@@ -38,7 +38,7 @@ app.post('/api/login', (req, res) => {
  * Login : Vérification de la clé de connexion
  * Si la clé est bonne, créer un token pour l'utilisateur
  **/
-app.post('/api/login/verify/:key', (req, res) => {
+app.post('/api/register', (req, res) => {
     res.status(501).json({ message: 'Pas encore implémenté'})
 });
 
