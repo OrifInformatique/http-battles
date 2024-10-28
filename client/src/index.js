@@ -1,68 +1,57 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { createRoot } from 'react-dom/client'
 
 import { BrowserRouter, Routes, Route, } from "react-router-dom";
 
-// Login Components
-import LoginLayout from './components/layouts/login';
-import LoginForm from './components/modules/login/form';
+// Layouts
+import PublicLayout from './layouts/public';
+import LobbyLayout from './layouts/lobby';
+import InGameLayout from './layouts/in-game'
+
+// Pulic Components
+import LoginForm from './modules/login/form';
+import RegisterForm from './modules/register/form';
 
 // Lobby Components
-import LobbyLayout from './components/layouts/lobby';
-import GamesCreate from './components/modules/games/create';
-import GamesList from './components/modules/games/list';
+import GamesCreate from './modules/games/create';
+import GamesJoin, { GamesJoinLink } from './modules/games/join';
+import GamesList from './modules/games/list';
 
 // In-Game Components
-import GameLayout from './components/layouts/game'
-import GamesLaunch from './components/modules/games/launch';
+import GamesLaunch from './modules/games/launch';
+import GamesEnded from './modules/games/ended';
 
-// Protected Route
-import { ProtectedRoute } from './components/layouts/protected-route';
+// Utilitaires
+import Redirect from './utils/redirect';
 
-
-// Auth utils
-import { AuthProvider, useAuth } from './hooks/useAuth';
-
+// Styles
 import './index.pcss';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-const NoMatch = () => {
-    return (<ProtectedRoute>
-        <div className="w-full h-full flex items-center justify-center">
-            <p>404 - Aucune page trouvée</p>
-        </div>
-    </ProtectedRoute>);
-}
-
-const Logout = () => {
-    const { logout } = useAuth();
-
-    useEffect(() => {
-        logout();
-    })
-    return <></>;
-}
 
 root.render(<BrowserRouter>
-    <AuthProvider>
-        <Routes>
-            <Route path="/login" element={<LoginLayout />}>
-                <Route index element={<LoginForm />} />
-            </Route>
+    <Routes>
+        <Route path="/login" element={<PublicLayout />}>
+            <Route index element={<LoginForm />} />
+        </Route>
 
-            <Route path="/lobby" element={<LobbyLayout />}>
-                <Route index element={<GamesList />} />
-                <Route path="new-game" element={<GamesCreate />} />
-            </Route>
+        <Route path="/register" element={<PublicLayout />}>
+            <Route index element={<RegisterForm />} />
+        </Route>
 
-            <Route path="/games" element={<GameLayout />}>
-                <Route path=":gameId" element={<GamesLaunch />} />
-            </Route>
+        <Route path="/lobby" element={<LobbyLayout />}>
+            <Route index element={<GamesList />} />
+            <Route path="new-game" element={<GamesCreate />} />
+            <Route path="join-game" element={<GamesJoin />} />
+        </Route>
 
-            <Route path="/logout" element={<Logout />} />
-            <Route path="*" element={<NoMatch />} />
-        </Routes>
-    </AuthProvider>
+        <Route path="/games" element={<InGameLayout />}>
+            <Route path=":gameId" element={<GamesLaunch />} />
+            <Route path=":gameId/ended" element={<GamesEnded />} />
+            <Route path=":gameId/join" element={<GamesJoinLink />} />
+        </Route>
+        <Route path="*" element={<Redirect to="login" />} />
+    </Routes>
 </BrowserRouter>);

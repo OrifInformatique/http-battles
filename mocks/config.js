@@ -1,0 +1,1 @@
+export const MOCKED_GAME_ID = "mocked"
