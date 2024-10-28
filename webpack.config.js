@@ -21,7 +21,13 @@ module.exports = {
         liveReload: true,
         historyApiFallback:true
     },
+    
     resolve: {
+        alias: {
+            '@src': path.resolve(__dirname, 'client/src/'),
+            '@mocks' : path.resolve(__dirname, 'mocks/'),
+            '@public': path.resolve(__dirname, 'client/public/')
+        },
         extensions: ['.js', '.jsx', '.json'],
     },
     module: {
