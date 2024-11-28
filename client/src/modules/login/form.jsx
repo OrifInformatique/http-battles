@@ -20,7 +20,7 @@ const LoginForm = () => {
             <li>Un formulaire de login contenant :</li>
             <li>- Un champs email</li>
             <li>- Un champs mot de passe</li>
-            <li>- Un bouton de validation du formulaire</li>
+            
         </ul>
         
         <hr />        
