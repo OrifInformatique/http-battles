@@ -11,6 +11,7 @@ import InGameLayout from './layouts/in-game'
 // Pulic Components
 import LoginForm from './modules/login/form';
 import RegisterForm from './modules/register/form';
+import ForgotPasswordForm from './modules/forgotpassword/form';
 
 // Lobby Components
 import GamesCreate from './modules/games/create';
@@ -30,7 +31,6 @@ import './index.pcss';
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-
 root.render(<BrowserRouter>
     <Routes>
         <Route path="/login" element={<PublicLayout />}>
@@ -39,6 +39,10 @@ root.render(<BrowserRouter>
 
         <Route path="/register" element={<PublicLayout />}>
             <Route index element={<RegisterForm />} />
+        </Route>
+
+        <Route path="/forgotpassword" element={<PublicLayout />}>
+            <Route index element={<ForgotPasswordForm />} />
         </Route>
 
         <Route path="/lobby" element={<LobbyLayout />}>

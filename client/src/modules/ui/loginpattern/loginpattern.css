@@ -1,0 +1,98 @@
+.containerAccount {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+background-color: #fefefe;
+
+border-radius:7px;
+
+color: black;
+
+
+gap: 20px;
+height: 340px;
+width: 370px;
+padding-bottom: 20px;
+}
+
+.containerLogin {
+
+background-color: white;
+
+}
+
+.loginConnexion {
+display: flex;
+padding-top: 2px;
+padding-bottom: 2px;
+padding-left: 18px;
+padding-right: 18px;
+}
+
+.loginText {
+font-weight: bold;
+padding-bottom: 20px;
+
+
+}
+
+.loginNav {
+padding-bottom: 20px;
+border-bottom: 1px solid;
+}
+
+
+.containerCheckbox {
+display: flex;
+flex-direction: row;
+gap: 8px;
+font-size: 12px;
+}
+
+  /*
+- Boutton de login BLEU 
+*/
+.loginButton {
+  display: flex;
+  
+  color: white;
+  background-color:  #005BA9;
+
+  padding: 1px 3px 4px 40px;
+
+  height: 27px;
+
+  width: 170px;
+  
+}
+
+.loginButton:hover {
+  border: black solid 2px;
+}
+
+.loginSlogan {
+  color: white;
+  font-size: 22px;
+
+  padding-bottom: 80px;
+}
+
+
+
+.fullBackground {
+  background-image: url(https://i.pinimg.com/originals/b2/bd/84/b2bd8481244584645d454911edb42549.jpg);
+  background-repeat: no-repeat;
+  background-size:cover;
+
+  display: flex;
+  flex-flow: column wrap;
+  align-items:center;
+  justify-content: center;
+
+  min-height: 1400px;
+  
+  padding-bottom: 400px;
+}
+  
+    

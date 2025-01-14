@@ -1,32 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {RegisterForm} from '../register/form.jsx';
+import LoginPattern from "../ui/loginpattern/loginpattern.jsx";
 
-const LoginForm = () => {
-
-    return (<>
-
-        <p className="font-bold">Navigation : </p>
-
-        <ul>
-            <li><Link className="text-blue-500 underline" to="/register">Formulaire de creation de compte</Link></li>
-            <li><Link className="text-blue-500 underline" to="/lobby">Lobby</Link></li>
-        </ul>
-
-        <hr />        
-        
-        <p className="font-bold">Contenu : </p>
-        <ul>
-            <li>Un lien vers le formulaire de création de compte</li>
-            <li>Un formulaire de login contenant :</li>
-            <li>- Un champs email</li>
-            <li>- Un champs mot de passe</li>
-            
-        </ul>
-        
-        <hr />        
-    
-    </>)
-
-}
-
-export default LoginForm
+export default () => {
+    return (
+      <LoginPattern/>
+    );
+  };
+  
