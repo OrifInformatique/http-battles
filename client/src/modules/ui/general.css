@@ -1,11 +1,13 @@
-* {
-    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
+@font-face {
+  font-family: 'Calibril';
+  src: url('../../assets/calibril.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 /*Règles de généralités pour les input notament pour les formulaires*/
 
 input[type="email"],input[type="email"]::placeholder {
-    color: black;
 
     min-height: 20px;
     max-height:30px;
@@ -14,40 +16,47 @@ input[type="email"],input[type="email"]::placeholder {
     min-width: 80%;
     max-width: 100%;
 
-    background-color: #D9D9D9;
     padding: 4px 4px 4px 4px;
-
     border-radius: 3.5px;
+
   }
 
-input[type="password"], input[type="password"]::placeholder {
-    color: black;
+  input[type="password"], input[type="password"]::placeholder {
 
     min-height: 20px;
     max-height:30px;
-
+  
    
     min-width: 80%;
     max-width: 100%;
-
-    background-color: #D9D9D9;
+    
     padding: 4px 4px 4px 4px;
-
     border-radius: 3.5px;
-}
+  }
+  
 
 input[type="text"], input[type="text"]::placeholder {
-    color: black;
 
     min-height: 20px;
     max-height:30px;
     
-    
-
-    background-color: #D9D9D9;
     padding: 4px 4px 4px 4px;
 
     border-radius: 3.5px;
 }
+
+.calibri {
+    font-family: 'calibril'; 
+    letter-spacing: 2.2px; 
+}
+
+#username, #email, #password, #prenomRegister, #ndfRegister {
+  color: white;
+
+  background:rgba(0, 0, 0, 0);
+
+  border-bottom: white solid 1px;
+}
+
 
 /*Background image*/

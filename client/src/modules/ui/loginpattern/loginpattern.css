@@ -1,85 +1,3 @@
-.containerAccount {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-background-color: #fefefe;
-
-border-radius:7px;
-
-color: black;
-
-
-gap: 20px;
-height: 340px;
-width: 370px;
-padding-bottom: 20px;
-}
-
-.containerLogin {
-
-background-color: white;
-
-}
-
-.loginConnexion {
-display: flex;
-padding-top: 2px;
-padding-bottom: 2px;
-padding-left: 18px;
-padding-right: 18px;
-}
-
-.loginText {
-font-weight: bold;
-padding-bottom: 20px;
-
-
-}
-
-.loginNav {
-padding-bottom: 20px;
-border-bottom: 1px solid;
-}
-
-
-.containerCheckbox {
-display: flex;
-flex-direction: row;
-gap: 8px;
-font-size: 12px;
-}
-
-  /*
-- Boutton de login BLEU 
-*/
-.loginButton {
-  display: flex;
-  
-  color: white;
-  background-color:  #005BA9;
-
-  padding: 1px 3px 4px 40px;
-
-  height: 27px;
-
-  width: 170px;
-  
-}
-
-.loginButton:hover {
-  border: black solid 2px;
-}
-
-.loginSlogan {
-  color: white;
-  font-size: 22px;
-
-  padding-bottom: 80px;
-}
-
-
-
 .fullBackground {
   background-image: url(https://i.pinimg.com/originals/b2/bd/84/b2bd8481244584645d454911edb42549.jpg);
   background-repeat: no-repeat;
@@ -93,6 +11,75 @@ font-size: 12px;
   min-height: 1400px;
   
   padding-bottom: 400px;
-}
   
-    
+}
+
+.accountContainer {
+display: flex;
+flex-direction: column;
+align-items: center;
+flex-wrap: wrap;
+justify-content: center;
+
+background:rgba(0, 0, 0, 0.7);
+backdrop-filter: blur(4px);
+
+color: white;
+
+height: 500px;
+width: 30%;
+
+
+max-width: 65%;
+
+gap: 25px;
+
+padding-left: 24px;
+padding-right: 24px;
+padding-bottom: 30px;
+padding-top: 23px;
+
+border-radius: 7px;
+}
+
+.checkboxContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.textLogin {
+font-weight: bold;
+padding-bottom: 20px;
+
+
+}
+
+.sloganLogin {
+  color: white;
+  font-size: 22px;
+
+  padding-bottom: 80px;
+
+}
+
+  /*   Boutton de login BLEU   */
+.buttonLogin {
+  display: flex;
+  
+  color: white;
+  background-color:  #005BA9;
+
+  padding: 1px 3px 4px 40px;
+
+  height: 27px;
+
+  width: 170px;
+  
+}
+
+.buttonLogin:hover {
+  border: black solid 2px;
+}
+

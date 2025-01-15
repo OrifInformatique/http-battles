@@ -1,0 +1,125 @@
+h1 {
+    letter-spacing: 2px;
+}
+
+
+.fullBackgroundRegister {
+    background-image: url(https://wallpaperaccess.com/full/6303195.jpg);
+    background-repeat: no-repeat;
+    background-size:cover;
+    
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;   
+    
+    padding-bottom: 400px;
+
+    height: 2000px;
+
+    color: white;
+}
+
+.accountCreatedContainer {
+    border-top: whitesmoke 1px solid;
+    border-bottom: whitesmoke 1px solid;
+
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+.registerContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    justify-content: center;
+    background:rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+
+    height: 500px;
+    max-width: 65%;
+
+
+    gap: 18px;
+
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 30px;
+    padding-top: 23px;
+
+    border-radius: 7px;
+}
+
+.facultatifContainer {
+    display: flex;
+    gap: 25%;
+    
+}
+
+.name {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content:space-between;
+
+}
+
+.buttonRegister{
+  background-color:  #005BA9;
+  letter-spacing: 0px;
+  padding: 1px 3px 4px 40px;
+
+  height: 27px;
+}
+
+.phraseRegister {
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.textRegister1 {
+    font-weight: bold;
+    font-size: x-large;
+}
+
+.textRegister2 {
+    font-weight: bold;
+    font-size: x-large;
+    padding-left: 5%;
+}
+
+.checkboxRegister {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+
+.facultatif {
+    font-style: italic ;
+    color: red;
+    font-size: 13.5px;
+    letter-spacing: 1px;
+}
+/*  Bordure de la checkbox  */
+.checkbox-border {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    border: 1px solid white;
+    background-color: transparent; 
+    border-radius: 3px; 
+}
+
+#ndfRegister, #prenomRegister {
+    min-width: 40%;
+}
+
+#loginCheckbox {
+    opacity: 0;
+    border: white solid 1px;
+}
