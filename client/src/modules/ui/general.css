@@ -1,3 +1,5 @@
+/*   Import de la police   */
+
 @font-face {
   font-family: 'Calibril';
   src: url('../../assets/calibril.ttf') format('truetype');
@@ -5,7 +7,9 @@
   font-style: normal;
 }
 
-/*Règles de généralités pour les input notament pour les formulaires*/
+/*Règles de généralités notamment pour les formulaires*/
+
+/*   input du form.   */
 
 input[type="email"],input[type="email"]::placeholder {
 
@@ -45,12 +49,79 @@ input[type="text"], input[type="text"]::placeholder {
     border-radius: 3.5px;
 }
 
+/*   Définition police du composant en: Calibri Light ( imported ) */
+
 .calibri {
     font-family: 'calibril'; 
     letter-spacing: 2.2px; 
 }
 
-#username, #email, #password, #prenomRegister, #ndfRegister {
+/*   Checkbox du form.   */
+    /*  Comportement de la checkbox  */
+
+.checkboxRegisterLogin input {
+  display: none;
+}
+
+.checkboxRegisterLogin label {
+  display: flex;
+  align-items: center;
+}
+
+    /*  Bordure de la checkbox  */
+
+.checkboxRegisterLogin .checkbox-border {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: transparent; 
+  border-radius: 3px; 
+  margin: 0;
+  padding: 0;
+  margin-right: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/*   ::after   */
+
+.checkboxRegisterLogin .checkbox-border::after {
+  display:block;
+  content:"";
+  width:1px;
+  height:1px;
+  margin: 0;
+  padding: 0;
+  opacity:0;
+  background: whitesmoke;
+  transition:.2s;
+}
+
+/*   Une fois checked   */
+
+.checkboxRegisterLogin input:checked + label .checkbox-border {
+  border:solid 2px whitesmoke 
+}
+
+.checkboxRegisterLogin input:checked + label .checkbox-border::after {
+  opacity: 1;
+  width: 16px;
+  height: 16px;
+}
+
+.checkboxRegisterLogin input:checked + .checkbox-label {
+  color:purple    
+}
+
+    /*  Opacité de la checkbox  */
+
+
+/*   Input du form.   */
+
+#username, #email, #prenom
+, #nomDeFamille {
   color: white;
 
   background:rgba(0, 0, 0, 0);
@@ -58,5 +129,49 @@ input[type="text"], input[type="text"]::placeholder {
   border-bottom: white solid 1px;
 }
 
+.input input{
+  display:none;
+}
 
-/*Background image*/
+.input label{
+  display:flex;
+  align-items:center;    
+}
+
+.input .input-box{
+  display:flex;
+  width:12px;
+  height:12px;
+  border:solid 1px black;
+  margin: 0;
+  padding: 0;
+  margin-right: 8px;
+
+  justify-content: center;
+  align-items: center;
+}
+.input .input-box:after{
+  display:block;
+  content:"";
+  width:1px;
+  height:1px;
+  margin: 0;
+  padding: 0;
+  opacity:0;
+  background: purple;
+  transition:.2s;
+}
+
+.input input:checked + label .input-box{
+border:solid 2px purple;
+}
+
+.input input:checked + label .input-box:after{
+ opacity:1;
+ width:8px;
+ height:8px;
+}
+
+.input input:checked + label .input-label{
+color:purple;
+}

@@ -11,12 +11,10 @@ function ForgotPassword() {
   const [resetPassword, setResetPassword] = useState(
     <>
       <input type="email" className="emailReset" name="email" placeholder="Entrez votre adresse mail" required />
-      <button onClick={() => setResetPassword(<EmailReadyForgotPassword />)} className="resetButton" >Réinitialiser</button>
-   
+      <button onClick={() => setResetPassword(<EmailReadyForgotPassword />)} className="resetButton" >Envoi</button>
     </>);
 
   return ( <div className="containerForgotPassword">
-
               <h1>Réinitialiser votre mot de passe</h1>
               {resetPassword}             
            </div>);

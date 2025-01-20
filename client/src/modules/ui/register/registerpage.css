@@ -2,6 +2,7 @@ h1 {
     letter-spacing: 2px;
 }
 
+/*   Backdground de la page   */
 
 .fullBackgroundRegister {
     background-image: url(https://wallpaperaccess.com/full/6303195.jpg);
@@ -20,6 +21,8 @@ h1 {
     color: white;
 }
 
+/*   Containers   */
+
 .accountCreatedContainer {
     border-top: whitesmoke 1px solid;
     border-bottom: whitesmoke 1px solid;
@@ -33,7 +36,7 @@ h1 {
 .registerContainer {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 
     justify-content: center;
     background:rgba(0, 0, 0, 0.7);
@@ -59,13 +62,14 @@ h1 {
     
 }
 
-.name {
+.nameContainer {
     display:flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content:space-between;
-
 }
+
+/*     Bouton BLEU "Création de votre compte"    */
 
 .buttonRegister{
   background-color:  #005BA9;
@@ -75,29 +79,14 @@ h1 {
   height: 27px;
 }
 
+
+
 .phraseRegister {
     font-size: 13px;
     letter-spacing: 1px;
 }
 
-.textRegister1 {
-    font-weight: bold;
-    font-size: x-large;
-}
-
-.textRegister2 {
-    font-weight: bold;
-    font-size: x-large;
-    padding-left: 5%;
-}
-
-.checkboxRegister {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-}
-
+/*   Texte facultatif en italique rouge   */
 
 .facultatif {
     font-style: italic ;
@@ -105,21 +94,30 @@ h1 {
     font-size: 13.5px;
     letter-spacing: 1px;
 }
-/*  Bordure de la checkbox  */
-.checkbox-border {
-    display: flex;
-    width: 20px;
-    height: 20px;
-    border: 1px solid white;
-    background-color: transparent; 
-    border-radius: 3px; 
-}
 
-#ndfRegister, #prenomRegister {
+
+
+#nomDeFamille, #prenom {
     min-width: 40%;
 }
 
-#loginCheckbox {
-    opacity: 0;
-    border: white solid 1px;
+/*   Textes affichés   */
+
+#textRegister1 {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+#textRegister2 {
+    font-weight: bold;
+    font-size: x-large;
+    padding-left: 5%;
+}
+
+input[type="password"] {
+    
+        color: white;
+        background: rgba(0, 0, 0, 0);
+        border-bottom: white solid 1px;
+    
 }
