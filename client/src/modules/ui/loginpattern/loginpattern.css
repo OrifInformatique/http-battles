@@ -1,4 +1,4 @@
-input[type="password"] {
+input[type="password"], input[type="email"] {
   color: white;
   background: rgba(0, 0, 0, 0);
   border-bottom: white solid 1px;
@@ -7,7 +7,7 @@ input[type="password"] {
 /*   Backdground de la page   */
 
 .fullBackground {
-  background-image: url(https://i.pinimg.com/originals/b2/bd/84/b2bd8481244584645d454911edb42549.jpg);
+  background-image: url(../../../../public/assets/images/background/backgroundlogin.jpg);
   background-repeat: no-repeat;
   background-size:cover;
 
@@ -28,7 +28,7 @@ input[type="password"] {
 display: flex;
 flex-direction: column;
 align-items: center;
-flex-wrap: wrap;
+flex-wrap: nowrap;
 justify-content: center;
 
 background:rgba(0, 0, 0, 0.7);
@@ -36,19 +36,26 @@ backdrop-filter: blur(4px);
 
 color: white;
 
-height: 370px;
+height: 35%;
 
-min-width: 27%;
-max-width: 30%;
+min-width: 22%;
+max-width: 25%;
 
 gap: 25px;
 
-padding-left: 5px;
-padding-right: 5px;
+padding-left: 0.5%;
+padding-right:  0.5%;
 padding-bottom: 30px;
 padding-top: 23px;
 
 border-radius: 7px;
+}
+
+.centerTextContainer {
+ display: flex;
+ flex-flow: row wrap;
+ justify-content: center;
+  
 }
 
 .checkboxContainer {
@@ -59,8 +66,8 @@ border-radius: 7px;
 }
 
 .textLogin {
-font-weight: bold;
-padding-bottom: 20px;
+  font-weight: bold;
+  padding-bottom: 20px;
 }
 
 .sloganLogin {
@@ -68,7 +75,6 @@ padding-bottom: 20px;
   font-size: 22px;
 
   padding-bottom: 80px;
-
 }
 
 .spaceBetweenLoginAndPassword  {
@@ -98,3 +104,6 @@ padding-bottom: 20px;
   border: black solid 2px;
 }
 
+.checkbox-label {
+  font-size: small;
+}

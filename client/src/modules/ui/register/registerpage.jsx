@@ -16,15 +16,12 @@ function RegisterPage() {
         email: "",
         password1: "",
         password2: "",
-    })
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         setIsSubmitted(true)
-
-        console.log("Données soumises :", formData);
-
     };
 
     const onChange = (e) => {
@@ -34,7 +31,6 @@ function RegisterPage() {
             [name]: value,
         });
     };
-    console.log(isSubmitted)
     
     return (<>
         <Navigation/>
@@ -42,6 +38,7 @@ function RegisterPage() {
         <div id="containerFullBackground" className="fullBackgroundRegister">
 
             {   /*     Vérifie que isSubmitted est True (?) ou false (:)       */
+            
                 isSubmitted ?
                 <div className="registerContainer" >
                     <h1 id="textRegister2" className="calibri">
@@ -51,7 +48,7 @@ function RegisterPage() {
                     <div className="accountCreatedContainer">
 
                         <h3 className="registerPhrase ">
-                            {formData.username}, nous vous remercions chaleureusement de vous être inscrit/e sur notre plateforme. <br/><br/>Votre inscription a bien été prise en compte. Vous pouvez dès à présent vous rendre sur la page de connexion pour accéder à votre compte et profiter de nos services : 👉 <Link className="text-blue-500 underline" to="/login">Lien vers le formulaire de connexion</Link> <br/>Si vous avez des questions ou besoin d'assistance, n'hésitez pas à nous contacter. Nous sommes là pour vous aider ! Encore merci de votre confiance et à très bientôt,
+                            {formData.username}, nous vous remercions chaleureusement de vous être inscrit/e sur notre plateforme. <br/><br/>Votre inscription a bien été prise en compte. Vous pouvez dès à présent vous rendre sur la page de connexion pour accéder à votre compte et profiter de nos services : 👉 <Link className="text-blue-500 underline" to="/login">Lien vers le formulaire de connexion</Link> <br/><br/>Si vous avez des questions ou besoin d'assistance, n'hésitez pas à nous contacter. Nous sommes là pour vous aider ! Encore merci de votre confiance et à très bientôt,
                             <br/><br/>L'équipe HTTP BATTLE de l'Orif de Pomy
                         </h3>
 

@@ -10,19 +10,51 @@
 /*Règles de généralités notamment pour les formulaires*/
 
 /*   input du form.   */
+    /*   Suppression de l'autofill sur les balises input   */
+input[type="email"]:-webkit-autofill,
+input[type="email"]:-webkit-autofill:hover, 
+input[type="email"]:-webkit-autofill:focus, 
+input[type="email"]:-webkit-autofill:active{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+input[type="password"]:-webkit-autofill,
+input[type="password"]:-webkit-autofill:hover, 
+input[type="password"]:-webkit-autofill:focus, 
+input[type="password"]:-webkit-autofill:active{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+input[type="text"]:-webkit-autofill,
+input[type="text"]:-webkit-autofill:hover, 
+input[type="text"]:-webkit-autofill:focus, 
+input[type="text"]:-webkit-autofill:active{
+    color: white;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+input[type="text"],input[type="text"]::placeholder {
+  color: white;
+  background-clip: text;
+    -webkit-text-fill-color: #ffffff;
+}
 
 input[type="email"],input[type="email"]::placeholder {
 
     min-height: 20px;
     max-height:30px;
 
-    
+
     min-width: 80%;
     max-width: 100%;
 
     padding: 4px 4px 4px 4px;
-    border-radius: 3.5px;
-
   }
 
   input[type="password"], input[type="password"]::placeholder {
@@ -35,7 +67,6 @@ input[type="email"],input[type="email"]::placeholder {
     max-width: 100%;
     
     padding: 4px 4px 4px 4px;
-    border-radius: 3.5px;
   }
   
 
@@ -45,8 +76,6 @@ input[type="text"], input[type="text"]::placeholder {
     max-height:30px;
     
     padding: 4px 4px 4px 4px;
-
-    border-radius: 3.5px;
 }
 
 /*   Définition police du composant en: Calibri Light ( imported ) */
@@ -56,7 +85,7 @@ input[type="text"], input[type="text"]::placeholder {
     letter-spacing: 2.2px; 
 }
 
-/*   Checkbox du form.   */
+/*     Style / comportement de la checkbox     */
     /*  Comportement de la checkbox  */
 
 .checkboxRegisterLogin input {
@@ -85,7 +114,7 @@ input[type="text"], input[type="text"]::placeholder {
 }
 
 
-/*   ::after   */
+    /*   ::after   */
 
 .checkboxRegisterLogin .checkbox-border::after {
   display:block;
@@ -99,7 +128,7 @@ input[type="text"], input[type="text"]::placeholder {
   transition:.2s;
 }
 
-/*   Une fois checked   */
+    /*   Une fois checked   */
 
 .checkboxRegisterLogin input:checked + label .checkbox-border {
   border:solid 2px whitesmoke 
@@ -118,9 +147,9 @@ input[type="text"], input[type="text"]::placeholder {
     /*  Opacité de la checkbox  */
 
 
-/*   Input du form.   */
+    /*   Input du form.   */
 
-#username, #email, #prenom
+#username, #prenom
 , #nomDeFamille {
   color: white;
 
@@ -129,49 +158,4 @@ input[type="text"], input[type="text"]::placeholder {
   border-bottom: white solid 1px;
 }
 
-.input input{
-  display:none;
-}
 
-.input label{
-  display:flex;
-  align-items:center;    
-}
-
-.input .input-box{
-  display:flex;
-  width:12px;
-  height:12px;
-  border:solid 1px black;
-  margin: 0;
-  padding: 0;
-  margin-right: 8px;
-
-  justify-content: center;
-  align-items: center;
-}
-.input .input-box:after{
-  display:block;
-  content:"";
-  width:1px;
-  height:1px;
-  margin: 0;
-  padding: 0;
-  opacity:0;
-  background: purple;
-  transition:.2s;
-}
-
-.input input:checked + label .input-box{
-border:solid 2px purple;
-}
-
-.input input:checked + label .input-box:after{
- opacity:1;
- width:8px;
- height:8px;
-}
-
-.input input:checked + label .input-label{
-color:purple;
-}

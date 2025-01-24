@@ -73,7 +73,9 @@ h1 {
 
 .buttonRegister{
   background-color:  #005BA9;
+
   letter-spacing: 0px;
+
   padding: 1px 3px 4px 40px;
 
   height: 27px;
@@ -114,10 +116,9 @@ h1 {
     padding-left: 5%;
 }
 
-input[type="password"] {
-    
-        color: white;
-        background: rgba(0, 0, 0, 0);
-        border-bottom: white solid 1px;
+input[type="password"]/*input[type="password"]:-webkit-autofill */{
+    color: white;
+    background: rgba(0, 0, 0, 0);
+    border-bottom: white solid 1px;
     
 }
