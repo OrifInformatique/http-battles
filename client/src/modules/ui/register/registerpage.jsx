@@ -71,7 +71,7 @@ function RegisterPage() {
                     </div>
 
                     <div className="nameContainer">
-                        <input type="text" className="calibri" id="prenom" name="prenom" placeholder='Prénom' value={formData.prenom} onChange={onChange} required />
+                        <input type="text" className="calibri" id="prenom" name="prenom" value={formData.prenom} onChange={onChange} placeholder='Prénom' required />
                         <input type="text" className="calibri" id="nomDeFamille" name="nom" value={formData.nom} onChange={onChange} placeholder='Nom de famille' required />
                     </div>
 

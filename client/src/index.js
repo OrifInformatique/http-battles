@@ -17,6 +17,7 @@ import ForgotPasswordForm from './modules/forgotpassword/form';
 import GamesCreate from './modules/games/create';
 import GamesJoin, { GamesJoinLink } from './modules/games/join';
 import GamesList from './modules/games/list';
+import GameLaunchTest from './modules/games/launchtest';
 
 // In-Game Components
 import GamesLaunch from './modules/games/launch';
@@ -43,6 +44,10 @@ root.render(<BrowserRouter>
 
         <Route path="/forgotpassword" element={<PublicLayout />}>
             <Route index element={<ForgotPasswordForm />} />
+        </Route>
+
+        <Route path="/lauchtest" element={<PublicLayout />}>
+            <Route index element={<GameLaunchTest />} />
         </Route>
 
         <Route path="/lobby" element={<LobbyLayout />}>

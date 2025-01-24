@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navigation from "../navigation/navigation";
-import {Link, Navigate, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './loginpattern.css';
 import '../general.css';
 

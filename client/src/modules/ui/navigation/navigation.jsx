@@ -9,6 +9,7 @@ function Navigation() {
         <nav className="loginNav">
             <li><Link className="text-blue-500 underline" to="/login">Formulaire de login</Link></li>
             <li><Link className="text-blue-500 underline" to="/lobby">Lobby</Link></li>
+            <li><Link className="text-blue-500 underline" to="/lauchtest">LaunchTest</Link></li>
         </nav>
     </>)
 }
