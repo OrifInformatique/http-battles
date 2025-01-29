@@ -1,0 +1,27 @@
+
+.firstContainer {
+    display: flex;
+    flex-flow: row;
+}
+
+.launchContainerRight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.thirdContainerRight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.launchListContainer {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    gap: 20%;
+}
+
+/*     A supprimer     */

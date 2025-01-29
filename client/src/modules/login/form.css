@@ -7,7 +7,7 @@ input[type="password"], input[type="email"] {
 /*   Backdground de la page   */
 
 .fullBackground {
-  background-image: url(../../../../public/assets/images/background/backgroundlogin.jpg);
+  background-image: url(../../../public/assets/images/background/background_from_youcam.jpg);
   background-repeat: no-repeat;
   background-size:cover;
 
