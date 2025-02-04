@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import '../general.css';
-
 
 function LoopForList({ handleChange ,staticVal1, staticVal2, dynamicVal, i}) {
 

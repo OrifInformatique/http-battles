@@ -20,7 +20,7 @@ function RegisterPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        
         setIsSubmitted(true)
     };
 

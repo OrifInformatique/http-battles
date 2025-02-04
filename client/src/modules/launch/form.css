@@ -1,27 +1,83 @@
-
+/*     Container Principal     */
 .firstContainer {
     display: flex;
     flex-flow: row;
+    align-items: baseline;
+    justify-content: space-around;
+
+    color:white;
+
+    background-image: url(../../../public/assets/images/background/launchbackground_upscale.webp);
+    background-repeat: no-repeat;
+    background-size:cover;
+
+    min-height: 1000px;
 }
 
-.launchContainerRight {
+.phraseLaunchContainer {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    min-width: 50%;
 }
 
-.thirdContainerRight {
+/*     Containers des colonnes de la page    
+    /*     Container principal des titres + listes*/
+    .initialisationContainer {
+    
+    }
+    
+        /*  Liste des mots  */
+
+        .listLaunchContainer {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: center;
+            gap: 20%;
+        }
+
+    /*     Validation de la phrase     */
+
+    .validationContainer {
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+        gap: 0px 200px;
+    }
+
+        /*     Boutton de validation     */
+
+        .submitValidationContainer {
+            
+        }
+
+        /*     Titre du container de validation     */
+        
+        .titleValidationContainer {
+            display: flex;
+            flex-flow: row nowrap;
+            gap: 20px
+        }
+
+
+.testContainer {
     display: flex;
+    flex-flow: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
 
 }
 
-.launchListContainer {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    gap: 20%;
+.buttonLaunch {
+    color: white;
+    width: 200%;
+}
+
+button[type="submit"]{
+    max-width: 250px;
 }
 
 /*     A supprimer     */

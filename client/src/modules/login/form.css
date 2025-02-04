@@ -90,14 +90,8 @@ border-radius: 7px;
   justify-content: center;
 
   color: white;
-  background-color:  #005BA9;
-
-  padding: 1px 3px 4px ;
-
-  height: 27px;
 
   min-width: 80%;
-  
 }
 
 .buttonLogin:hover {
