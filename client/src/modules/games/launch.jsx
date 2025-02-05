@@ -13,6 +13,7 @@ const GamesLaunch = () => {
 
     const handleClick = (newState) => {
         setState(newState)
+        
     }
 
     return (<>
