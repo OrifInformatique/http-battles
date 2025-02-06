@@ -7,6 +7,9 @@ const bodyParser = require('body-parser');
 
 const app = express();    
 
+// importe la page user.js de dossiers routes qui contient les chemins d'accès envers les différnts fonctionnalité utilisateurs
+const userRoutes = require('./routes/user')
+
 // connection à la base de donnée mongodb, plus précisément le cluster 0 avec l'utilisateur KenCacciabue
 mongoose.connect('mongodb+srv://KenBattle:OhMgJYjh8g04Y27K@clusterbattle.zjpdt.mongodb.net/?retryWrites=true&w=majority&appName=ClusterBattle')
     // S i tout se passe sans probleme, affiche le succès de la connection dans la console
@@ -38,21 +41,9 @@ app.get('/api', (req, res) => {
     res.status(200).json({ message : 'HTTP Battle - Version 0.1'})
 });
 
-/** 
- * Login : Demande de connexion. Demande une adresse e-mail 
- * et envoi un message contenant un lien de connexion 
- **/
-app.post('/api/login', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté'})
-});
+// implement les fonctionalité utilisateurs
+app.use('/api/auth', userRoutes)
 
-/** 
- * Login : Vérification de la clé de connexion
- * Si la clé est bonne, créer un token pour l'utilisateur
- **/
-app.post('/api/register', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté'})
-});
 
 /** 
  * Games : Crée une nouvelle partie en associant l'utilisateur connecté
