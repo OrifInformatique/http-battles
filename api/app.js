@@ -1,7 +1,19 @@
 const express = require('express');
+
+// importe le package Mongoose qui facilittent les interactions avec la base donnée Mongodb
+const mongoose = require('mongoose');
+
 const bodyParser = require('body-parser');
 
 const app = express();    
+
+// connection à la base de donnée mongodb, plus précisément le cluster 0 avec l'utilisateur KenCacciabue
+mongoose.connect('mongodb+srv://KenBattle:OhMgJYjh8g04Y27K@clusterbattle.zjpdt.mongodb.net/?retryWrites=true&w=majority&appName=ClusterBattle')
+    // S i tout se passe sans probleme, affiche le succès de la connection dans la console
+    .then(() => console.log('Connexion à MongoDB réussie !'))
+    // si une erreure est reperer, affiche l'erreur
+    .catch( (e)=> console.log(e) )
+
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
