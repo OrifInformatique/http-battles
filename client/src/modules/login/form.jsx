@@ -1,6 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+const monObj = {
+    nom: "Jean",
+    age: 24,
+    grow: function(){
+        this.age += 1;
+    }
+}
+
+const TABLEAU = [{
+    "id":1,
+    "nom":"Albert"
+}, {
+    "id":2,
+    "nom":"Jean"
+}, {
+    "id":3,
+    "nom":"Claude"
+}, {
+    "id":4,
+    "nom": "Claude"
+}];
+
 const LoginForm = () => {
 
     return (<>
@@ -23,7 +45,7 @@ const LoginForm = () => {
             <li>- Un bouton de validation du formulaire</li>
         </ul>
         
-        <hr />        
+        <hr />      
     
     </>)
 
