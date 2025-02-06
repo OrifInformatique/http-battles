@@ -4,7 +4,7 @@
   "description": "Introduction au protocole HTTP au travers d'un jeu dérivé de la bataille navale.",
   "main": "client/src/index.js",
   "scripts": {
-    "build:client": "webpack --env production --node-env production --mode production",    
+    "build:client": "webpack --env production --node-env production --mode production",
     "start:api": "node ./server/prod.js",
     "serve:client": "webpack serve",
     "serve:api": "nodemon ./api/index.js"
@@ -27,7 +27,7 @@
     "@heroicons/react": "^2.1.5",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
-    "express": "^4.21.0",
+    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
