@@ -19,7 +19,8 @@
 }
 
 /*     Container Principal     */
-.firstContainer {
+
+.backgroundContainer1 {
     display: flex;
     flex-flow: row;
     align-items: baseline;
@@ -34,6 +35,27 @@
     min-height: 1000px;
 }
 
+.backgroundContainer2 {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+
+    color:white;
+
+    background-image: url(../../../public/assets/images/background/launchbackground_upscale.webp);
+    background-repeat: no-repeat;
+    background-size:cover;
+
+    min-height: 1000px;
+}
+/*     Titre de la page    */
+
+.title {
+    padding-top: 10%;
+    padding-bottom: 30px;
+}
+
 /*     Containers des colonnes de la page    
     /*     Container principal des titres + listes*/
 
@@ -46,8 +68,11 @@
         .listLaunchContainer {
             display: flex;
             flex-flow: row wrap;
-            justify-content: center;
-            gap: 20%;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            ;
+
         }
 
 
@@ -79,8 +104,8 @@
 
             position: relative;
             overflow: visible;
-            background-image: url(../../../public/assets/images/element/2-flower-mandala.png);
-            background-size: 170%;
+            background-image: url(../../../public/assets/images/element/1409-rose_des_vents.png);
+            background-size: 105%;
             background-position: center;
             background-repeat: no-repeat;
             animation: rotateImage 30s infinite linear;
@@ -94,7 +119,6 @@
 
         /*     Phrase choisie   */
         .phrase {
-            transform: none;
         }
 
         /*     Boutton de validation de la phrase     */
