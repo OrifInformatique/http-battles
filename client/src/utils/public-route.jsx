@@ -7,7 +7,7 @@ export const PublicRoute = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuth) {
+    if (isAuth()) {
       navigate("/lobby");
     }
   }, [auth]);

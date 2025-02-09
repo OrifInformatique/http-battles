@@ -54,7 +54,7 @@ root.render(
           <Route path=":gameId/join" element={<GamesJoinLink />} />
         </Route>
 
-        <Route path="*" element={<Redirect to="login" />} />
+        <Route path="*" element={<Redirect to="/" />} />
       </Routes>
     </BrowserRouter>
   </AuthProvider>

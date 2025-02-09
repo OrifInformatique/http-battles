@@ -8,4 +8,9 @@ export const API_AUTH_LOGOUT_ROUTE = `${API_AUTH_BASE_ROUTE}/logout`;
 export const API_AUTH_REGISTER_ROUTE = `${API_AUTH_BASE_ROUTE}/signup`;
 
 // Games Routes
+export const API_GAMES_BASE_ROUTE = `/games`;
 
+export const API_GAMES_LIST_ROUTE = `${API_GAMES_BASE_ROUTE}`;
+export const API_GAMES_NEW_ROUTE = `${API_GAMES_BASE_ROUTE}`;
+export const API_GAMES_CHALLENGER_ROUTE = `/challenger`;
+export const API_GAMES_JOIN_ROUTE = `/join`;

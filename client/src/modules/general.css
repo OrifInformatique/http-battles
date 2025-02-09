@@ -14,30 +14,30 @@
 
 /*   input du form.   */
 /*   Suppression de l'autofill sur les balises input   */
-input[type="email"]:-webkit-autofill,
-input[type="email"]:-webkit-autofill:hover,
-input[type="email"]:-webkit-autofill:focus,
-input[type="email"]:-webkit-autofill:active {
+.public-layout input[type="email"]:-webkit-autofill,
+.public-layout input[type="email"]:-webkit-autofill:hover,
+.public-layout input[type="email"]:-webkit-autofill:focus,
+.public-layout input[type="email"]:-webkit-autofill:active {
   color: white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-input[type="password"]:-webkit-autofill,
-input[type="password"]:-webkit-autofill:hover,
-input[type="password"]:-webkit-autofill:focus,
-input[type="password"]:-webkit-autofill:active {
+.public-layout input[type="password"]:-webkit-autofill,
+.public-layout input[type="password"]:-webkit-autofill:hover,
+.public-layout input[type="password"]:-webkit-autofill:focus,
+.public-layout input[type="password"]:-webkit-autofill:active {
   color: white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-input[type="text"]:-webkit-autofill,
-input[type="text"]:-webkit-autofill:hover,
-input[type="text"]:-webkit-autofill:focus,
-input[type="text"]:-webkit-autofill:active {
+.public-layout input[type="text"]:-webkit-autofill,
+.public-layout input[type="text"]:-webkit-autofill:hover,
+.public-layout input[type="text"]:-webkit-autofill:focus,
+.public-layout input[type="text"]:-webkit-autofill:active {
   color: white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: #ffffff;
@@ -46,15 +46,15 @@ input[type="text"]:-webkit-autofill:active {
 
 /*   Généralités pour les inputs   */
 
-input[type="text"],
-input[type="text"]::placeholder {
+.public-layout input[type="text"],
+.public-layout input[type="text"]::placeholder {
   color: white;
   background-clip: text;
   -webkit-text-fill-color: #ffffff;
 }
 
-input[type="email"],
-input[type="email"]::placeholder {
+.public-layout input[type="email"],
+.public-layout input[type="email"]::placeholder {
   color: white;
 
   min-height: 20px;
@@ -66,8 +66,8 @@ input[type="email"]::placeholder {
   padding: 4px 4px 4px 4px;
 }
 
-input[type="password"],
-input[type="password"]::placeholder {
+.public-layout input[type="password"],
+.public-layout input[type="password"]::placeholder {
   color: white;
 
   min-height: 20px;
@@ -79,8 +79,8 @@ input[type="password"]::placeholder {
   padding: 4px 4px 4px 4px;
 }
 
-input[type="text"],
-input[type="text"]::placeholder {
+.public-layout input[type="text"],
+.public-layout input[type="text"]::placeholder {
   min-height: 20px;
   max-height: 30px;
 
@@ -89,7 +89,7 @@ input[type="text"]::placeholder {
 
 /*     Bouton BLEU "Création de votre compte"    */
 
-button[type="submit"] {
+.public-layout button[type="submit"] {
   background-color: #005ba9;
 
   letter-spacing: 0px;

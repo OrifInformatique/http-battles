@@ -1,0 +1,41 @@
+[{
+    "id": "22c9226a-f7b4-41de-ba97-e6e5a00f7832",
+    "state": "WAITING_PLAYER",
+    "challenger": null
+},{
+    "id": "ffa74781-3290-44e7-82df-25f5daabfb67",
+    "state": "SETTINGS",
+    "challenger": {
+        "username": "eddy-0721"
+    }
+},{
+    "id": "16633d61-848a-471a-8aa1-873a7fe3c3e8",
+    "state": "YOUR_TURN",
+    "challenger": {
+        "username": "alois-6412"
+    }
+},{
+    "id": "0de49e9b-2f28-4b72-b998-f933179dee60",
+    "state": "OPPONENT_ROUND",
+    "challenger": {
+        "username": "johnny-b"
+    }
+},{
+    "id": "2756e0c8-9bac-4b92-93a3-4823a0db5bff",
+    "state": "YOUR_TURN",
+    "challenger": {
+        "username": "clarks"
+    }
+},{
+    "id": "7da64ff6-8d9f-46be-8a7d-928d3aa66039",
+    "state": "ENDED",
+    "challenger": {
+        "username": "michaelM"
+    }
+},{
+    "id": "39f5fc15-a44f-427c-850b-b81529144dda",
+    "state": "ENDED",
+    "challenger": {
+        "username": "alois-6412"
+    }
+}]
