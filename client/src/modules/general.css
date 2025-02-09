@@ -1,7 +1,7 @@
 /*   Import de la police   */
 @font-face {
-  font-family: 'Calibril';
-  src: url('../assets/calibril.ttf') format('truetype');
+  font-family: "Calibril";
+  src: url("../../public/assets/fonts/calibril.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -10,88 +10,87 @@
   font-family: Calibril;
 }
 
-
 /*Règles de généralités notamment pour les formulaires*/
 
 /*   input du form.   */
-    /*   Suppression de l'autofill sur les balises input   */
-    input[type="email"]:-webkit-autofill,
-    input[type="email"]:-webkit-autofill:hover, 
-    input[type="email"]:-webkit-autofill:focus, 
-    input[type="email"]:-webkit-autofill:active{
-      color: white;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: #ffffff;
-      transition: background-color 5000s ease-in-out 0s;
-    }
-
-    input[type="password"]:-webkit-autofill,
-    input[type="password"]:-webkit-autofill:hover, 
-    input[type="password"]:-webkit-autofill:focus, 
-    input[type="password"]:-webkit-autofill:active{
-      color: white;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: #ffffff;
-      transition: background-color 5000s ease-in-out 0s;
-    }
-
-    input[type="text"]:-webkit-autofill,
-    input[type="text"]:-webkit-autofill:hover, 
-    input[type="text"]:-webkit-autofill:focus, 
-    input[type="text"]:-webkit-autofill:active{
-      color: white;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: #ffffff;
-      transition: background-color 5000s ease-in-out 0s;
-    }
-    
-/*   Généralités pour les inputs   */
-
-input[type="text"],input[type="text"]::placeholder {
+/*   Suppression de l'autofill sur les balises input   */
+input[type="email"]:-webkit-autofill,
+input[type="email"]:-webkit-autofill:hover,
+input[type="email"]:-webkit-autofill:focus,
+input[type="email"]:-webkit-autofill:active {
   color: white;
-  background-clip: text;
-    -webkit-text-fill-color: #ffffff;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
-input[type="email"],input[type="email"]::placeholder {
-    color: white;
+input[type="password"]:-webkit-autofill,
+input[type="password"]:-webkit-autofill:hover,
+input[type="password"]:-webkit-autofill:focus,
+input[type="password"]:-webkit-autofill:active {
+  color: white;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
+}
 
-    min-height: 20px;
-    max-height:30px;
+input[type="text"]:-webkit-autofill,
+input[type="text"]:-webkit-autofill:hover,
+input[type="text"]:-webkit-autofill:focus,
+input[type="text"]:-webkit-autofill:active {
+  color: white;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
+}
 
+/*   Généralités pour les inputs   */
 
-    min-width: 80%;
-    max-width: 100%;
+input[type="text"],
+input[type="text"]::placeholder {
+  color: white;
+  background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+}
 
-    padding: 4px 4px 4px 4px;
-  }
+input[type="email"],
+input[type="email"]::placeholder {
+  color: white;
 
-  input[type="password"], input[type="password"]::placeholder {
-    color: white;
-    
-    min-height: 20px;
-    max-height:30px;
-  
-   
-    min-width: 80%;
-    max-width: 100%;
-    
-    padding: 4px 4px 4px 4px;
-  }
-  
+  min-height: 20px;
+  max-height: 30px;
 
-input[type="text"], input[type="text"]::placeholder {
+  min-width: 80%;
+  max-width: 100%;
 
-    min-height: 20px;
-    max-height:30px;
-    
-    padding: 4px 4px 4px 4px;
+  padding: 4px 4px 4px 4px;
+}
+
+input[type="password"],
+input[type="password"]::placeholder {
+  color: white;
+
+  min-height: 20px;
+  max-height: 30px;
+
+  min-width: 80%;
+  max-width: 100%;
+
+  padding: 4px 4px 4px 4px;
+}
+
+input[type="text"],
+input[type="text"]::placeholder {
+  min-height: 20px;
+  max-height: 30px;
+
+  padding: 4px 4px 4px 4px;
 }
 
 /*     Bouton BLEU "Création de votre compte"    */
 
-button[type="submit"]{
-  background-color:  #005BA9;
+button[type="submit"] {
+  background-color: #005ba9;
 
   letter-spacing: 0px;
 
@@ -102,12 +101,12 @@ button[type="submit"]{
 /*   Définition police du composant en: Calibri Light ( imported ) */
 
 .calibri {
-    font-family: 'calibril'; 
-    letter-spacing: 2.2px; 
+  font-family: "calibril";
+  letter-spacing: 2.2px;
 }
 
 /*     Style / comportement de la checkbox     */
-    /*  Comportement de la checkbox  */
+/*  Comportement de la checkbox  */
 
 .checkboxRegisterLogin input {
   display: none;
@@ -118,15 +117,15 @@ button[type="submit"]{
   align-items: center;
 }
 
-    /*  Bordure de la checkbox  */
+/*  Bordure de la checkbox  */
 
 .checkboxRegisterLogin .checkbox-border {
   display: flex;
   width: 20px;
   height: 20px;
   border: 1px solid white;
-  background-color: transparent; 
-  border-radius: 3px; 
+  background-color: transparent;
+  border-radius: 3px;
   margin: 0;
   padding: 0;
   margin-right: 8px;
@@ -134,25 +133,24 @@ button[type="submit"]{
   align-items: center;
 }
 
-
-    /*   ::after   */
+/*   ::after   */
 
 .checkboxRegisterLogin .checkbox-border::after {
-  display:block;
-  content:"";
-  width:1px;
-  height:1px;
+  display: block;
+  content: "";
+  width: 1px;
+  height: 1px;
   margin: 0;
   padding: 0;
-  opacity:0;
+  opacity: 0;
   background: whitesmoke;
-  transition:.2s;
+  transition: 0.2s;
 }
 
-    /*   Une fois checked   */
+/*   Une fois checked   */
 
 .checkboxRegisterLogin input:checked + label .checkbox-border {
-  border:solid 2px whitesmoke 
+  border: solid 2px whitesmoke;
 }
 
 .checkboxRegisterLogin input:checked + label .checkbox-border::after {
@@ -162,21 +160,19 @@ button[type="submit"]{
 }
 
 .checkboxRegisterLogin input:checked + .checkbox-label {
-  color:purple    
+  color: purple;
 }
 
-    /*  Opacité de la checkbox  */
+/*  Opacité de la checkbox  */
 
+/*   Input du form.   */
 
-    /*   Input du form.   */
-
-#username, #prenom
-, #nomDeFamille {
+#username,
+#prenom,
+#nomDeFamille {
   color: white;
 
-  background:rgba(0, 0, 0, 0);
+  background: rgba(0, 0, 0, 0);
 
   border-bottom: white solid 1px;
 }
-
-

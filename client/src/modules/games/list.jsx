@@ -7,6 +7,11 @@ const GamesList = () => {
 
     return (<>
 
+          <h1>
+            Heureux de vous voir de retour mousaillon! Vôtre équipage n'attend
+            plus que vous afin de partir à la conquête du web.
+          </h1>
+
         <hr />        
     
         <p className="font-bold">Navigation : </p>

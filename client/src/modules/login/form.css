@@ -1,4 +1,5 @@
-input[type="password"], input[type="email"] {
+input[type="password"],
+input[type="email"] {
   color: white;
   background: rgba(0, 0, 0, 0);
   border-bottom: white solid 1px;
@@ -7,55 +8,51 @@ input[type="password"], input[type="email"] {
 /*   Backdground de la page   */
 
 .fullBackground {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
   background-image: url(../../../public/assets/images/background/background_from_youcam.jpg);
   background-repeat: no-repeat;
-  background-size:cover;
+  background-size: cover;
 
   display: flex;
   flex-flow: column wrap;
-  align-items:center;
+  align-items: center;
   justify-content: center;
-
-  min-height: 1400px;
-  
-  padding-bottom: 400px;
-  
 }
 
 /*   Containers   */
 
 .loginContainer {
-display: flex;
-flex-direction: column;
-align-items: center;
-flex-wrap: nowrap;
-justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-background:rgba(0, 0, 0, 0.7);
-backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
 
-color: white;
+  color: white;
 
-height: 35%;
+  height: 35%;
 
-min-width: 22%;
-max-width: 25%;
+  min-width: 22%;
+  max-width: 25%;
 
-gap: 25px;
+  gap: 25px;
 
-padding-left: 0.5%;
-padding-right:  0.5%;
-padding-bottom: 30px;
-padding-top: 23px;
+  padding-left: 0.5%;
+  padding-right: 0.5%;
+  padding-bottom: 32px;
+  padding-top: 32px;
 
-border-radius: 7px;
-}
+  border-radius: 7px;
 
-.centerTextContainer {
- display: flex;
- flex-flow: row wrap;
- justify-content: center;
-  
+  box-sizing: border-box;
 }
 
 .checkboxContainer {
@@ -66,26 +63,35 @@ border-radius: 7px;
 }
 
 .textLogin {
+  text-align: center;
   font-weight: bold;
-  padding-bottom: 20px;
 }
 
 .sloganLogin {
   color: white;
   font-size: 22px;
-
-  padding-bottom: 80px;
+  text-align: center;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: rgba(0, 0, 0, 0.6);
 }
 
-.spaceBetweenLoginAndPassword  {
+.sloganLogin p {
+  padding-bottom: 12px;
+}
+
+.spaceBetweenLoginAndPassword {
   padding-right: 5px;
 }
 
-/*   Boutton BLEU "se connecter"   */ 
+/*   Boutton BLEU "se connecter"   */
 
 .buttonLogin {
   display: flex;
-  flex-direction: column ;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 
