@@ -1,9 +1,9 @@
 import React from 'react'
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 const LobbyLayout = () => {
     return (<>
-        <div>
+        <div>            
             <Outlet />
         </div>
     </>);

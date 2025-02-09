@@ -1,0 +1,103 @@
+input[type="password"], input[type="email"] {
+  color: white;
+  background: rgba(0, 0, 0, 0);
+  border-bottom: white solid 1px;
+}
+
+/*   Backdground de la page   */
+
+.fullBackground {
+  background-image: url(../../../public/assets/images/background/background_from_youcam.jpg);
+  background-repeat: no-repeat;
+  background-size:cover;
+
+  display: flex;
+  flex-flow: column wrap;
+  align-items:center;
+  justify-content: center;
+
+  min-height: 1400px;
+  
+  padding-bottom: 400px;
+  
+}
+
+/*   Containers   */
+
+.loginContainer {
+display: flex;
+flex-direction: column;
+align-items: center;
+flex-wrap: nowrap;
+justify-content: center;
+
+background:rgba(0, 0, 0, 0.7);
+backdrop-filter: blur(4px);
+
+color: white;
+
+height: 35%;
+
+min-width: 22%;
+max-width: 25%;
+
+gap: 25px;
+
+padding-left: 0.5%;
+padding-right:  0.5%;
+padding-bottom: 30px;
+padding-top: 23px;
+
+border-radius: 7px;
+}
+
+.centerTextContainer {
+ display: flex;
+ flex-flow: row wrap;
+ justify-content: center;
+  
+}
+
+.checkboxContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.textLogin {
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
+.sloganLogin {
+  color: white;
+  font-size: 22px;
+
+  padding-bottom: 80px;
+}
+
+.spaceBetweenLoginAndPassword  {
+  padding-right: 5px;
+}
+
+/*   Boutton BLEU "se connecter"   */ 
+
+.buttonLogin {
+  display: flex;
+  flex-direction: column ;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+
+  min-width: 80%;
+}
+
+.buttonLogin:hover {
+  border: black solid 2px;
+}
+
+.checkbox-label {
+  font-size: small;
+}

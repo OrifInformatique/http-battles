@@ -1,0 +1,182 @@
+/*   Import de la police   */
+@font-face {
+  font-family: 'Calibril';
+  src: url('../assets/calibril.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: Calibril;
+}
+
+
+/*Règles de généralités notamment pour les formulaires*/
+
+/*   input du form.   */
+    /*   Suppression de l'autofill sur les balises input   */
+    input[type="email"]:-webkit-autofill,
+    input[type="email"]:-webkit-autofill:hover, 
+    input[type="email"]:-webkit-autofill:focus, 
+    input[type="email"]:-webkit-autofill:active{
+      color: white;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: #ffffff;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
+    input[type="password"]:-webkit-autofill,
+    input[type="password"]:-webkit-autofill:hover, 
+    input[type="password"]:-webkit-autofill:focus, 
+    input[type="password"]:-webkit-autofill:active{
+      color: white;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: #ffffff;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
+    input[type="text"]:-webkit-autofill,
+    input[type="text"]:-webkit-autofill:hover, 
+    input[type="text"]:-webkit-autofill:focus, 
+    input[type="text"]:-webkit-autofill:active{
+      color: white;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: #ffffff;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+    
+/*   Généralités pour les inputs   */
+
+input[type="text"],input[type="text"]::placeholder {
+  color: white;
+  background-clip: text;
+    -webkit-text-fill-color: #ffffff;
+}
+
+input[type="email"],input[type="email"]::placeholder {
+    color: white;
+
+    min-height: 20px;
+    max-height:30px;
+
+
+    min-width: 80%;
+    max-width: 100%;
+
+    padding: 4px 4px 4px 4px;
+  }
+
+  input[type="password"], input[type="password"]::placeholder {
+    color: white;
+    
+    min-height: 20px;
+    max-height:30px;
+  
+   
+    min-width: 80%;
+    max-width: 100%;
+    
+    padding: 4px 4px 4px 4px;
+  }
+  
+
+input[type="text"], input[type="text"]::placeholder {
+
+    min-height: 20px;
+    max-height:30px;
+    
+    padding: 4px 4px 4px 4px;
+}
+
+/*     Bouton BLEU "Création de votre compte"    */
+
+button[type="submit"]{
+  background-color:  #005BA9;
+
+  letter-spacing: 0px;
+
+  height: 28px;
+  min-width: 200px;
+}
+
+/*   Définition police du composant en: Calibri Light ( imported ) */
+
+.calibri {
+    font-family: 'calibril'; 
+    letter-spacing: 2.2px; 
+}
+
+/*     Style / comportement de la checkbox     */
+    /*  Comportement de la checkbox  */
+
+.checkboxRegisterLogin input {
+  display: none;
+}
+
+.checkboxRegisterLogin label {
+  display: flex;
+  align-items: center;
+}
+
+    /*  Bordure de la checkbox  */
+
+.checkboxRegisterLogin .checkbox-border {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: transparent; 
+  border-radius: 3px; 
+  margin: 0;
+  padding: 0;
+  margin-right: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+
+    /*   ::after   */
+
+.checkboxRegisterLogin .checkbox-border::after {
+  display:block;
+  content:"";
+  width:1px;
+  height:1px;
+  margin: 0;
+  padding: 0;
+  opacity:0;
+  background: whitesmoke;
+  transition:.2s;
+}
+
+    /*   Une fois checked   */
+
+.checkboxRegisterLogin input:checked + label .checkbox-border {
+  border:solid 2px whitesmoke 
+}
+
+.checkboxRegisterLogin input:checked + label .checkbox-border::after {
+  opacity: 1;
+  width: 16px;
+  height: 16px;
+}
+
+.checkboxRegisterLogin input:checked + .checkbox-label {
+  color:purple    
+}
+
+    /*  Opacité de la checkbox  */
+
+
+    /*   Input du form.   */
+
+#username, #prenom
+, #nomDeFamille {
+  color: white;
+
+  background:rgba(0, 0, 0, 0);
+
+  border-bottom: white solid 1px;
+}
+
+

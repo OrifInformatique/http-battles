@@ -1,37 +1,103 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
+import Navigation from "../navigation/form.jsx";
+import './form.css';
+import '../general.css'
 
-const RegisterForm = () => {
+function RegisterPage() {     
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
+    /*     State de sauvegarde de données     */
+
+    const [formData, setFormData] = useState({
+        prenom: "",
+        nom: "",
+        username: "",
+        email: "",
+        password1: "",
+        password2: "",
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        setIsSubmitted(true)
+    };
+
+    const onChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+    
     return (<>
-    
-        <hr />        
+        <Navigation/>
 
-        <p className="font-bold">Navigation : </p>
+        <div id="containerFullBackground" className="fullBackgroundRegister">
 
-        <ul>
-            <li><Link className="text-blue-500 underline" to="/login">Formulaire de login</Link></li>
-            <li><Link className="text-blue-500 underline" to="/lobby">Lobby</Link></li>
-        </ul>
+            {   /*     Vérifie que isSubmitted est True (?) ou false (:)       */
+            
+                isSubmitted ?
+                <div className="registerContainer" >
+                    <h1 id="textRegister2" className="calibri">
+                        Register
+                    </h1>
 
-        <hr />        
-        
-        <p className="font-bold">Contenu : </p>
+                    <div className="accountCreatedContainer">
 
-        <ul className="list-disc">
-            <li>Un lien vers le formulaire de login</li>
-            <li>Un formulaire de création de compte contenant : </li>
-            <li>- Un champs email</li>
-            <li>- Un champs username</li>
-            <li>- Un champs mot de passe</li>
-            <li>- Un champs confirmer le mot de passe</li>
-            <li>- Un bouton de validation du formulaire</li>
-        </ul>
-        
-        <hr />        
-    
+                        <h3 className="registerPhrase ">
+                            {formData.username}, nous vous remercions chaleureusement de vous être inscrit/e sur notre plateforme. <br/><br/>Votre inscription a bien été prise en compte. Vous pouvez dès à présent vous rendre sur la page de connexion pour accéder à votre compte et profiter de nos services : 👉 <Link className="text-blue-500 underline" to="/login">Lien vers le formulaire de connexion</Link> <br/><br/>Si vous avez des questions ou besoin d'assistance, n'hésitez pas à nous contacter. Nous sommes là pour vous aider ! Encore merci de votre confiance et à très bientôt,
+                            <br/><br/>L'équipe HTTP BATTLE de l'Orif de Pomy
+                        </h3>
+
+                    </div>
+                </div>
+                : 
+                    <form onSubmit={handleSubmit} className="registerContainer">
+
+                    <h1 id="textRegister1" >
+                        Register
+                    </h1>
+                    <h3 className="phraseRegister">
+                        Créez votre premier compte, rejoignez désormais les flots obscurs des richesses oubliées de HTTP Battles
+                    </h3>
+                        
+                    <div className="facultatifContainer">
+                            <h4 className="facultatif">*facultatif</h4>
+                            <p></p>
+                            <h4 className="facultatif" id="facultatif2">*facultatif</h4>
+                    </div>
+
+                    <div className="nameContainer">
+                        <input type="text" className="calibri" id="prenom" name="prenom" value={formData.prenom} onChange={onChange} placeholder='Prénom' required />
+                        <input type="text" className="calibri" id="nomDeFamille" name="nom" value={formData.nom} onChange={onChange} placeholder='Nom de famille' required />
+                    </div>
+
+                    <input type="text" className="calibri" id="username" name="username" value={formData.username} onChange={onChange} placeholder="Nom d'utilisateur" required />
+                    <input type="email" className="calibri" id="email" name="email" value={formData.email} onChange={onChange} placeholder='Entrez un email' required />
+                    <input type="password" className="calibri" id="password1" name="password1" value={formData.password1} onChange={onChange} placeholder='Entrez un mot de passe' required />
+                    <input type="password" className="calibri" id="password2" name="password2" value={formData.password2} onChange={onChange} placeholder='Confirmez le mot de passe' required />
+
+                    <div className="checkboxRegisterLogin">
+                        <input type="checkbox" className="calibri" id="checkboxRegisterLogin"/> 
+                        <label htmlFor="checkboxRegisterLogin">   
+                            <span className="checkbox-border"></span>
+                            <span className="checkbox-label">J'accepte les {/*A passer le texte suivant en LINK pour les conditions */} conditions d'utilisations de HTTP Battles</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" name="submit" className="buttonRegister">Création de votre compte</button>
+                </form>
+
+            }
+
+</div>
+
     </>)
+    }
 
-}
+export default RegisterPage
 
-export default RegisterForm
+
