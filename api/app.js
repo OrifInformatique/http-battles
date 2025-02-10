@@ -12,7 +12,7 @@ const userRoutes = require('./routes/user')
 
 // connection à la base de donnée mongodb, plus précisément le cluster 0 avec l'utilisateur KenCacciabue
 mongoose.set('strictQuery', false);
-mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/?retryWrites=true&w=majority&appName=${process.env.DB_APP_NAME}`)
+mongoose.connect(`mongodb+srv://KenBattle:OhMgJYjh8g04Y27K@clusterbattle.zjpdt.mongodb.net/?retryWrites=true&w=majority&appName=ClusterBattle`)
     // S i tout se passe sans probleme, affiche le succès de la connection dans la console
     .then(() => console.log('Connexion à MongoDB réussie !'))
     // si une erreure est reperer, affiche l'erreur
