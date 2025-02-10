@@ -10,6 +10,8 @@ const app = express();
 // importe la page user.js de dossiers routes qui contient les chemins d'accès envers les différnts fonctionnalité utilisateurs
 const userRoutes = require('./routes/user')
 
+const gameRoutes = require('./routes/game')
+
 // connection à la base de donnée mongodb, plus précisément le cluster 0 avec l'utilisateur KenCacciabue
 mongoose.set('strictQuery', false);
 mongoose.connect(`mongodb+srv://KenBattle:OhMgJYjh8g04Y27K@clusterbattle.zjpdt.mongodb.net/?retryWrites=true&w=majority&appName=ClusterBattle`)
@@ -45,6 +47,8 @@ app.get('/api', (req, res) => {
 
 // implement les fonctionalité utilisateurs
 app.use('/api/auth', userRoutes)
+
+app.use('/api/auth', gameRoutes)
 
 /** 
  * Games : Crée une nouvelle partie en associant l'utilisateur connecté

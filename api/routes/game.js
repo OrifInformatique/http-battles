@@ -7,7 +7,7 @@ const gameCtrl = require('../controllers/game')
 
 // redirige la requette post de création utilisateur
 // créé une partie
-router.get('/gameCreation', gameCtrl.gameCreation)
+router.get('/games', gameCtrl.createGame)
 // redirige la requet post de connexion utilisateur
 //router.post('/login', userCtrl.login)
 
