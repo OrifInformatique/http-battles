@@ -48,6 +48,10 @@ app.get('/api', (req, res) => {
 // implement les fonctionalité utilisateurs
 app.use('/api/auth', userRoutes)
 
+/** 
+ * Games : Crée une nouvelle partie en associant l'utilisateur connecté
+ * à un autre utilisateur selon son email.
+ **/
 app.use('/api/auth', gameRoutes)
 
 /** 
@@ -59,15 +63,6 @@ app.get('/api/games', (req, res) => {
     res.status(200).json(games)
 });
 
-/** 
- * Games : Crée une nouvelle partie en associant l'utilisateur connecté
- * à un autre utilisateur selon son email.
- **/
-app.post('/api/games', (req, res) => {
-    const games = require('../mocks/games/list.json'); // Find or create 
-    let newGame = games.find(aGame => aGame.state === "WAITING_PLAYER");
-    res.status(200).json(newGame)
-});
 
 /** 
  * Games : Permet de récupérer les informations de jeux
