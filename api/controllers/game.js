@@ -10,9 +10,9 @@ exports.createGame = (req, res, next) => {
 
     const creatorId = gameReq.userId
 
-    const date = new Date()
+    const timestamp = new Date().getTime()
 
-    const key = creatorId + String(date)
+    const key = creatorId + timestamp
 
     // crée une partie à partir d'un schema
     const game = new Game({
