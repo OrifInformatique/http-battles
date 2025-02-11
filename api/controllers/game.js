@@ -32,10 +32,31 @@ exports.createGame = (req, res, next) => {
 }
 
 exports.findGame = (req, res, next) => {
-  // recupère la partie qui correspond à la clef de la requette
-  Game.findOne({ key: req.body.key})
+    // recupère la partie qui correspond à la clef de la requette
+    Game.findOne({ key: req.body.key})
         // si tout se passe bien, envoit la partie
         .then(game => res.status(200).json(game))
+        // si une erreur est trouvée, envoie l'erreur
+        .catch(error => res.status(404).json({error}))
+}
+
+exports.joinGame = (req, res) => {
+    // recupère la partie qui correspond à la clef de la requette
+    Game.findOne({ key: req.body.key})
+        // si tout se passe bien, envoit la partie
+        .then(
+            game => {
+                // modifie la partie qui correspond a l'id en parametre dans la requet en remplacant son contenu par le body contenu dans la requet
+                Game.updateOne({ key: req.body.key}, { $set: {
+                        state: "SETTINGS",
+                        challengerId:  req.body.challengerId
+                    }})
+                    // si tout se passe bien, envoit la partie
+                    .then(() => res.status(200).json(game))
+                    // si une erreur est trouvée, envoie l'erreur
+                    .catch(error => res.status(401).json({ error }))
+            }
+        )
         // si une erreur est trouvée, envoie l'erreur
         .catch(error => res.status(404).json({error}))
 }
