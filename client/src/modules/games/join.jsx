@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { MOCKED_GAME_ID } from "@mocks/config"; 
@@ -32,6 +32,40 @@ export const GamesJoinLink = () => {
 
 const GamesJoin = () => {
 
+    const [name,setName] = useState("Votre clé");
+
+    const [gameStatus, setStatus] = UseState(0);
+
+    //{key :"Votre clé"} syntaxe pas tout à fait correcte pour le reste du programme
+
+    /*  
+    
+    partie feedback de la clé de partie
+
+    handleClick(e) {
+    var count = this.state.count;
+    count = count !== 3 ? count + 1 : 0;
+    this.setState({
+      count: count
+    });
+  }
+  
+  function fillColor(count) {
+    var fill = "";
+    if(count === 1) fill = "#E1E0DD";
+    if(count === 2) fill = "#999999";
+    if(count === 3) fill = "#000";
+    return fill;
+}  
+  */
+    
+    const handleSubmit = (event) => {
+        console.log(name)
+        event.preventDefault();
+        alert(`The name you entered was: ${name}`)
+        console.log(event)
+      }
+
     return (<>
 
         <hr />        
@@ -59,8 +93,19 @@ const GamesJoin = () => {
             <li>- Un lien de navigation vers la partie rejointe</li>
         </ul>
         
-        <hr />        
-    
+        <hr />
+
+        <br />
+        <p className="font-bold">Rejoindre une partie : </p>        
+        <form onSubmit={handleSubmit}>
+      <label>Entrez la clé de la partie d'un autre joueur : <br />
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+      </label>
+      <br />
+      <input type="submit" />
+    </form>
+    <p>Current Input Value: {name}</p>
+
     </>)
 
 }
