@@ -3,11 +3,14 @@ const Game = require('../models/Game')
 // import le package fs de node qui nous permet de modifier des fichiers
 const fs = require('fs')
 
+// crée une partie
 exports.createGame = (req, res, next) => {
+    // crée une partie à partir d'un schema
     const game = new Game({
         state: "WAITING_PLAYER",
         createurId: req.body.userId
     })
+    // sauvegarde la partie
     game.save()
         // si tout se passe bien, envoi un message de succès (obligatoire)
         .then(() => res.status(201).json({ message: "Partie créé !" }))
