@@ -45,13 +45,10 @@ app.get('/api', (req, res) => {
     res.status(200).json({ message : 'HTTP Battle - Version 0.1'})
 });
 
-// implement les fonctionalité utilisateurs
+// implemente les fonctionalité utilisateurs
 app.use('/api/auth', userRoutes)
 
-/** 
- * Games : Crée une nouvelle partie en associant l'utilisateur connecté
- * à un autre utilisateur selon son email.
- **/
+// Implemente les fonctionalité de parties
 app.use('/api/auth', gameRoutes)
 
 /** 
@@ -64,12 +61,6 @@ app.get('/api/games', (req, res) => {
 });
 
 
-/** 
- * Games : Permet de récupérer les informations de jeux
- **/
-app.get('/api/games/:gameId', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté'})
-});
 
 /** 
  * Games : Permet de récupérer les informations de jeux

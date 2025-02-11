@@ -5,19 +5,37 @@ const fs = require('fs')
 
 // crée une partie
 exports.createGame = (req, res, next) => {
+
+    const gameReq = req.body 
+
+    const creatorId = gameReq.userId
+
+    const date = new Date()
+
+    const key = creatorId + String(date)
+
     // crée une partie à partir d'un schema
     const game = new Game({
         state: "WAITING_PLAYER",
-        createurId: req.body.userId
+        createurId: creatorId,
+        key: key
     })
     // sauvegarde la partie
     game.save()
         // si tout se passe bien, envoi un message de succès (obligatoire)
-        .then(() => res.status(201).json({ message: "Partie créé !" }))
+        .then(() => res.status(201).json({ 
+            message: "Partie créé !" ,
+            key: key
+        }))
         // en cas d'erreure, envoie l'erreur
         .catch((error) => res.status(400).json({ error }));
+}
 
-    //const games = require('../../mocks/games/list.json'); // Find or create 
-    //let newGame = games.find(aGame => aGame.state === "WAITING_PLAYER");
-    //res.status(200).json(newGame)
+exports.findGame = (req, res, next) => {
+  // recupère la partie qui correspond à la clef de la requette
+  Game.findOne({ key: req.body.key})
+        // si tout se passe bien, envoit la partie
+        .then(game => res.status(200).json(game))
+        // si une erreur est trouvée, envoie l'erreur
+        .catch(error => res.status(404).json({error}))
 }

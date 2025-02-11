@@ -6,7 +6,9 @@ const router = express.Router()
 const gameCtrl = require('../controllers/game')
 
 // créé une partie
-router.get('/games', gameCtrl.createGame)
+router.get('/games/createGame', gameCtrl.createGame)
+
+router.get('/games/findGame', gameCtrl.findGame)
 
 // export le router
 module.exports = router
