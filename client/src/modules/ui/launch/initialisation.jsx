@@ -1,5 +1,5 @@
 import React from "react";
-import '../general.css';
+import '../../general.css';
 
 function MyList({ handleChange, valeurs = [], i, tech}) {
     return (

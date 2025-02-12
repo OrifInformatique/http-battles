@@ -51,10 +51,6 @@
     min-height: 1000px;
 }
 
-/*  Règles pour Select  */
-select {
-    width: 100px;
-}
 /*     Titre de la page    */
 
 .title {
@@ -124,8 +120,7 @@ select {
         }
 
         /*     Phrase choisie   */
-        .phrase {
-        }
+
 
         /*     Boutton de validation de la phrase     */
 
@@ -138,6 +133,18 @@ select {
 button[type="submit"]{
     max-width: 250px;
 }
+
+/*  Règles pour Select  */
+select {
+    width: 100px;
+    height: 25px;
+
+    background-color: cadetblue;
+
+    border: solid 2px black;
+    border-radius: 13px;
+}
+
 /*     Element mobile      */
 
 
