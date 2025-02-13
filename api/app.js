@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const app = express();    
+const path = require('path')
+const dotenv = require('dotenv').config({ path: 'env/.env' })
 
 // importe la page user.js de dossiers routes qui contient les chemins d'accès envers les différnts fonctionnalité utilisateurs
 const userRoutes = require('./routes/user')
