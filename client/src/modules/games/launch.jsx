@@ -17,7 +17,6 @@ const GamesLaunch = () => {
     }
 
     return (<>
-
         <hr />        
     
         <p className="font-bold">Navigation : </p>
@@ -37,7 +36,7 @@ const GamesLaunch = () => {
             <li><Link className="text-blue-500 underline" to={`/games/${MOCKED_GAME_ID}/ended`}>{GAMES_STATES.ENDED}</Link></li>
         </ul>
 
-        <hr />        
+        <hr />
     
         { (state === GAMES_STATES.SETTINGS) && <>
             <p className="font-bold">Contenu de l'état {GAMES_STATES.SETTINGS} : </p>

@@ -1,5 +1,5 @@
 import React from "react";
-import PhraseLaunch from "../../ui/launch";
+import PhraseLaunch from "../../ui/launch/initialisation";
 
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
     return(<>
@@ -9,7 +9,7 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
             <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>
                 <div>
                     {/*Liste*/}
-                    <div className="listLaunchContainer">
+                    <div className="listLaunchContainer" >
                         <div className="firstListLaunchContainer"> 
                             <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase.d1}/>
                             <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} phrase={phrase.d2}/>
