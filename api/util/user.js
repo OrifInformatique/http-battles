@@ -1,8 +1,9 @@
 // import le schema d'un utilisateur
 const User = require("../models/User")
 
-exports.getUserById = (userId) =>{
+exports.getUserById = (userId) => {
     return User.findOne({ _id: userId })
         .then(user => user)
-        .catch(error => error)
+        .catch(error => console.log(error))
 }
+

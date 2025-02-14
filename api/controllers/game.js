@@ -41,7 +41,7 @@ exports.findGame = (req, res, next) => {
     Game.findOne({ key: req.body.key})
         // si tout se passe bien, envoit la partie
         .then(game => {
-            utilGame.formateGame(game)
+            utilGame.formatedGame(game)
                 .then(formatedGame => res.status(200).json(formatedGame))
                 .catch(error => res.status(404).json({error}))
         })
@@ -54,9 +54,8 @@ exports.listGames = (req, res, next) => {
     Game.find({ state: "WAITING_PLAYER"})
         // si tout se passe bien, envoit la partie
         .then(games => {
-            games.forEach(game => {
-                console.log(game)
-            });
+            res.status(200).json({games})
+            
         })
         // si une erreur est trouvée, envoie l'erreur
         .catch(error => res.status(400).json({error}))
