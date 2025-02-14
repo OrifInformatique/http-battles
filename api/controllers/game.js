@@ -3,7 +3,9 @@ const Game = require('../models/Game')
 // import le package fs de node qui nous permet de modifier des fichiers
 const fs = require('fs')
 
-const util = require('../util/user')
+const utilUser = require('../util/user')
+
+const utilGame = require('../util/game')
 
 // crée une partie
 exports.createGame = (req, res, next) => {
@@ -38,9 +40,26 @@ exports.findGame = (req, res, next) => {
     // recupère la partie qui correspond à la clef de la requette
     Game.findOne({ key: req.body.key})
         // si tout se passe bien, envoit la partie
-        .then(game => res.status(200).json(game))
+        .then(game => {
+            utilGame.formateGame(game)
+                .then(formatedGame => res.status(200).json(formatedGame))
+                .catch(error => res.status(404).json({error}))
+        })
         // si une erreur est trouvée, envoie l'erreur
         .catch(error => res.status(404).json({error}))
+}
+
+exports.listGames = (req, res, next) => {
+    // recupère la partie qui correspond à la clef de la requette
+    Game.find({ state: "WAITING_PLAYER"})
+        // si tout se passe bien, envoit la partie
+        .then(games => {
+            games.forEach(game => {
+                console.log(game)
+            });
+        })
+        // si une erreur est trouvée, envoie l'erreur
+        .catch(error => res.status(400).json({error}))
 }
 
 exports.joinGame = (req, res) => {
@@ -53,14 +72,13 @@ exports.joinGame = (req, res) => {
             game => {
                 const createurId = game.createurId
 
-                util.getUserById(createurId)
+                utilUser.getUserById(createurId)
                     .then(
                         createur => {
                         
                         const createurUsername = createur.username
-                        console.log(createurUsername)
                         
-                        util.getUserById(challengerId)
+                        utilUser.getUserById(challengerId)
                             .then(
                                 challenger => {
                                     const challengerUsername = challenger.username

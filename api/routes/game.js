@@ -10,6 +10,8 @@ router.get('/games/createGame', gameCtrl.createGame)
 
 router.get('/games/findGame', gameCtrl.findGame)
 
+router.get('/games/listGames', gameCtrl.listGames)
+
 router.post('/games/joinGame', gameCtrl.joinGame)
 
 // export le router
