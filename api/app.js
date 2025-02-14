@@ -1,5 +1,8 @@
 const express = require('express');
 
+const path = require('path')
+const dotenv = require('dotenv').config({ path: 'env/.env' })
+
 // importe le package Mongoose qui facilittent les interactions avec la base donnée Mongodb
 const mongoose = require('mongoose');
 
