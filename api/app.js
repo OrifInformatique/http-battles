@@ -1,7 +1,5 @@
 const express = require('express');
 
-
-
 // importe le package Mongoose qui facilittent les interactions avec la base donnée Mongodb
 const mongoose = require('mongoose');
 
