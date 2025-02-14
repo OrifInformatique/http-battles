@@ -1,5 +1,7 @@
 const express = require('express');
 
+
+
 // importe le package Mongoose qui facilittent les interactions avec la base donnée Mongodb
 const mongoose = require('mongoose');
 
@@ -9,6 +11,11 @@ const app = express();
 
 // importe la page user.js de dossiers routes qui contient les chemins d'accès envers les différnts fonctionnalité utilisateurs
 const userRoutes = require('./routes/user')
+
+const path = require('path')
+const dotenv = require('dotenv').config({ path: 'env/.env' })
+
+console.log(process.env)
 
 // connection à la base de donnée mongodb, plus précisément le cluster 0 avec l'utilisateur KenCacciabue
 mongoose.set('strictQuery', false);
