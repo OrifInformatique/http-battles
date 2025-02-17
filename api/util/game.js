@@ -49,3 +49,21 @@ exports.startMessage = (reqId, startUserId) => {
 
     return resultMessage
 }
+
+exports.switchTurn = (game) => {
+    if(game.state === "CREATEUR_TURN"){
+        Game.updateOne({ key: game.key}, { $set: {
+            state: "CHALLENGER_TURN"
+        }})
+        .then(
+            console.log("CREATEUR_TURN to CHALLENGER_TURN")
+        )
+    } else if(game.state === "CHALLENGER_TURN"){
+        Game.updateOne({ key: game.key}, { $set: {
+            state: "CREATEUR_TURN"
+        }})
+        .then(
+            console.log("CHALLENGER_TURN to CREATEUR_TURN")
+        )
+    }
+}

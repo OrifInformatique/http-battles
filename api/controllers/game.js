@@ -152,3 +152,215 @@ exports.checkTurn = (req, res, next) => {
         })
         .catch(error => res.status(404).json({ error }))
 }
+
+exports.tryGetA = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Get A")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Get A"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryGetB = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Get B")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Get B"
+            })
+    })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryGetC = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Get C")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Get C"
+            })
+    })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryGetD = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Get D")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Get D"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+
+exports.tryPostA = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Post A")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Post A"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryPostB = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Post B")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Post B"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryPostC = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Post C")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Post C"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryPostD = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Post D")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Post D"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryPutA = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Put A")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Put A"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryPutB = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Put B")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Put B"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryPutC = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Put C")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Put C"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryPutD = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Put D")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Put D"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryDeleteA = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Delete A")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Delete A"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryDeleteB = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Delete B")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Delete B"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryDeleteC = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Delete C")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Delete C"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.tryDeleteD = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            console.log("Delete D")
+            utilGame.switchTurn(game)
+            res.status(200).json({
+                "message": "Delete D"
+            })
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+
+

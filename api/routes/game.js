@@ -20,5 +20,41 @@ router.post('/games/startGame', auth, gameCtrl.startGame)
 
 router.post('/games/checkTurn', auth, gameCtrl.checkTurn)
 
+// Get
+router.get('/games/tryA', auth, gameCtrl.tryGetA)
+
+router.get('/games/tryB', auth, gameCtrl.tryGetB)
+
+router.get('/games/tryC', auth, gameCtrl.tryGetC)
+
+router.get('/games/tryD', auth, gameCtrl.tryGetD)
+
+// Post
+router.post('/games/tryA', auth, gameCtrl.tryPostA)
+
+router.post('/games/tryB', auth, gameCtrl.tryPostB)
+
+router.post('/games/tryC', auth, gameCtrl.tryPostC)
+
+router.post('/games/tryD', auth, gameCtrl.tryPostD)
+
+// Put
+router.put('/games/tryA', auth, gameCtrl.tryPutA)
+
+router.put('/games/tryB', auth, gameCtrl.tryPutB)
+
+router.put('/games/tryC', auth, gameCtrl.tryPutC)
+
+router.put('/games/tryD', auth, gameCtrl.tryPutD)
+
+// Delete
+router.delete('/games/tryA', auth, gameCtrl.tryDeleteA)
+
+router.delete('/games/tryB', auth, gameCtrl.tryDeleteB)
+
+router.delete('/games/tryC', auth, gameCtrl.tryDeleteC)
+
+router.delete('/games/tryD', auth, gameCtrl.tryDeleteD)
+
 // export le router
 module.exports = router
