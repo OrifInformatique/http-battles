@@ -53,9 +53,9 @@ exports.listGames = (req, res, next) => {
     // recupère la partie qui correspond à la clef de la requette
     Game.find({ state: "WAITING_PLAYER"})
         // si tout se passe bien, envoit la partie
-        .then(games => {
-            res.status(200).json({games})
-            
+        .then(async games => {
+            const formattedGames = await utilGame.formatedGames(games)
+            res.status(200).json(formattedGames)
         })
         // si une erreur est trouvée, envoie l'erreur
         .catch(error => res.status(400).json({error}))
@@ -67,41 +67,26 @@ exports.joinGame = (req, res) => {
     // recupère la partie qui correspond à la clef de la requette
     Game.findOne({ key: key})
         // si tout se passe bien, envoit la partie
-        .then(
-            game => {
+        .then( async game => {
                 const createurId = game.createurId
-
-                utilUser.getUserById(createurId)
-                    .then(
-                        createur => {
-                        
-                        const createurUsername = createur.username
-                        
-                        utilUser.getUserById(challengerId)
-                            .then(
-                                challenger => {
-                                    const challengerUsername = challenger.username
-
-                                    // modifie la partie qui correspond a l'id en parametre dans la requet en remplacant son contenu par le body contenu dans la requet
-                                    Game.updateOne({ key: key}, { $set: {
-                                        state: "SETTINGS",
-                                        challengerId:  challengerId
-                                    }})
-                                    // si tout se passe bien, envoit la partie
-                                    .then(() => res.status(200).json({
-                                        message: "Partie rejointe !",
-                                        state: game.state,
-                                        createurUsername: createurUsername,
-                                        challengerUsername: challengerUsername
-                                    }))
-                                    // si une erreur est trouvée, envoie l'erreur
-                                    .catch(error => res.status(401).json({ error }))
-                                }
-                            )
-                            .catch(error => res.status(404).json(error))
-                    }
-                )
-                .catch(error => res.status(404).json(error))
+                const createur = await utilUser.getUserById(createurId)
+                const createurUsername = createur.username
+                const challenger = await utilUser.getUserById(challengerId)
+                const challengerUsername = challenger.username
+                // modifie la partie qui correspond a l'id en parametre dans la requet en remplacant son contenu par le body contenu dans la requet
+                Game.updateOne({ key: key}, { $set: {
+                    state: "SETTINGS",
+                    challengerId:  challengerId
+                }})
+                // si tout se passe bien, envoit la partie
+                .then(() => res.status(200).json({
+                    message: "Partie rejointe !",
+                    state: game.state,
+                    createurUsername: createurUsername,
+                    challengerUsername: challengerUsername
+                }))
+                // si une erreur est trouvée, envoie l'erreur
+                .catch(error => res.status(401).json({ error }))
             }
         )
         // si une erreur est trouvée, envoie l'erreur

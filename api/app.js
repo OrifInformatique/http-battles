@@ -64,7 +64,6 @@ app.get('/api/games', (req, res) => {
 });
 
 
-
 /** 
  * Games : Permet de récupérer les informations de jeux
  **/

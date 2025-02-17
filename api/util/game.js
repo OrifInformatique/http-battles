@@ -3,22 +3,22 @@ const Game = require("../models/Game")
 
 const utilUser = require('../util/user')
 
-exports.formatedGame = (game) =>{
-    const createurId = game.createurId
-
-    return utilUser.getUserById(createurId)
-        .then( createur => {
-            
+exports.formatedGames = async (games) =>{
+    const newGameList = []
+    for(const game of games){
+        const createur = await utilUser.getUserById(game.createurId)
+        try {
             const createurUsername = createur.username
-            return {
+            newGameList.push({
                 state: game.state,
                 createurUsername: createurUsername
-            }
-        })
-        .catch(error => console.log(error))
+            })
+        } catch (error) {
+            console.log(error)
+            continue
+        }
+    }
+    return newGameList
 }
 
-exports.formatedGames = (games) =>{
-    
 
-}
