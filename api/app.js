@@ -63,6 +63,8 @@ app.use('/api', userRoutes)
  *  http://localhost:3000/api/games/listGames
  *  http://localhost:3000/api/games/joinGame
  *  http://localhost:3000/api/games/startGame
+ *  http://localhost:3000/api/games/checkTurn
+ *  http://localhost:3000/api/games/endGame
  **/
 app.use('/api', gameRoutes)
 

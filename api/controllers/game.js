@@ -362,5 +362,20 @@ exports.tryDeleteD = (req, res, next) => {
         .catch(error => res.status(404).json({ error }))
 }
 
-
+exports.endGame =  (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then( game => {
+            Game.updateOne({ key: game.key}, { $set: {
+                state: "ENDED"
+            }})
+            .then(
+                console.log("ENDED"),
+                res.status(200).json({
+                    "message": "Game Over"
+                })
+            )
+        })
+        .catch(error => res.status(404).json({ error }))
+}
 

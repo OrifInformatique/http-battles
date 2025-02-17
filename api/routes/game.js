@@ -20,6 +20,8 @@ router.post('/games/startGame', auth, gameCtrl.startGame)
 
 router.post('/games/checkTurn', auth, gameCtrl.checkTurn)
 
+router.post('/games/endGame', auth, gameCtrl.endGame)
+
 // Get
 router.get('/games/tryA', auth, gameCtrl.tryGetA)
 
