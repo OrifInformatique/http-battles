@@ -21,7 +21,7 @@ exports.formatedGames = async (games) =>{
     return newGameList
 }
 
-exports.formatedGame = async (game) =>{
+exports.formatedGame = async (game) => {
     try {
         const createurId = game.createurId
         const createur = await utilUser.getUserById(createurId)
@@ -35,3 +35,17 @@ exports.formatedGame = async (game) =>{
     }
 }
 
+exports.startMessage = (reqId, startUserId) => {
+    
+    if(reqId === startUserId){
+        var resultMessage = {
+            "message": "You start"
+        }
+    } else {
+        var resultMessage = {
+            "message": "Your opponent start"
+        }
+    }
+
+    return resultMessage
+}

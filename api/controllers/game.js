@@ -61,7 +61,7 @@ exports.listGames = (req, res, next) => {
         .catch(error => res.status(400).json({error}))
 }
 
-exports.joinGame = (req, res) => {
+exports.joinGame = (req, res, next) => {
     const key = req.body.key
     const challengerId = req.body.userId
     // recupère la partie qui correspond à la clef de la requette
@@ -91,4 +91,32 @@ exports.joinGame = (req, res) => {
         )
         // si une erreur est trouvée, envoie l'erreur
         .catch(error => res.status(404).json(error))
+}
+
+exports.startGame = (req, res, next) => {
+    const key = req.body.key
+    const coinFlip = Math.floor(Math.random() * 2) == 0
+
+    console.log(coinFlip)
+    Game.findOne({ key: key})
+        .then( game => {
+            if(coinFlip){
+                var startUserId = game.createurId
+                console.log("CREATEUR_TURN")
+                Game.updateOne({ key: key}, { $set: {
+                    state: "CREATEUR_TURN"
+                }})
+                 .catch(error => res.status(401).json({ error }))
+            } else {
+                var startUserId = game.challengerId
+                console.log("CHALLENGER_TURN")
+                Game.updateOne({ key: key}, { $set: {
+                    state: "CHALLENGER_TURN"
+                }})
+                .catch(error => res.status(401).json({ error }))
+            }
+            const resultMessage = utilGame.startMessage(req.body.userId, startUserId)
+            res.status(200).json(resultMessage)
+        })
+        .catch(error => res.status(404).json({ error }))
 }
