@@ -21,4 +21,17 @@ exports.formatedGames = async (games) =>{
     return newGameList
 }
 
+exports.formatedGame = async (game) =>{
+    try {
+        const createurId = game.createurId
+        const createur = await utilUser.getUserById(createurId)
+        const createurUsername = createur.username
+        return {
+            state: game.state,
+            createurUsername: createurUsername
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 

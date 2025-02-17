@@ -47,12 +47,21 @@ app.get('/', (req, res) => {
 app.get('/api', (req, res) => {
     res.status(200).json({ message : 'HTTP Battle - Version 0.1'})
 });
-
+/**
+ * http://localhost:3000/api/user/signup
+ * http://localhost:3000/api/user/login
+ **/
 // implemente les fonctionalité utilisateurs
-app.use('/api/auth', userRoutes)
+app.use('/api', userRoutes)
 
+/**
+ * http://localhost:3000/api/games/createGame
+ * http://localhost:3000/api/games/findGame
+ * http://localhost:3000/api/games/listGames
+ * http://localhost:3000/api/games/joinGame
+ **/
 // Implemente les fonctionalité de parties
-app.use('/api/auth', gameRoutes)
+app.use('/api', gameRoutes)
 
 /** 
  * Games : Crée une nouvelle partie en associant l'utilisateur connecté
