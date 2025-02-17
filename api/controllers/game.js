@@ -97,7 +97,6 @@ exports.startGame = (req, res, next) => {
     const key = req.body.key
     const coinFlip = Math.floor(Math.random() * 2) == 0
 
-    console.log(coinFlip)
     Game.findOne({ key: key})
         .then( game => {
             if(coinFlip){
@@ -117,6 +116,39 @@ exports.startGame = (req, res, next) => {
             }
             const resultMessage = utilGame.startMessage(req.body.userId, startUserId)
             res.status(200).json(resultMessage)
+        })
+        .catch(error => res.status(404).json({ error }))
+}
+
+exports.checkTurn = (req, res, next) => {
+    const key = req.body.key
+    Game.findOne({ key: key})
+        .then(game => {
+            if(game.state === "CREATEUR_TURN"){
+                if(game.createurId === req.body.userId){
+                    res.status(200).json({
+                        "message": "Your turn"
+                    })
+                } else {
+                    res.status(200).json({
+                        "message": "Wait"
+                    })
+                }
+            } else if(game.state === "CHALLENGER_TURN"){
+                if(game.challengerId === req.body.userId){
+                    res.status(200).json({
+                        "message": "Your turn"
+                    })
+                } else {
+                    res.status(200).json({
+                        "message": "Wait"
+                    })
+                }
+            } else {
+                res.status(200).json({
+                    "message": "Game Over"
+                })
+            }
         })
         .catch(error => res.status(404).json({ error }))
 }

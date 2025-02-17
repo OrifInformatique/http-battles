@@ -18,5 +18,7 @@ router.post('/games/joinGame', auth, gameCtrl.joinGame)
 
 router.post('/games/startGame', auth, gameCtrl.startGame)
 
+router.post('/games/checkTurn', auth, gameCtrl.checkTurn)
+
 // export le router
 module.exports = router
