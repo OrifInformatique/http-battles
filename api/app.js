@@ -15,6 +15,8 @@ const userRoutes = require('./routes/user')
 
 const gameRoutes = require('./routes/game')
 
+const phraseRoutes = require('./routes/phrase')
+
 // connection à la base de donnée mongodb, plus précisément le cluster 0 avec l'utilisateur KenCacciabue
 mongoose.set('strictQuery', false);
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/?retryWrites=true&w=majority&appName=${process.env.DB_APP_NAME}`)
@@ -67,6 +69,8 @@ app.use('/api', userRoutes)
  *  http://localhost:3000/api/games/endGame
  **/
 app.use('/api', gameRoutes)
+
+app.use('/api', phraseRoutes)
 
 /** 
  * Games : Crée une nouvelle partie en associant l'utilisateur connecté

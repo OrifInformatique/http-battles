@@ -4,8 +4,9 @@ const Game = require('../models/Game')
 const fs = require('fs')
 
 const utilUser = require('../util/user')
-
 const utilGame = require('../util/game')
+const utilBoard = require('../util/board')
+
 
 // crée une partie
 exports.createGame = (req, res, next) => {
@@ -101,11 +102,12 @@ exports.startGame = (req, res, next) => {
     const key = req.body.key
     // sort aléatoirement un résultat true or false et le stock dans une constante
     const coinFlip = Math.floor(Math.random() * 2) == 0
-
     // récupère le jeux suivant la clef contenu dans la requette
     Game.findOne({ key: key })
         // si tout se passe bien
-        .then(game => {
+        .then(async game =>  {
+            utilBoard.createBoard(game._id)
+            
             // test le résultat aléatoire
             // si vrai
             if (coinFlip) {
@@ -191,6 +193,8 @@ exports.checkTurn = (req, res, next) => {
         // en cas de problème renvoit une erreur
         .catch(error => res.status(404).json({ error }))
 }
+
+
 
 /**
  * série de fonctions pour les case du jeux

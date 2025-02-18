@@ -17,3 +17,4 @@ userSchema.plugin(uniqueValidator)
 
 // export le schema utilisateur en tant que User
 module.exports = mongoose.model('User', userSchema)
+

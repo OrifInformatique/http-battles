@@ -61,6 +61,7 @@ exports.switchTurn = (game) => {
             .then(
                 console.log("CREATEUR_TURN to CHALLENGER_TURN")
             )
+            .catch(error => console.log(error))
     } else if (game.state === "CHALLENGER_TURN") {
         Game.updateOne({ key: game.key }, {
             $set: {
@@ -70,5 +71,12 @@ exports.switchTurn = (game) => {
             .then(
                 console.log("CHALLENGER_TURN to CREATEUR_TURN")
             )
+            .catch(error => console.log(error))
     }
+}
+
+exports.getGame = async (key) => {
+    return Game.findOne({ key })
+        .then(game => { return game })
+        .catch(error => console.log(error))
 }
