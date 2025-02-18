@@ -7,12 +7,13 @@ exports.formatedGames = async (games) => {
     const newGameList = []
     for (const game of games) {
         const createur = await utilUser.getUserById(game.createurId)
+        
         try {
             const createurUsername = createur.username
             newGameList.push({
                 state: game.state,
                 createurUsername: createurUsername,
-                key: game.key
+                gameId: game._id
             })
         } catch (error) {
             console.log(error)
@@ -53,7 +54,7 @@ exports.startMessage = (reqId, startUserId) => {
 
 exports.switchTurn = (game) => {
     if (game.state === "CREATEUR_TURN") {
-        Game.updateOne({ key: game.key }, {
+        Game.updateOne({ _id: game._id }, {
             $set: {
                 state: "CHALLENGER_TURN"
             }
@@ -63,7 +64,7 @@ exports.switchTurn = (game) => {
             )
             .catch(error => console.log(error))
     } else if (game.state === "CHALLENGER_TURN") {
-        Game.updateOne({ key: game.key }, {
+        Game.updateOne({ _id: game._id }, {
             $set: {
                 state: "CREATEUR_TURN"
             }
@@ -75,8 +76,12 @@ exports.switchTurn = (game) => {
     }
 }
 
-exports.getGame = async (key) => {
-    return Game.findOne({ key })
+exports.getGame = async (gameId) => {
+    return Game.findOne({ _id: gameId })
         .then(game => { return game })
-        .catch(error => console.log(error))
+}
+
+exports.getGames = async () => {
+    return Game.find()
+        .then(games => { return games })
 }

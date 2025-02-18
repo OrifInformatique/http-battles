@@ -8,9 +8,7 @@ const gameSchema = mongoose.Schema({
     // mail de l'utilisateur qui à créé la party
     createurId: { type: String, required: true },
     // nom d'ut'ilisateur du challenger
-    challengerId: { type: String, required: false },
-
-    key: { type: String, required: true, unique: true }
+    challengerId: { type: String, required: false }
 })
 
 // exporte le shema de la party en tant que Game

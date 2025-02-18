@@ -10,72 +10,59 @@ const utilBoard = require('../util/board')
 
 // crée une partie
 exports.createGame = (req, res, next) => {
-    // crée un timestamp
-    const timestamp = new Date().getTime()
-    // crée une clef avec le user id et le timestamp
-    const key = req.body.userId + timestamp
 
     // crée une partie à partir d'un schema
     const game = new Game({
         state: "WAITING_PLAYER",
-        createurId: req.body.userId,
-        key: key
+        createurId: req.body.userId
     })
     // sauvegarde la partie
     game.save()
         // si tout se passe bien, envoi un message de succès avec l'état de la partie et la clef
-        .then(() => res.status(201).json({
-            message: "Partie créé !",
-            state: game.state,
-            key: key
-        }))
+        .then((newGame) => {
+            res.status(201).json({
+                message: "Partie créé !",
+                state: game.state,
+                gameId: newGame._id
+            })
+        })
         // en cas d'erreure, envoie l'erreur
         .catch((error) => res.status(400).json({ error }));
 }
 
-// trouve une partie selon sa clef
-exports.findGame = (req, res, next) => {
-    // recupère la partie qui correspond à la clef de la requette
-    Game.findOne({ key: req.body.key })
-        // si tout se passe bien
-        .then(game => {
-            // formate le jeux envoyé pour que le client ne reçoive que les information util
-            utilGame.formatedGame(game)
-                // si tout se passe bien envoit la partie formaté
-                .then(formatedGame => res.status(200).json(formatedGame))
-                // en cas d'erreure, envoie l'erreur
-                .catch(error => res.status(404).json({ error }))
-        })
-        // si une erreur est trouvée, envoie l'erreur
+// trouve une partie 
+exports.findGame = async (req, res, next) => {
+    const game = await utilGame.getGame(req.body.gameId)
         .catch(error => res.status(404).json({ error }))
+
+    const formatedGame = await utilGame.formatedGame(game)
+        .catch(error => res.status(404).json({ error }))
+
+    res.status(200).json(formatedGame)
 }
 
 // liste les parties en attente de challenger
-exports.listGames = (req, res, next) => {
-    // recupère les partie qui sont en attentent
-    Game.find({ state: "WAITING_PLAYER" })
-        // si tout se passe bien
-        .then(async games => {
-            // formate les parties afin que le client ne reçoive que les informations dont il a besoins
-            const formattedGames = await utilGame.formatedGames(games)
-            // envois les parties formattées
-            res.status(200).json(formattedGames)
-        })
-        // si une erreur est trouvée, envoie l'erreur
+exports.listGames = async (req, res, next) => {
+    const games = await utilGame.getGames()
         .catch(error => res.status(404).json({ error }))
+
+    const formattedGames = await await utilGame.formatedGames(games)
+        .catch(error => res.status(404).json({ error }))
+
+    res.status(200).json(formattedGames)
 }
 
 // permet au client de rejoindre une party dont il a entré la clef
 exports.joinGame = (req, res, next) => {
     const challengerId = req.body.userId
     // recupère la partie qui correspond à la clef de la requette
-    Game.findOne({ key: req.body.key })
+    Game.findOne({ _id: req.body.gameId })
         // si tout se passe bien
         .then(async game => {
             const createur = await utilUser.getUserById(game.createurId)
             const challenger = await utilUser.getUserById(challengerId)
             // modifie la partie qui correspond a la clef en parametre dans la requet en remplacant son contenu par le body contenu dans la requet
-            Game.updateOne({ key: req.body.key }, {
+            Game.updateOne({ _id: req.body.gameId }, {
                 $set: {
                     state: "SETTINGS",
                     challengerId: challengerId
@@ -99,22 +86,22 @@ exports.joinGame = (req, res, next) => {
 // commence la partie
 exports.startGame = (req, res, next) => {
     // stoque la clef dans une constante
-    const key = req.body.key
+    const gameId = req.body.gameId
     // sort aléatoirement un résultat true or false et le stock dans une constante
     const coinFlip = Math.floor(Math.random() * 2) == 0
     // récupère le jeux suivant la clef contenu dans la requette
-    Game.findOne({ key: key })
+    Game.findOne({ _id: gameId })
         // si tout se passe bien
-        .then(async game =>  {
+        .then(async game => {
             utilBoard.createBoard(game._id)
-            
+
             // test le résultat aléatoire
             // si vrai
             if (coinFlip) {
                 // initialise la variable définissant le joueur qui commece la partie comme étant celui qui la créé
                 var startUserId = game.createurId
                 // update l'état de la partie pour signifier que le créateur commence
-                Game.updateOne({ key: key }, {
+                Game.updateOne({ _id: gameId }, {
                     $set: {
                         state: "CREATEUR_TURN"
                     }
@@ -126,7 +113,7 @@ exports.startGame = (req, res, next) => {
                 // initialise la variable définissant le joueur qui commece la partie comme étant le challenger
                 var startUserId = game.challengerId
                 // update l'état de la partie pour signifier que le challenger commence
-                Game.updateOne({ key: key }, {
+                Game.updateOne({ _id: gameId }, {
                     $set: {
                         state: "CHALLENGER_TURN"
                     }
@@ -146,7 +133,7 @@ exports.startGame = (req, res, next) => {
 // vérifie si c'est le tour de l'utilisateur envoyant la requète suivant l'état de la partie
 exports.checkTurn = (req, res, next) => {
     // trouve la partie selon la clef
-    Game.findOne({ key: req.body.key })
+    Game.findOne({ _id: req.body.gameId })
         // si tout se passe bien
         .then(game => {
             // teste l'état de la partie
@@ -201,8 +188,8 @@ exports.checkTurn = (req, res, next) => {
  */
 
 exports.tryGetA = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Get A")
             utilGame.switchTurn(game)
@@ -214,8 +201,8 @@ exports.tryGetA = (req, res, next) => {
 }
 
 exports.tryGetB = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Get B")
             utilGame.switchTurn(game)
@@ -227,8 +214,8 @@ exports.tryGetB = (req, res, next) => {
 }
 
 exports.tryGetC = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Get C")
             utilGame.switchTurn(game)
@@ -240,8 +227,8 @@ exports.tryGetC = (req, res, next) => {
 }
 
 exports.tryGetD = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Get D")
             utilGame.switchTurn(game)
@@ -254,8 +241,8 @@ exports.tryGetD = (req, res, next) => {
 
 
 exports.tryPostA = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Post A")
             utilGame.switchTurn(game)
@@ -267,8 +254,8 @@ exports.tryPostA = (req, res, next) => {
 }
 
 exports.tryPostB = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Post B")
             utilGame.switchTurn(game)
@@ -280,8 +267,8 @@ exports.tryPostB = (req, res, next) => {
 }
 
 exports.tryPostC = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Post C")
             utilGame.switchTurn(game)
@@ -293,8 +280,8 @@ exports.tryPostC = (req, res, next) => {
 }
 
 exports.tryPostD = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Post D")
             utilGame.switchTurn(game)
@@ -306,8 +293,8 @@ exports.tryPostD = (req, res, next) => {
 }
 
 exports.tryPutA = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Put A")
             utilGame.switchTurn(game)
@@ -319,8 +306,8 @@ exports.tryPutA = (req, res, next) => {
 }
 
 exports.tryPutB = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Put B")
             utilGame.switchTurn(game)
@@ -332,8 +319,8 @@ exports.tryPutB = (req, res, next) => {
 }
 
 exports.tryPutC = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Put C")
             utilGame.switchTurn(game)
@@ -345,8 +332,8 @@ exports.tryPutC = (req, res, next) => {
 }
 
 exports.tryPutD = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Put D")
             utilGame.switchTurn(game)
@@ -358,8 +345,8 @@ exports.tryPutD = (req, res, next) => {
 }
 
 exports.tryDeleteA = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Delete A")
             utilGame.switchTurn(game)
@@ -371,8 +358,8 @@ exports.tryDeleteA = (req, res, next) => {
 }
 
 exports.tryDeleteB = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Delete B")
             utilGame.switchTurn(game)
@@ -384,8 +371,8 @@ exports.tryDeleteB = (req, res, next) => {
 }
 
 exports.tryDeleteC = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Delete C")
             utilGame.switchTurn(game)
@@ -397,8 +384,8 @@ exports.tryDeleteC = (req, res, next) => {
 }
 
 exports.tryDeleteD = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
             console.log("Delete D")
             utilGame.switchTurn(game)
@@ -410,10 +397,10 @@ exports.tryDeleteD = (req, res, next) => {
 }
 
 exports.endGame = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key })
+    const gameId = req.body.gameId
+    Game.findOne({ _id: gameId })
         .then(game => {
-            Game.updateOne({ key: game.key }, {
+            Game.updateOne({ _id: game._id }, {
                 $set: {
                     state: "ENDED"
                 }
