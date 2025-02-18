@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 
 const bodyParser = require('body-parser');
 
-const app = express();    
+const app = express();
 
 const path = require('path')
-const dotenv = require('dotenv').config({ path: path.resolve(__dirname, 'env/.env') }) 
+const dotenv = require('dotenv').config({ path: path.resolve(__dirname, 'env/.env') })
 
 // importe la page user.js de dossiers routes qui contient les chemins d'accès envers les différnts fonctionnalité utilisateurs
 const userRoutes = require('./routes/user')
@@ -21,7 +21,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD
     // S i tout se passe sans probleme, affiche le succès de la connection dans la console
     .then(() => console.log('Connexion à MongoDB réussie !'))
     // si une erreure est reperer, affiche l'erreur
-    .catch( (e)=> console.log(e) )
+    .catch((e) => console.log(e))
 
 
 app.use((req, res, next) => {
@@ -38,14 +38,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
  * API root
  **/
 app.get('/', (req, res) => {
-    res.status(200).json({ message : 'HTTP Battle - API'})
+    res.status(200).json({ message: 'HTTP Battle - API' })
 });
 
 /** 
  * Base API
  **/
 app.get('/api', (req, res) => {
-    res.status(200).json({ message : 'HTTP Battle - Version 0.1'})
+    res.status(200).json({ message: 'HTTP Battle - Version 0.1' })
 });
 /**
  * implemente les fonctionalité utilisateurs
@@ -84,10 +84,10 @@ app.get('/api/games', (req, res) => {
 app.post('/api/games/:gameId/join', (req, res) => {
     const gameId = req.params.gameId;
     const gameToJoin = require('../mocks/games/join.json'); // Find or create 
-    if(gameToJoin.id === gameId){
+    if (gameToJoin.id === gameId) {
         res.status(200).json(gameToJoin)
-    }else{
-        res.status(404).json({ message: 'Pas de partie trouvée'})
+    } else {
+        res.status(404).json({ message: 'Pas de partie trouvée' })
     }
 });
 
@@ -97,10 +97,10 @@ app.post('/api/games/:gameId/join', (req, res) => {
 app.post('/api/games/:gameId/challenger', (req, res) => {
     const gameId = req.params.gameId;
     const gameToCreate = require('../mocks/games/create.json'); // Find or create 
-    if(gameToCreate.id === gameId){
+    if (gameToCreate.id === gameId) {
         res.status(200).json(gameToCreate)
-    }else{
-        res.status(404).json({ message: 'Pas de partie trouvée'})
+    } else {
+        res.status(404).json({ message: 'Pas de partie trouvée' })
     }
 });
 
@@ -110,7 +110,7 @@ app.post('/api/games/:gameId/challenger', (req, res) => {
  * ainsi que la position des 5 mots dans la grille. 
  **/
 app.post('/api/games/:gameId/settings', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté'})
+    res.status(501).json({ message: 'Pas encore implémenté' })
 });
 
 /** 
@@ -118,7 +118,7 @@ app.post('/api/games/:gameId/settings', (req, res) => {
  * avec la méthode GET.
  **/
 app.get('/api/games/:gameId/search/:path', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté'})
+    res.status(501).json({ message: 'Pas encore implémenté' })
 });
 
 /** 
@@ -126,7 +126,7 @@ app.get('/api/games/:gameId/search/:path', (req, res) => {
  * avec la méthode POST.
  **/
 app.post('/api/games/:gameId/search/:path', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté'})
+    res.status(501).json({ message: 'Pas encore implémenté' })
 });
 
 /** 
@@ -134,7 +134,7 @@ app.post('/api/games/:gameId/search/:path', (req, res) => {
  * avec la méthode PUT.
  **/
 app.put('/api/games/:gameId/search/:path', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté'})
+    res.status(501).json({ message: 'Pas encore implémenté' })
 });
 
 /** 
@@ -142,14 +142,14 @@ app.put('/api/games/:gameId/search/:path', (req, res) => {
  * avec la méthode DELETE.
  **/
 app.delete('/api/games/:gameId/search/:path', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté'})
+    res.status(501).json({ message: 'Pas encore implémenté' })
 });
 
 /** 
  * Games : Permet de tenter de proposer la phrase secrète de l'adversaire.
  **/
 app.post('/api/games/:gameId/try', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté'})
+    res.status(501).json({ message: 'Pas encore implémenté' })
 });
 
 module.exports = app;

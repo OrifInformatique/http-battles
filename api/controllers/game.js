@@ -23,8 +23,8 @@ exports.createGame = (req, res, next) => {
     // sauvegarde la partie
     game.save()
         // si tout se passe bien, envoi un message de succès avec l'état de la partie et la clef
-        .then(() => res.status(201).json({ 
-            message: "Partie créé !" ,
+        .then(() => res.status(201).json({
+            message: "Partie créé !",
             state: game.state,
             key: key
         }))
@@ -35,7 +35,7 @@ exports.createGame = (req, res, next) => {
 // trouve une partie selon sa clef
 exports.findGame = (req, res, next) => {
     // recupère la partie qui correspond à la clef de la requette
-    Game.findOne({ key: req.body.key})
+    Game.findOne({ key: req.body.key })
         // si tout se passe bien
         .then(game => {
             // formate le jeux envoyé pour que le client ne reçoive que les information util
@@ -43,16 +43,16 @@ exports.findGame = (req, res, next) => {
                 // si tout se passe bien envoit la partie formaté
                 .then(formatedGame => res.status(200).json(formatedGame))
                 // en cas d'erreure, envoie l'erreur
-                .catch(error => res.status(404).json({error}))
+                .catch(error => res.status(404).json({ error }))
         })
         // si une erreur est trouvée, envoie l'erreur
-        .catch(error => res.status(404).json({error}))
+        .catch(error => res.status(404).json({ error }))
 }
 
 // liste les parties en attente de challenger
 exports.listGames = (req, res, next) => {
     // recupère les partie qui sont en attentent
-    Game.find({ state: "WAITING_PLAYER"})
+    Game.find({ state: "WAITING_PLAYER" })
         // si tout se passe bien
         .then(async games => {
             // formate les parties afin que le client ne reçoive que les informations dont il a besoins
@@ -61,23 +61,25 @@ exports.listGames = (req, res, next) => {
             res.status(200).json(formattedGames)
         })
         // si une erreur est trouvée, envoie l'erreur
-        .catch(error => res.status(404).json({error}))
+        .catch(error => res.status(404).json({ error }))
 }
 
 // permet au client de rejoindre une party dont il a entré la clef
 exports.joinGame = (req, res, next) => {
     const challengerId = req.body.userId
     // recupère la partie qui correspond à la clef de la requette
-    Game.findOne({ key: req.body.key})
+    Game.findOne({ key: req.body.key })
         // si tout se passe bien
-        .then( async game => {
-                const createur = await utilUser.getUserById(game.createurId)
-                const challenger = await utilUser.getUserById(challengerId)
-                // modifie la partie qui correspond a la clef en parametre dans la requet en remplacant son contenu par le body contenu dans la requet
-                Game.updateOne({ key: req.body.key}, { $set: {
+        .then(async game => {
+            const createur = await utilUser.getUserById(game.createurId)
+            const challenger = await utilUser.getUserById(challengerId)
+            // modifie la partie qui correspond a la clef en parametre dans la requet en remplacant son contenu par le body contenu dans la requet
+            Game.updateOne({ key: req.body.key }, {
+                $set: {
                     state: "SETTINGS",
-                    challengerId:  challengerId
-                }})
+                    challengerId: challengerId
+                }
+            })
                 // si tout se passe bien, envoit les informations util au client
                 .then(() => res.status(200).json({
                     message: "Partie rejointe !",
@@ -87,7 +89,7 @@ exports.joinGame = (req, res, next) => {
                 }))
                 // si une erreur est trouvée, envoie l'erreur
                 .catch(error => res.status(404).json({ error }))
-            }
+        }
         )
         // si une erreur est trouvée, envoie l'erreur
         .catch(error => res.status(404).json(error))
@@ -101,30 +103,34 @@ exports.startGame = (req, res, next) => {
     const coinFlip = Math.floor(Math.random() * 2) == 0
 
     // récupère le jeux suivant la clef contenu dans la requette
-    Game.findOne({ key: key})
+    Game.findOne({ key: key })
         // si tout se passe bien
-        .then( game => {
+        .then(game => {
             // test le résultat aléatoire
             // si vrai
-            if(coinFlip){
+            if (coinFlip) {
                 // initialise la variable définissant le joueur qui commece la partie comme étant celui qui la créé
                 var startUserId = game.createurId
                 // update l'état de la partie pour signifier que le créateur commence
-                Game.updateOne({ key: key}, { $set: {
-                    state: "CREATEUR_TURN"
-                }})
-                // en cas de problème renvoit une erreur
-                 .catch(error => res.status(404).json({ error }))
-            // si le résultat aléatoire est faux
+                Game.updateOne({ key: key }, {
+                    $set: {
+                        state: "CREATEUR_TURN"
+                    }
+                })
+                    // en cas de problème renvoit une erreur
+                    .catch(error => res.status(404).json({ error }))
+                // si le résultat aléatoire est faux
             } else {
                 // initialise la variable définissant le joueur qui commece la partie comme étant le challenger
                 var startUserId = game.challengerId
                 // update l'état de la partie pour signifier que le challenger commence
-                Game.updateOne({ key: key}, { $set: {
-                    state: "CHALLENGER_TURN"
-                }})
-                // en cas de problème renvoit une erreur
-                .catch(error => res.status(404).json({ error }))
+                Game.updateOne({ key: key }, {
+                    $set: {
+                        state: "CHALLENGER_TURN"
+                    }
+                })
+                    // en cas de problème renvoit une erreur
+                    .catch(error => res.status(404).json({ error }))
             }
             // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence)
             const resultMessage = utilGame.startMessage(req.body.userId, startUserId)
@@ -138,43 +144,43 @@ exports.startGame = (req, res, next) => {
 // vérifie si c'est le tour de l'utilisateur envoyant la requète suivant l'état de la partie
 exports.checkTurn = (req, res, next) => {
     // trouve la partie selon la clef
-    Game.findOne({ key: req.body.key})
+    Game.findOne({ key: req.body.key })
         // si tout se passe bien
         .then(game => {
             // teste l'état de la partie
             // si c'est le tour du créateur
-            if(game.state === "CREATEUR_TURN"){
+            if (game.state === "CREATEUR_TURN") {
                 // test si le client est le créateur
                 // si oui
-                if(game.createurId === req.body.userId){
+                if (game.createurId === req.body.userId) {
                     // renvoi un message pour informer que c'est le tour du client
                     res.status(200).json({
                         "message": "Your turn"
                     })
-                // si non
+                    // si non
                 } else {
                     // renvoi un message pour informer que ce n'est pas le tour du client
                     res.status(200).json({
                         "message": "Wait"
                     })
                 }
-            // si c'est le tour du challenger
-            } else if(game.state === "CHALLENGER_TURN"){
+                // si c'est le tour du challenger
+            } else if (game.state === "CHALLENGER_TURN") {
                 // test si le client est le challenger
                 // si oui
-                if(game.challengerId === req.body.userId){
+                if (game.challengerId === req.body.userId) {
                     // renvoi un message pour informer que c'est le tour du client
                     res.status(200).json({
                         "message": "Your turn"
                     })
-                // si non
+                    // si non
                 } else {
                     // renvoi un message pour informer que ce n'est pas le tour du client
                     res.status(200).json({
                         "message": "Wait"
                     })
                 }
-            // si c'est le tour de personne
+                // si c'est le tour de personne
             } else {
                 // renvoi un message pour informer que la partie est términer
                 res.status(200).json({
@@ -192,8 +198,8 @@ exports.checkTurn = (req, res, next) => {
 
 exports.tryGetA = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Get A")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -205,34 +211,34 @@ exports.tryGetA = (req, res, next) => {
 
 exports.tryGetB = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Get B")
             utilGame.switchTurn(game)
             res.status(200).json({
                 "message": "Get B"
             })
-    })
+        })
         .catch(error => res.status(404).json({ error }))
 }
 
 exports.tryGetC = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Get C")
             utilGame.switchTurn(game)
             res.status(200).json({
                 "message": "Get C"
             })
-    })
+        })
         .catch(error => res.status(404).json({ error }))
 }
 
 exports.tryGetD = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Get D")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -245,8 +251,8 @@ exports.tryGetD = (req, res, next) => {
 
 exports.tryPostA = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Post A")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -258,8 +264,8 @@ exports.tryPostA = (req, res, next) => {
 
 exports.tryPostB = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Post B")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -271,8 +277,8 @@ exports.tryPostB = (req, res, next) => {
 
 exports.tryPostC = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Post C")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -284,8 +290,8 @@ exports.tryPostC = (req, res, next) => {
 
 exports.tryPostD = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Post D")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -297,8 +303,8 @@ exports.tryPostD = (req, res, next) => {
 
 exports.tryPutA = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Put A")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -310,8 +316,8 @@ exports.tryPutA = (req, res, next) => {
 
 exports.tryPutB = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Put B")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -323,8 +329,8 @@ exports.tryPutB = (req, res, next) => {
 
 exports.tryPutC = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Put C")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -336,8 +342,8 @@ exports.tryPutC = (req, res, next) => {
 
 exports.tryPutD = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Put D")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -349,8 +355,8 @@ exports.tryPutD = (req, res, next) => {
 
 exports.tryDeleteA = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Delete A")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -362,8 +368,8 @@ exports.tryDeleteA = (req, res, next) => {
 
 exports.tryDeleteB = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Delete B")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -375,8 +381,8 @@ exports.tryDeleteB = (req, res, next) => {
 
 exports.tryDeleteC = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Delete C")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -388,8 +394,8 @@ exports.tryDeleteC = (req, res, next) => {
 
 exports.tryDeleteD = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
+    Game.findOne({ key: key })
+        .then(game => {
             console.log("Delete D")
             utilGame.switchTurn(game)
             res.status(200).json({
@@ -399,19 +405,21 @@ exports.tryDeleteD = (req, res, next) => {
         .catch(error => res.status(404).json({ error }))
 }
 
-exports.endGame =  (req, res, next) => {
+exports.endGame = (req, res, next) => {
     const key = req.body.key
-    Game.findOne({ key: key})
-        .then( game => {
-            Game.updateOne({ key: game.key}, { $set: {
-                state: "ENDED"
-            }})
-            .then(
-                console.log("ENDED"),
-                res.status(200).json({
-                    "message": "Game Over"
-                })
-            )
+    Game.findOne({ key: key })
+        .then(game => {
+            Game.updateOne({ key: game.key }, {
+                $set: {
+                    state: "ENDED"
+                }
+            })
+                .then(
+                    console.log("ENDED"),
+                    res.status(200).json({
+                        "message": "Game Over"
+                    })
+                )
         })
         .catch(error => res.status(404).json({ error }))
 }

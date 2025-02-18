@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 // crée un schema
 const wordSchema = mongoose.Schema({
-    content: { type: String, required: true, unique: true}
+    content: { type: String, required: true, unique: true }
 })
 
 // exporte le shema

@@ -3,9 +3,9 @@ const Game = require("../models/Game")
 
 const utilUser = require('../util/user')
 
-exports.formatedGames = async (games) =>{
+exports.formatedGames = async (games) => {
     const newGameList = []
-    for(const game of games){
+    for (const game of games) {
         const createur = await utilUser.getUserById(game.createurId)
         try {
             const createurUsername = createur.username
@@ -37,8 +37,8 @@ exports.formatedGame = async (game) => {
 }
 
 exports.startMessage = (reqId, startUserId) => {
-    
-    if(reqId === startUserId){
+
+    if (reqId === startUserId) {
         var resultMessage = {
             "message": "You start"
         }
@@ -52,19 +52,23 @@ exports.startMessage = (reqId, startUserId) => {
 }
 
 exports.switchTurn = (game) => {
-    if(game.state === "CREATEUR_TURN"){
-        Game.updateOne({ key: game.key}, { $set: {
-            state: "CHALLENGER_TURN"
-        }})
-        .then(
-            console.log("CREATEUR_TURN to CHALLENGER_TURN")
-        )
-    } else if(game.state === "CHALLENGER_TURN"){
-        Game.updateOne({ key: game.key}, { $set: {
-            state: "CREATEUR_TURN"
-        }})
-        .then(
-            console.log("CHALLENGER_TURN to CREATEUR_TURN")
-        )
+    if (game.state === "CREATEUR_TURN") {
+        Game.updateOne({ key: game.key }, {
+            $set: {
+                state: "CHALLENGER_TURN"
+            }
+        })
+            .then(
+                console.log("CREATEUR_TURN to CHALLENGER_TURN")
+            )
+    } else if (game.state === "CHALLENGER_TURN") {
+        Game.updateOne({ key: game.key }, {
+            $set: {
+                state: "CREATEUR_TURN"
+            }
+        })
+            .then(
+                console.log("CHALLENGER_TURN to CREATEUR_TURN")
+            )
     }
 }
