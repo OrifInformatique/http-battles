@@ -11,7 +11,8 @@ exports.formatedGames = async (games) =>{
             const createurUsername = createur.username
             newGameList.push({
                 state: game.state,
-                createurUsername: createurUsername
+                createurUsername: createurUsername,
+                key: game.key
             })
         } catch (error) {
             console.log(error)

@@ -9,24 +9,20 @@ const utilGame = require('../util/game')
 
 // crée une partie
 exports.createGame = (req, res, next) => {
-
-    const gameReq = req.body 
-
-    const creatorId = gameReq.userId
-
+    // crée un timestamp
     const timestamp = new Date().getTime()
-
-    const key = creatorId + timestamp
+    // crée une clef avec le user id et le timestamp
+    const key = req.body.userId + timestamp
 
     // crée une partie à partir d'un schema
     const game = new Game({
         state: "WAITING_PLAYER",
-        createurId: creatorId,
+        createurId: req.body.userId,
         key: key
     })
     // sauvegarde la partie
     game.save()
-        // si tout se passe bien, envoi un message de succès (obligatoire)
+        // si tout se passe bien, envoi un message de succès avec l'état de la partie et la clef
         .then(() => res.status(201).json({ 
             message: "Partie créé !" ,
             state: game.state,
@@ -36,122 +32,163 @@ exports.createGame = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
 }
 
+// trouve une partie selon sa clef
 exports.findGame = (req, res, next) => {
     // recupère la partie qui correspond à la clef de la requette
     Game.findOne({ key: req.body.key})
-        // si tout se passe bien, envoit la partie
+        // si tout se passe bien
         .then(game => {
+            // formate le jeux envoyé pour que le client ne reçoive que les information util
             utilGame.formatedGame(game)
+                // si tout se passe bien envoit la partie formaté
                 .then(formatedGame => res.status(200).json(formatedGame))
+                // en cas d'erreure, envoie l'erreur
                 .catch(error => res.status(404).json({error}))
         })
         // si une erreur est trouvée, envoie l'erreur
         .catch(error => res.status(404).json({error}))
 }
 
+// liste les parties en attente de challenger
 exports.listGames = (req, res, next) => {
-    // recupère la partie qui correspond à la clef de la requette
+    // recupère les partie qui sont en attentent
     Game.find({ state: "WAITING_PLAYER"})
-        // si tout se passe bien, envoit la partie
+        // si tout se passe bien
         .then(async games => {
+            // formate les parties afin que le client ne reçoive que les informations dont il a besoins
             const formattedGames = await utilGame.formatedGames(games)
+            // envois les parties formattées
             res.status(200).json(formattedGames)
         })
         // si une erreur est trouvée, envoie l'erreur
-        .catch(error => res.status(400).json({error}))
+        .catch(error => res.status(404).json({error}))
 }
 
+// permet au client de rejoindre une party dont il a entré la clef
 exports.joinGame = (req, res, next) => {
-    const key = req.body.key
     const challengerId = req.body.userId
     // recupère la partie qui correspond à la clef de la requette
-    Game.findOne({ key: key})
-        // si tout se passe bien, envoit la partie
+    Game.findOne({ key: req.body.key})
+        // si tout se passe bien
         .then( async game => {
-                const createurId = game.createurId
-                const createur = await utilUser.getUserById(createurId)
-                const createurUsername = createur.username
+                const createur = await utilUser.getUserById(game.createurId)
                 const challenger = await utilUser.getUserById(challengerId)
-                const challengerUsername = challenger.username
-                // modifie la partie qui correspond a l'id en parametre dans la requet en remplacant son contenu par le body contenu dans la requet
-                Game.updateOne({ key: key}, { $set: {
+                // modifie la partie qui correspond a la clef en parametre dans la requet en remplacant son contenu par le body contenu dans la requet
+                Game.updateOne({ key: req.body.key}, { $set: {
                     state: "SETTINGS",
                     challengerId:  challengerId
                 }})
-                // si tout se passe bien, envoit la partie
+                // si tout se passe bien, envoit les informations util au client
                 .then(() => res.status(200).json({
                     message: "Partie rejointe !",
                     state: game.state,
-                    createurUsername: createurUsername,
-                    challengerUsername: challengerUsername
+                    createurUsername: createur.username,
+                    challengerUsername: challenger.username
                 }))
                 // si une erreur est trouvée, envoie l'erreur
-                .catch(error => res.status(401).json({ error }))
+                .catch(error => res.status(404).json({ error }))
             }
         )
         // si une erreur est trouvée, envoie l'erreur
         .catch(error => res.status(404).json(error))
 }
 
+// commence la partie
 exports.startGame = (req, res, next) => {
+    // stoque la clef dans une constante
     const key = req.body.key
+    // sort aléatoirement un résultat true or false et le stock dans une constante
     const coinFlip = Math.floor(Math.random() * 2) == 0
 
+    // récupère le jeux suivant la clef contenu dans la requette
     Game.findOne({ key: key})
+        // si tout se passe bien
         .then( game => {
+            // test le résultat aléatoire
+            // si vrai
             if(coinFlip){
+                // initialise la variable définissant le joueur qui commece la partie comme étant celui qui la créé
                 var startUserId = game.createurId
-                console.log("CREATEUR_TURN")
+                // update l'état de la partie pour signifier que le créateur commence
                 Game.updateOne({ key: key}, { $set: {
                     state: "CREATEUR_TURN"
                 }})
-                 .catch(error => res.status(401).json({ error }))
+                // en cas de problème renvoit une erreur
+                 .catch(error => res.status(404).json({ error }))
+            // si le résultat aléatoire est faux
             } else {
+                // initialise la variable définissant le joueur qui commece la partie comme étant le challenger
                 var startUserId = game.challengerId
-                console.log("CHALLENGER_TURN")
+                // update l'état de la partie pour signifier que le challenger commence
                 Game.updateOne({ key: key}, { $set: {
                     state: "CHALLENGER_TURN"
                 }})
-                .catch(error => res.status(401).json({ error }))
+                // en cas de problème renvoit une erreur
+                .catch(error => res.status(404).json({ error }))
             }
+            // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence)
             const resultMessage = utilGame.startMessage(req.body.userId, startUserId)
+            // renvoie le message à l'utilisateur
             res.status(200).json(resultMessage)
         })
+        // en cas de problème renvoit une erreur
         .catch(error => res.status(404).json({ error }))
 }
 
+// vérifie si c'est le tour de l'utilisateur envoyant la requète suivant l'état de la partie
 exports.checkTurn = (req, res, next) => {
-    const key = req.body.key
-    Game.findOne({ key: key})
+    // trouve la partie selon la clef
+    Game.findOne({ key: req.body.key})
+        // si tout se passe bien
         .then(game => {
+            // teste l'état de la partie
+            // si c'est le tour du créateur
             if(game.state === "CREATEUR_TURN"){
+                // test si le client est le créateur
+                // si oui
                 if(game.createurId === req.body.userId){
+                    // renvoi un message pour informer que c'est le tour du client
                     res.status(200).json({
                         "message": "Your turn"
                     })
+                // si non
                 } else {
+                    // renvoi un message pour informer que ce n'est pas le tour du client
                     res.status(200).json({
                         "message": "Wait"
                     })
                 }
+            // si c'est le tour du challenger
             } else if(game.state === "CHALLENGER_TURN"){
+                // test si le client est le challenger
+                // si oui
                 if(game.challengerId === req.body.userId){
+                    // renvoi un message pour informer que c'est le tour du client
                     res.status(200).json({
                         "message": "Your turn"
                     })
+                // si non
                 } else {
+                    // renvoi un message pour informer que ce n'est pas le tour du client
                     res.status(200).json({
                         "message": "Wait"
                     })
                 }
+            // si c'est le tour de personne
             } else {
+                // renvoi un message pour informer que la partie est términer
                 res.status(200).json({
                     "message": "Game Over"
                 })
             }
         })
+        // en cas de problème renvoit une erreur
         .catch(error => res.status(404).json({ error }))
 }
+
+/**
+ * série de fonctions pour les case du jeux
+ */
 
 exports.tryGetA = (req, res, next) => {
     const key = req.body.key
