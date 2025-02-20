@@ -7,13 +7,11 @@ const utilUser = require('../util/user')
 // retourne une partie selon sont id
 exports.getGame = async (gameId) => {
     return Game.findOne({ _id: gameId })
-        .then(game => { return game })
 }
 
 // retourne toute les partie
 exports.getGames = async () => {
     return Game.find()
-        .then(games => { return games })
 }
 
 // formate une série de jeux
@@ -50,7 +48,6 @@ exports.createGame = async (userId) => {
 // sauvegarde un jeux et le retourne
 exports.saveGame = async (game) => {
     return game.save()
-        .then(game => { return game })
 }
 
 // permet à un utilisateur de rejoindre une partie

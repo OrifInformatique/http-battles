@@ -58,7 +58,7 @@ exports.listGames = async (req, res, next) => {
         .catch(() => res.status(404).json({ error: "failed to getGames" }))
 
     // formates les parties
-    const formattedGames = await await utilGame.formatedGames(games)
+    const formattedGames = await utilGame.formatedGames(games)
         .catch(() => res.status(500).json({ error: "failed to formatedGames" }))
 
     // envoie les informations utiles au client
