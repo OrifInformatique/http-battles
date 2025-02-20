@@ -22,6 +22,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
+  opacity: 70%;
+
 }
 
 .public-layout input[type="password"]:-webkit-autofill,
@@ -32,6 +34,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
+  opacity: 70%;
+
 }
 
 .public-layout input[type="text"]:-webkit-autofill,
@@ -42,6 +46,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
+  opacity: 70%;
+
 }
 
 /*   Généralités pour les inputs   */
@@ -51,6 +57,14 @@
   color: white;
   background-clip: text;
   -webkit-text-fill-color: #ffffff;
+  opacity: 70%;
+
+}
+
+.public-layout input[type="text"] {
+  border-bottom: solid  1px white;
+  opacity: 70%;
+
 }
 
 .public-layout input[type="email"],
@@ -63,7 +77,10 @@
   min-width: 80%;
   max-width: 100%;
 
+  opacity: 70%;
   padding: 4px 4px 4px 4px;
+
+  
 }
 
 .public-layout input[type="password"],
@@ -75,7 +92,7 @@
 
   min-width: 80%;
   max-width: 100%;
-
+  opacity: 70%;
   padding: 4px 4px 4px 4px;
 }
 
@@ -90,9 +107,13 @@
 /*     Bouton BLEU "Création de votre compte"    */
 
 .public-layout button[type="submit"] {
+
+  position: relative;
+
   background-color: black;
 
   border: 2px solid #005ba9;
+
   overflow: hidden;
   z-index: 0;
 
@@ -101,30 +122,31 @@
   height: 28px;
   min-width: 200px;
 }
-/*
+
+/*  Effets de boutton BLEU généraux   */
 .public-layout button[type="submit"]::before {
   content: '';
+
   position: absolute;
 
-  top:320px;
-  left:end;
-  width: 200px; 
+  left:0;
   height: 24px;
-  background-color: pink;
+  background-color: #005ba9;
   border-radius: 50% 50% 0 0;
 
   transition: all 0.5s;
+  
   z-index: -1; 
   opacity: 50%;
 
+
 }
 .public-layout button[type="submit"]:hover::before {
-  top: 296px;
   opacity: 100%;
   background-color: #005ba9;
   border-radius: 0 0 0 0;
 
-}*/
+}
 /*   Définition police du composant en: Calibri Light ( imported ) */
 
 .calibri {

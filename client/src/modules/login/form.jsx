@@ -51,6 +51,7 @@ const LoginForm = ({ loginData, handleSubmit, onChange, messageError }) => {
       <button type="submit" className="buttonLogin">
         Se connecter
       </button>
+   
       <p>
         Pas encore de compte ?{" "}
         <Link className="text-blue-500 underline" to="/register">
@@ -59,9 +60,8 @@ const LoginForm = ({ loginData, handleSubmit, onChange, messageError }) => {
       </p>
 
       {messageError ? (
-        <div>
           <p><strong>Error : </strong>{messageError}</p>
-        </div>
+
       ) : (
         ""
       )}

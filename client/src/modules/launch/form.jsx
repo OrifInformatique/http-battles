@@ -24,10 +24,10 @@ function LaunchPage() {
     const [phrase, setPhrase] = useState({
         // Dimensions
         d1: { word: dynamicVal[0][0],  route: staticVal1[0], method: staticVal2[0]},
-        d2: { word: dynamicVal[1][0],route: staticVal1[0], method: staticVal2[0] },
-        d3: {word: dynamicVal[2][0], route: staticVal1[0], method: staticVal2[0] },
-        d4: {word: dynamicVal[3][0], route: staticVal1[0], method: staticVal2[0] },
-        d5: { word: dynamicVal[4][0], route: staticVal1[0], method: staticVal2[0] }
+        d2: { word: dynamicVal[1][0], route: staticVal1[0], method: staticVal2[0]},
+        d3: {word: dynamicVal[2][0], route: staticVal1[0], method: staticVal2[0]},
+        d4: {word: dynamicVal[3][0], route: staticVal1[0], method: staticVal2[0]},
+        d5: { word: dynamicVal[4][0], route: staticVal1[0], method: staticVal2[0]}
     });
     
     const [isSubmitted, setIsSubmitted] = useState(1);

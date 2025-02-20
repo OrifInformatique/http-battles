@@ -100,8 +100,4 @@
   padding-left: 5%;
 }
 
-.public-layout input[type="password"]/*input[type="password"]:-webkit-autofill */ {
-  color: white;
-  background: rgba(0, 0, 0, 0);
-  border-bottom: white solid 1px;
-}
+/*  */

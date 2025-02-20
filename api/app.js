@@ -11,7 +11,7 @@ const app = express();
 const userRoutes = require('./routes/user')
 
 const path = require('path')
-const dotenv = require('dotenv').config({ path: 'env/.env' })
+const dotenv = require('dotenv').config({ path: path.resolve(__dirname, 'env/.env') })    
 
 console.log(process.env)
 
