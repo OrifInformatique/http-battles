@@ -1,6 +1,6 @@
 const Board = require('../models/Board')
 
-exports.createBoard = (gameId) => {
+exports.createBoard = async (gameId) => {
     
     const board = new Board({
         gameId: gameId,
@@ -11,8 +11,12 @@ exports.createBoard = (gameId) => {
             [null, null, null, null]
         ]
     })
-    board.save()
-        .then(console.log("board created  succesfully"))
-        .catch(error => console.log(error))
+    const newboard = await board.save()
+
+    return await exports.getBoard(newboard._id)
 }
 
+exports.getBoard = async (boardId) => {
+    return Board.findOne({ _id: boardId })
+            .then(board => { return board })
+}

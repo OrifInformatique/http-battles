@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 // crée un schema
 const boardSchema = mongoose.Schema({
 
-    gameId: { type: String, required: true, unique: true },
+    gameId: { type: String, required: true},
 
     board: { type: Array, required: true }
 })

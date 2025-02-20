@@ -9,178 +9,128 @@ const utilBoard = require('../util/board')
 
 
 // crée une partie
-exports.createGame = (req, res, next) => {
+exports.createGame = async (req, res, next) => {
 
     // crée une partie à partir d'un schema
-    const game = new Game({
-        state: "WAITING_PLAYER",
-        createurId: req.body.userId
-    })
-    // sauvegarde la partie
-    game.save()
-        // si tout se passe bien, envoi un message de succès avec l'état de la partie et la clef
-        .then((newGame) => {
-            res.status(201).json({
-                message: "Partie créé !",
-                state: game.state,
-                gameId: newGame._id
-            })
-        })
+    const game = await utilGame.createGame(req.body.userId)
+        .catch(() => res.status(500).json({ error: "failed to createGame" }))
+    const newGame = await utilGame.saveGame(game)
         // en cas d'erreure, envoie l'erreur
-        .catch((error) => res.status(400).json({ error }));
+        .catch(() => res.status(500).json({ error: "failed to saveGame" }))
+
+    try {
+        res.status(201).json({
+            message: "Partie créé !",
+            state: newGame.state,
+            gameId: newGame._id
+        })
+    } catch (error) { console.log(error) }
+
 }
 
 // trouve une partie 
 exports.findGame = async (req, res, next) => {
     const game = await utilGame.getGame(req.body.gameId)
-        .catch(error => res.status(404).json({ error }))
+        .catch(() => res.status(404).json({ error: "failed to getGames" }))
 
     const formatedGame = await utilGame.formatedGame(game)
-        .catch(error => res.status(404).json({ error }))
+        .catch(() => res.status(500).json({ error: "failed to formatedGame" }))
 
-    res.status(200).json(formatedGame)
+    try {
+        res.status(200).json(formatedGame)
+    } catch (error) { console.log(error) }
+
 }
 
 // liste les parties en attente de challenger
 exports.listGames = async (req, res, next) => {
     const games = await utilGame.getGames()
-        .catch(error => res.status(404).json({ error }))
+        .catch(() => res.status(404).json({ error: "failed to getGames" }))
 
     const formattedGames = await await utilGame.formatedGames(games)
-        .catch(error => res.status(404).json({ error }))
+        .catch(() => res.status(500).json({ error: "failed to formatedGames" }))
+    try {
+        res.status(200).json(formattedGames)
+    } catch (error) { console.log(error) }
 
-    res.status(200).json(formattedGames)
 }
 
 // permet au client de rejoindre une party dont il a entré la clef
-exports.joinGame = (req, res, next) => {
-    const challengerId = req.body.userId
+exports.joinGame = async (req, res, next) => {
     // recupère la partie qui correspond à la clef de la requette
-    Game.findOne({ _id: req.body.gameId })
-        // si tout se passe bien
-        .then(async game => {
-            const createur = await utilUser.getUserById(game.createurId)
-            const challenger = await utilUser.getUserById(challengerId)
-            // modifie la partie qui correspond a la clef en parametre dans la requet en remplacant son contenu par le body contenu dans la requet
-            Game.updateOne({ _id: req.body.gameId }, {
-                $set: {
-                    state: "SETTINGS",
-                    challengerId: challengerId
-                }
-            })
-                // si tout se passe bien, envoit les informations util au client
-                .then(() => res.status(200).json({
-                    message: "Partie rejointe !",
-                    state: game.state,
-                    createurUsername: createur.username,
-                    challengerUsername: challenger.username
-                }))
-                // si une erreur est trouvée, envoie l'erreur
-                .catch(error => res.status(404).json({ error }))
-        }
-        )
+    const game = await utilGame.getGame(req.body.gameId)
         // si une erreur est trouvée, envoie l'erreur
-        .catch(error => res.status(404).json(error))
+        .catch(() => res.status(404).json({ error: "failed to getGame" }))
+
+    const createur = await utilUser.getUserById(game.createurId)
+    const challenger = await utilUser.getUserById(req.body.userId)
+
+    utilGame.joinGame(req.body.gameId, challenger._id)
+        // si une erreur est trouvée, envoie l'erreur
+        .catch(() => res.status(404).json({ error: "failed to joinGame" }))
+    try {
+        res.status(200).json({
+            message: "Partie rejointe !",
+            state: game.state,
+            createurUsername: createur.username,
+            challengerUsername: challenger.username
+        })
+    } catch (error) { console.log(error) }
+
+
 }
 
 // commence la partie
-exports.startGame = (req, res, next) => {
-    // stoque la clef dans une constante
-    const gameId = req.body.gameId
-    // sort aléatoirement un résultat true or false et le stock dans une constante
-    const coinFlip = Math.floor(Math.random() * 2) == 0
+exports.startGame = async (req, res, next) => {
     // récupère le jeux suivant la clef contenu dans la requette
-    Game.findOne({ _id: gameId })
-        // si tout se passe bien
-        .then(async game => {
-            utilBoard.createBoard(game._id)
-
-            // test le résultat aléatoire
-            // si vrai
-            if (coinFlip) {
-                // initialise la variable définissant le joueur qui commece la partie comme étant celui qui la créé
-                var startUserId = game.createurId
-                // update l'état de la partie pour signifier que le créateur commence
-                Game.updateOne({ _id: gameId }, {
-                    $set: {
-                        state: "CREATEUR_TURN"
-                    }
-                })
-                    // en cas de problème renvoit une erreur
-                    .catch(error => res.status(404).json({ error }))
-                // si le résultat aléatoire est faux
-            } else {
-                // initialise la variable définissant le joueur qui commece la partie comme étant le challenger
-                var startUserId = game.challengerId
-                // update l'état de la partie pour signifier que le challenger commence
-                Game.updateOne({ _id: gameId }, {
-                    $set: {
-                        state: "CHALLENGER_TURN"
-                    }
-                })
-                    // en cas de problème renvoit une erreur
-                    .catch(error => res.status(404).json({ error }))
-            }
-            // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence)
-            const resultMessage = utilGame.startMessage(req.body.userId, startUserId)
-            // renvoie le message à l'utilisateur
-            res.status(200).json(resultMessage)
-        })
+    const game = await utilGame.getGame(req.body.gameId)
         // en cas de problème renvoit une erreur
-        .catch(error => res.status(404).json({ error }))
+        .catch(() => res.status(404).json({ error: "failed to getGame" }))
+
+    const board = await utilBoard.createBoard(game._id)
+        .catch(() => res.status(400).json({ error: "failed to createBoard" }))
+
+    const startUserId = await utilGame.startCoinFlip(game)
+        .catch(() => res.status(404).json({ error: "failed to startCoinFlip" }))
+
+    // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence)
+    const resultMessage = utilGame.startMessage(req.body.userId, startUserId, board._id)
+
+    try {
+        // renvoie le message à l'utilisateur
+        res.status(200).json(resultMessage)
+    } catch (error) { console.log(error) }
+
 }
 
 // vérifie si c'est le tour de l'utilisateur envoyant la requète suivant l'état de la partie
-exports.checkTurn = (req, res, next) => {
-    // trouve la partie selon la clef
-    Game.findOne({ _id: req.body.gameId })
-        // si tout se passe bien
-        .then(game => {
-            // teste l'état de la partie
-            // si c'est le tour du créateur
-            if (game.state === "CREATEUR_TURN") {
-                // test si le client est le créateur
-                // si oui
-                if (game.createurId === req.body.userId) {
-                    // renvoi un message pour informer que c'est le tour du client
-                    res.status(200).json({
-                        "message": "Your turn"
-                    })
-                    // si non
-                } else {
-                    // renvoi un message pour informer que ce n'est pas le tour du client
-                    res.status(200).json({
-                        "message": "Wait"
-                    })
-                }
-                // si c'est le tour du challenger
-            } else if (game.state === "CHALLENGER_TURN") {
-                // test si le client est le challenger
-                // si oui
-                if (game.challengerId === req.body.userId) {
-                    // renvoi un message pour informer que c'est le tour du client
-                    res.status(200).json({
-                        "message": "Your turn"
-                    })
-                    // si non
-                } else {
-                    // renvoi un message pour informer que ce n'est pas le tour du client
-                    res.status(200).json({
-                        "message": "Wait"
-                    })
-                }
-                // si c'est le tour de personne
-            } else {
-                // renvoi un message pour informer que la partie est términer
-                res.status(200).json({
-                    "message": "Game Over"
-                })
-            }
-        })
-        // en cas de problème renvoit une erreur
-        .catch(error => res.status(404).json({ error }))
+exports.checkTurn = async (req, res, next) => {
+    const game = await utilGame.getGame(req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to getGame" }))
+    const message = await utilGame.testTurn(game, req.body.userId)
+        .catch(() => res.status(500).json({ error: "failed to testTurn" }))
+    
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
+exports.endGame = async (req, res, next) => {
+
+    const game = await utilGame.getGame(req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to getGame" }))
+
+    await utilGame.endGame(game._1)
+        .catch(() => res.status(404).json({ error: "failed to endGame" }))
+
+    try {
+        res.status(200).json({
+            message: "Game Over"
+        })
+    } catch (error) { console.log(error) }
+
+
+}
 
 
 /**
@@ -396,22 +346,4 @@ exports.tryDeleteD = (req, res, next) => {
         .catch(error => res.status(404).json({ error }))
 }
 
-exports.endGame = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            Game.updateOne({ _id: game._id }, {
-                $set: {
-                    state: "ENDED"
-                }
-            })
-                .then(
-                    console.log("ENDED"),
-                    res.status(200).json({
-                        "message": "Game Over"
-                    })
-                )
-        })
-        .catch(error => res.status(404).json({ error }))
-}
 
