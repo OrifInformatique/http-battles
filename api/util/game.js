@@ -1,18 +1,22 @@
 // import le schema d'un utilisateur
 const Game = require("../models/Game")
 
+// import les fonction utiles pour utilisateur
 const utilUser = require('../util/user')
 
+// retourne une partie selon sont id
 exports.getGame = async (gameId) => {
     return Game.findOne({ _id: gameId })
         .then(game => { return game })
 }
 
+// retourne toute les partie
 exports.getGames = async () => {
     return Game.find()
         .then(games => { return games })
 }
 
+// formate une série de jeux
 exports.formatedGames = async (games) => {
     const newGameList = []
     for (const game of games) {
@@ -21,6 +25,7 @@ exports.formatedGames = async (games) => {
     return newGameList
 }
 
+// formate un jeux
 exports.formatedGame = async (game) => {
     const createur = await utilUser.getUserById(game.createurId)
     return {
@@ -31,6 +36,7 @@ exports.formatedGame = async (game) => {
 
 }
 
+// crée un objet jeux et le retourn
 exports.createGame = async (userId) => {
     try {
         var game = new Game({
@@ -41,11 +47,13 @@ exports.createGame = async (userId) => {
     return game
 }
 
+// sauvegarde un jeux et le retourne
 exports.saveGame = async (game) => {
     return game.save()
         .then(game => { return game })
 }
 
+// permet à un utilisateur de rejoindre une partie
 exports.joinGame = async (gameId, challengerId) => {
     await Game.updateOne({ _id: gameId }, {
         $set: {
@@ -55,6 +63,7 @@ exports.joinGame = async (gameId, challengerId) => {
     })
 }
 
+// choisit aléatoirement le premier utilisateur à commencer
 exports.startCoinFlip = async (game) => {
     // sort aléatoirement un résultat true or false et le stock dans une constante
     const coinFlip = Math.floor(Math.random() * 2) == 0
@@ -84,6 +93,7 @@ exports.startCoinFlip = async (game) => {
     return startUserId
 }
 
+// construit le message de départ
 exports.startMessage = (reqId, startUserId, boardId) => {
     if (reqId === startUserId) {
         var resultMessage = {
@@ -100,6 +110,7 @@ exports.startMessage = (reqId, startUserId, boardId) => {
     return resultMessage
 }
 
+// test si c'est le tour de l'utilisateur ou de son adversaire
 exports.testTurn = async (game, userId) => {
     // teste l'état de la partie
     // si c'est le tour du créateur
@@ -133,15 +144,16 @@ exports.testTurn = async (game, userId) => {
     }
 }
 
+// test une case de la grille
 exports.tryCase = async (requestMode, requestRoad, gameId) => {
     const game = await exports.getGame(gameId)
 
     exports.switchTurn(game)
 
     return {message: requestMode + " " + requestRoad}
-
 }
 
+// change le toour 
 exports.switchTurn = (game) => {
     if (game.state === "CREATEUR_TURN") {
         Game.updateOne({ _id: game._id }, {
@@ -158,6 +170,7 @@ exports.switchTurn = (game) => {
     }
 }
 
+// fini la partie
 exports.endGame = async (gameId) => {
     Game.updateOne({ _id: gameId }, {
         $set: {
