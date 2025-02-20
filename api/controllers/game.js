@@ -3,21 +3,27 @@ const Game = require('../models/Game')
 // import le package fs de node qui nous permet de modifier des fichiers
 const fs = require('fs')
 
+// import fonctions util pour utilisateur
 const utilUser = require('../util/user')
+
+// import fonctions util pour partie
 const utilGame = require('../util/game')
+
+// import fonctions util pour board
 const utilBoard = require('../util/board')
 
 
 // crée une partie
 exports.createGame = async (req, res, next) => {
-
     // crée une partie à partir d'un schema
     const game = await utilGame.createGame(req.body.userId)
         .catch(() => res.status(500).json({ error: "failed to createGame" }))
+
+    // sauvegarde la partie
     const newGame = await utilGame.saveGame(game)
-        // en cas d'erreure, envoie l'erreur
         .catch(() => res.status(500).json({ error: "failed to saveGame" }))
 
+    // envoie les informations utiles au client
     try {
         res.status(201).json({
             message: "Partie créé !",
@@ -30,25 +36,32 @@ exports.createGame = async (req, res, next) => {
 
 // trouve une partie 
 exports.findGame = async (req, res, next) => {
+    // récupère la partie en fonction de son id
     const game = await utilGame.getGame(req.body.gameId)
         .catch(() => res.status(404).json({ error: "failed to getGames" }))
 
+    // formate la partie pour le client
     const formatedGame = await utilGame.formatedGame(game)
         .catch(() => res.status(500).json({ error: "failed to formatedGame" }))
 
+    // envoie les informations utiles au client
     try {
         res.status(200).json(formatedGame)
     } catch (error) { console.log(error) }
 
 }
 
-// liste les parties en attente de challenger
+// liste les parties
 exports.listGames = async (req, res, next) => {
+    // récupère les parties
     const games = await utilGame.getGames()
         .catch(() => res.status(404).json({ error: "failed to getGames" }))
 
+    // formates les parties
     const formattedGames = await await utilGame.formatedGames(games)
         .catch(() => res.status(500).json({ error: "failed to formatedGames" }))
+
+    // envoie les informations utiles au client
     try {
         res.status(200).json(formattedGames)
     } catch (error) { console.log(error) }
@@ -57,17 +70,23 @@ exports.listGames = async (req, res, next) => {
 
 // permet au client de rejoindre une party dont il a entré la clef
 exports.joinGame = async (req, res, next) => {
-    // recupère la partie qui correspond à la clef de la requette
+    // recupère la partie en fonction de son id
     const game = await utilGame.getGame(req.body.gameId)
-        // si une erreur est trouvée, envoie l'erreur
         .catch(() => res.status(404).json({ error: "failed to getGame" }))
 
+    // recupère le créateur de la partie en fonction de son identifiant contenue dans la partie
     const createur = await utilUser.getUserById(game.createurId)
-    const challenger = await utilUser.getUserById(req.body.userId)
+        .catch(() => res.status(404).json({ error: "failed to getUserById" }))
 
-    utilGame.joinGame(req.body.gameId, challenger._id)
-        // si une erreur est trouvée, envoie l'erreur
+    // récupère le challenger en fonction de l'id contenu dans son id
+    const challenger = await utilUser.getUserById(req.body.userId)
+        .catch(() => res.status(404).json({ error: "failed to getUserById" }))
+
+    // rejoin la partie et update son état ainsi que le challenger
+    await utilGame.joinGame(req.body.gameId, challenger._id)
         .catch(() => res.status(404).json({ error: "failed to joinGame" }))
+    
+    // envoie les informations utiles au client
     try {
         res.status(200).json({
             message: "Partie rejointe !",
@@ -82,47 +101,55 @@ exports.joinGame = async (req, res, next) => {
 
 // commence la partie
 exports.startGame = async (req, res, next) => {
-    // récupère le jeux suivant la clef contenu dans la requette
+    // récupère le jeux suivant son id
     const game = await utilGame.getGame(req.body.gameId)
-        // en cas de problème renvoit une erreur
         .catch(() => res.status(404).json({ error: "failed to getGame" }))
 
+    // crée et récupère la grille de jeux
     const board = await utilBoard.createBoard(game._id)
         .catch(() => res.status(400).json({ error: "failed to createBoard" }))
 
+    // récupère l'identifiant de l'utilisateur qui commence
     const startUserId = await utilGame.startCoinFlip(game)
         .catch(() => res.status(404).json({ error: "failed to startCoinFlip" }))
 
-    // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence)
+    // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
     const resultMessage = utilGame.startMessage(req.body.userId, startUserId, board._id)
 
+    // envoie les informations utiles au client
     try {
-        // renvoie le message à l'utilisateur
         res.status(200).json(resultMessage)
     } catch (error) { console.log(error) }
 
 }
 
-// vérifie si c'est le tour de l'utilisateur envoyant la requète suivant l'état de la partie
+// vérifie si c'est le tour de l'utilisateur
 exports.checkTurn = async (req, res, next) => {
+    // récupère la partie suivant son id
     const game = await utilGame.getGame(req.body.gameId)
         .catch(() => res.status(404).json({ error: "failed to getGame" }))
+    
+    // construit le message en fonction de la partie et de l'utilisateur
     const message = await utilGame.testTurn(game, req.body.userId)
         .catch(() => res.status(500).json({ error: "failed to testTurn" }))
-    
+
+    // envoie les informations utiles au client
     try {
         res.status(200).json(message)
     } catch (error) { console.log(error) }
 }
 
+// termine la partie
 exports.endGame = async (req, res, next) => {
-
+    // récupère la partie suivant son id
     const game = await utilGame.getGame(req.body.gameId)
         .catch(() => res.status(404).json({ error: "failed to getGame" }))
 
-    await utilGame.endGame(game._1)
+    // termine la partie
+    await utilGame.endGame(game._id)
         .catch(() => res.status(404).json({ error: "failed to endGame" }))
 
+    //  envoie les informations utiles au client
     try {
         res.status(200).json({
             message: "Game Over"
@@ -132,218 +159,137 @@ exports.endGame = async (req, res, next) => {
 
 }
 
-
 /**
  * série de fonctions pour les case du jeux
  */
 
-exports.tryGetA = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Get A")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Get A"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryGetA = async (req, res, next) => {
+    message = await utilGame.tryCase("Get", "A", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryGetB = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Get B")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Get B"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryGetB = async (req, res, next) => {
+    message = await utilGame.tryCase("Get", "B", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryGetC = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Get C")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Get C"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryGetC = async (req, res, next) => {
+    message = await utilGame.tryCase("Get", "C", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryGetD = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Get D")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Get D"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryGetD = async (req, res, next) => {
+    message = await utilGame.tryCase("Get", "D", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
 
-exports.tryPostA = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Post A")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Post A"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryPostA = async (req, res, next) => {
+    message = await utilGame.tryCase("Post", "A", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryPostB = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Post B")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Post B"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryPostB = async (req, res, next) => {
+    message = await utilGame.tryCase("Post", "B", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryPostC = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Post C")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Post C"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryPostC = async (req, res, next) => {
+    message = await utilGame.tryCase("Post", "C", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryPostD = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Post D")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Post D"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryPostD = async (req, res, next) => {
+    message = await utilGame.tryCase("Post", "D", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryPutA = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Put A")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Put A"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryPutA = async (req, res, next) => {
+    message = await utilGame.tryCase("Put", "A", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryPutB = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Put B")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Put B"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryPutB = async (req, res, next) => {
+    message = await utilGame.tryCase("Put", "B", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryPutC = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Put C")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Put C"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryPutC = async (req, res, next) => {
+    message = await utilGame.tryCase("Put", "C", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryPutD = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Put D")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Put D"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryPutD = async (req, res, next) => {
+    message = await utilGame.tryCase("Put", "D", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryDeleteA = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Delete A")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Delete A"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryDeleteA = async (req, res, next) => {
+    message = await utilGame.tryCase("Delete", "A", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryDeleteB = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Delete B")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Delete B"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryDeleteB = async (req, res, next) => {
+    message = await utilGame.tryCase("Delete", "B", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryDeleteC = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Delete C")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Delete C"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryDeleteC = async (req, res, next) => {
+    message = await utilGame.tryCase("Delete", "C", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
-exports.tryDeleteD = (req, res, next) => {
-    const gameId = req.body.gameId
-    Game.findOne({ _id: gameId })
-        .then(game => {
-            console.log("Delete D")
-            utilGame.switchTurn(game)
-            res.status(200).json({
-                "message": "Delete D"
-            })
-        })
-        .catch(error => res.status(404).json({ error }))
+exports.tryDeleteD = async (req, res, next) => {
+    message = await utilGame.tryCase("Delete", "D", req.body.gameId)
+        .catch(() => res.status(404).json({ error: "failed to tryCase" }))
+    try {
+        res.status(200).json(message)
+    } catch (error) { console.log(error) }
 }
 
 

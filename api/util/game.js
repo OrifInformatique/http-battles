@@ -3,6 +3,16 @@ const Game = require("../models/Game")
 
 const utilUser = require('../util/user')
 
+exports.getGame = async (gameId) => {
+    return Game.findOne({ _id: gameId })
+        .then(game => { return game })
+}
+
+exports.getGames = async () => {
+    return Game.find()
+        .then(games => { return games })
+}
+
 exports.formatedGames = async (games) => {
     const newGameList = []
     for (const game of games) {
@@ -21,61 +31,6 @@ exports.formatedGame = async (game) => {
 
 }
 
-exports.startMessage = (reqId, startUserId, boardId) => {
-    if (reqId === startUserId) {
-        var resultMessage = {
-            message: "You start",
-            boardId: boardId
-        }
-    } else {
-        var resultMessage = {
-            message: "Your opponent start",
-            boardId: boardId
-        }
-    }
-
-    return resultMessage
-}
-
-exports.switchTurn = (game) => {
-    if (game.state === "CREATEUR_TURN") {
-        Game.updateOne({ _id: game._id }, {
-            $set: {
-                state: "CHALLENGER_TURN"
-            }
-        })
-            .then(
-                console.log("CREATEUR_TURN to CHALLENGER_TURN")
-            )
-            .catch(error => console.log(error))
-    } else if (game.state === "CHALLENGER_TURN") {
-        Game.updateOne({ _id: game._id }, {
-            $set: {
-                state: "CREATEUR_TURN"
-            }
-        })
-            .then(
-                console.log("CHALLENGER_TURN to CREATEUR_TURN")
-            )
-            .catch(error => console.log(error))
-    }
-}
-
-exports.getGame = async (gameId) => {
-    return Game.findOne({ _id: gameId })
-        .then(game => { return game })
-}
-
-exports.getGames = async () => {
-    return Game.find()
-        .then(games => { return games })
-}
-
-exports.saveGame = async (game) => {
-    return game.save()
-        .then(game => { return game })
-}
-
 exports.createGame = async (userId) => {
     try {
         var game = new Game({
@@ -86,9 +41,13 @@ exports.createGame = async (userId) => {
     return game
 }
 
-exports.joinGame = async (gameId, challengerId) => {
+exports.saveGame = async (game) => {
+    return game.save()
+        .then(game => { return game })
+}
 
-    Game.updateOne({ _id: gameId }, {
+exports.joinGame = async (gameId, challengerId) => {
+    await Game.updateOne({ _id: gameId }, {
         $set: {
             state: "SETTINGS",
             challengerId: challengerId
@@ -125,6 +84,22 @@ exports.startCoinFlip = async (game) => {
     return startUserId
 }
 
+exports.startMessage = (reqId, startUserId, boardId) => {
+    if (reqId === startUserId) {
+        var resultMessage = {
+            message: "You start",
+            boardId: boardId
+        }
+    } else {
+        var resultMessage = {
+            message: "Your opponent start",
+            boardId: boardId
+        }
+    }
+
+    return resultMessage
+}
+
 exports.testTurn = async (game, userId) => {
     // teste l'état de la partie
     // si c'est le tour du créateur
@@ -155,6 +130,31 @@ exports.testTurn = async (game, userId) => {
     } else {
         // renvoi un message pour informer que la partie est términer
         return { message: "Game Over" }
+    }
+}
+
+exports.tryCase = async (requestMode, requestRoad, gameId) => {
+    const game = await exports.getGame(gameId)
+
+    exports.switchTurn(game)
+
+    return {message: requestMode + " " + requestRoad}
+
+}
+
+exports.switchTurn = (game) => {
+    if (game.state === "CREATEUR_TURN") {
+        Game.updateOne({ _id: game._id }, {
+            $set: {
+                state: "CHALLENGER_TURN"
+            }
+        })
+    } else if (game.state === "CHALLENGER_TURN") {
+        Game.updateOne({ _id: game._id }, {
+            $set: {
+                state: "CREATEUR_TURN"
+            }
+        })
     }
 }
 
