@@ -85,7 +85,7 @@ exports.joinGame = async (req, res, next) => {
     // rejoin la partie et update son état ainsi que le challenger
     await utilGame.joinGame(req.body.gameId, challenger._id)
         .catch(() => res.status(404).json({ error: "failed to joinGame" }))
-    
+
     // envoie les informations utiles au client
     try {
         res.status(200).json({
@@ -105,26 +105,34 @@ exports.startGame = async (req, res, next) => {
     const game = await utilGame.getGame(req.body.gameId)
         .catch(() => res.status(404).json({ error: "failed to getGame" }))
 
-    // crée et récupère la grille de jeux du createur
-    const createurBoard = await utilBoard.createBoard(game._id, game.createurId)
-        .catch(() => res.status(400).json({ error: "failed to createBoard - créateur" }))
+    const check = await utilGame.checkStartStat(game)
+        .catch(() => res.status(404).json({ error: "failed to checkStartStat" }))
 
-    // crée et récupère la grille de jeux du challenger
-    const challengerBoard = await utilBoard.createBoard(game._id, game.challengerId)
-        .catch(() => res.status(400).json({ error: "failed to createBoard - challenger" }))
+    if (check) {
+        // crée et récupère la grille de jeux du createur
+        const createurBoard = await utilBoard.createBoard(game._id, game.createurId)
+            .catch(() => res.status(400).json({ error: "failed to createBoard - créateur" }))
 
-    // récupère l'identifiant de l'utilisateur qui commence
-    const startUserId = await utilGame.startCoinFlip(game)
-        .catch(() => res.status(404).json({ error: "failed to startCoinFlip" }))
+        // crée et récupère la grille de jeux du challenger
+        const challengerBoard = await utilBoard.createBoard(game._id, game.challengerId)
+            .catch(() => res.status(400).json({ error: "failed to createBoard - challenger" }))
 
-    // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
-    const resultMessage = utilGame.startMessage(req.body.userId, startUserId, createurBoard, challengerBoard)
+        // récupère l'identifiant de l'utilisateur qui commence
+        const startUserId = await utilGame.startCoinFlip(game)
+            .catch(() => res.status(404).json({ error: "failed to startCoinFlip" }))
+
+        // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
+        var resultMessage = utilGame.startMessage(req.body.userId, startUserId, createurBoard, challengerBoard)
+    } else {
+        // construit le message en fonction de la partie et de l'utilisateur
+        var resultMessage = await utilGame.testTurn(game, req.body.userId)
+            .catch(() => res.status(500).json({ error: "failed to testTurn" }))
+    }
 
     // envoie les informations utiles au client
     try {
         res.status(200).json(resultMessage)
     } catch (error) { console.log(error) }
-
 }
 
 // vérifie si c'est le tour de l'utilisateur
@@ -132,7 +140,7 @@ exports.checkTurn = async (req, res, next) => {
     // récupère la partie suivant son id
     const game = await utilGame.getGame(req.body.gameId)
         .catch(() => res.status(404).json({ error: "failed to getGame" }))
-    
+
     // construit le message en fonction de la partie et de l'utilisateur
     const message = await utilGame.testTurn(game, req.body.userId)
         .catch(() => res.status(500).json({ error: "failed to testTurn" }))

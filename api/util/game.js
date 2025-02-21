@@ -60,6 +60,14 @@ exports.joinGame = async (gameId, challengerId) => {
     })
 }
 
+exports.checkStartStat = async (game) => {
+    if(game.state === "SETTINGS"){
+        return true
+    } else {
+        return false
+    }
+}
+
 // choisit aléatoirement le premier utilisateur à commencer
 exports.startCoinFlip = async (game) => {
     // sort aléatoirement un résultat true or false et le stock dans une constante
