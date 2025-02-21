@@ -1,6 +1,7 @@
 // import jsonwebtoken pour verifier des token
 const jwt = require('jsonwebtoken');
-
+const path = require('path')
+const dotenv = require('dotenv').config({ path: path.resolve(__dirname, '../env/.env') })
 
 // export le module
 module.exports = (req, res, next) => {
@@ -9,7 +10,7 @@ module.exports = (req, res, next) => {
         // extrait le token du header de la requete en utilisant la fonction split pour seulment récupérer le contenu après l'espace suivant le mot clef Bearer
         const token = req.headers.authorization.split(' ')[1]
 
-        if (token !== "ModerationeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2I2ZmY4YjRiMDhiNGRlOTAzMDNjZDAiLCJpYXQiOjE3NDAwNDYyNDksImV4cCI6MTc0MDEzMjY0OX0.4Hp2F457BBCTyqZFMTCAyDUGSf2Iy_aKC_JswQM9ZWw") {
+        if (token !== process.env.DEV_TOKEN) {
             // decode le token 
             const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET')
             // récupère l'id utilisateur
