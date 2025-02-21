@@ -106,7 +106,7 @@
 
 /*     Bouton BLEU "Création de votre compte"    */
 
-.public-layout button[type="submit"] {
+button[type="submit"] {
 
   position: relative;
 
@@ -120,11 +120,16 @@
   letter-spacing: 0px;
 
   height: 28px;
-  min-width: 200px;
 }
 
+/*  
+    Pq avoir mit public layout    
+    .public-layout button[type="submit"]::before
+*/
+
+
 /*  Effets de boutton BLEU généraux   */
-.public-layout button[type="submit"]::before {
+button[type="submit"]::before {
   content: '';
 
   position: absolute;
@@ -132,18 +137,21 @@
   left:0;
   height: 24px;
   background-color: #005ba9;
+  border: 2px solid #005ba9;
+
   border-radius: 50% 50% 0 0;
 
   transition: all 0.5s;
   
-  z-index: -1; 
-  opacity: 50%;
-
+  z-index: -1;
+  opacity: 100%;
 
 }
-.public-layout button[type="submit"]:hover::before {
+button[type="submit"]:hover::before {
   opacity: 100%;
   background-color: #005ba9;
+  border: 2px solid #005ba9;
+
   border-radius: 0 0 0 0;
 
 }

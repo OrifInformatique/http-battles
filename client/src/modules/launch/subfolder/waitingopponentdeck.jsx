@@ -5,7 +5,8 @@ const WaitingOpponentDeck = ({phrase}) => {
         <h1>Partie #{/*numéro de la partie */} - Initialisation de la phrase</h1>
         <h2>Votre phrase est prête</h2>
     </div>
-
+    
+    <div>
         <p>{phrase.d1.word} {phrase.d2.word} {phrase.d3.word} {phrase.d4.word} {phrase.d5.word} </p>
         <button style={{backgroundColor:"grey"}}type="submit" >Ce n'est pas votre tour</button>
         <p style={{fontWeight:"bold"}}>La phrase de votre adversaire</p>
@@ -14,7 +15,7 @@ const WaitingOpponentDeck = ({phrase}) => {
         <h1>En attente de [username]
             <p>La partie pourra démarrer dès que [username] a renseigné la phrase</p>
         </h1>
-        
+    </div>
     </>)
 }
 

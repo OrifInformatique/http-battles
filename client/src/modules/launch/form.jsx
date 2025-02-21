@@ -57,9 +57,9 @@ function LaunchPage() {
    
         case 2:
             return (<>  
-                    <div className="backgroundContainer2">
-                        <WaitingOpponentDeck phrase={phrase}/>
-                    </div>
+                <div className="backgroundContainer2">
+                    <WaitingOpponentDeck phrase={phrase}/>
+                </div>
             </>); 
     }
 }

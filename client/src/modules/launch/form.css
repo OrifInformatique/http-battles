@@ -1,6 +1,4 @@
-@keyframes 
-
-    rotateImage {
+@keyframes  rotateImage {
     0% {
         transform: rotate(0deg);
     }
@@ -107,7 +105,7 @@
             position: relative;
             overflow: visible;
             background-image: url(../../../public/assets/images/element/1409-rose_des_vents.png);
-            background-size: 105%;
+            background-size: 110%;
             background-position: center;
             background-repeat: no-repeat;
             animation: rotateImage 30s infinite linear;
@@ -122,17 +120,22 @@
         /*     Phrase choisie   */
 
 
-        /*     Boutton de validation de la phrase     */
+/*     Boutton de validation de la phrase     */
 
-        .buttonLaunch {
-            color: white;
-            width: 200%;
-        }
-        
-
-button[type="submit"]{
-    max-width: 250px;
+.initbtn {
+color: white;
+min-width: 350px;
 }
+
+button[type="submit"]::before {
+    width: 350px; 
+    bottom:-28px;
+  }
+  
+button[type="submit"]:hover::before {
+    bottom: 0;
+  }
+  
 
 /*  Règles pour Select  */
 

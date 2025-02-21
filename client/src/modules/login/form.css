@@ -103,18 +103,27 @@
 
 /*  Effets de boutton BLEU généraux   */
 
-.public-layout button[type="submit"]::before {
-  width: 200px; 
+button[type="submit"]::before {
+  width: 385px; 
   bottom:-28px;
 }
 
-.public-layout button[type="submit"]:hover::before {
+button[type="submit"]:hover::before {
   bottom: 0;
 }
 
-.buttonLogin:hover {
-  border: black solid 2px;
+
+/*
+button[type="submit"]::before {
+  width: 350px; 
+  bottom:-28px;
 }
+*/
+button[type="submit"]:hover::before {
+  bottom: 0;
+}
+
+
 
 .checkbox-label {
   font-size: small;

@@ -1,5 +1,6 @@
 import React from "react";
 import PhraseLaunch from "../../ui/launch/initialisation";
+import '../../general.css';
 
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
     return(<>
@@ -38,7 +39,7 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
                     </div>
                 </div>
             </div>
-            <button form="myForm" type="submit" className="buttonLaunch">Valider la phrase</button>  
+            <button form="myForm" type="submit" className="initbtn">Valider la phrase</button>
         </div>
     </>);
 }
