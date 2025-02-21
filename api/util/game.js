@@ -91,7 +91,13 @@ exports.startCoinFlip = async (game) => {
 }
 
 // construit le message de départ
-exports.startMessage = (reqId, startUserId, boardId) => {
+exports.startMessage = (reqId, startUserId, createurBoard, challengerBoard) => {
+    if(startUserId === createurBoard.userId){
+        var boardId = createurBoard.userId
+    } else if (startUserId === challengerBoard.userId){
+        var boardId = challengerBoard.userId
+    }
+
     if (reqId === startUserId) {
         var resultMessage = {
             message: "You start",

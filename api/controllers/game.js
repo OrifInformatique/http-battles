@@ -76,11 +76,11 @@ exports.joinGame = async (req, res, next) => {
 
     // recupère le créateur de la partie en fonction de son identifiant contenue dans la partie
     const createur = await utilUser.getUserById(game.createurId)
-        .catch(() => res.status(404).json({ error: "failed to getUserById" }))
+        .catch(() => res.status(404).json({ error: "failed to getUserById - créateur" }))
 
     // récupère le challenger en fonction de l'id contenu dans son id
     const challenger = await utilUser.getUserById(req.body.userId)
-        .catch(() => res.status(404).json({ error: "failed to getUserById" }))
+        .catch(() => res.status(404).json({ error: "failed to getUserById - challenger" }))
 
     // rejoin la partie et update son état ainsi que le challenger
     await utilGame.joinGame(req.body.gameId, challenger._id)
@@ -105,16 +105,20 @@ exports.startGame = async (req, res, next) => {
     const game = await utilGame.getGame(req.body.gameId)
         .catch(() => res.status(404).json({ error: "failed to getGame" }))
 
-    // crée et récupère la grille de jeux
-    const board = await utilBoard.createBoard(game._id)
-        .catch(() => res.status(400).json({ error: "failed to createBoard" }))
+    // crée et récupère la grille de jeux du createur
+    const createurBoard = await utilBoard.createBoard(game._id, game.createurId)
+        .catch(() => res.status(400).json({ error: "failed to createBoard - créateur" }))
+
+    // crée et récupère la grille de jeux du challenger
+    const challengerBoard = await utilBoard.createBoard(game._id, game.challengerId)
+        .catch(() => res.status(400).json({ error: "failed to createBoard - challenger" }))
 
     // récupère l'identifiant de l'utilisateur qui commence
     const startUserId = await utilGame.startCoinFlip(game)
         .catch(() => res.status(404).json({ error: "failed to startCoinFlip" }))
 
     // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
-    const resultMessage = utilGame.startMessage(req.body.userId, startUserId, board._id)
+    const resultMessage = utilGame.startMessage(req.body.userId, startUserId, createurBoard, challengerBoard)
 
     // envoie les informations utiles au client
     try {

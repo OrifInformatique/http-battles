@@ -18,7 +18,7 @@ router.post('/games/joinGame', auth, gameCtrl.joinGame)
 // commence la partie
 router.post('/games/startGame', auth, gameCtrl.startGame)
 // vérifie à qui est le tour
-router.post('/games/checkTurn', auth, gameCtrl.checkTurn)
+router.get('/games/checkTurn', auth, gameCtrl.checkTurn)
 // términe la partie
 router.post('/games/endGame', auth, gameCtrl.endGame)
 
