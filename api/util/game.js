@@ -70,6 +70,7 @@ exports.checkStartStat = async (game) => {
 
 // choisit aléatoirement le premier utilisateur à commencer
 exports.startCoinFlip = async (game) => {
+
     // sort aléatoirement un résultat true or false et le stock dans une constante
     const coinFlip = Math.floor(Math.random() * 2) == 0
     // test le résultat aléatoire
@@ -78,7 +79,7 @@ exports.startCoinFlip = async (game) => {
         // initialise la variable définissant le joueur qui commece la partie comme étant celui qui la créé
         var startUserId = game.createurId
         // update l'état de la partie pour signifier que le créateur commence
-        Game.updateOne({ _id: game._id }, {
+        await Game.updateOne({ _id: game._id }, {
             $set: {
                 state: "CREATEUR_TURN"
             }
@@ -88,7 +89,7 @@ exports.startCoinFlip = async (game) => {
         // initialise la variable définissant le joueur qui commece la partie comme étant le challenger
         var startUserId = game.challengerId
         // update l'état de la partie pour signifier que le challenger commence
-        Game.updateOne({ _id: game._id }, {
+        await Game.updateOne({ _id: game._id }, {
             $set: {
                 state: "CHALLENGER_TURN"
             }
@@ -99,22 +100,26 @@ exports.startCoinFlip = async (game) => {
 }
 
 // construit le message de départ
-exports.startMessage = (reqId, startUserId, createurBoard, challengerBoard) => {
-    if(startUserId === createurBoard.userId){
-        var boardId = createurBoard.userId
-    } else if (startUserId === challengerBoard.userId){
-        var boardId = challengerBoard.userId
+exports.getOtherUserId = (game, userId) => {
+    if(userId === game.createurId){
+        return game.challengerId
+    } else {
+        return game.createurId
     }
+}
+
+// construit le message de départ
+exports.startMessage = (reqId, startUserId, board) => {
 
     if (reqId === startUserId) {
         var resultMessage = {
             message: "You start",
-            boardId: boardId
+            boardId: board._id
         }
     } else {
         var resultMessage = {
             message: "Your opponent start",
-            boardId: boardId
+            boardId: board._id
         }
     }
 

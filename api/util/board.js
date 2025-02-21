@@ -1,9 +1,9 @@
 const Board = require('../models/Board')
 
-exports.createBoard = async (gameId, userId) => {
+exports.createBoard = async (game, userId) => {
     
     const board = new Board({
-        gameId: gameId,
+        gameId: game._id,
         userId: userId,
         board: [
             [null, null, null, null],
