@@ -12,8 +12,11 @@ const utilGame = require('../util/game')
 // import fonctions util pour board
 const utilBoard = require('../util/board')
 
-// import fonctions util pour board
+// import fonctions util pour phrase
 const utilPhrase = require('../util/phrase')
+
+// import fonctions util pour word
+const utilWord = require('../util/word')
 
 
 // crée une partie
@@ -136,7 +139,9 @@ exports.startGame = async (req, res, next) => {
     }
 
     const userPhrase = await utilPhrase.createPhrase( board._id, req.body.phrase)
+    
     console.log(userPhrase)
+    utilBoard.fillBoard(board, userPhrase)
 
     // envoie les informations utiles au client
     try {

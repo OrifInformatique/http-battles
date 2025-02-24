@@ -1,7 +1,7 @@
 const Board = require('../models/Board')
 
 exports.createBoard = async (game, userId) => {
-    
+
     const board = new Board({
         gameId: game._id,
         userId: userId,
@@ -17,5 +17,11 @@ exports.createBoard = async (game, userId) => {
 
 exports.getBoard = async (boardId) => {
     return Board.findOne({ _id: boardId })
-            .then(board => { return board })
+        .then(board => { return board })
+}
+
+exports.fillBoard = async (board, phrase) => {
+    const newBoard = []
+    
+    console.log(newBoard)
 }
