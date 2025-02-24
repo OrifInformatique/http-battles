@@ -12,8 +12,6 @@ exports.createBoard = async (game, userId) => {
             [null, null, null, null]
         ]
     })
-    
-
     return await board.save()
 }
 

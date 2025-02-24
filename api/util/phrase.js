@@ -1,12 +1,11 @@
 const Phrase = require('../models/Phrase')
 
-exports.createPhrase = async (gameId, userId) => {
+exports.createPhrase = async (boardId, userPhrase) => {
     const phrase = new Phrase({
-            gameId: gameId,
-            userId: userId,
-            words: []
+            boardId: boardId,
+            words: userPhrase
         })
-        phrase.save()
+        return await phrase.save()
             .then(console.log("Phrase created  succesfully"))
             .catch(error => console.log(error))
 }

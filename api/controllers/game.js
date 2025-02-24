@@ -12,6 +12,9 @@ const utilGame = require('../util/game')
 // import fonctions util pour board
 const utilBoard = require('../util/board')
 
+// import fonctions util pour board
+const utilPhrase = require('../util/phrase')
+
 
 // crée une partie
 exports.createGame = async (req, res, next) => {
@@ -107,7 +110,8 @@ exports.startGame = async (req, res, next) => {
 
     const check = await utilGame.checkStartStat(game)
         .catch(() => res.status(404).json({ error: "failed to checkStartStat" }))
-
+    
+    
 
     if (check) {
         // récupère l'identifiant de l'utilisateur qui commence
@@ -115,7 +119,7 @@ exports.startGame = async (req, res, next) => {
             .catch(() => res.status(404).json({ error: "failed to startCoinFlip" }))
 
         // crée et récupère la grille de jeux du createur
-        const board = await utilBoard.createBoard(game, req.body.userId)
+        var board = await utilBoard.createBoard(game, req.body.userId)
             .catch(() => res.status(400).json({ error: "failed to createBoard" }))
 
         // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
@@ -124,12 +128,15 @@ exports.startGame = async (req, res, next) => {
         // récupère l'identifiant de l'utilisateur qui commence
         const startUserId = utilGame.getOtherUserId(game, req.body.userId)
         // crée et récupère la grille de jeux du createur
-        const board = await utilBoard.createBoard(game, req.body.userId)
+        var board = await utilBoard.createBoard(game, req.body.userId)
             .catch(() => res.status(400).json({ error: "failed to createBoard" }))
 
         // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
         var resultMessage = utilGame.startMessage(req.body.userId, startUserId, board)
     }
+
+    const userPhrase = await utilPhrase.createPhrase( board._id, req.body.phrase)
+    console.log(userPhrase)
 
     // envoie les informations utiles au client
     try {
@@ -169,8 +176,6 @@ exports.endGame = async (req, res, next) => {
             message: "Game Over"
         })
     } catch (error) { console.log(error) }
-
-
 }
 
 /**
