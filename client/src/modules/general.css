@@ -106,55 +106,6 @@
 
 /*     Bouton BLEU "Création de votre compte"    */
 
-button[type="submit"] {
-
-  position: relative;
-
-  background-color: black;
-
-  border: 2px solid #005ba9;
-
-  overflow: hidden;
-  z-index: 0;
-
-  letter-spacing: 0px;
-
-  height: 28px;
-}
-
-/*  
-    Pq avoir mit public layout    
-    .public-layout button[type="submit"]::before
-*/
-
-
-/*  Effets de boutton BLEU généraux   */
-button[type="submit"]::before {
-  content: '';
-
-  position: absolute;
-
-  left:0;
-  height: 24px;
-  background-color: #005ba9;
-  border: 2px solid #005ba9;
-
-  border-radius: 50% 50% 0 0;
-
-  transition: all 0.5s;
-  
-  z-index: -1;
-  opacity: 100%;
-
-}
-button[type="submit"]:hover::before {
-  opacity: 100%;
-  background-color: #005ba9;
-  border: 2px solid #005ba9;
-
-  border-radius: 0 0 0 0;
-
-}
 /*   Définition police du composant en: Calibri Light ( imported ) */
 
 .calibri {

@@ -9,6 +9,9 @@ import { AuthContext } from "../../contexts/auth";
 import "./form.css";
 import "../general.css";
 
+// Eléments
+import Button from "../ui/button";
+
 const LoginForm = ({ loginData, handleSubmit, onChange, messageError }) => {
   return (
     <form onSubmit={handleSubmit} className="loginContainer">
@@ -39,18 +42,18 @@ const LoginForm = ({ loginData, handleSubmit, onChange, messageError }) => {
         <label htmlFor="checkboxRegisterLogin">
           <span className="checkbox-border"></span>
           <span className="checkbox-label">
-            Rester connecter{" "}
-            <Link className="text-black-500 underline" to="/forgotpassword">
-              {" "}
-              Oublié mon mot de passe{" "}
-            </Link>{" "}
+            <div className="labelContainer">
+              <p>Rester connecter{" "}</p>
+              <Link className="text-black-500 underline" to="/forgotpassword">
+                {" "}
+              <p>Oublié mon mot de passe{" "}</p>
+              </Link>{" "}
+            </div>
           </span>
         </label>
       </div>
 
-      <button type="submit" className="buttonLogin">
-        Se connecter
-      </button>
+      <Button className={"initbtn"} label={"Se connecter"}/>
    
       <p>
         Pas encore de compte ?{" "}
@@ -139,5 +142,6 @@ function LoginPage() {
     </div>
   );
 }
+         //   <Button form={"myform"} className={"initbtn"} label={"Valider la phrase"}/>
 
 export default LoginPage;

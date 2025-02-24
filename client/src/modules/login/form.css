@@ -63,9 +63,18 @@
   font-size: 12px;
 }
 
+.labelContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 130px;
+}
+
 .textLogin {
   text-align: center;
-  font-weight: bold;
+  font-weight: none;
+  font-size: large;
+  letter-spacing: 5px;
 }
 
 .sloganLogin {
@@ -91,39 +100,8 @@
 /*   Boutton BLEU "se connecter"   */
 
 .buttonLogin {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  color: white;
-
-  min-width: 80%;
+  width: 385px;
 }
-
-/*  Effets de boutton BLEU généraux   */
-
-button[type="submit"]::before {
-  width: 385px; 
-  bottom:-28px;
-}
-
-button[type="submit"]:hover::before {
-  bottom: 0;
-}
-
-
-/*
-button[type="submit"]::before {
-  width: 350px; 
-  bottom:-28px;
-}
-*/
-button[type="submit"]:hover::before {
-  bottom: 0;
-}
-
-
 
 .checkbox-label {
   font-size: small;
