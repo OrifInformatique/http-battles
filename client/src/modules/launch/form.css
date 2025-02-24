@@ -15,164 +15,149 @@
         transform: rotate(-360deg);
     }
 }
+/* ----------------------------------------------------------------------------------------------------------
 
-/*     Container Principal     */
+    Initialisation
+*/
+        /*     Container Principal     */
+            .initBackgroundContainer1 {
+                display: flex;
+                flex-flow: row;
+                align-items: baseline;
+                justify-content: space-around;
 
-.backgroundContainer1 {
-    display: flex;
-    flex-flow: row;
-    align-items: baseline;
-    justify-content: space-around;
+                color:white;
 
-    color:white;
+                background-image: url(../../../public/assets/images/background/launchbackground_upscale.webp);
+                background-repeat: no-repeat;
+                background-size:cover;
 
-    background-image: url(../../../public/assets/images/background/launchbackground_upscale.webp);
-    background-repeat: no-repeat;
-    background-size:cover;
+                min-height: 1000px;
+                min-width: 200px
+            }
 
-    min-height: 1000px;
-    min-width: 200px
-}
+            /*     Titre de la page    */
+            .initTitle {
+                padding-top: 10%;
+                padding-bottom: 30px;
+            }
 
-.backgroundContainer2 {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
+            /*     Containers des colonnes de la page    
+                /*     Container principal des titres + listes*/
 
-    color:white;
+                /*     Container qui prend en compte l'initialisation de la phrase       */
+                .initContainer {
+                    color:white;
+                }
+                    /*  Liste des mots  */
 
-    background-image: url(../../../public/assets/images/background/launchbackground_upscale.webp);
-    background-repeat: no-repeat;
-    background-size:cover;
+                    .initListLaunchContainer {
+                        display: flex;
+                        flex-flow: row wrap;
+                        justify-content: space-between;
+                        align-items: flex-start;
 
-    min-height: 1000px;
-}
-
-/*     Titre de la page    */
-
-.title {
-    padding-top: 10%;
-    padding-bottom: 30px;
-}
-
-/*     Containers des colonnes de la page    
-    /*     Container principal des titres + listes*/
-
-    /*     Container qui prend en compte l'initialisation de la phrase       */
-    .initialisationContainer {
-        color:white;
-    }
-        /*  Liste des mots  */
-
-        .listLaunchContainer {
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: space-between;
-            align-items: flex-start;
-
-            min-width: 450px;
-            gap: 70px;
-        }
+                        min-width: 450px;
+                        gap: 70px;
+                    }
 
 
-/*     Container de la phrase avec mandala de fond     */
+            .initFirstListLaunchContainer {
+                background-color: rgba(0, 0, 0, 50%);
+                margin: 20p;
+            }
 
-    .validationContainer {
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        justify-content: center;
-    
-        gap: 200px;
-    }
-        /*     Titre du container de validation     */
+            .initThirdListLaunchContainer {
+                background-color: rgba(0, 0, 0, 50%);
+            }
+
+            /*     Container de la phrase avec mandala de fond     */
+
+                .initValidationContainer {
+                    display: flex;
+                    flex-flow: column nowrap;
+                    align-items: center;
+                    justify-content: center;
+                
+                    gap: 200px;
+                }
+                    /*     Titre du container de validation     */
+                    
+                    .initTitleValidationContainer {
+                        display: flex;
+                        flex-flow: row nowrap;
+                        gap: 20px;
+                    }
+                    /*     Container de l'Element mobile     */
+
+                    .initElementContainer {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        height: 300px;
+
+                        position: relative;
+                        overflow: visible;
+                        background-image: url(../../../public/assets/images/element/1409-rose_des_vents.png);
+                        background-size: 110%;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        animation: rotateImage 30s infinite linear;
+                    
+                        min-width: 50%;
+                    }
+                    /*     Pour fixer la phrase et qu'elle ne soit pas affectée par la rotation     */
+                    .initFixPhrase {
+                        animation: rotateIImage 30s infinite linear;
+                    }
+
+                    /*     Phrase choisie   */
+
+
+            /*     Boutton de validation de la phrase     */
+
+            .initbtn {
+                min-width: 350px;
+            }
+
+            /*  Règles pour Select  */
+
+            select {
+                width: 100px;
+                height: 25px;
+
+                background-color: transparent;
+
+                border: solid 2px black;
+                border-radius: 13px;
+            }
+
+
+
+
+/* -----------------------------------------------------s-----------------------------------------------------
         
-        .titleValidationContainer {
+        Waiting Oponnent Deck
+*/
+    /*     Container Principal     */
+        .waitBackgroundContainer2 {
             display: flex;
-            flex-flow: row nowrap;
-            gap: 20px;
-        }
-        /*     Container de l'Element mobile     */
-
-        .elementContainer {
-            display: flex;
+            flex-flow: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            height: 300px;
 
-            position: relative;
-            overflow: visible;
-            background-image: url(../../../public/assets/images/element/1409-rose_des_vents.png);
-            background-size: 110%;
-            background-position: center;
+            color:white;
+
+            background-image: url(../../../public/assets/images/background/launchbackground_upscale.webp);
             background-repeat: no-repeat;
-            animation: rotateImage 30s infinite linear;
-        
-            min-width: 50%;
-        }
-        /*     Pour fixer la phrase et qu'elle ne soit pas affectée par la rotation     */
-        .fixPhrase {
-            animation: rotateIImage 30s infinite linear;
+            background-size:cover;
+
+            min-height: 1000px;
         }
 
-        /*     Phrase choisie   */
-
-
-/*     Boutton de validation de la phrase     */
-
-.initbtn {
-color: white;
-min-width: 350px;
-}
-
-button[type="submit"]::before {
-    width: 350px; 
-    bottom:-28px;
-  }
-  
-button[type="submit"]:hover::before {
-    bottom: 0;
-  }
-  
-
-/*  Règles pour Select  */
-
-select {
-    width: 100px;
-    height: 25px;
-
-    background-color: cadetblue;
-
-    border: solid 2px black;
-    border-radius: 13px;
-}
-
-/*     Element mobile      */
-
-
-/*     A supprimer     
-
-.element {
-    position: fixed;
-
-    background-size:absolute;
-    background-image: url(../../../public/assets/images/element/2-flower-mandala.png);
-   
-
-    height: 300px;
-    width: 350px;
-
-}
-
-        Container qui contient mon element mobile    
-
-    .container {
-        position: relative;
-
-        width:100vw;
-        height: 100vh;
-    }
-
-    */
+        .waitContainer {
+            display: flex;
+            flex-flow: column wrap;
+            gap: 30px;
+        }

@@ -6,7 +6,7 @@ const WaitingOpponentDeck = ({phrase}) => {
         <h2>Votre phrase est prête</h2>
     </div>
     
-    <div>
+    <div className="waitContainer">
         <p>{phrase.d1.word} {phrase.d2.word} {phrase.d3.word} {phrase.d4.word} {phrase.d5.word} </p>
         <button style={{backgroundColor:"grey"}}type="submit" >Ce n'est pas votre tour</button>
         <p style={{fontWeight:"bold"}}>La phrase de votre adversaire</p>

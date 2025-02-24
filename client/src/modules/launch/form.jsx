@@ -50,14 +50,14 @@ function LaunchPage() {
     switch(isSubmitted) { 
         case 1:
             return (<>
-                <div className="backgroundContainer1">
+                <div className="initBackgroundContainer1">
                     <Initialisation handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
                 </div>
             </>); 
    
         case 2:
             return (<>  
-                <div className="backgroundContainer2">
+                <div className="waitBackgroundContainer2">
                     <WaitingOpponentDeck phrase={phrase}/>
                 </div>
             </>); 
