@@ -4,9 +4,15 @@ const Game = require("../models/Game")
 // import les fonction utiles pour utilisateur
 const utilUser = require('../util/user')
 
+// import les fonction utiles pour board
+const utilBoard = require('../util/board')
+
+// import les fonction utiles pour board
+const utilWord = require('../util/word')
+
 // retourne une partie selon sont id
 exports.getGame = async (gameId) => {
-    return Game.findOne({ _id: gameId })
+    return await Game.findOne({ _id: gameId })
 }
 
 // retourne toute les partie
@@ -61,7 +67,7 @@ exports.joinGame = async (gameId, challengerId) => {
 }
 
 exports.checkStartStat = async (game) => {
-    if(game.state === "SETTINGS"){
+    if (game.state === "SETTINGS") {
         return true
     } else {
         return false
@@ -100,10 +106,13 @@ exports.startCoinFlip = async (game) => {
 }
 
 // construit le message de départ
-exports.getOtherUserId = (game, userId) => {
-    if(userId === game.createurId){
+exports.getOtherUserId = async (game, userId) => {
+    
+    if (userId === game.createurId) {
+        
         return game.challengerId
     } else {
+        
         return game.createurId
     }
 }
@@ -161,12 +170,62 @@ exports.testTurn = async (game, userId) => {
 }
 
 // test une case de la grille
-exports.tryCase = async (requestMode, requestRoad, gameId) => {
-    const game = await exports.getGame(gameId)
+exports.tryCase = async (requestMode, requestRoad, gameId, userId) => {
+    
+    const game = await this.getGame(gameId)
+    
+    const adversaireId = await this.getOtherUserId(game, userId)
+    
+    switch (requestMode) {
+        case "Get":
+            var arrayY = 0
+            break;
+        case "Post":
+            var arrayY = 1
+            break;
+        case "Put":
+            var arrayY = 2
+            break;
+        case "Delete":
+            var arrayY = 3
+            break;
+    }
 
-    exports.switchTurn(game)
 
-    return {message: requestMode + " " + requestRoad}
+    switch (requestRoad) {
+        case "A":
+            var arrayX = 0
+            break;
+        case "B":
+            var arrayX = 1
+            break;
+        case "C":
+            var arrayX = 2
+            break;
+        case "D":
+            var arrayX = 3
+            break;
+    }
+
+    const board = await utilBoard.getBoardGameUser(game._id, adversaireId)
+    
+    const check = await utilBoard.checkBoard(board, arrayY, arrayX)
+    if(check.result){
+        var message =  { 
+            message: requestMode + " " + requestRoad ,
+            result: "Touché!",
+            word: check.word.content
+        }
+        
+    } else {
+        var message =  { 
+            message: requestMode + " " + requestRoad ,
+            result: "Manqué!"
+        }
+    }
+    this.switchTurn(game)
+
+    return message
 }
 
 // change le toour 

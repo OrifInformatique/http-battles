@@ -1,5 +1,7 @@
 const Board = require('../models/Board')
 
+const utilWord = require('../util/word')
+
 exports.createBoard = async (game, userId) => {
 
     const board = new Board({
@@ -16,8 +18,17 @@ exports.createBoard = async (game, userId) => {
 }
 
 exports.getBoard = async (boardId) => {
-    return Board.findOne({ _id: boardId })
-        .then(board => { return board })
+    
+    return await Board.findOne({ _id: boardId })
+}
+
+
+exports.getBoardGameUser = async (gameId, userId) => {
+    
+    return await Board.findOne({ 
+        gameId: gameId,
+        userId: userId
+     })
 }
 
 exports.fillBoard = async (board, phrase) => {
@@ -40,6 +51,40 @@ exports.fillBoard = async (board, phrase) => {
                 board: newBoard
             }
         })
-        .then(console.log("Board modified succesfully"))
     return await this.getBoard(board._id)
+}
+
+exports.checkBoard = async (board, y, x) => {
+    console.log(board.board[y][x])
+    if(board.board[y][x] !== null){
+        var revealedWord = await utilWord.revealWord(board.board[y][x])
+        console.log(board.board[y][x])
+        board.board[y][x] = revealedWord
+        console.log(board.board[y][x])
+        var updatedBoard = await this.updateBoard(board)
+        var result = {
+            word: updatedBoard.board[y][x],
+            result: true
+        }
+        
+    } else {
+        var result = {
+            result: false
+        }
+    }
+    
+    return result
+}
+
+exports.updateBoard = async (newBoard) => {
+    console.log(newBoard._id)
+    await Board.updateOne({ _id: newBoard._id }, {
+        $set: {
+            gameId: newBoard.gameId,
+            userId: newBoard.userId,
+            board: newBoard.board
+        }
+    })
+    
+    return await this.getBoard(newBoard._id)
 }

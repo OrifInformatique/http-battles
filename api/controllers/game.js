@@ -141,7 +141,7 @@ exports.startGame = async (req, res, next) => {
     // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
     const resultMessage = await utilGame.startMessage(req.body.userId, startUserId, filledBoard)
         .catch(() => res.status(404).json({ error: "failed to startMessage" }))
-        
+
     // envoie les informations utiles au client
     try {
         res.status(200).json(resultMessage)
@@ -187,7 +187,7 @@ exports.endGame = async (req, res, next) => {
  */
 
 exports.tryGetA = async (req, res, next) => {
-    message = await utilGame.tryCase("Get", "A", req.body.gameId)
+    message = await utilGame.tryCase("Get", "A", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -195,7 +195,7 @@ exports.tryGetA = async (req, res, next) => {
 }
 
 exports.tryGetB = async (req, res, next) => {
-    message = await utilGame.tryCase("Get", "B", req.body.gameId)
+    message = await utilGame.tryCase("Get", "B", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -203,7 +203,7 @@ exports.tryGetB = async (req, res, next) => {
 }
 
 exports.tryGetC = async (req, res, next) => {
-    message = await utilGame.tryCase("Get", "C", req.body.gameId)
+    message = await utilGame.tryCase("Get", "C", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -211,7 +211,7 @@ exports.tryGetC = async (req, res, next) => {
 }
 
 exports.tryGetD = async (req, res, next) => {
-    message = await utilGame.tryCase("Get", "D", req.body.gameId)
+    message = await utilGame.tryCase("Get", "D", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -220,7 +220,7 @@ exports.tryGetD = async (req, res, next) => {
 
 
 exports.tryPostA = async (req, res, next) => {
-    message = await utilGame.tryCase("Post", "A", req.body.gameId)
+    message = await utilGame.tryCase("Post", "A", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -228,7 +228,7 @@ exports.tryPostA = async (req, res, next) => {
 }
 
 exports.tryPostB = async (req, res, next) => {
-    message = await utilGame.tryCase("Post", "B", req.body.gameId)
+    message = await utilGame.tryCase("Post", "B", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -236,7 +236,7 @@ exports.tryPostB = async (req, res, next) => {
 }
 
 exports.tryPostC = async (req, res, next) => {
-    message = await utilGame.tryCase("Post", "C", req.body.gameId)
+    message = await utilGame.tryCase("Post", "C", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -244,7 +244,7 @@ exports.tryPostC = async (req, res, next) => {
 }
 
 exports.tryPostD = async (req, res, next) => {
-    message = await utilGame.tryCase("Post", "D", req.body.gameId)
+    message = await utilGame.tryCase("Post", "D", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -252,7 +252,7 @@ exports.tryPostD = async (req, res, next) => {
 }
 
 exports.tryPutA = async (req, res, next) => {
-    message = await utilGame.tryCase("Put", "A", req.body.gameId)
+    message = await utilGame.tryCase("Put", "A", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -260,7 +260,7 @@ exports.tryPutA = async (req, res, next) => {
 }
 
 exports.tryPutB = async (req, res, next) => {
-    message = await utilGame.tryCase("Put", "B", req.body.gameId)
+    message = await utilGame.tryCase("Put", "B", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -268,7 +268,7 @@ exports.tryPutB = async (req, res, next) => {
 }
 
 exports.tryPutC = async (req, res, next) => {
-    message = await utilGame.tryCase("Put", "C", req.body.gameId)
+    message = await utilGame.tryCase("Put", "C", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -276,7 +276,7 @@ exports.tryPutC = async (req, res, next) => {
 }
 
 exports.tryPutD = async (req, res, next) => {
-    message = await utilGame.tryCase("Put", "D", req.body.gameId)
+    message = await utilGame.tryCase("Put", "D", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -284,7 +284,7 @@ exports.tryPutD = async (req, res, next) => {
 }
 
 exports.tryDeleteA = async (req, res, next) => {
-    message = await utilGame.tryCase("Delete", "A", req.body.gameId)
+    message = await utilGame.tryCase("Delete", "A", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -292,7 +292,7 @@ exports.tryDeleteA = async (req, res, next) => {
 }
 
 exports.tryDeleteB = async (req, res, next) => {
-    message = await utilGame.tryCase("Delete", "B", req.body.gameId)
+    message = await utilGame.tryCase("Delete", "B", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -300,7 +300,7 @@ exports.tryDeleteB = async (req, res, next) => {
 }
 
 exports.tryDeleteC = async (req, res, next) => {
-    message = await utilGame.tryCase("Delete", "C", req.body.gameId)
+    message = await utilGame.tryCase("Delete", "C", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)
@@ -308,7 +308,7 @@ exports.tryDeleteC = async (req, res, next) => {
 }
 
 exports.tryDeleteD = async (req, res, next) => {
-    message = await utilGame.tryCase("Delete", "D", req.body.gameId)
+    message = await utilGame.tryCase("Delete", "D", req.body.gameId, req.body.userId)
         .catch(() => res.status(404).json({ error: "failed to tryCase" }))
     try {
         res.status(200).json(message)

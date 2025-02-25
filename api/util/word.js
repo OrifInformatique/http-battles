@@ -1,5 +1,9 @@
 const Word = require('../models/Word')
 
+exports.getWord = async (wordId) => {
+    return await Word.findOne({ _id: wordId })
+}
+
 exports.createWord = async (word) => {
     const newWord = new Word({
         content: word.content,
@@ -7,4 +11,13 @@ exports.createWord = async (word) => {
     })
     return await newWord.save()
         .then(console.log("Word created  succesfully"))
+}
+
+exports.revealWord= async (word) =>  {
+    await Word.updateOne({ _id: word._id }, {
+        $set: {
+            revealed: true
+        }
+    })
+    return await this.getWord(word._id)
 }

@@ -10,5 +10,7 @@ const boardSchema = mongoose.Schema({
     board: { type: Array, required: true }
 })
 
+boardSchema.index({gameId: 1, userId: 1}, {unique: true})
+
 // exporte le shema
 module.exports = mongoose.model('Board', boardSchema)
