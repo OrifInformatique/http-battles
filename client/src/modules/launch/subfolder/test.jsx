@@ -48,23 +48,14 @@ return(<>
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
     return(<>
         <div className="initInitialisationContainer">
-            <h1 className="initTitle"style={{fontWeight:'bold'}}>Partie #{/*numéro de la partie */} - Initialisation de la phrase </h1>
+            <h1 className="initTitle"style={{fontWeight:'bold'}}>Partie #{/*numéro de la partie */} - Test </h1>
             
             <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>
                 <div className="">
                     {/*Liste*/}
-                    <div className="initListLaunchContainer" >
-                        <div className="initFirstListLaunchContainer"> 
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase.d1}/>
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} phrase={phrase.d2}/>
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={3} phrase={phrase.d3}/>
-                             <div></div>
-                        </div>
-                        <div className="initThirdListLaunchContainer">
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={4} phrase={phrase.d4}/>
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={5} phrase={phrase.d5}/>
-                        </div>  
-                    </div>
+                    <ul>
+                        <li></li>
+                    </ul>
                 </div>
             </form>
         </div>

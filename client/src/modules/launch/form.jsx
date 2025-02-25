@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Initialisation from "../launch/subfolder/initialisation";
+import Initialisation from "./subfolder/initialisation";
 import WaitingOpponentDeck from "./subfolder/waitingopponentdeck";
+import Test from './subfolder/test'
+
 import './form.css';
 import '../general.css';
 
@@ -25,14 +27,78 @@ function LaunchPage() {
         // Dimensions
         d1: { word: dynamicVal[0][0],  route: staticVal1[0], method: staticVal2[0]},
         d2: { word: dynamicVal[1][0], route: staticVal1[0], method: staticVal2[0]},
-        d3: {word: dynamicVal[2][0], route: staticVal1[0], method: staticVal2[0]},
-        d4: {word: dynamicVal[3][0], route: staticVal1[0], method: staticVal2[0]},
+        d3: { word: dynamicVal[2][0], route: staticVal1[0], method: staticVal2[0]},
+        d4: { word: dynamicVal[3][0], route: staticVal1[0], method: staticVal2[0]},
         d5: { word: dynamicVal[4][0], route: staticVal1[0], method: staticVal2[0]}
     });
+
+    
+    const [test, setTest] = useState([ 
+        
+        { 
+
+            word: { 
+
+                "content": dynamicVal[0][0], 
+                "position": [staticVal1[0], staticVal2[0]] 
+
+            } 
+
+            }, 
+
+            { 
+
+            word: { 
+
+                "content": dynamicVal[1][0], 
+                "position": [staticVal1[0], staticVal2[0]] 
+
+            } 
+
+            }, 
+
+            { 
+            word: { 
+
+                "content": dynamicVal[2][0], 
+                "position": [staticVal1[0], staticVal2[0]] 
+
+            } 
+
+            }, 
+
+            { 
+            word: {
+
+                "content": dynamicVal[3][0], 
+                "position": [staticVal1[0], staticVal2[0]] 
+
+            }
+
+            },
+
+            {
+            word: { 
+
+                "content": dynamicVal[4][0], 
+                "position": [staticVal1[0], staticVal2[0]] 
+
+            } 
+
+        } 
+
+    ] )
     
     const [isSubmitted, setIsSubmitted] = useState(1);
 
     const handleChange = (e) => {
+        const { name, value } = e.target
+        const [dimension, key] = name.split('.');
+        console.log("1",name , "2",dimension,  "3",key,  "4",value)
+
+        
+
+        {/*
         const { name, value } = e.target
         const [dimension, key] = name.split('.');
         
@@ -42,10 +108,10 @@ function LaunchPage() {
                 ...prevPhrase[dimension],
                 [key]: [value],
             }}))
-            console.log(e.target.value, name)
+            console.log(e.target.value, name)*/}
     };
 
-    console.log("phrase array via handleChange :", phrase)
+    console.log("phrase array via handleChange :", test)
     
     switch(isSubmitted) { 
         case 1:
@@ -61,6 +127,13 @@ function LaunchPage() {
                     <WaitingOpponentDeck phrase={phrase}/>
                 </div>
             </>); 
+        case 3:
+            return (<>
+            <div className="initBackgroundContainer1">
+                <Test handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}></Test>
+
+            </div>
+        </>)
     }
 }
 

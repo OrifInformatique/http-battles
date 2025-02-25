@@ -15,6 +15,10 @@
         transform: rotate(-360deg);
     }
 }
+* {
+    font-size: large;
+}
+
 /* ----------------------------------------------------------------------------------------------------------
 
     Initialisation
@@ -63,12 +67,11 @@
 
 
             .initFirstListLaunchContainer {
-                background-color: rgba(0, 0, 0, 50%);
                 margin: 20p;
             }
 
             .initThirdListLaunchContainer {
-                background-color: rgba(0, 0, 0, 50%);
+                background-color: rgba(0, 0, 0, 0%);
             }
 
             /*     Container de la phrase avec mandala de fond     */
@@ -160,4 +163,13 @@
             display: flex;
             flex-flow: column wrap;
             gap: 30px;
+        }
+
+        .waitTitle {
+            position: absolute;
+            padding-bottom: 40%;
+        }
+
+        .waitPhrase {
+
         }
