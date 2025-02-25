@@ -113,36 +113,35 @@ exports.startGame = async (req, res, next) => {
 
     const check = await utilGame.checkStartStat(game)
         .catch(() => res.status(404).json({ error: "failed to checkStartStat" }))
-    
-    
+
+
 
     if (check) {
         // récupère l'identifiant de l'utilisateur qui commence
-        const startUserId = await utilGame.startCoinFlip(game)
+        var startUserId = await utilGame.startCoinFlip(game)
             .catch(() => res.status(404).json({ error: "failed to startCoinFlip" }))
 
         // crée et récupère la grille de jeux du createur
         var board = await utilBoard.createBoard(game, req.body.userId)
             .catch(() => res.status(400).json({ error: "failed to createBoard" }))
-
-        // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
-        var resultMessage = utilGame.startMessage(req.body.userId, startUserId, board)
     } else {
         // récupère l'identifiant de l'utilisateur qui commence
-        const startUserId = utilGame.getOtherUserId(game, req.body.userId)
+        var startUserId = utilGame.getOtherUserId(game, req.body.userId)
         // crée et récupère la grille de jeux du createur
         var board = await utilBoard.createBoard(game, req.body.userId)
             .catch(() => res.status(400).json({ error: "failed to createBoard" }))
-
-        // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
-        var resultMessage = utilGame.startMessage(req.body.userId, startUserId, board)
     }
 
-    const userPhrase = await utilPhrase.createPhrase( board._id, req.body.phrase)
-    
-    console.log(userPhrase)
-    utilBoard.fillBoard(board, userPhrase)
+    const userPhrase = await utilPhrase.createPhrase(board._id, req.body.phrase)
+        .catch(() => res.status(400).json({ error: "failed to createPhrase" }))
 
+    const filledBoard = await utilBoard.fillBoard(board, userPhrase)
+        .catch(() => res.status(404).json({ error: "failed to fillBoard" }))
+
+    // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
+    const resultMessage = await utilGame.startMessage(req.body.userId, startUserId, filledBoard)
+        .catch(() => res.status(404).json({ error: "failed to startMessage" }))
+        
     // envoie les informations utiles au client
     try {
         res.status(200).json(resultMessage)

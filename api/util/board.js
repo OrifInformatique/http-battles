@@ -22,6 +22,24 @@ exports.getBoard = async (boardId) => {
 
 exports.fillBoard = async (board, phrase) => {
     const newBoard = []
-    
-    console.log(newBoard)
+    for(const keyY in board.board){
+        newBoard.push([])
+        for(const keyX in board.board[keyY]){
+            for(const keyW in phrase.words){
+                if(phrase.words[keyW].position[0].toString() === keyY && phrase.words[keyW].position[1].toString() === keyX){
+                    newBoard[keyY].push(phrase.words[keyW])
+                }
+            }
+            if(newBoard[keyY][keyX] === undefined) {
+                newBoard[keyY].push(null)
+            }
+        }
+    }
+    await Board.updateOne({ _id: board._id }, {
+            $set: {
+                board: newBoard
+            }
+        })
+        .then(console.log("Board modified succesfully"))
+    return await this.getBoard(board._id)
 }

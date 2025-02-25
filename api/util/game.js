@@ -109,7 +109,7 @@ exports.getOtherUserId = (game, userId) => {
 }
 
 // construit le message de départ
-exports.startMessage = (reqId, startUserId, board) => {
+exports.startMessage = async (reqId, startUserId, board) => {
 
     if (reqId === startUserId) {
         var resultMessage = {
