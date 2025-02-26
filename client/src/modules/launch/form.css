@@ -166,30 +166,32 @@
                 display: none; /* Caché par défaut */
             }
 
-            /* Rendre la liste visible lorsque le parent a une classe active */
-            .initUl.active {
+            .initUl:active {
                 display: block;
             }
 
-            /* Style des éléments de la liste */
-            .initLi {
+
+            li {
                 padding: 10px;
                 color: #333;
-                transition: background 0.2s ease-in-out;
+                transition: background 0.2s ease-in-out, transform 0.5s ease-in-out;
+                overflow: hidden;
             }
 
-            /* Effet au survol */
-            .initLi:hover {
-                background: #f0f0f0;
+     
+            li:hover {
+                background: pink;
+                font-size: large;
                 cursor: pointer;
+                transform: scale(1.2);
             }
 
-            /* Ajouter un effet lors du clic */
-            .initLi:active {
+
+            li:active {
                 background: #e0e0e0;
             }
 
-            .initUl.active {
+            li:active {
                 animation: fadeIn 0.3s ease-in-out;
             }
 

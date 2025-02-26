@@ -6,7 +6,7 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
     return (
         <ul style={{ color: "black" }}>
              {valeurs.map((valeur, index) => (
-        <li key={index} onClick={() => handleChange({ target: { name: `d${i}.${tech}`, value: valeur } })} style={{ cursor: "pointer" }}>
+        <li key={index} onClick={() => handleChange({ target: { name: `${i}.${tech}`, value: valeur } })} style={{ cursor: "pointer" }}>
             {valeur}
         </li>
     ))}
@@ -15,14 +15,13 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
 }
 
 function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, i, phrase}) {
-console.log(dynamicVal[1])
     return (
     <>
-        <ul className="" defaultValue={phrase.word} onChange={handleChange} name={`d${i}.word`} style={{ color: "black"}}>
+        <ul className="" style={{ color: "black"}}>
             {dynamicVal[i-1] && dynamicVal[i-1].map((value, index) => (
-                <il key={index} value={value}>
+                <li key={index} >
                     {value}
-                </il>
+                </li>
             ))}
         </ul>
 
@@ -81,7 +80,7 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
             <div className="initPhraseLaunchContainer">
                 <div className="initElementContainer">
                     <div className="initFixPhrase">
-                        <h1 className="initPhrase">Phrase choisie : {phrase.d1.word} {phrase.d2.word} {phrase.d3.word} {phrase.d4.word} {phrase.d5.word} </h1>
+                        <h1 className="initPhrase">Phrase choisie : {phrase[0].word} {phrase[1].word} {phrase[2].word} {phrase[3].word} {phrase[4].word} </h1>
                     </div>
                 </div>
             </div>
