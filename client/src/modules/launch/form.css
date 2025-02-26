@@ -15,6 +15,20 @@
         transform: rotate(-360deg);
     }
 }
+
+  /* Listes déroulantes */
+
+  @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 * {
     font-size: large;
 }
@@ -137,6 +151,47 @@
             }
 
 
+                /* Style de base du conteneur */
+            .initUl {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                width: 200px;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                position: absolute;
+                z-index: 10;
+                display: none; /* Caché par défaut */
+            }
+
+            /* Rendre la liste visible lorsque le parent a une classe active */
+            .initUl.active {
+                display: block;
+            }
+
+            /* Style des éléments de la liste */
+            .initLi {
+                padding: 10px;
+                color: #333;
+                transition: background 0.2s ease-in-out;
+            }
+
+            /* Effet au survol */
+            .initLi:hover {
+                background: #f0f0f0;
+                cursor: pointer;
+            }
+
+            /* Ajouter un effet lors du clic */
+            .initLi:active {
+                background: #e0e0e0;
+            }
+
+            .initUl.active {
+                animation: fadeIn 0.3s ease-in-out;
+            }
 
 
 /* -----------------------------------------------------s-----------------------------------------------------
