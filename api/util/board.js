@@ -55,12 +55,10 @@ exports.fillBoard = async (board, phrase) => {
 }
 
 exports.checkBoard = async (board, y, x) => {
-    console.log(board.board[y][x])
+
     if(board.board[y][x] !== null){
         var revealedWord = await utilWord.revealWord(board.board[y][x])
-        console.log(board.board[y][x])
         board.board[y][x] = revealedWord
-        console.log(board.board[y][x])
         var updatedBoard = await this.updateBoard(board)
         var result = {
             word: updatedBoard.board[y][x],

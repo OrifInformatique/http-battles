@@ -247,7 +247,7 @@ exports.switchTurn = (game) => {
 
 // fini la partie
 exports.endGame = async (gameId) => {
-    Game.updateOne({ _id: gameId }, {
+    await Game.updateOne({ _id: gameId }, {
         $set: {
             state: "ENDED"
         }
