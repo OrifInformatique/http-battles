@@ -95,3 +95,21 @@ exports.updateBoard = async (newBoard) => {
     
     return await this.getBoard(newBoard._id)
 }
+
+exports.tryPhrase = async (advBoard, req) => {
+    const wordCount = advBoard.phrase.words.length
+    var wordCounter = 0
+    for (const keyAdv in advBoard.phrase.words) {
+        for (const keyReq in req.body.phrase) {
+            if (advBoard.phrase.words[keyAdv].content === req.body.phrase[keyReq].word.content && keyAdv === keyReq) {
+                var wordCounter = wordCounter + 1
+            }
+        }
+    }
+
+    if(wordCounter === wordCount) {
+        return true
+    } else {
+        return false
+    }
+}

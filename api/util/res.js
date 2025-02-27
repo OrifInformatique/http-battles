@@ -13,3 +13,9 @@ exports.sendSuccess = async (code, json, res) => {
         return console.log("response already sent")
     }
 }
+
+exports.sendSuccessCheck  = async (code, message, res) => {
+    if (message !== "Your turn") {
+        return await this.sendSuccess(code, message, res)
+    } 
+}

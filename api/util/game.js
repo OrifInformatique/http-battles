@@ -135,6 +135,32 @@ exports.startMessage = async (reqId, startUserId, board) => {
     return resultMessage
 }
 
+exports.testTurnUserId = async (game, userId) => {
+    const turn = await this.testTurn(game, userId)
+    if(turn === "Your turn") {
+        return userId
+    } else if(turn === "Wait") {
+        return await getOtherUserId(game, userId)
+    }
+}
+
+exports.checkStartUserId = async (check, game, userId) => {
+    if(check){
+        return await this.startCoinFlip(game, userId)
+    } else {
+        return await this.testTurnUserId(game, userId)
+    }
+}
+
+exports.tryPhraseResult = async (check, game) => {
+    if(check){
+        await this.endGame(game._id)
+        return "Success!"
+    } else {
+        return "Wrong phrase!"
+    }
+}
+
 // test si c'est le tour de l'utilisateur ou de son adversaire
 exports.testTurn = async (game, userId) => {
     // teste l'état de la partie
