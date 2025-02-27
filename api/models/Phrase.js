@@ -3,8 +3,6 @@ const mongoose = require('mongoose')
 
 // crée un schema
 const phraseSchema = mongoose.Schema({
-    boardId: { type: String, required: true},
-
     words: { type: Array, required: true }
 })
 

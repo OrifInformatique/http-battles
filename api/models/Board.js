@@ -7,6 +7,8 @@ const boardSchema = mongoose.Schema({
 
     userId: { type: String, required: true},
 
+    phrase: { type: Object, required: false},
+
     board: { type: Array, required: true }
 })
 

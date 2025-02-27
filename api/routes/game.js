@@ -17,12 +17,12 @@ router.get('/games/listGames', auth, gameCtrl.listGames)
 router.post('/games/joinGame', auth, gameCtrl.joinGame)
 // commence la partie
 router.post('/games/startGame', auth, gameCtrl.startGame)
-// commence la partie
-router.post('/games/:phrase/startGame', auth, gameCtrl.startGame)
 // vérifie à qui est le tour
 router.get('/games/checkTurn', auth, gameCtrl.checkTurn)
 // términe la partie
 router.post('/games/endGame', auth, gameCtrl.endGame)
+// vérifie à qui est le tour
+router.get('/games/tryPhrase', auth, gameCtrl.tryPhrase)
 
 // routes Get pour le jeux
 router.get('/games/tryA', auth, gameCtrl.tryGetA)

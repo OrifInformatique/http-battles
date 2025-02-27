@@ -18,6 +18,9 @@ const utilPhrase = require('../util/phrase')
 // import fonctions util pour word
 const utilWord = require('../util/word')
 
+// import fonctions util pour word
+const utilRes = require('../util/res')
+const { util } = require('webpack')
 
 // crée une partie
 exports.createGame = async (req, res, next) => {
@@ -138,10 +141,12 @@ exports.startGame = async (req, res, next) => {
     const filledBoard = await utilBoard.fillBoard(board, userPhrase)
         .catch(() => res.status(404).json({ error: "failed to fillBoard" }))
 
+    await utilBoard.insertPhrase(filledBoard, userPhrase)
+        .catch(() => res.status(404).json({ error: "failed to insertPhrase" }))
+
     // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
     const resultMessage = await utilGame.startMessage(req.body.userId, startUserId, filledBoard)
         .catch(() => res.status(404).json({ error: "failed to startMessage" }))
-
     // envoie les informations utiles au client
     try {
         res.status(200).json(resultMessage)
@@ -162,6 +167,40 @@ exports.checkTurn = async (req, res, next) => {
     try {
         res.status(200).json(message)
     } catch (error) { console.log(error) }
+}
+
+exports.tryPhrase = async (req, res, next) => {
+    // récupère la partie suivant son id
+    const game = await utilGame.getGame(req.body.gameId)
+        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
+
+    const adversaireId = await utilGame.getOtherUserId(game, req.body.userId)
+        .catch(() => { utilRes.sendError(404, "failed to getOtherUserId", res) })
+
+    const advBoard = await utilBoard.getBoardGameUser(game._id, adversaireId)
+        .catch(() => { utilRes.sendError(404, "failed to getBoardGameUser", res) })
+
+    const wordCount = advBoard.phrase.words.length
+    var wordCounter = 0
+    for (const keyAdv in advBoard.phrase.words) {
+        for (const keyReq in req.body.phrase) {
+            if (advBoard.phrase.words[keyAdv].content === req.body.phrase[keyReq].word.content && keyAdv === keyReq) {
+                var wordCounter = wordCounter + 1
+            }
+        }
+    }
+
+    if (wordCounter === wordCount) {
+        utilRes.sendSuccess(200, {
+            message: "Success!"
+        }, res)
+    } else {
+        utilRes.sendSuccess(200, {
+            message: "Wrong phrase"
+        }, res)
+    }
+
+
 }
 
 // termine la partie

@@ -11,8 +11,6 @@ exports.createPhrase = async (boardId, userPhrase) => {
             words: wordObjectsArray
         })
         return await phrase.save()
-            .then(console.log("Phrase created  succesfully"))
-            .catch(error => console.log(error))
 }
 
 exports.fillPhrase = async (userPhrase) => {

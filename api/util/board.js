@@ -76,12 +76,21 @@ exports.checkBoard = async (board, y, x) => {
     return result
 }
 
+exports.insertPhrase = async (board, phrase) => {
+    await Board.updateOne({ _id: board._id }, {
+        $set: {
+            phrase: phrase
+        }
+    })
+    console.log(await this.getBoard(board._id))
+}
+
 exports.updateBoard = async (newBoard) => {
-    console.log(newBoard._id)
     await Board.updateOne({ _id: newBoard._id }, {
         $set: {
             gameId: newBoard.gameId,
             userId: newBoard.userId,
+            phrase: newBoard.phrase,
             board: newBoard.board
         }
     })
