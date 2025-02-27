@@ -10,7 +10,6 @@ exports.createWord = async (word) => {
         position: word.position
     })
     return await newWord.save()
-        .then(console.log("Word created  succesfully"))
 }
 
 exports.revealWord= async (word) =>  {

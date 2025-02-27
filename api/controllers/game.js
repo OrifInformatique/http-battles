@@ -25,44 +25,31 @@ const { util } = require('webpack')
 // crée une partie
 exports.createGame = async (req, res, next) => {
     // crée une partie à partir d'un schema
-    const game = await utilGame.createGame(req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to createGame", res) })
-
-    // sauvegarde la partie
-    const newGame = await utilGame.saveGame(game)
-        .catch(() => { utilRes.sendError(500, "failed to saveGame", res) })
-
+    const game = await utilGame.createAndSaveGame(req.body.userId)
+        .catch(() => { utilRes.sendError(404, "failed to createAndSaveGame", res) })
     utilRes.sendSuccess(200, {
         message: "Partie créé !",
-        state: newGame.state,
-        gameId: newGame._id
+        state: game.state,
+        gameId: game._id
     }, res)
 }
 
 // trouve une partie 
 exports.findGame = async (req, res, next) => {
     // récupère la partie en fonction de son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGames", res) })
+    const game = await utilGame.findAndFormatGame(req.body.gameId)
+        .catch(() => { utilRes.sendError(404, "failed to findAndFormatGame", res) })
 
-    // formate la partie pour le client
-    const formatedGame = await utilGame.formatedGame(game)
-        .catch(() => { utilRes.sendError(500, "failed to formatedGame", res) })
-
-    utilRes.sendSuccess(200, formatedGame, res)
+    utilRes.sendSuccess(200, game, res)
 }
 
 // liste les parties
 exports.listGames = async (req, res, next) => {
     // récupère les parties
-    const games = await utilGame.getGames()
-        .catch(() => { utilRes.sendError(404, "failed to getGames", res) })
+    const games = await utilGame.findAndFormatGames()
+        .catch(() => { utilRes.sendError(404, "failed to findAndFormatGames", res) })
 
-    // formates les parties
-    const formattedGames = await utilGame.formatedGames(games)
-        .catch(() => { utilRes.sendError(500, "failed to formatedGames", res) })
-
-    utilRes.sendSuccess(200, formattedGames, res)
+    utilRes.sendSuccess(200, games, res)
 }
 
 // permet au client de rejoindre une party dont il a entré la clef
@@ -98,13 +85,6 @@ exports.startGame = async (req, res, next) => {
     const game = await utilGame.getGame(req.body.gameId)
         .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
 
-    const check = await utilGame.checkStartStat(game)
-        .catch(() => { utilRes.sendError(404, "failed to checkStartStat", res) })
-
-    // récupère l'identifiant de l'utilisateur qui commence
-    const startUserId = await utilGame.checkStartUserId(check, game, req.body.userId)
-        .catch(() => { utilRes.sendError(400, "failed to checkStartUserId", res) })
-
     // crée et récupère la grille de jeux du createur
     const board = await utilBoard.createBoard(game, req.body.userId)
         .catch(() => { utilRes.sendError(400, "failed to createBoard", res) })
@@ -112,28 +92,22 @@ exports.startGame = async (req, res, next) => {
     const userPhrase = await utilPhrase.createPhrase(board._id, req.body.phrase)
         .catch(() => { utilRes.sendError(400, "failed to createPhrase", res) })
 
-    const filledBoard = await utilBoard.fillBoard(board, userPhrase)
-        .catch(() => { utilRes.sendError(404, "failed to fillBoard", res) })
-
-    await utilBoard.insertPhrase(filledBoard, userPhrase)
-        .catch(() => { utilRes.sendError(404, "failed to insertPhrase", res) })
+    const filledBoard = await utilBoard.fillBoardInsertPhrase(board, userPhrase)
+        .catch(() => { utilRes.sendError(404, "failed to fillBoardInsertPhrase", res) })
 
     // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
-    const resultMessage = await utilGame.startMessage(req.body.userId, startUserId, filledBoard)
-        .catch(() => { utilRes.sendError(404, "failed to startMessage", res) })
+    const resultMessage = await utilGame.startMessageUserId(game, req.body.userId, filledBoard)
+        .catch(() => { utilRes.sendError(404, "failed to startMessageUserId", res) })
 
     utilRes.sendSuccess(200, resultMessage, res)
 }
 
 // vérifie si c'est le tour de l'utilisateur
 exports.checkTurn = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
 
     // construit le message en fonction de la partie et de l'utilisateur
-    const message = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
+    const message = await utilGame.getGameAndTestTurn(req.body.gameId, req.body.userId)
+        .catch(() => { utilRes.sendError(500, "failed to getGameAndTestTurn", res) })
 
     utilRes.sendSuccess(200, message, res)
 }
@@ -143,20 +117,13 @@ exports.tryPhrase = async (req, res, next) => {
     const game = await utilGame.getGame(req.body.gameId)
         .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
 
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const adversaireId = await utilGame.getOtherUserId(game, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to getOtherUserId", res) })
 
-    const advBoard = await utilBoard.getBoardGameUser(game._id, adversaireId)
-        .catch(() => { utilRes.sendError(404, "failed to getBoardGameUser", res) })
-
-    const check = await utilBoard.tryPhrase(advBoard, req)
-        .catch(() => { utilRes.sendError(400, "failed to tryPhrase", res) })
+    const check = await utilBoard.getBoardGameUserAndTryPhrase(game._id, adversaireId, req)
+        .catch(() => { utilRes.sendError(400, "failed to getBoardGameUserAndTryPhrase", res) })
 
     const finalMessage = await utilGame.tryPhraseResult(check, game)
         .catch(() => { utilRes.sendError(400, "failed to tryPhraseResult", res) })
@@ -166,12 +133,8 @@ exports.tryPhrase = async (req, res, next) => {
 
 // termine la partie
 exports.endGame = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
     // termine la partie
-    await utilGame.endGame(game._id)
+    await utilGame.endGame(req.body.gameId)
         .catch(() => { utilRes.sendError(404, "failed to endGame", res) })
 
     utilRes.sendSuccess(200, {
@@ -184,15 +147,7 @@ exports.endGame = async (req, res, next) => {
  */
 
 exports.tryGetA = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const message = await utilGame.tryCase("Get", "A", req.body.gameId, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
@@ -201,15 +156,7 @@ exports.tryGetA = async (req, res, next) => {
 }
 
 exports.tryGetB = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const message = await utilGame.tryCase("Get", "B", req.body.gameId, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
@@ -219,15 +166,7 @@ exports.tryGetB = async (req, res, next) => {
 }
 
 exports.tryGetC = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const message = await utilGame.tryCase("Get", "C", req.body.gameId, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
@@ -236,15 +175,7 @@ exports.tryGetC = async (req, res, next) => {
 }
 
 exports.tryGetD = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const message = await utilGame.tryCase("Get", "D", req.body.gameId, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
@@ -254,15 +185,7 @@ exports.tryGetD = async (req, res, next) => {
 
 
 exports.tryPostA = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const message = await utilGame.tryCase("Post", "A", req.body.gameId, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
@@ -271,15 +194,7 @@ exports.tryPostA = async (req, res, next) => {
 }
 
 exports.tryPostB = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const message = await utilGame.tryCase("Post", "B", req.body.gameId, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
@@ -288,15 +203,7 @@ exports.tryPostB = async (req, res, next) => {
 }
 
 exports.tryPostC = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const message = await utilGame.tryCase("Post", "C", req.body.gameId, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
@@ -305,15 +212,7 @@ exports.tryPostC = async (req, res, next) => {
 }
 
 exports.tryPostD = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const message = await utilGame.tryCase("Post", "D", req.body.gameId, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
@@ -322,15 +221,7 @@ exports.tryPostD = async (req, res, next) => {
 }
 
 exports.tryPutA = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
 
     const message = await utilGame.tryCase("Put", "A", req.body.gameId, req.body.userId)
@@ -340,15 +231,7 @@ exports.tryPutA = async (req, res, next) => {
 }
 
 exports.tryPutB = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
 
     const message = await utilGame.tryCase("Put", "B", req.body.gameId, req.body.userId)
@@ -358,15 +241,7 @@ exports.tryPutB = async (req, res, next) => {
 }
 
 exports.tryPutC = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
 
     const message = await utilGame.tryCase("Put", "C", req.body.gameId, req.body.userId)
@@ -376,15 +251,7 @@ exports.tryPutC = async (req, res, next) => {
 }
 
 exports.tryPutD = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
 
     const message = await utilGame.tryCase("Put", "D", req.body.gameId, req.body.userId)
@@ -394,15 +261,7 @@ exports.tryPutD = async (req, res, next) => {
 }
 
 exports.tryDeleteA = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
 
     const message = await utilGame.tryCase("Delete", "A", req.body.gameId, req.body.userId)
@@ -412,15 +271,7 @@ exports.tryDeleteA = async (req, res, next) => {
 }
 
 exports.tryDeleteB = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
 
     const message = await utilGame.tryCase("Delete", "B", req.body.gameId, req.body.userId)
@@ -430,15 +281,7 @@ exports.tryDeleteB = async (req, res, next) => {
 }
 
 exports.tryDeleteC = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
 
     const message = await utilGame.tryCase("Delete", "C", req.body.gameId, req.body.userId)
@@ -448,21 +291,10 @@ exports.tryDeleteC = async (req, res, next) => {
 }
 
 exports.tryDeleteD = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // construit le message en fonction de la partie et de l'utilisateur
-    const messageCheck = await utilGame.testTurn(game, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
-
-
-    utilRes.sendSuccessCheck(200, messageCheck, res)
+    await utilRes.sendSuccessCheck(req, res)
 
     const message = await utilGame.tryCase("Delete", "D", req.body.gameId, req.body.userId)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
 }
-
-

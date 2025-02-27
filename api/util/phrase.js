@@ -7,7 +7,6 @@ exports.createPhrase = async (boardId, userPhrase) => {
     const wordObjectsArray = await exports.fillPhrase(userPhrase)
 
     const phrase = new Phrase({
-            boardId: boardId,
             words: wordObjectsArray
         })
         return await phrase.save()
