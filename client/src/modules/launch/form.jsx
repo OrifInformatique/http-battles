@@ -4,6 +4,7 @@ import WaitingOpponentDeck from "./subfolder/waitingopponentdeck";
 
 import './form.css';
 import '../general.css';
+import Test from "./subfolder/test";
 
 function LaunchPage() {
     let i = 0;
@@ -62,9 +63,15 @@ function LaunchPage() {
         case 2:
             return (<>  
                 <div className="waitBackgroundContainer2">
-                    <WaitingOpponentDeck phrase={phrase}/>
+                    <WaitingOpponentDeck handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
                 </div>
             </>); 
+/*
+        case 3:
+            return (<>
+                <Test phrase={phrase}/>
+            </>)
+*/
     }
 }
 

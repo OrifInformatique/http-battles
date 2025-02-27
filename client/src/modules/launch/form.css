@@ -157,29 +157,31 @@
                 padding: 0;
                 margin: 0;
                 width: 200px;
-                background: white;
-                border: 1px solid #ddd;
+                background: transparent;
+                border: 0px solid blue;
                 border-radius: 5px;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 position: absolute;
                 z-index: 10;
-                display: none; /* Caché par défaut */
+                overflow: hidden;
+
+            /*    display: none; /*  Caché par défaut */
             }
 
             .initUl:active {
                 display: block;
             }
 
-
-            li {
+            .initLi {
+                position: relative;
                 padding: 10px;
                 color: #333;
                 transition: background 0.2s ease-in-out, transform 0.5s ease-in-out;
-                overflow: hidden;
+
             }
 
      
-            li:hover {
+            .initLi:hover {
                 background: pink;
                 font-size: large;
                 cursor: pointer;
@@ -187,14 +189,12 @@
             }
 
 
-            li:active {
-                background: #e0e0e0;
-            }
-
-            li:active {
+            .initLi:active {
+                background: #23fd34;
                 animation: fadeIn 0.3s ease-in-out;
             }
 
+          
 
 /* -----------------------------------------------------s-----------------------------------------------------
         

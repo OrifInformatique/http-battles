@@ -4,22 +4,22 @@ import '../../general.css';
 
 function MyList({ handleChange, valeurs = [], i, tech}) {
     return (
-        <ul style={{ color: "black" }}>
+        <ul className="initUl" style={{ color: "black" }}>
              {valeurs.map((valeur, index) => (
-        <li key={index} onClick={() => handleChange({ target: { name: `${i}.${tech}`, value: valeur } })} style={{ cursor: "pointer" }}>
-            {valeur}
-        </li>
-    ))}
-</ul>
+                <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${i}.${tech}`, value: valeur } })} style={{ cursor: "pointer" }}>
+                    {valeur}
+                </li>
+            ))}
+        </ul>
     );
 }
 
 function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, i, phrase}) {
     return (
     <>
-        <ul className="" style={{ color: "black"}}>
+        <ul className="initUl" style={{ color: "black"}}>
             {dynamicVal[i-1] && dynamicVal[i-1].map((value, index) => (
-                <li key={index} >
+                <li className="initLi" key={index} >
                     {value}
                 </li>
             ))}
