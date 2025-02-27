@@ -2,49 +2,63 @@ import React from "react";
 import Button from "../../ui/button";
 import '../../general.css';
 
-function MyList({ handleChange, valeurs = [], i, tech}) {
-    return (
-        <ul className="initUl" style={{ color: "black" }}>
-             {valeurs.map((valeur, index) => (
-                <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${i}.${tech}`, value: valeur } })} style={{ cursor: "pointer" }}>
-                    {valeur}
-                </li>
-            ))}
-        </ul>
-    );
+function MyList({ handleChange, valeurs = [], i, tech, dynamicVal}) {
+console.log(valeurs)
+
+    switch (tech) {
+        case dynamicVal:
+            return(<>{/*
+                <ul className="initUl" style={{ color: "black", backgroundColor: "white"}}>
+                    {dynamicVal[i-1] && dynamicVal[i-1].map((value, index) => (
+                    <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${i}.${tech}` } })}>
+                        {value}
+                    </li>
+                    ))}
+                </ul>*/}
+            </>);
+    
+        default:
+            return (<>
+                <ul className="initUl" style={{ color: "black" }}>
+                     {valeurs.map((valeur, index) => (
+                        <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${tech}[${i}]`, value: valeur } })} style={{ cursor: "pointer" }}>
+                            {valeur}
+                        </li>
+                    ))}
+                </ul>
+            </>);
+    }
 }
 
-function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, i, phrase}) {
-    return (
-    <>
-        <ul className="initUl" style={{ color: "black"}}>
-            {dynamicVal[i-1] && dynamicVal[i-1].map((value, index) => (
-                <li className="initLi" key={index} >
-                    {value}
-                </li>
-            ))}
-        </ul>
+function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, i, phrase, tech}) {
+    
+    return (<>
+         <ul className="initUl" style={{ color: "black", backgroundColor: "transparent"}}>
+                    {dynamicVal[i-1].map((value, index) => (
+                    <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${i}.${tech}` } })}>
+                        {value}
+                    </li>
+                    ))}
+                </ul>
 
-        <div style={{display:"flex",flexFlow:"row", gap:"10px"}}>
-            <div style={{display:"flex",flexFlow:"column"}}>
-                <h3>Route</h3>
-                <MyList handleChange={handleChange} tech={"route"} valeurs={staticVal1} i={i}/> 
-            </div>
-
-            <div style={{display:"flex",flexFlow:"column"}}>
-            <h3>Methode</h3>
-            <MyList handleChange={handleChange} tech={"method"} valeurs={staticVal2} i={i}/>
-            <br/><br/><br/><br/>
-            </div>
+    <div className="initPosition">
+        <div className="initWord"style={{display:"flex",flexFlow:"column"}}>
+            <h3>Mot {i}</h3>
+            <MyList handleChange={handleChange} tech={"dynamicVal"} valeurs={dynamicVal} i={i}/> 
         </div>
-    </>);
-}
 
-function PhraseLaunch({ handleChange ,staticVal1, staticVal2, dynamicVal, i, phrase}) {
-return(<>
-<h2>Mot {i} </h2>
-    <InitialisationList handleChange={handleChange} staticVal1={staticVal1} staticVal2={staticVal2} dynamicVal={dynamicVal} i={i} phrase={phrase} />
-</>)
+        <div className="initRoute"style={{display:"flex",flexFlow:"column"}}>
+            <h3>Route</h3>
+            <MyList handleChange={handleChange} tech={"route"} valeurs={staticVal1} i={i}/> 
+        </div>
+
+        <div className="initMethod" style={{display:"flex",flexFlow:"column"}}>
+        <h3>Methode</h3>
+        <MyList handleChange={handleChange} tech={"method"} valeurs={staticVal2} i={i}/>
+        <br/><br/><br/><br/>
+        </div>
+    </div>
+    </>);
 }
 
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
@@ -57,14 +71,14 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
                     {/*Liste*/}
                     <div className="initListLaunchContainer" >
                         <div className="initFirstListLaunchContainer"> 
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase.d1}/>
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} phrase={phrase.d2}/>
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={3} phrase={phrase.d3}/>
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase[1]}/>
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} phrase={phrase[2]}/>
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={3} phrase={phrase[3]}/>
                              <div></div>
                         </div>
                         <div className="initThirdListLaunchContainer">
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={4} phrase={phrase.d4}/>
-                            <PhraseLaunch handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={5} phrase={phrase.d5}/>
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={4} phrase={phrase[4]}/>
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={5} phrase={phrase[5]}/>
                         </div>  
                     </div>
                 </div>

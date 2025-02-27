@@ -4,7 +4,6 @@ import WaitingOpponentDeck from "./subfolder/waitingopponentdeck";
 
 import './form.css';
 import '../general.css';
-import Test from "./subfolder/test";
 
 function LaunchPage() {
     let i = 0;
