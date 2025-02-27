@@ -107,7 +107,7 @@ exports.endGame = async (req, res, next) => {
 exports.tryGetA = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
-    const message = await utilGame.tryCase("Get", "A", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Get", "A", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -116,7 +116,7 @@ exports.tryGetA = async (req, res, next) => {
 exports.tryGetB = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
-    const message = await utilGame.tryCase("Get", "B", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Get", "B", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -126,7 +126,7 @@ exports.tryGetB = async (req, res, next) => {
 exports.tryGetC = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
-    const message = await utilGame.tryCase("Get", "C", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Get", "C", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -135,7 +135,7 @@ exports.tryGetC = async (req, res, next) => {
 exports.tryGetD = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
-    const message = await utilGame.tryCase("Get", "D", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Get", "D", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -145,7 +145,7 @@ exports.tryGetD = async (req, res, next) => {
 exports.tryPostA = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
-    const message = await utilGame.tryCase("Post", "A", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Post", "A", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -154,7 +154,7 @@ exports.tryPostA = async (req, res, next) => {
 exports.tryPostB = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
-    const message = await utilGame.tryCase("Post", "B", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Post", "B", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -163,7 +163,7 @@ exports.tryPostB = async (req, res, next) => {
 exports.tryPostC = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
-    const message = await utilGame.tryCase("Post", "C", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Post", "C", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -172,7 +172,7 @@ exports.tryPostC = async (req, res, next) => {
 exports.tryPostD = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
-    const message = await utilGame.tryCase("Post", "D", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Post", "D", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -182,7 +182,7 @@ exports.tryPutA = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
 
-    const message = await utilGame.tryCase("Put", "A", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Put", "A", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -192,7 +192,7 @@ exports.tryPutB = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
 
-    const message = await utilGame.tryCase("Put", "B", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Put", "B", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -202,7 +202,7 @@ exports.tryPutC = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
 
-    const message = await utilGame.tryCase("Put", "C", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Put", "C", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -212,7 +212,7 @@ exports.tryPutD = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
 
-    const message = await utilGame.tryCase("Put", "D", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Put", "D", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -222,7 +222,7 @@ exports.tryDeleteA = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
 
-    const message = await utilGame.tryCase("Delete", "A", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Delete", "A", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -232,7 +232,7 @@ exports.tryDeleteB = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
 
-    const message = await utilGame.tryCase("Delete", "B", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Delete", "B", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -242,7 +242,7 @@ exports.tryDeleteC = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
 
-    const message = await utilGame.tryCase("Delete", "C", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Delete", "C", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)
@@ -251,7 +251,7 @@ exports.tryDeleteC = async (req, res, next) => {
 exports.tryDeleteD = async (req, res, next) => {
     await utilRes.sendSuccessCheck(req, res)
 
-    const message = await utilGame.tryCase("Delete", "D", req.body.gameId, req.body.userId)
+    const message = await utilGame.tryCase("Delete", "D", req)
         .catch(() => { utilRes.sendError(404, "failed to tryCase", res) })
 
     utilRes.sendSuccess(200, message, res)

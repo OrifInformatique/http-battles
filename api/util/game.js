@@ -17,7 +17,7 @@ exports.getGame = async (gameId) => {
 
 // retourne toute les partie
 exports.getGames = async () => {
-    return Game.find()
+    return await Game.find()
 }
 
 // formate une série de jeux
@@ -58,12 +58,12 @@ exports.formatedGame = async (game) => {
 
 // crée un objet jeux et le retourn
 exports.createGame = async (userId) => {
-    try {
-        var game = new Game({
-            state: "WAITING_PLAYER",
-            createurId: userId
-        })
-    } catch (error) { }
+
+    var game = new Game({
+        state: "WAITING_PLAYER",
+        createurId: userId
+    })
+
     return game
 }
 
@@ -215,11 +215,11 @@ exports.testTurn = async (game, userId) => {
 }
 
 // test une case de la grille
-exports.tryCase = async (requestMode, requestRoad, gameId, userId) => {
+exports.tryCase = async (requestMode, requestRoad, req) => {
 
-    const game = await this.getGame(gameId)
+    const game = await this.getGame(req.body.gameId)
 
-    const adversaireId = await this.getOtherUserId(game, userId)
+    const adversaireId = await this.getOtherUserId(req)
 
     switch (requestMode) {
         case "Get":
@@ -324,14 +324,14 @@ exports.findAndFormatGames = async () => {
     return formatedGames
 }
 
-exports.startMessageUserId = async (req)  => {
+exports.startMessageUserId = async (req) => {
     const filledBoard = await utilBoard.fillBoardInsertPhrase(req)
     const game = await this.getGame(req.body.gameId)
     // récupère l'identifiant de l'utilisateur qui commence
     const startUserId = await this.checkStartUserId(game, req)
-    
+
     const resultMessage = await this.startMessage(req.body.userId, startUserId, filledBoard)
-    
+
     return resultMessage
 }
 
