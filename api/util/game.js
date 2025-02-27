@@ -122,9 +122,9 @@ exports.startCoinFlip = async (game) => {
 }
 
 // construit le message de départ
-exports.getOtherUserId = async (game, userId) => {
-
-    if (userId === game.createurId) {
+exports.getOtherUserId = async (req) => {
+    const game = await this.getGame(req.body.gameId)
+    if (req.body.userId === game.createurId) {
 
         return game.challengerId
     } else {
@@ -151,27 +151,29 @@ exports.startMessage = async (reqId, startUserId, board) => {
     return resultMessage
 }
 
-exports.testTurnUserId = async (game, userId) => {
-    const turn = await this.testTurn(game, userId)
+exports.testTurnUserId = async (game, req) => {
+    const turn = await this.testTurn(game, req.body.userId)
     if (turn === "Your turn") {
-        return userId
+        return req.body.userId
     } else if (turn === "Wait") {
-        return await getOtherUserId(game, userId)
+        return await getOtherUserId(req)
     }
 }
 
-exports.checkStartUserId = async (game, userId) => {
+exports.checkStartUserId = async (game, req) => {
     const check = await this.checkStartStat(game)
     if (check) {
-        return await this.startCoinFlip(game, userId)
+        return await this.startCoinFlip(game, req.body.userId)
     } else {
-        return await this.testTurnUserId(game, userId)
+        return await this.testTurnUserId(game, req)
     }
 }
 
-exports.tryPhraseResult = async (check, game) => {
+exports.tryPhraseResult = async (req) => {
+    const adversaireId = await this.getOtherUserId(req)
+    const check = await utilBoard.getBoardGameUserAndTryPhrase(req.body.gameId, adversaireId, req)
     if (check) {
-        await this.endGame(game._id)
+        await this.endGame(req.body.gameId)
         return "Success!"
     } else {
         return "Wrong phrase!"
@@ -322,11 +324,13 @@ exports.findAndFormatGames = async () => {
     return formatedGames
 }
 
-exports.startMessageUserId = async (game, userId, filledBoard)  => {
+exports.startMessageUserId = async (req)  => {
+    const filledBoard = await utilBoard.fillBoardInsertPhrase(req)
+    const game = await this.getGame(req.body.gameId)
     // récupère l'identifiant de l'utilisateur qui commence
-    const startUserId = await this.checkStartUserId(game, userId)
+    const startUserId = await this.checkStartUserId(game, req)
     
-    const resultMessage = await this.startMessage(userId, startUserId, filledBoard)
+    const resultMessage = await this.startMessage(req.body.userId, startUserId, filledBoard)
     
     return resultMessage
 }
@@ -343,4 +347,24 @@ exports.getGameAndTestTurn = async (req) => {
     const message = await this.testTurn(game, req.body.userId)
 
     return message
+}
+
+exports.getCreateur = async (gameId) => {
+    const game = await this.getGame(gameId)
+    const createur = await utilUser.getUserById(game.createurId)
+
+    return createur
+}
+
+exports.joinSuccessMessage = async (req) => {
+    const game = await this.getGame(req.body.gameId)
+    const createur = await this.getCreateur(req.body.gameId)
+    const challenger = await utilUser.getUserById(req.body.userId)
+    await this.joinGame(req.body.gameId, req.body.userId)
+    return {
+        message: "Partie rejointe !",
+        state: game.state,
+        createurUsername: createur.username,
+        challengerUsername: challenger.username
+    }
 }

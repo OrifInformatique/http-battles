@@ -54,49 +54,16 @@ exports.listGames = async (req, res, next) => {
 
 // permet au client de rejoindre une party dont il a entré la clef
 exports.joinGame = async (req, res, next) => {
-    // recupère la partie en fonction de son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // recupère le créateur de la partie en fonction de son identifiant contenue dans la partie
-    const createur = await utilUser.getUserById(game.createurId)
-        .catch(() => { utilRes.sendError(404, "failed to getUserById - créateur", res) })
-
-    // récupère le challenger en fonction de l'id contenu dans son id
-    const challenger = await utilUser.getUserById(req.body.userId)
-        .catch(() => { utilRes.sendError(404, "failed to getUserById - challenger", res) })
-
-    // rejoin la partie et update son état ainsi que le challenger
-    await utilGame.joinGame(req.body.gameId, challenger._id)
-        .catch(() => { utilRes.sendError(404, "failed to joinGame", res) })
-
-    utilRes.sendSuccess(200, {
-        message: "Partie rejointe !",
-        state: game.state,
-        createurUsername: createur.username,
-        challengerUsername: challenger.username
-    }, res)
+    const message = await utilGame.joinSuccessMessage(req)
+        .catch(() => { utilRes.sendError(404, "failed to joinSuccessMessage", res) })
+    utilRes.sendSuccess(200, message, res)
 
 }
 
 // commence la partie
 exports.startGame = async (req, res, next) => {
-    // récupère le jeux suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
-
-    // crée et récupère la grille de jeux du createur
-    const board = await utilBoard.createBoard(game, req.body.userId)
-        .catch(() => { utilRes.sendError(400, "failed to createBoard", res) })
-
-    const userPhrase = await utilPhrase.createPhrase(board._id, req.body.phrase)
-        .catch(() => { utilRes.sendError(400, "failed to createPhrase", res) })
-
-    const filledBoard = await utilBoard.fillBoardInsertPhrase(board, userPhrase)
-        .catch(() => { utilRes.sendError(404, "failed to fillBoardInsertPhrase", res) })
-
     // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
-    const resultMessage = await utilGame.startMessageUserId(game, req.body.userId, filledBoard)
+    const resultMessage = await utilGame.startMessageUserId(req)
         .catch(() => { utilRes.sendError(404, "failed to startMessageUserId", res) })
 
     utilRes.sendSuccess(200, resultMessage, res)
@@ -113,19 +80,10 @@ exports.checkTurn = async (req, res, next) => {
 }
 
 exports.tryPhrase = async (req, res, next) => {
-    // récupère la partie suivant son id
-    const game = await utilGame.getGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to getGame", res) })
 
     await utilRes.sendSuccessCheck(req, res)
 
-    const adversaireId = await utilGame.getOtherUserId(game, req.body.userId)
-        .catch(() => { utilRes.sendError(404, "failed to getOtherUserId", res) })
-
-    const check = await utilBoard.getBoardGameUserAndTryPhrase(game._id, adversaireId, req)
-        .catch(() => { utilRes.sendError(400, "failed to getBoardGameUserAndTryPhrase", res) })
-
-    const finalMessage = await utilGame.tryPhraseResult(check, game)
+    const finalMessage = await utilGame.tryPhraseResult(req)
         .catch(() => { utilRes.sendError(400, "failed to tryPhraseResult", res) })
 
     utilRes.sendSuccess(200, { message: finalMessage }, res)

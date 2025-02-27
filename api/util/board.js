@@ -1,9 +1,10 @@
 const Board = require('../models/Board')
-
+const utilGame = require('../util/game')
+const utilPhrase = require('../util/phrase')
 const utilWord = require('../util/word')
 
-exports.createBoard = async (game, userId) => {
-
+exports.createBoard = async (gameId, userId) => {
+    const game = await utilGame.getGame(gameId)
     const board = new Board({
         gameId: game._id,
         userId: userId,
@@ -117,7 +118,9 @@ exports.tryPhrase = async (advBoard, req) => {
     }
 }
 
-exports.fillBoardInsertPhrase = async (board, userPhrase) => {
+exports.fillBoardInsertPhrase = async (req) => {
+    const board = await this.createBoard(req.body.gameId, req.body.userId)
+    const userPhrase = await utilPhrase.createPhrase(board._id, req.body.phrase)
     const filledBoard = await this.fillBoard(board, userPhrase)
     await this.insertPhrase(filledBoard, userPhrase)
 
