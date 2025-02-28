@@ -25,8 +25,8 @@ const { util } = require('webpack')
 // crée une partie
 exports.createGame = async (req, res, next) => {
     // crée une partie à partir d'un schema
-    const game = await utilGame.createAndSaveGame(req.body.userId)
-        .catch(() => { utilRes.sendError(404, "failed to createAndSaveGame", res) })
+    const game = await utilGame.createGame(req.body.userId)
+        .catch(() => { utilRes.sendError(404, "failed to createGame", res) })
     utilRes.sendSuccess(200, {
         message: "Partie créé !",
         state: game.state,
@@ -37,7 +37,7 @@ exports.createGame = async (req, res, next) => {
 // trouve une partie 
 exports.findGame = async (req, res, next) => {
     // récupère la partie en fonction de son id
-    const game = await utilGame.findAndFormatGame(req.body.gameId)
+    const game = await utilGame.formatedGame(req.body.gameId)
         .catch(() => { utilRes.sendError(404, "failed to findAndFormatGame", res) })
 
     utilRes.sendSuccess(200, game, res)
@@ -46,8 +46,8 @@ exports.findGame = async (req, res, next) => {
 // liste les parties
 exports.listGames = async (req, res, next) => {
     // récupère les parties
-    const games = await utilGame.findAndFormatGames()
-        .catch(() => { utilRes.sendError(404, "failed to findAndFormatGames", res) })
+    const games = await utilGame.formatedGames()
+        .catch(() => { utilRes.sendError(404, "failed to formatedGames", res) })
 
     utilRes.sendSuccess(200, games, res)
 }
@@ -63,8 +63,8 @@ exports.joinGame = async (req, res, next) => {
 // commence la partie
 exports.startGame = async (req, res, next) => {
     // construit le message à renvoyer à l'utilisateur suivant le role de l'utilisateur et l'état de la partie (qui commence) ainsi que l'identifiant de la grille
-    const resultMessage = await utilGame.startMessageUserId(req)
-        .catch(() => { utilRes.sendError(404, "failed to startMessageUserId", res) })
+    const resultMessage = await utilGame.startMessage(req)
+        .catch(() => { utilRes.sendError(404, "failed to startMessage", res) })
 
     utilRes.sendSuccess(200, resultMessage, res)
 }
@@ -73,8 +73,8 @@ exports.startGame = async (req, res, next) => {
 exports.checkTurn = async (req, res, next) => {
 
     // construit le message en fonction de la partie et de l'utilisateur
-    const message = await utilGame.getGameAndTestTurn(req.body.gameId, req.body.userId)
-        .catch(() => { utilRes.sendError(500, "failed to getGameAndTestTurn", res) })
+    const message = await utilGame.testTurn(req)
+        .catch(() => { utilRes.sendError(500, "failed to testTurn", res) })
 
     utilRes.sendSuccess(200, message, res)
 }

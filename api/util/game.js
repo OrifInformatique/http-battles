@@ -21,13 +21,13 @@ exports.getGames = async () => {
 }
 
 // formate une série de jeux
-exports.formatedGames = async (games) => {
-
+exports.formatedGames = async () => {
+    const games = await this.getGames()
     const newGameList = []
 
     for (const game of games) {
 
-        newGameList.push(await exports.formatedGame(game))
+        newGameList.push(await exports.formatedGame(game._id))
 
     }
 
@@ -35,8 +35,8 @@ exports.formatedGames = async (games) => {
 }
 
 // formate un jeux
-exports.formatedGame = async (game) => {
-
+exports.formatedGame = async (gameId) => {
+    const game = await this.getGame(gameId)
     const createur = await utilUser.getUserById(game.createurId)
 
     if (createur === null) {
@@ -63,8 +63,8 @@ exports.createGame = async (userId) => {
         state: "WAITING_PLAYER",
         createurId: userId
     })
-
-    return game
+    const savedGame = await this.saveGame(game)
+    return savedGame
 }
 
 // sauvegarde un jeux et le retourne
@@ -82,7 +82,9 @@ exports.joinGame = async (gameId, challengerId) => {
     })
 }
 
-exports.checkStartStat = async (game) => {
+exports.checkStartStat = async (gameId) => {
+    const game = await this.getGame(gameId)
+
     if (game.state === "SETTINGS") {
         return true
     } else {
@@ -91,8 +93,8 @@ exports.checkStartStat = async (game) => {
 }
 
 // choisit aléatoirement le premier utilisateur à commencer
-exports.startCoinFlip = async (game) => {
-
+exports.startCoinFlip = async (gameId) => {
+    const game = await this.getGame(gameId)
     // sort aléatoirement un résultat true or false et le stock dans une constante
     const coinFlip = Math.floor(Math.random() * 2) == 0
     // test le résultat aléatoire
@@ -134,9 +136,13 @@ exports.getOtherUserId = async (req) => {
 }
 
 // construit le message de départ
-exports.startMessage = async (reqId, startUserId, board) => {
+exports.startMessage = async (req) => {
 
-    if (reqId === startUserId) {
+    const startUserId = await this.checkStartUserId(req)
+
+    const board = await utilBoard.fillBoard(req)
+
+    if (req.body.userId === startUserId) {
         var resultMessage = {
             message: "You start",
             boardId: board._id
@@ -151,8 +157,10 @@ exports.startMessage = async (reqId, startUserId, board) => {
     return resultMessage
 }
 
-exports.testTurnUserId = async (game, req) => {
-    const turn = await this.testTurn(game, req.body.userId)
+exports.testTurnUserId = async (req) => {
+
+    const turn = await this.testTurn(req)
+
     if (turn === "Your turn") {
         return req.body.userId
     } else if (turn === "Wait") {
@@ -160,18 +168,23 @@ exports.testTurnUserId = async (game, req) => {
     }
 }
 
-exports.checkStartUserId = async (game, req) => {
-    const check = await this.checkStartStat(game)
+exports.checkStartUserId = async (req) => {
+
+    const check = await this.checkStartStat(req.body.gameId)
+
     if (check) {
-        return await this.startCoinFlip(game, req.body.userId)
+
+        return await this.startCoinFlip(req.body.gameId)
+
     } else {
-        return await this.testTurnUserId(game, req)
+
+        return await this.testTurnUserId(req)
     }
 }
 
 exports.tryPhraseResult = async (req) => {
     const adversaireId = await this.getOtherUserId(req)
-    const check = await utilBoard.getBoardGameUserAndTryPhrase(req.body.gameId, adversaireId, req)
+    const check = await utilBoard.tryPhrase(adversaireId, req)
     if (check) {
         await this.endGame(req.body.gameId)
         return "Success!"
@@ -181,13 +194,15 @@ exports.tryPhraseResult = async (req) => {
 }
 
 // test si c'est le tour de l'utilisateur ou de son adversaire
-exports.testTurn = async (game, userId) => {
+exports.testTurn = async (req) => {
+    const game = await this.getGame(req.body.gameId)
+
     // teste l'état de la partie
     // si c'est le tour du créateur
     if (game.state === "CREATEUR_TURN") {
         // test si le client est le créateur
         // si oui
-        if (game.createurId === userId) {
+        if (game.createurId === req.body.userId) {
             // renvoi un message pour informer que c'est le tour du client
             return { message: "Your turn" }
             // si non
@@ -199,7 +214,7 @@ exports.testTurn = async (game, userId) => {
     } else if (game.state === "CHALLENGER_TURN") {
         // test si le client est le challenger
         // si oui
-        if (game.challengerId === userId) {
+        if (game.challengerId === req.body.userId) {
             // renvoi un message pour informer que c'est le tour du client
             return { message: "Your turn" }
             // si non
@@ -216,8 +231,6 @@ exports.testTurn = async (game, userId) => {
 
 // test une case de la grille
 exports.tryCase = async (requestMode, requestRoad, req) => {
-
-    const game = await this.getGame(req.body.gameId)
 
     const adversaireId = await this.getOtherUserId(req)
 
@@ -252,9 +265,8 @@ exports.tryCase = async (requestMode, requestRoad, req) => {
             break;
     }
 
-    const board = await utilBoard.getBoardGameUser(game._id, adversaireId)
+    const check = await utilBoard.checkBoard(arrayY, arrayX, req.body.gameId, adversaireId)
 
-    const check = await utilBoard.checkBoard(board, arrayY, arrayX)
     if (check.result) {
         var message = {
             message: requestMode + " " + requestRoad,
@@ -268,13 +280,14 @@ exports.tryCase = async (requestMode, requestRoad, req) => {
             result: "Manqué!"
         }
     }
-    this.switchTurn(game)
+    this.switchTurn(req.body.gameId)
 
     return message
 }
 
 // change le toour 
-exports.switchTurn = (game) => {
+exports.switchTurn = async (gameId) => {
+    const game = await this.getGame(gameId)
     if (game.state === "CREATEUR_TURN") {
         Game.updateOne({ _id: game._id }, {
             $set: {
@@ -299,55 +312,6 @@ exports.endGame = async (gameId) => {
     })
 }
 
-exports.createAndSaveGame = async (userId) => {
-    // crée une partie à partir d'un schema
-    const game = await this.createGame(userId)
-    // sauvegarde la partie
-    const savedGame = await this.saveGame(game)
-
-    return savedGame
-}
-
-exports.findAndFormatGame = async (gameId) => {
-    const game = await this.getGame(gameId)
-    const formatedGame = await this.formatedGame(game)
-
-    return formatedGame
-}
-
-exports.findAndFormatGames = async () => {
-
-    const games = await this.getGames()
-
-    const formatedGames = await this.formatedGames(games)
-
-    return formatedGames
-}
-
-exports.startMessageUserId = async (req) => {
-    const filledBoard = await utilBoard.fillBoardInsertPhrase(req)
-    const game = await this.getGame(req.body.gameId)
-    // récupère l'identifiant de l'utilisateur qui commence
-    const startUserId = await this.checkStartUserId(game, req)
-
-    const resultMessage = await this.startMessage(req.body.userId, startUserId, filledBoard)
-
-    return resultMessage
-}
-
-exports.getGameAndTestTurn = async (gameId, userId) => {
-    const game = await this.getGame(gameId)
-    const message = await this.testTurn(game, userId)
-
-    return message
-}
-
-exports.getGameAndTestTurn = async (req) => {
-    const game = await this.getGame(req.body.gameId)
-    const message = await this.testTurn(game, req.body.userId)
-
-    return message
-}
 
 exports.getCreateur = async (gameId) => {
     const game = await this.getGame(gameId)

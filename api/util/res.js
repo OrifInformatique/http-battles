@@ -18,9 +18,9 @@ exports.sendSuccess = async (code, json, res) => {
 }
 
 exports.sendSuccessCheck = async (req, res) => {
-    const message = await utilGame.getGameAndTestTurn(req)
+    const message = await utilGame.testTurn(req)
 
     if (message.message !== "Your turn") {
-        return await this.sendSuccess(500, message, res)
+        return await this.sendSuccess(200, message, res)
     }
 }

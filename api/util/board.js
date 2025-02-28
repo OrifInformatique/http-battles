@@ -4,9 +4,8 @@ const utilPhrase = require('../util/phrase')
 const utilWord = require('../util/word')
 
 exports.createBoard = async (gameId, userId) => {
-    const game = await utilGame.getGame(gameId)
     const board = new Board({
-        gameId: game._id,
+        gameId: gameId,
         userId: userId,
         board: [
             [null, null, null, null],
@@ -25,7 +24,6 @@ exports.getBoard = async (boardId) => {
 
 
 exports.getBoardGameUser = async (gameId, userId) => {
-
     const board = await Board.findOne({
         gameId: gameId,
         userId: userId
@@ -34,14 +32,16 @@ exports.getBoardGameUser = async (gameId, userId) => {
     return board
 }
 
-exports.fillBoard = async (board, phrase) => {
+exports.fillBoard = async (req) => {
+    const board = await this.createBoard(req.body.gameId, req.body.userId)
+    const userPhrase = await utilPhrase.createPhrase(board._id, req.body.phrase)
     const newBoard = []
     for (const keyY in board.board) {
         newBoard.push([])
         for (const keyX in board.board[keyY]) {
-            for (const keyW in phrase.words) {
-                if (phrase.words[keyW].position[0].toString() === keyY && phrase.words[keyW].position[1].toString() === keyX) {
-                    newBoard[keyY].push(phrase.words[keyW])
+            for (const keyW in userPhrase.words) {
+                if (userPhrase.words[keyW].position[0].toString() === keyY && userPhrase.words[keyW].position[1].toString() === keyX) {
+                    newBoard[keyY].push(userPhrase.words[keyW])
                 }
             }
             if (newBoard[keyY][keyX] === undefined) {
@@ -54,11 +54,13 @@ exports.fillBoard = async (board, phrase) => {
             board: newBoard
         }
     })
-    return await this.getBoard(board._id)
+    const filledBoard = await this.getBoard(board._id)
+    await this.insertPhrase(filledBoard, userPhrase)
+    return filledBoard
 }
 
-exports.checkBoard = async (board, y, x) => {
-
+exports.checkBoard = async (y, x, gameId, adversaireId) => {
+    const board = await this.getBoardGameUser(gameId, adversaireId)
     if (board.board[y][x] !== null) {
         var revealedWord = await utilWord.revealWord(board.board[y][x])
         board.board[y][x] = revealedWord
@@ -98,8 +100,8 @@ exports.updateBoard = async (newBoard) => {
     return await this.getBoard(newBoard._id)
 }
 
-exports.tryPhrase = async (advBoard, req) => {
-
+exports.tryPhrase = async (adversaireId, req) => {
+    const advBoard = await this.getBoardGameUser(req.body.gameId, adversaireId)
     const wordCount = advBoard.phrase.words.length
 
     var wordCounter = 0
@@ -118,20 +120,3 @@ exports.tryPhrase = async (advBoard, req) => {
     }
 }
 
-exports.fillBoardInsertPhrase = async (req) => {
-    const board = await this.createBoard(req.body.gameId, req.body.userId)
-    const userPhrase = await utilPhrase.createPhrase(board._id, req.body.phrase)
-    const filledBoard = await this.fillBoard(board, userPhrase)
-    await this.insertPhrase(filledBoard, userPhrase)
-
-    return filledBoard
-}
-
-exports.getBoardGameUserAndTryPhrase = async (gameId, adversaireId, req) => {
-
-    const advBoard = await this.getBoardGameUser(gameId, adversaireId)
-
-    const check = await this.tryPhrase(advBoard, req)
-
-    return check
-}
