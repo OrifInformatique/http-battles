@@ -36,21 +36,37 @@ exports.formatedGames = async () => {
 
 // formate un jeux
 exports.formatedGame = async (gameId) => {
+
     const game = await this.getGame(gameId)
+
     const createur = await utilUser.getUserById(game.createurId)
 
-    if (createur === null) {
-        var message = {
-            state: game.state,
-            createurUsername: "unknown",
-            gameId: game._id
-        }
+    const createurUsername = await this.checkCreatorNotNull(createur)
+
+    return await this.formatedMessage(game, createurUsername)
+}
+
+exports.checkCreatorNotNull = async (createur) => {
+
+    if (createur !== null) {
+
+        var createurUsername = createur.username
+
     } else {
-        var message = {
-            state: game.state,
-            createurUsername: createur.username,
-            gameId: game._id
-        }
+
+        var createurUsername = "unknown"
+
+    }
+
+    return createurUsername
+}
+
+exports.formatedMessage = async (game, createurUsername) => {
+
+    var message = {
+        state: game.state,
+        createurUsername: createurUsername,
+        gameId: game._id
     }
 
     return message
@@ -63,7 +79,9 @@ exports.createGame = async (userId) => {
         state: "WAITING_PLAYER",
         createurId: userId
     })
+
     const savedGame = await this.saveGame(game)
+
     return savedGame
 }
 
@@ -74,9 +92,30 @@ exports.saveGame = async (game) => {
 
 // permet à un utilisateur de rejoindre une partie
 exports.joinGame = async (gameId, challengerId) => {
+    await this.updateGame(gameId, "SETTINGS", challengerId)
+}
+
+exports.updateGame = async (gameId, state, challengerId) => {
+    if (typeof state !== 'undefined') {
+        await this.updateGameState(gameId, state)
+    }
+
+    if (typeof challengerId !== 'undefined') {
+        await this.updateGameChallenger(gameId, challengerId)
+    }
+}
+
+exports.updateGameState = async (gameId, state) => {
     await Game.updateOne({ _id: gameId }, {
         $set: {
-            state: "SETTINGS",
+            state: state
+        }
+    })
+}
+
+exports.updateGameChallenger = async (gameId, challengerId) => {
+    await Game.updateOne({ _id: gameId }, {
+        $set: {
             challengerId: challengerId
         }
     })
@@ -94,44 +133,60 @@ exports.checkStartStat = async (gameId) => {
 
 // choisit aléatoirement le premier utilisateur à commencer
 exports.startCoinFlip = async (gameId) => {
-    const game = await this.getGame(gameId)
+
     // sort aléatoirement un résultat true or false et le stock dans une constante
     const coinFlip = Math.floor(Math.random() * 2) == 0
-    // test le résultat aléatoire
-    // si vrai
-    if (coinFlip) {
-        // initialise la variable définissant le joueur qui commece la partie comme étant celui qui la créé
-        var startUserId = game.createurId
-        // update l'état de la partie pour signifier que le créateur commence
-        await Game.updateOne({ _id: game._id }, {
-            $set: {
-                state: "CREATEUR_TURN"
-            }
-        })
-        // si le résultat aléatoire est faux
-    } else {
-        // initialise la variable définissant le joueur qui commece la partie comme étant le challenger
-        var startUserId = game.challengerId
-        // update l'état de la partie pour signifier que le challenger commence
-        await Game.updateOne({ _id: game._id }, {
-            $set: {
-                state: "CHALLENGER_TURN"
-            }
-        })
-    }
+
+    const startUserId = this.coinFlipStartUserId(coinFlip, gameId)
+
+    const startGameState = this.coinFlipStartGameState(coinFlip)
+
+    await this.updateGame(gameId, startGameState)
 
     return startUserId
 }
 
+exports.coinFlipStartUserId = async (coinFlip, gameId) => {
+
+    const game = await this.getGame(gameId)
+
+    if (coinFlip) {
+
+        return game.createurId
+
+    } else {
+
+        return game.challengerId
+
+    }
+}
+
+exports.coinFlipStartGameState = async (coinFlip) => {
+
+    if (coinFlip) {
+
+        return "CREATEUR_TURN"
+
+    } else {
+
+        return "CHALLENGER_TURN"
+
+    }
+}
+
 // construit le message de départ
 exports.getOtherUserId = async (req) => {
+
     const game = await this.getGame(req.body.gameId)
+
     if (req.body.userId === game.createurId) {
 
         return game.challengerId
+
     } else {
 
         return game.createurId
+
     }
 }
 
@@ -142,19 +197,20 @@ exports.startMessage = async (req) => {
 
     const board = await utilBoard.fillBoard(req)
 
-    if (req.body.userId === startUserId) {
-        var resultMessage = {
-            message: "You start",
-            boardId: board._id
-        }
-    } else {
-        var resultMessage = {
-            message: "Your opponent start",
-            boardId: board._id
-        }
-    }
+    const message = await this.startMessageTest(req.body.userId, startUserId)
 
-    return resultMessage
+    return {
+        message: message,
+        boardId: board._id
+    }
+}
+
+exports.startMessageTest = async (userId, startUserId) => {
+    if (userId === startUserId) {
+        return "You start"
+    } else {
+        return "Your opponent start"
+    }
 }
 
 exports.testTurnUserId = async (req) => {
@@ -162,9 +218,13 @@ exports.testTurnUserId = async (req) => {
     const turn = await this.testTurn(req)
 
     if (turn === "Your turn") {
+
         return req.body.userId
+
     } else if (turn === "Wait") {
+
         return await getOtherUserId(req)
+
     }
 }
 
@@ -183,49 +243,65 @@ exports.checkStartUserId = async (req) => {
 }
 
 exports.tryPhraseResult = async (req) => {
+
     const adversaireId = await this.getOtherUserId(req)
+
     const check = await utilBoard.tryPhrase(adversaireId, req)
+
     if (check) {
+
         await this.endGame(req.body.gameId)
+
         return "Success!"
+
     } else {
+
         return "Wrong phrase!"
+
     }
 }
 
 // test si c'est le tour de l'utilisateur ou de son adversaire
 exports.testTurn = async (req) => {
+
     const game = await this.getGame(req.body.gameId)
 
     // teste l'état de la partie
     // si c'est le tour du créateur
     if (game.state === "CREATEUR_TURN") {
-        // test si le client est le créateur
-        // si oui
-        if (game.createurId === req.body.userId) {
-            // renvoi un message pour informer que c'est le tour du client
-            return { message: "Your turn" }
-            // si non
-        } else {
-            // renvoi un message pour informer que ce n'est pas le tour du client
-            return { message: "Wait" }
-        }
+
+        return await this.testUserTurn(game.createurId, req.body.userId)
+
         // si c'est le tour du challenger
     } else if (game.state === "CHALLENGER_TURN") {
-        // test si le client est le challenger
-        // si oui
-        if (game.challengerId === req.body.userId) {
-            // renvoi un message pour informer que c'est le tour du client
-            return { message: "Your turn" }
-            // si non
-        } else {
-            // renvoi un message pour informer que ce n'est pas le tour du client
-            return { message: "Wait" }
-        }
+
+
+        return await this.testUserTurn(game.challengerId, req.body.userId)
+
         // si c'est le tour de personne
     } else {
+
         // renvoi un message pour informer que la partie est términer
         return { message: "Game Over" }
+
+    }
+}
+
+exports.testUserTurn = async (gameUserId, reqId) => {
+
+    // test si le client est le créateur
+    // si oui
+    if (gameUserId === reqId) {
+
+        // renvoi un message pour informer que c'est le tour du client
+        return { message: "Your turn" }
+
+        // si non
+    } else {
+
+        // renvoi un message pour informer que ce n'est pas le tour du client
+        return { message: "Wait" }
+
     }
 }
 
@@ -233,83 +309,100 @@ exports.testTurn = async (req) => {
 exports.tryCase = async (requestMode, requestRoad, req) => {
 
     const adversaireId = await this.getOtherUserId(req)
-
-    switch (requestMode) {
-        case "Get":
-            var arrayY = 0
-            break;
-        case "Post":
-            var arrayY = 1
-            break;
-        case "Put":
-            var arrayY = 2
-            break;
-        case "Delete":
-            var arrayY = 3
-            break;
-    }
-
-
-    switch (requestRoad) {
-        case "A":
-            var arrayX = 0
-            break;
-        case "B":
-            var arrayX = 1
-            break;
-        case "C":
-            var arrayX = 2
-            break;
-        case "D":
-            var arrayX = 3
-            break;
-    }
+    
+    const arrayY = await this.switchArrayY(requestMode)
+    
+    const arrayX = await this.switchArrayX(requestRoad)
 
     const check = await utilBoard.checkBoard(arrayY, arrayX, req.body.gameId, adversaireId)
 
     if (check.result) {
+
         var message = {
-            message: requestMode + " " + requestRoad,
+            case: requestMode + " " + requestRoad,
             result: "Touché!",
             word: check.word.content
         }
 
     } else {
+
         var message = {
-            message: requestMode + " " + requestRoad,
+            case: requestMode + " " + requestRoad,
             result: "Manqué!"
         }
     }
+    
     this.switchTurn(req.body.gameId)
 
     return message
 }
 
+exports.switchArrayY = async (requestMode) => {
+
+    switch (requestMode) {
+
+        case "GET":
+
+            return arrayY = 0
+
+        case "POST":
+
+            return arrayY = 1
+
+        case "PUT":
+
+            return arrayY = 2
+
+        case "DELETE":
+
+            return arrayY = 3
+
+    }
+}
+
+exports.switchArrayX = async (requestRoad) => {
+
+    switch (requestRoad) {
+
+        case "A":
+
+            return arrayX = 0
+
+        case "B":
+
+            return arrayX = 1
+
+
+        case "C":
+
+            return arrayX = 2
+
+        case "D":
+
+            return arrayX = 3
+
+    }
+}
+
 // change le toour 
 exports.switchTurn = async (gameId) => {
+
     const game = await this.getGame(gameId)
+
     if (game.state === "CREATEUR_TURN") {
-        Game.updateOne({ _id: game._id }, {
-            $set: {
-                state: "CHALLENGER_TURN"
-            }
-        })
+
+        await this.updateGame(gameId, "CHALLENGER_TURN")
+
     } else if (game.state === "CHALLENGER_TURN") {
-        Game.updateOne({ _id: game._id }, {
-            $set: {
-                state: "CREATEUR_TURN"
-            }
-        })
+
+        await this.updateGame(gameId, "CREATEUR_TURN")
+
     }
 }
 
 // fini la partie
 exports.endGame = async (gameId) => {
-    await Game.updateOne({ _id: gameId }, {
-        $set: {
-            state: "ENDED"
-        }
-    })
+    await this.updateGame(gameId, "ENDED")
 }
 
 
@@ -321,10 +414,10 @@ exports.getCreateur = async (gameId) => {
 }
 
 exports.joinSuccessMessage = async (req) => {
-    const game = await this.getGame(req.body.gameId)
+    await this.joinGame(req.body.gameId, req.body.userId)
     const createur = await this.getCreateur(req.body.gameId)
     const challenger = await utilUser.getUserById(req.body.userId)
-    await this.joinGame(req.body.gameId, req.body.userId)
+    const game = await this.getGame(req.body.gameId)
     return {
         message: "Partie rejointe !",
         state: game.state,

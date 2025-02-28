@@ -3,24 +3,28 @@ const utilGame = require('../util/game')
 
 exports.sendError = async (code, message, res) => {
     if (!res.headersSent) {
-        return res.status(code).json({ error: message })
+        res.status(code).json({ error: message })
     } else {
-        return console.log("response already sent")
+        console.log("response already sent")
     }
 }
 
 exports.sendSuccess = async (code, json, res) => {
     if (!res.headersSent) {
-        return res.status(code).json(json)
+        res.status(code).json(json)
     } else {
-        return console.log("response already sent")
+        console.log("response already sent")
     }
 }
 
 exports.sendSuccessCheck = async (req, res) => {
     const message = await utilGame.testTurn(req)
+    message.message !== "Your turn"
 
     if (message.message !== "Your turn") {
-        return await this.sendSuccess(200, message, res)
+        await this.sendSuccess(200, message, res)
+        return false
+    } else {
+        return true
     }
 }

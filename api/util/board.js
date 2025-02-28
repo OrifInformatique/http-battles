@@ -60,6 +60,7 @@ exports.fillBoard = async (req) => {
 }
 
 exports.checkBoard = async (y, x, gameId, adversaireId) => {
+    
     const board = await this.getBoardGameUser(gameId, adversaireId)
     if (board.board[y][x] !== null) {
         var revealedWord = await utilWord.revealWord(board.board[y][x])
