@@ -30,9 +30,9 @@ const InGameLayout = () => {
   return (
     <ProtectedRoute>
       <TopBar />
-      <main className="w-full max-w-[1300px] m-auto px-4">
-        <Outlet />
-      </main>
+        <main className="w-full max-w-[1600px] m-auto px-4">
+          <Outlet />
+        </main>
     </ProtectedRoute>
   );
 };

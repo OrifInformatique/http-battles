@@ -42,6 +42,7 @@
                 flex-flow: row;
                 align-items: baseline;
                 justify-content: space-around;
+                position: relative;
 
                 color:white;
 
@@ -49,12 +50,18 @@
                 background-repeat: no-repeat;
                 background-size:cover;
 
-                min-height: 1000px;
+                min-height: 1400px;
                 min-width: 200px
             }
-
+            .initInitialisationContainer {
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+            }
             /*     Titre de la page    */
             .initTitle {
+                position: static;
+                
                 padding-top: 10%;
                 padding-bottom: 30px;
             }
@@ -66,26 +73,45 @@
                 .initContainer {
                     color:white;
                 }
-                    /*  Liste des mots  */
+
+            /*
+                SLIDER Liste de mots ---------------------------------------------------------
+            */
 
                     .initListLaunchContainer {
                         display: flex;
-                        flex-flow: row wrap;
+                        flex-flow: row;
                         justify-content: space-between;
                         align-items: flex-start;
 
+                        position: absolute;
+
+                        padding-top: 20%;
+                        left: 30%;
                         min-width: 450px;
                         gap: 70px;
                     }
 
 
             .initFirstListLaunchContainer {
+                display: flex;
+                gap: 300px;
                 margin: 20px;
             }
 
             .initThirdListLaunchContainer {
                 background-color: rgba(0, 0, 0, 0%);
             }
+
+            .initInitialisationList1 {
+                
+            }
+
+            /*
+                Fin Liste de mots ---------------------------------------------------------
+            */
+
+
 
             /*     Container de la phrase avec mandala de fond     */
 
@@ -116,19 +142,30 @@
                         position: relative;
                         overflow: visible;
                         background-image: url(../../../public/assets/images/element/1409-rose_des_vents.png);
-                        background-size: 110%;
+                        background-size: 40%;
                         background-position: center;
                         background-repeat: no-repeat;
                         animation: rotateImage 30s infinite linear;
                     
                         min-width: 50%;
                     }
+
+                    /*     Pour fixer la phrase et qu'elle ne soit pas affectée par la rotation     */
+
+                    .initButtonContainer {
+                        position: absolute;
+                        top: 1000px;    
+                    }
+
                     /*     Pour fixer la phrase et qu'elle ne soit pas affectée par la rotation     */
                     .initFixPhrase {
                         animation: rotateIImage 30s infinite linear;
                     }
 
                     /*     Phrase choisie   */
+                    .initPhrase {
+                        padding-bottom: 20%;
+                    }
 
 
             /*     Boutton de validation de la phrase     */
@@ -136,6 +173,7 @@
             .initbtn {
                 min-width: 350px;
             }
+            
 
             /*  Règles pour Select  */
 
@@ -181,6 +219,8 @@
             }
 
             .initLi {
+                background-color: transparent;
+                border: 2px solid black;
                 position: relative;
                 padding: 10px;
                 color: #333;
@@ -194,9 +234,11 @@
             }
 
             .initUl:hover .initLi {
+                top: 30px;
                 opacity: 1;
                 visibility: visible;
                 transform: translateY(0);
+                
             }
 
      

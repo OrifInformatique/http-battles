@@ -36,11 +36,6 @@ function LaunchPage() {
     const handleChange = (e) => {
         const { name, value } = e.target
         const [dimension, key] = name.split('.');
-        console.log("1",name , "2",dimension,  "3",key,  "4",value)
-
-        {/*
-        const { name, value } = e.target
-        const [dimension, key] = name.split('.');
         
         setPhrase((prevPhrase) => ({
             ...prevPhrase,
@@ -48,7 +43,7 @@ function LaunchPage() {
                 ...prevPhrase[dimension],
                 [key]: [value],
             }}))
-            console.log(e.target.value, name)*/}
+            console.log(phrase)
     };
 
     switch(isSubmitted) { 
