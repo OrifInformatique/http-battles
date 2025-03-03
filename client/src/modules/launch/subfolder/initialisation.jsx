@@ -74,7 +74,7 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
                     </div>
                 </div>
             </div>
-            <img src="../../../../../public/images/element/left-arrow.png" alt="" />
+            <img src="/assets/images" alt="" />
 
             <div className="initPhrase">
                 {phrase[0].word} {phrase[1].word} {phrase[2].word} {phrase[3].word} {phrase[4].word}

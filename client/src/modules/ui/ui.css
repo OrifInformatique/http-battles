@@ -4,7 +4,11 @@
       /*  Effets de boutton BLEU généraux   */
       button[type="submit"] {
         position: relative;
-      
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
         background-color: transparent;
       
         border: 2px solid #005ba9;
