@@ -26,7 +26,7 @@ const { util } = require('webpack')
 exports.createGame = async (req, res, next) => {
     // crée une partie à partir d'un schema
     const game = await utilGame.createGame(req.body.userId)
-        .catch(() => { utilRes.sendError(404, "failed to createGame", res) })
+        .catch(() => { utilRes.sendError(500, "file: ../controllers/game methode: createGame error: failed to utilGame.createGame", res) })
     utilRes.sendSuccess(200, {
         message: "Partie créé !",
         state: game.state,
@@ -36,20 +36,12 @@ exports.createGame = async (req, res, next) => {
 
 // trouve une partie 
 exports.findGame = async (req, res, next) => {
-    // récupère la partie en fonction de son id
-    const game = await utilGame.formatedGame(req.body.gameId)
-        .catch(() => { utilRes.sendError(404, "failed to findAndFormatGame", res) })
-
-    utilRes.sendSuccess(200, game, res)
+    utilRes.sendSuccess(200, req.formatedGame, res)
 }
 
 // liste les parties
 exports.listGames = async (req, res, next) => {
-    // récupère les parties
-    const games = await utilGame.formatedGames()
-        .catch(() => { utilRes.sendError(404, "failed to formatedGames", res) })
-
-    utilRes.sendSuccess(200, games, res)
+    utilRes.sendSuccess(200, req.formatedGames, res)
 }
 
 // permet au client de rejoindre une party dont il a entré la clef

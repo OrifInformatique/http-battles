@@ -11,18 +11,20 @@ const routeParam = require('../middleware/routeParam')
 
 const checkTurn = require('../middleware/checkTurn')
 
+const middleGame = require('../middleware/game')
+
 // créé une partie pour cette utilisateur
 router.get('/games/createGame', auth, gameCtrl.createGame)
 // trouve une partie selon la clefs
-router.get('/games/findGame', auth, gameCtrl.findGame)
+router.get('/games/findGame', auth, middleGame.getGame, middleGame.formatedGame, gameCtrl.findGame)
 // liste toute les partie en attente
-router.get('/games/listGames', auth, gameCtrl.listGames)
+router.get('/games/listGames', auth, middleGame.getGames, middleGame.formatedGames, gameCtrl.listGames)
 // permet à un utilisateur de rjoindre une partie
-router.post('/games/joinGame', auth, gameCtrl.joinGame)
+router.post('/games/joinGame', auth, middleGame.getGame, gameCtrl.joinGame)
 // commence la partie
-router.post('/games/startGame', auth, gameCtrl.startGame)
+router.post('/games/startGame', auth, middleGame.getGame, gameCtrl.startGame)
 // vérifie à qui est le tour
-router.get('/games/checkTurn', auth, gameCtrl.checkTurn)
+router.get('/games/checkTurn', auth, middleGame.getGame, gameCtrl.checkTurn)
 // términe la partie
 router.post('/games/endGame', auth, gameCtrl.endGame)
 // vérifie à qui est le tour
