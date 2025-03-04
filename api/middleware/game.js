@@ -4,13 +4,13 @@ const Game = require("../models/Game")
 // import fonctions util pour res
 const utilRes = require('../util/res')
 
-// import fonctions util pour res
+// import fonctions util pour game
 const utilGame = require('../util/game')
 
-// import fonctions util pour res
+// import fonctions util pour user
 const utilUser = require('../util/user')
 
-// import fonctions util pour res
+// import fonctions util pour board
 const utilBoard = require('../util/board')
 
 // retourne une partie selon sont id
@@ -178,19 +178,6 @@ exports.joinGame = async (req, res, next) => {
 // construit le message de départ
 exports.startMessage = async (req, res, next) => {
 
-    const board = await utilBoard.fillBoard(req)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../middleware/game methode: startMessage error: failed to utilBoard.fillBoard", res)
-        })
-
-    if (board === null) {
-        console.log("file: ../middleware/game methode: startMessage error: board is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: startMessage error: board is null", res)
-    }
-
     const startMessage = await utilGame.startMessageTest(req.body.userId, req.startUserId)
         .catch(error => {
             console.log(error)
@@ -205,7 +192,7 @@ exports.startMessage = async (req, res, next) => {
     } else {
         req.startMessage = {
             message: startMessage,
-            boardId: board._id
+            boardId: req.board._id
         }
 
         if (next !== undefined) {
