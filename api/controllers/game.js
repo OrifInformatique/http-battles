@@ -80,7 +80,7 @@ exports.endGame = async (req, res, next) => {
  */
 
 exports.tryCase = async (req, res, next) => {
-    console.log(req.tryCaseMessage) //????
+
     utilRes.sendSuccess(200, req.tryCaseMessage, res)
 
 }

@@ -88,11 +88,11 @@ exports.formatedGame = async (req, res, next) => {
             utilRes.sendError(404, "file: ../middleware/game methode: formatedGame error: failed to utilUser.getUserById", res)
         })
 
-    if (createur === null) {
+    /*if (createur === null) {
         console.log("file: ../middleware/game methode: formatedGame error: createur is empty")
 
         utilRes.sendError(404, "file: ../middleware/game methode: formatedGame error: createur is empty", res)
-    }
+    }*/
 
     const createurUsername = await utilGame.checkCreatorNotNull(createur)
         .catch(error => {
@@ -138,22 +138,7 @@ exports.createGame = async (req, res, next) => {
 
     req.game = game
 
-    await this.saveGame(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../middleware/game methode: createGame error: failed to utilGame.saveGame", res)
-        })
-
-    const savedGame = req.savedGame
-
-    if (savedGame === null) {
-        console.log("file: ../middleware/game methode: createGame error: savedGame is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: createGame error: savedGame is null", res)
-    } else {
-        req.game = savedGame
-
+    if (next !== undefined) {
         next()
     }
 }
@@ -184,38 +169,14 @@ exports.saveGame = async (req, res, next) => {
 exports.joinGame = async (req, res, next) => {
     req.newState = "SETTINGS"
     req.newChallenger = req.body.userId
-    await this.updateGame(req, res)
-        .catch(error => {
-            console.log(error)
 
-            utilRes.sendError(500, "file: ../middleware/game methode: joinGame error: failed to utilGame.updateGame", res)
-        })
-
-    await this.getGame(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: joinGame error: failed to this.getGame", res)
-        })
-
-    next()
+    if (next !== undefined) {
+        next()
+    }
 }
 
 // construit le message de départ
 exports.startMessage = async (req, res, next) => {
-
-    const startUserId = await utilGame.checkStartUserId(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../middleware/game methode: startMessage error: failed to utilGame.checkStartUserId", res)
-        })
-
-    if (startUserId === null) {
-        console.log("file: ../middleware/game methode: startMessage error: startUserId is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: startMessage error: startUserId is null", res)
-    }
 
     const board = await utilBoard.fillBoard(req)
         .catch(error => {
@@ -230,14 +191,12 @@ exports.startMessage = async (req, res, next) => {
         utilRes.sendError(404, "file: ../middleware/game methode: startMessage error: board is null", res)
     }
 
-    const startMessage = await utilGame.startMessageTest(req.body.userId, startUserId)
+    const startMessage = await utilGame.startMessageTest(req.body.userId, req.startUserId)
         .catch(error => {
             console.log(error)
 
             utilRes.sendError(500, "file: ../middleware/game methode: startMessage error: failed to utilGame.startMessageTest", res)
         })
-
-    await this.updateGame(req, res)
 
     if (startMessage === null) {
         console.log("file: ../middleware/game methode: startMessage error: message is null")
@@ -397,19 +356,6 @@ exports.tryPhraseResult = async (req, res, next) => {
 // fini la partie
 exports.endGame = async (req, res, next) => {
     req.newState = "ENDED"
-    await this.updateGame(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../middleware/game methode: endGame error: failed to utilGame.updateGame", res)
-        })
-
-    await this.getGame(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: endGame error: failed to this.getGame", res)
-        })
 
     if (next !== undefined) {
         next()
@@ -466,17 +412,10 @@ exports.tryCase = async (req, res, next) => {
         })
 
     if (check === null) {
-        console.log("file: ../middleware/game methode: tryCase error: adversaireId is check")
+        console.log("file: ../middleware/game methode: tryCase error: check is null")
 
-        utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: adversaireId is check", res)
+        utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: check is null", res)
     }
-
-    await this.switchTurn(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../middleware/game methode: tryCase error: failed to utilGame.switchTurn", res)
-        })
 
     await this.getGame(req, res)
         .catch(error => {
@@ -487,7 +426,7 @@ exports.tryCase = async (req, res, next) => {
 
     if (check.result) {
 
-        var tryCaseMessage = {
+        req.tryCaseMessage = {
             case: req.method + " " + req.route,
             result: "Touché!",
             word: check.word.content,
@@ -496,14 +435,12 @@ exports.tryCase = async (req, res, next) => {
 
     } else {
 
-        var tryCaseMessage = {
+        req.tryCaseMessage = {
             case: req.method + " " + req.route,
             result: "Manqué!"
         }
     }
 
-    req.tryCaseMessage = tryCaseMessage
-    console.log(req.tryCaseMessage)
     if (next !== undefined) {
         next()
     }
@@ -511,29 +448,22 @@ exports.tryCase = async (req, res, next) => {
 
 exports.updateGame = async (req, res, next) => {
     if (typeof req.newState !== 'undefined') {
-        await utilGame.updateGameState(req.body.gameId, req.newState)
+        await utilGame.updateGameState(req, res)
             .catch(error => {
                 console.log(error)
 
-                utilRes.sendError(500, "file: ../middleware/game methode: updateGame error: failed toutilGame.updateGameState", res)
+                utilRes.sendError(500, "file: ../middleware/game methode: updateGame error: failed to utilGame.updateGameState", res)
             })
     }
 
     if (typeof req.newChallenger !== 'undefined') {
-        await utilGame.updateGameChallenger(req.body.gameId, req.newChallenger)
+        await utilGame.updateGameChallenger(req, res)
             .catch(error => {
                 console.log(error)
 
-                utilRes.sendError(500, "file: ../middleware/game methode: updateGame error: failed toutilGame.updateGameChallenger", res)
+                utilRes.sendError(500, "file: ../middleware/game methode: updateGame error: failed to utilGame.updateGameChallenger", res)
             })
     }
-
-    await this.getGame(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: updateGame error: failed to this.getGame", res)
-        })
 
     if (next !== undefined) {
         next()
@@ -544,18 +474,49 @@ exports.updateGame = async (req, res, next) => {
 exports.switchTurn = async (req, res, next) => {
 
     if (req.game.state === "CREATEUR_TURN") {
-        req.newSate = "CHALLENGER_TURN"
+        req.newState = "CHALLENGER_TURN"
 
     } else if (req.game.state === "CHALLENGER_TURN") {
-        req.newSate = "CREATEUR_TURN"
+        req.newState = "CREATEUR_TURN"
     }
 
-    await this.updateGame(req, res)
+    if (next !== undefined) {
+        next()
+    }
+}
+
+exports.checkStartUserId = async (req, res, next) => {
+
+    const check = await utilGame.checkStartStat(req)
         .catch(error => {
             console.log(error)
 
-            utilRes.sendError(500, "file: ../middleware/game methode: switchTurn error: failed this.updateGame", res)
+            utilRes.sendError(500, "file: ../middleware/game methode: checkStartUserId error: failed utilGame.checkStartStat", res)
         })
+
+    if (check === null) {
+        console.log("file: ../middleware/game methode: checkStartUserId error: check is null")
+
+        utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: check is null", res)
+    }
+
+    if (check) {
+        req.startUserId = await utilGame.startCoinFlip(req, res)
+            .catch(error => {
+                console.log(error)
+
+                utilRes.sendError(500, "file: ../middleware/game methode: checkStartUserId error: failed utilGame.startCoinFlip", res)
+            })
+
+    } else {
+
+        req.startUserId = await utilGame.testTurnUserId(req, res)
+            .catch(error => {
+                console.log(error)
+
+                utilRes.sendError(500, "file: ../middleware/game methode: checkStartUserId error: failed utilGame.testTurnUserId", res)
+            })
+    }
 
     if (next !== undefined) {
         next()

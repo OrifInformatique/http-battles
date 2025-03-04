@@ -36,13 +36,6 @@ exports.formatedMessage = async (game, createurUsername) => {
 }
 
 
-exports.updateGameState = async (gameId, state) => {
-    await Game.updateOne({ _id: gameId }, {
-        $set: {
-            state: state
-        }
-    })
-}
 
 exports.updateGameChallenger = async (gameId, challengerId) => {
     await Game.updateOne({ _id: gameId }, {
@@ -66,12 +59,39 @@ exports.startCoinFlip = async (req, res) => {
     const coinFlip = Math.floor(Math.random() * 2) == 0
 
     const startUserId = await this.coinFlipStartUserId(coinFlip, req)
+        .catch(error => {
+            console.log(error)
+
+            utilRes.sendError(500, "file: ../util/game methode: startCoinFlip error: failed to this.coinFlipStartUserId", res)
+        })
+
+    if (startUserId === null) {
+        console.log("file: ../util/game methode: startCoinFlip error: startUserId is null")
+
+        utilRes.sendError(404, "file: ../util/game methode: startCoinFlip error: startUserId is null", res)
+    }
 
     const startGameState = await this.coinFlipStartGameState(coinFlip)
+        .catch(error => {
+            console.log(error)
+
+            utilRes.sendError(500, "file: ../util/game methode: startCoinFlip error: failed to this.coinFlipStartGameState", res)
+        })
+
+    if (startGameState === null) {
+        console.log("file: ../util/game methode: startCoinFlip error: startGameState is null")
+
+        utilRes.sendError(404, "file: ../util/game methode: startCoinFlip error: startGameState is null", res)
+    }
 
     req.newState = startGameState
 
     await middleGame.updateGame(req, res)
+        .catch(error => {
+            console.log(error)
+
+            utilRes.sendError(500, "file: ../util/game methode: startCoinFlip error: failed to middleGame.updateGame", res)
+        })
 
     return startUserId
 }
@@ -128,6 +148,17 @@ exports.startMessageTest = async (userId, startUserId) => {
 exports.testTurnUserId = async (req, res) => {
 
     const turn = await middleGame.testTurn(req, res)
+        .catch(error => {
+            console.log(error)
+
+            utilRes.sendError(500, "file: ../util/game methode: testTurnUserId error: failed to middleGame.testTurn", res)
+        })
+
+    if (turn === null) {
+        console.log("file: ../util/game methode: testTurnUserId error: turn is null")
+
+        utilRes.sendError(404, "file: ../util/game methode: testTurnUserId error: turn is null", res)
+    }
 
     if (turn === "Your turn") {
 
@@ -135,21 +166,13 @@ exports.testTurnUserId = async (req, res) => {
 
     } else if (turn === "Wait") {
 
-        return await getOtherUserId(req)
+        return await this.getOtherUserId(req)
+            .catch(error => {
+                console.log(error)
 
-    }
-}
+                utilRes.sendError(404, "file: ../util/game methode: testTurnUserId error: failed to this.getOtherUserId", res)
+            })
 
-exports.checkStartUserId = async (req, res) => {
-
-    const check = await this.checkStartStat(req)
-
-    if (check) {
-        return await this.startCoinFlip(req, res)
-
-    } else {
-
-        return await this.testTurnUserId(req, res)
     }
 }
 
@@ -222,7 +245,53 @@ exports.switchArrayX = async (requestRoad) => {
 
 exports.getCreateur = async (req) => {
     const createur = await utilUser.getUserById(req.game.createurId)
+        .catch(error => {
+            console.log(error)
+
+            utilRes.sendError(500, "file: ../util/game methode: getCreateur error: failed to utilUser.getUserById", res)
+        })
 
     return createur
 }
 
+exports.updateGameChallenger = async (req, res) => {
+
+    await Game.updateOne({ _id: req.body.gameId }, {
+        $set: {
+            challengerId: req.newChallenger
+        }
+    })
+        .catch(error => {
+            console.log(error)
+
+            utilRes.sendError(500, "file: ../util/game methode: updateGameChallenger error: failed to Game.updateOne", res)
+        })
+
+    await middleGame.getGame(req, res)
+        .catch(error => {
+            console.log(error)
+
+            utilRes.sendError(404, "file: ../util/game methode: updateGameChallenger error: failed to middleGame.getGame", res)
+        })
+}
+
+exports.updateGameState = async (req, res) => {
+
+    await Game.updateOne({ _id: req.body.gameId }, {
+        $set: {
+            state: req.newState
+        }
+    })
+        .catch(error => {
+            console.log(error)
+
+            utilRes.sendError(500, "file: ../util/game methode: updateGameState error: failed to Game.updateOne", res)
+        })
+
+    await middleGame.getGame(req, res)
+        .catch(error => {
+            console.log(error)
+
+            utilRes.sendError(404, "file: ../util/game methode: updateGameState error: failed to middleGame.getGame", res)
+        })
+}

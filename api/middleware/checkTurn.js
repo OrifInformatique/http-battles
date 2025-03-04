@@ -6,7 +6,7 @@ const middleGame = require('../middleware/game')
 const utilRes = require('../util/res')
 
 exports.checkTurn = async (req, res, next) => {
-    await middleGame.testTurn(req, res, next)
+    await middleGame.testTurn(req, res)
 
     if (req.testTurnMessage.message !== "Your turn") {
         await utilRes.sendSuccess(200, { message: req.testTurnMessage.message}, res)
