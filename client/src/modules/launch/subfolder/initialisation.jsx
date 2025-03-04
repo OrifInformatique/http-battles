@@ -3,19 +3,18 @@ import Button from "../../ui/button";
 import '../../general.css';
 
 function MyList({ handleChange, valeurs = [], i, tech, dynamicVal}) {
-console.log("s")
-console.log("c")
+
     switch (tech) {
         case "dynamicVal":
             console.log("dynamicVal")
-            return(<>{/*
+            return(<>
                 <ul className="initUl" style={{ color: "black", backgroundColor: "white"}}>
-                    {dynamicVal[i-1] && dynamicVal[i-1].map((value, index) => (
+                    {valeurs[i-1] && valeurs[i-1].map((value, index) => (
                     <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${i}.${tech}` } })}>
                         {value}
                     </li>
                     ))}
-                </ul>*/}
+                </ul>
             </>);
     
         default:
