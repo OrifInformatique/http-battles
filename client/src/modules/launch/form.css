@@ -92,8 +92,9 @@
                         gap: 70px;
                     }
 
-
-            .initFirstListLaunchContainer {
+            
+            .initContentContainer {
+                position: absolute;
                 display: flex;
                 gap: 600px;
                 margin-left: 50px;
@@ -190,10 +191,23 @@
 
                 /* Style de base du conteneur */
  
-            .initPosition {
+            .initContainerVisible {
                 display: flex;
                 flex-flow: row;
+                align-items: center;
+            
                 gap: 200px;
+                height: 20px;
+                width: 700px;
+
+                overflow: hidden;
+            }
+
+            .initContainerContent {
+                display: flex;
+                flex-flow: row;
+
+                gap: 20px;
             }
 
             /*      Liste déroulantes      */
