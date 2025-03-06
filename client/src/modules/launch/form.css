@@ -168,6 +168,29 @@
                         padding-bottom: 20%;
                     }
 
+            /*       Flèches des listes       */
+            
+            .initLeftArrow {
+                position: absolute;
+
+                left: 20%;
+                top: 42%;
+
+                width: 100px;
+                height: 100px;
+
+            }
+            .initRightArrow {
+                position: absolute;
+
+                right: 20%;
+                top: 42%;
+
+                width: 100px;
+                height: 100px;
+
+
+            }
 
             /*     Boutton de validation de la phrase     */
 
@@ -192,23 +215,37 @@
                 /* Style de base du conteneur */
  
             .initContainerVisible {
+                position: relative;
                 display: flex;
                 flex-flow: row;
-                align-items: center;
-            
+                align-items: flex-start;
+                justify-content: center;
+                left: 0;
                 gap: 200px;
-                height: 20px;
-                width: 700px;
+                height: 900px;
+                width: 1000px;
 
                 overflow: hidden;
             }
 
             .initContainerContent {
+                position: absolute;
                 display: flex;
-                flex-flow: row;
-
-                gap: 20px;
+                gap: 600px;
+                left:24%;
             }
+            
+            /*
+            Containers de content 1-2-3-4-5 
+            */
+            
+            .initContainerContentX {
+                display: flex;
+                flex-flow: row ;    
+                justify-content: center;
+                gap: 200px;
+            }
+
 
             /*      Liste déroulantes      */
 
@@ -216,13 +253,14 @@
                 list-style-type: none;
                 padding: 0;
                 margin: 0;
+                height: 300px;
                 width: 200px;
                 background: transparent;
                 border: 0px solid blue;
                 border-radius: 5px;
                 position: absolute;
                 z-index: 10;
-                overflow: hidden;
+            /*    overflow: hidden;*/
 
             /*    display: none; /*  Caché par défaut */
                 position: absolute;

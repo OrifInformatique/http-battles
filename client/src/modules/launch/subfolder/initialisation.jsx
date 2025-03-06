@@ -54,9 +54,8 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
         </div>
     </div>*/}
 
-    return (<>
-        <div className="initContainerVisible">
-                <div className="initWord"style={{display:"flex",flexFlow:"column"}}>
+    return (<>   
+                <div className="initWord"style={{display:"flex",flexFlow:"row" }}>
                     <h3>Mot {i}</h3>
                     <MyList handleChange={handleChange} tech={"dynamicVal"} valeurs={dynamicVal} i={i}/> 
                 </div>
@@ -70,7 +69,7 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
                     <h3>Methode</h3>
                     <MyList handleChange={handleChange} tech={"method"} valeurs={staticVal2} i={i}/>
                 </div>
-        </div>
+        
     </>);
 }
 
@@ -91,14 +90,31 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
                 {phrase[0].word} {phrase[1].word} {phrase[2].word} {phrase[3].word} {phrase[4].word}
             </div>
 
+            
+
+            <img className="initLeftArrow" src="/assets/images/element/left-arrow.png" alt="Left arrow"/>
+            <img className="initRightArrow" src="/assets/images/element/right-arrow.png" alt="Right arrow"/>
+
             <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>
 
-                <div className="initContentContainer">                     
-                          <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase[1]}/> 
-                          <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} phrase={phrase[2]}/> 
-                          <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={3} phrase={phrase[3]}/> 
-                        <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={4} phrase={phrase[4]}/> 
-                        <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={5} phrase={phrase[5]}/>
+                <div className="initContainerVisible">       
+                    <div className="initContainerContent">
+                        <div className="initContainerContent1 initContainerContentX">          
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase[1]}/> 
+                        </div >    
+                        <div className="initContainerContent2 initContainerContentX">          
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} phrase={phrase[1]}/> 
+                        </div>                         
+                        <div className="initContainerContent3 initContainerContentX">          
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={3} phrase={phrase[1]}/> 
+                        </div>  
+                        <div className="initContainerContent4 initContainerContentX">          
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={4} phrase={phrase[1]}/> 
+                        </div>
+                        <div className="initContainerContent5 initContainerContentX">          
+                            <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={5} phrase={phrase[1]}/> 
+                        </div>                 
+                    </div>
                 </div> 
             </form>
             {/* <div className="initFirstListLaunchContainer"> 
