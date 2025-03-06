@@ -8,8 +8,15 @@ const utilRes = require('../util/res')
 
 const LOC_GLOB = "file: ../middleware/board"
 
+// import fonctions util pour board
+const utilCheck = require('../util/check')
+
 exports.fillBoard = async (req, res, next) => {
     const LOC_LOC = "methode: fillBoard"
+
+    if (await utilCheck.dataValidityTest(req, res, next)) {
+        return null
+    }
 
     await utilBoard.createBoard(req.body.gameId, req.body.userId)
         .then(value => {
@@ -17,8 +24,8 @@ exports.fillBoard = async (req, res, next) => {
 
             req.data.push({
                 name: "utilBoard.createBoard",
-                value: value,
-                loc: LOC_GLOB + " " + LOC_LOC
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
         })
         .catch(error => {
@@ -36,8 +43,8 @@ exports.fillBoard = async (req, res, next) => {
 
             req.data.push({
                 name: "utilPhrase.createPhrase",
-                value: value,
-                loc: LOC_GLOB + " " + LOC_LOC
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
         })
         .catch(error => {
@@ -55,8 +62,8 @@ exports.fillBoard = async (req, res, next) => {
 
             req.data.push({
                 name: "utilBoard.insertPhraseInBoard",
-                value: value,
-                loc: LOC_GLOB + " " + LOC_LOC
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
         })
         .catch(error => {
@@ -73,8 +80,8 @@ exports.fillBoard = async (req, res, next) => {
 
             req.data.push({
                 name: "utilBoard.updateBoard",
-                value: value,
-                loc: LOC_GLOB + " " + LOC_LOC
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
         })
         .catch(error => {

@@ -15,11 +15,19 @@ const utilRes = require('../util/res')
 
 const middleGame = require('../middleware/game')
 
+// import fonctions util pour board
+const utilCheck = require('../util/check')
+
+const LOC_GLOB = "file: ../util/game"
+
 exports.checkCreatorNotNull = async (createur) => {
-    if (createur !== null) {
-        var createurUsername = createur.username
-    } else {
+
+    if (createur === null || createur === undefined) {
         var createurUsername = "unknown"
+    } else if (createur.username === undefined) {
+        var createurUsername = "unknown"
+    } else {
+        var createurUsername = createur.username
     }
     return createurUsername
 }
@@ -35,15 +43,6 @@ exports.formatedMessage = async (game, createurUsername) => {
     return message
 }
 
-
-
-exports.updateGameChallenger = async (gameId, challengerId) => {
-    await Game.updateOne({ _id: gameId }, {
-        $set: {
-            challengerId: challengerId
-        }
-    })
-}
 
 exports.checkStartStat = async (req) => {
     if (req.game.state === "SETTINGS") {
@@ -146,33 +145,52 @@ exports.startMessageTest = async (userId, startUserId) => {
 }
 
 exports.testTurnUserId = async (req, res) => {
+    const LOC_LOC = "methode: testTurnUserId"
 
-    const turn = await middleGame.testTurn(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../util/game methode: testTurnUserId error: failed to middleGame.testTurn", res)
-        })
-
-    if (turn === null) {
-        console.log("file: ../util/game methode: testTurnUserId error: turn is null")
-
-        utilRes.sendError(404, "file: ../util/game methode: testTurnUserId error: turn is null", res)
+    if (await utilCheck.dataValidityTest(req)) {
+        return null
     }
 
-    if (turn === "Your turn") {
+    await middleGame.testTurn(req, res)
+        .then(value => {
+            req.turn = value
+
+            req.data.push({
+                name: "middleGame.testTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "middleGame.testTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.turn.message === "Your turn") {
 
         return req.body.userId
 
-    } else if (turn === "Wait") {
+    } else if (req.turn.message === "Wait") {
 
         return await this.getOtherUserId(req)
-            .catch(error => {
-                console.log(error)
-
-                utilRes.sendError(404, "file: ../util/game methode: testTurnUserId error: failed to this.getOtherUserId", res)
+            .then(value => {
+                req.data.push({
+                    name: "this.getOtherUserId",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+                return value
             })
-
+            .catch(error => {
+                req.data.push({
+                    name: "this.getOtherUserId",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
     }
 }
 
@@ -244,7 +262,7 @@ exports.switchArrayX = async (requestRoad) => {
 
 
 exports.getCreateur = async (req) => {
-    const createur = await utilUser.getUserById(req.game.createurId)
+    const createur = await utilUser.getUserById(req.game.createurId, req)
         .catch(error => {
             console.log(error)
 
@@ -255,43 +273,96 @@ exports.getCreateur = async (req) => {
 }
 
 exports.updateGameChallenger = async (req, res) => {
+    const LOC_LOC = "methode: updateGameChallenger"
+
+    if (await utilCheck.dataValidityTest(req, res)) {
+        return null
+    }
 
     await Game.updateOne({ _id: req.body.gameId }, {
         $set: {
             challengerId: req.newChallenger
         }
     })
+        .then(value => {
+            req.data.push({
+                name: "Game.updateOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
         .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../util/game methode: updateGameChallenger error: failed to Game.updateOne", res)
+            req.data.push({
+                name: "Game.updateOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
     await middleGame.getGame(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../util/game methode: updateGameChallenger error: failed to middleGame.getGame", res)
+        .then(value => {
+            req.data.push({
+                name: "middleGame.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
         })
+        .catch(error => {
+            req.data.push({
+                name: "middleGame.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.game
 }
 
 exports.updateGameState = async (req, res) => {
+    const LOC_LOC = "methode: updateGameState"
+
+    if (await utilCheck.dataValidityTest(req, res)) {
+        return null
+    }
 
     await Game.updateOne({ _id: req.body.gameId }, {
         $set: {
             state: req.newState
         }
     })
+        .then(value => {
+            req.data.push({
+                name: "Game.updateOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
         .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../util/game methode: updateGameState error: failed to Game.updateOne", res)
+            req.data.push({
+                name: "Game.updateOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
     await middleGame.getGame(req, res)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../util/game methode: updateGameState error: failed to middleGame.getGame", res)
+        .then(value => {
+            req.data.push({
+                name: "middleGame.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
         })
+        .catch(error => {
+            req.data.push({
+                name: "middleGame.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.game
+
+
 }
+

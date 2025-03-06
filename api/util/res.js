@@ -9,9 +9,9 @@ exports.sendError = async (code, message, res) => {
     }
 }
 
-exports.sendSuccess = async (code, json, res) => {
+exports.sendSuccess = async (code, message, res) => {
     if (!res.headersSent) {
-        res.status(code).json(json)
+        res.status(code).json(message)
     } else {
         console.log("response already sent")
     }

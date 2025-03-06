@@ -13,119 +13,188 @@ const utilUser = require('../util/user')
 // import fonctions util pour board
 const utilBoard = require('../util/board')
 
+// import fonctions util pour board
+const utilCheck = require('../util/check')
+
+const LOC_GLOB = "file: ../middleware/game"
+
+
 // retourne une partie selon sont id
 exports.getGame = async (req, res, next) => {
+    const LOC_LOC = "methode: getGame"
 
-    const game = await Game.findOne({ _id: req.body.gameId })
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
+
+    await Game.findOne({ _id: req.body.gameId })
+        .then(value => {
+            req.game = value
+            
+            req.data.push({
+                name: "Game.findOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
         .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: getGame error: failed to Game.findOne", res)
+            req.data.push({
+                name: "Game.findOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (game === null) {
-        console.log("file: ../middleware/game methode: getGame error: game is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: getGame error: game is null", res)
-    } else {
-        req.game = game
-
-        if (next !== undefined) {
-            next()
-        }
+    if (next !== undefined) {
+        next()
     }
+
+    return req.game
 }
 
 // retourne toute les partie
 exports.getGames = async (req, res, next) => {
-    const games = await Game.find()
-        .catch(error => {
-            console.log(error)
+    const LOC_LOC = "methode: getGames"
 
-            utilRes.sendError(404, "file: ../middleware/game methode: getGame error: failed to Game.find", res)
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
+
+    await Game.find()
+        .then(value => {
+            req.games = value
+
+            req.data.push({
+                name: "Game.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "Game.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (games === null) {
-        console.log("file: ../middleware/game methode: getGame error: failed to Game.find")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: getGames error: games is null", res)
-    } else {
-        req.games = games
-
+    if (next !== undefined) {
         next()
     }
 }
 
 exports.formatedGames = async (req, res, next) => {
-    const formatedGamesList = []
-    for (const game of req.games) {
-        if (game !== null) {
-            req.game = game
-            await this.formatedGame(req, res)
-            formatedGamesList.push(req.formatedGame)
-        } else {
-            console.log("file: ../middleware/game methode: formatedGames error: game of req.games is null")
-        }
+    const LOC_LOC = "methode: formatedGames"
+
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
     }
 
-    if (formatedGamesList.length === 0) {
-        console.log("file: ../middleware/game methode: formatedGames error: formatedGamesList is empty")
+    const formatedGamesList = []
 
-        utilRes.sendError(404, "file: ../middleware/game methode: formatedGames error: formatedGamesList is empty", res)
-    } else {
-        req.formatedGames = formatedGamesList
+    for (const game of req.games) {
+        req.game = game
 
+        await this.formatedGame(req, res)
+            .then(value => {
+                formatedGamesList.push(value)
+
+                req.data.push({
+                    name: "this.formatedGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "this.formatedGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+
+    await utilCheck.dataValidityFilter(req, "utilUser.getUserById")
+    await utilCheck.dataValidityFilter(req, "User.findOn")
+
+
+    req.formatedGames = formatedGamesList
+
+    if (next !== undefined) {
         next()
     }
 }
 
 // formate un jeux
 exports.formatedGame = async (req, res, next) => {
-    const createur = await utilUser.getUserById(req.game.createurId)
-        .catch(error => {
-            console.log(error)
+    const LOC_LOC = "methode: formatedGame"
 
-            utilRes.sendError(404, "file: ../middleware/game methode: formatedGame error: failed to utilUser.getUserById", res)
-        })
-
-    /*if (createur === null) {
-        console.log("file: ../middleware/game methode: formatedGame error: createur is empty")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: formatedGame error: createur is empty", res)
-    }*/
-
-    const createurUsername = await utilGame.checkCreatorNotNull(createur)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: formatedGame error: failed to utilGame.checkCreatorNotNull", res)
-        })
-
-    if (createurUsername === null) {
-        console.log("file: ../middleware/game methode: formatedGame error: createurUsername is empty")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: formatedGame error: createurUsername is empty", res)
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
     }
 
 
-    const formatedGame = await utilGame.formatedMessage(req.game, createurUsername)
-        .catch(error => {
-            console.log(error)
+    await utilUser.getUserById(req.game.createurId, req)
+        .then(value => {
+            req.createur = value
 
-            utilRes.sendError(404, "file: ../middleware/game methode: formatedGame error: failed to this.formatedMessage", res)
+            req.data.push({
+                name: "utilUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (formatedGame === null) {
-        console.log("file: ../middleware/game methode: formatedGame error: formatedGamesList is empty")
 
-        utilRes.sendError(404, "file: ../middleware/game methode: formatedGame error: formatedGamesList is empty", res)
-    } else {
-        req.formatedGame = formatedGame
+    await utilGame.checkCreatorNotNull(req.createur)
+        .then(value => {
+            req.createurUsername = value
 
-        if (next !== undefined) {
-            next()
-        }
+            req.data.push({
+                name: "utilGame.checkCreatorNotNull",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilGame.checkCreatorNotNull",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
+    await utilGame.formatedMessage(req.game, req.createurUsername)
+        .then(value => {
+            req.formatedGame = value
+
+            req.data.push({
+                name: "utilGame.formatedMessage",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilGame.formatedMessage",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (next !== undefined) {
+        next()
     }
+    return req.formatedGame
+
 }
 
 // crée un objet jeux et le retourn
@@ -145,28 +214,44 @@ exports.createGame = async (req, res, next) => {
 
 // sauvegarde un jeux et le retourne
 exports.saveGame = async (req, res, next) => {
-    const savedGame = await req.game.save()
-        .catch(error => {
-            console.log(error)
+    const LOC_LOC = "methode: saveGame"
 
-            utilRes.sendError(500, "file: ../middleware/game methode: saveGame error: failed to req.game.save", res)
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
+
+    await req.game.save()
+        .then(value => {
+            req.savedGame = value
+
+            req.data.push({
+                name: "req.game.save",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "req.game.save",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (savedGame === null) {
-        console.log("file: ../middleware/game methode: saveGame error: savedGame is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: saveGame error: savedGame is null", res)
-    } else {
-        req.savedGame = savedGame
-
-        if (next !== undefined) {
-            next()
-        }
+    if (next !== undefined) {
+        next()
     }
+
 }
 
 // permet à un utilisateur de rejoindre une partie
 exports.joinGame = async (req, res, next) => {
+    const LOC_LOC = "methode: joinGame"
+    
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
+
     req.newState = "SETTINGS"
     req.newChallenger = req.body.userId
 
@@ -177,247 +262,352 @@ exports.joinGame = async (req, res, next) => {
 
 // construit le message de départ
 exports.startMessage = async (req, res, next) => {
+    const LOC_LOC = "methode: startMessage"
 
-    const startMessage = await utilGame.startMessageTest(req.body.userId, req.startUserId)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../middleware/game methode: startMessage error: failed to utilGame.startMessageTest", res)
-        })
-
-    if (startMessage === null) {
-        console.log("file: ../middleware/game methode: startMessage error: message is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: startMessage error: message is null", res)
-    } else {
-        req.startMessage = {
-            message: startMessage,
-            boardId: req.board._id
-        }
-
-        if (next !== undefined) {
-            next()
-        }
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
     }
-}
+    
+    await utilGame.startMessageTest(req.body.userId, req.startUserId)
+        .then(value => {
+            req.startMessageContent = value
 
-exports.joinSuccessMessage = async (req, res, next) => {
-
-    const createur = await utilGame.getCreateur(req)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: joinSuccessMessage error: failed to utilGame.getCreateur", res)
-        })
-
-    if (createur === null) {
-        console.log("file: ../middleware/game methode: joinSuccessMessage error: createur is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: joinSuccessMessage error: createur is null", res)
-    }
-
-    const challenger = await utilUser.getUserById(req.body.userId)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: joinSuccessMessage error: failed to utilUser.getUserById", res)
-        })
-
-    if (challenger === null) {
-        console.log("file: ../middleware/game methode: joinSuccessMessage error: challenger is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: joinSuccessMessage error: challenger is null", res)
-    } else {
-        req.joinSuccessMessage = {
-            message: "Partie rejointe !",
-            state: req.game.state,
-            createurUsername: createur.username,
-            challengerUsername: challenger.username
-        }
-
-        if (next !== undefined) {
-            next()
-        }
-    }
-}
-
-// test si c'est le tour de l'utilisateur ou de son adversaire
-exports.testTurn = async (req, res, next) => {
-
-    // teste l'état de la partie
-    // si c'est le tour du créateur
-    if (req.game.state === "CREATEUR_TURN") {
-
-        var testTurnMessage = await utilGame.testUserTurn(req.game.createurId, req.body.userId)
-            .catch(error => {
-                console.log(error)
-
-                utilRes.sendError(500, "file: ../middleware/game methode: testTurn error: failed to utilGame.testUserTurn - CREATEUR_TURN", res)
+            req.data.push({
+                name: "utilGame.startMessageTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-
-        // si c'est le tour du challenger
-    } else if (req.game.state === "CHALLENGER_TURN") {
-
-
-        var testTurnMessage = await utilGame.testUserTurn(req.game.challengerId, req.body.userId)
-            .catch(error => {
-                console.log(error)
-
-                utilRes.sendError(500, "file: ../middleware/game methode: testTurn error: failed to utilGame.testUserTurn - CHALLENGER_TURN", res)
-            })
-
-        // si c'est le tour de personne
-    } else {
-
-        // renvoi un message pour informer que la partie est términer
-        var testTurnMessage = { message: "Game Over" }
-
-    }
-
-    if (testTurnMessage === null) {
-        console.log("file: ../middleware/game methode: testTurn error: testTurnMessage is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: testTurn error: testTurnMessage is null", res)
-    } else {
-        req.testTurnMessage = testTurnMessage
-
-        if (next !== undefined) {
-            next()
-        }
-    }
-}
-
-exports.tryPhraseResult = async (req, res, next) => {
-
-    const adversaireId = await utilGame.getOtherUserId(req)
+        })
         .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: tryPhraseResult error: failed to utilGame.getOtherUserId", res)
+            req.data.push({
+                name: "utilGame.startMessageTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (adversaireId === null) {
-        console.log("file: ../middleware/game methode: testTurn error: adversaireId is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: testTurn error: adversaireId is null", res)
+    req.startMessage = {
+        message: req.startMessageContent,
+        boardId: req.board._id
     }
-
-    const check = await utilBoard.tryPhrase(adversaireId, req)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: tryPhraseResult error: failed to utilBoard.tryPhrase", res)
-        })
-
-    if (check === null) {
-        console.log("file: ../middleware/game methode: testTurn error: check is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: testTurn error: check is null", res)
-    }
-
-    if (check) {
-
-        await this.endGame(req, res)
-            .catch(error => {
-                console.log(error)
-
-                utilRes.sendError(500, "file: ../middleware/game methode: tryPhraseResult error: failed to this.endGame", res)
-            })
-
-        req.tryPhraseResultMessage = "Success!"
-
-        if (next !== undefined) {
-            next()
-        }
-
-    } else {
-
-        req.tryPhraseResultMessage = "Wrong phrase!"
-
-        if (next !== undefined) {
-            next()
-        }
-    }
-}
-
-// fini la partie
-exports.endGame = async (req, res, next) => {
-    req.newState = "ENDED"
 
     if (next !== undefined) {
         next()
     }
 }
 
+exports.joinSuccessMessage = async (req, res, next) => {
+    const LOC_LOC = "methode: joinSuccessMessage"
+
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
+    
+    await utilGame.getCreateur(req)
+        .then(value => {
+            req.createur = value
+
+            req.data.push({
+                name: "utilGame.getCreateur",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilGame.getCreateur",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await utilUser.getUserById(req.body.userId, req)
+        .then(value => {
+            req.challenger = value
+
+            req.data.push({
+                name: "utilUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+    
+    req.joinSuccessMessage = {
+        message: "Partie rejointe !",
+        state: req.game.state,
+        createurUsername: req.createur.username,
+        challengerUsername: req.challenger.username
+    }
+
+    if (next !== undefined) {
+        next()
+    }
+}
+
+// test si c'est le tour de l'utilisateur ou de son adversaire
+exports.testTurn = async (req, res, next) => {
+    const LOC_LOC = "methode: testTurn"
+
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
+
+    // teste l'état de la partie
+    // si c'est le tour du créateur
+    if (req.game.state === "CREATEUR_TURN") {
+        await utilGame.testUserTurn(req.game.createurId, req.body.userId)
+            .then(value => {
+                req.testTurnMessage = value
+
+                req.data.push({
+                    name: "utilGame.testUserTurn - CREATEUR_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "utilGame.testUserTurn - CREATEUR_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        // si c'est le tour du challenger
+    } else if (req.game.state === "CHALLENGER_TURN") {
+
+
+        await utilGame.testUserTurn(req.game.challengerId, req.body.userId)
+            .then(value => {
+                req.testTurnMessage = value
+
+                req.data.push({
+                    name: "utilGame.testUserTurn - CHALLENGER_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "utilGame.testUserTurn - CHALLENGER_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        // si c'est le tour de personne
+    } else {
+        // renvoi un message pour informer que la partie est términer
+        req.testTurnMessage = { message: "Game Over" }
+    }
+
+    if (next !== undefined) {
+        next()
+    }
+    
+    return req.testTurnMessage
+}
+
+exports.tryPhraseResult = async (req, res, next) => {
+    const LOC_LOC = "methode: tryPhraseResult"
+
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
+
+    await utilGame.getOtherUserId(req)
+        .then(value => {
+            req.adversaireId = value
+
+            req.data.push({
+                name: "utilGame.getOtherUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilGame.getOtherUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await utilBoard.tryPhrase(req.adversaireId, req)
+        .then(value => {
+            req.check = value
+
+            req.data.push({
+                name: "utilBoard.tryPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilBoard.tryPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.check) {
+        await this.endGame(req, res)
+            .then(value => {
+                req.data.push({
+                    name: "this.endGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "this.endGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        req.tryPhraseResultMessage = "Success!"
+
+    } else {
+
+        req.tryPhraseResultMessage = "Wrong phrase!"
+
+    }
+
+    if (next !== undefined) {
+        next()
+    }
+}
+
+// fini la partie
+exports.endGame = async (req, res, next) => {
+    const LOC_LOC = "methode: endGame"
+
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
+
+    req.newState = "ENDED"
+
+    if (next !== undefined) {
+        next()
+    }
+
+    return req.newState
+}
+
 // test une case de la grille
 exports.tryCase = async (req, res, next) => {
+    const LOC_LOC = "methode: tryCase"
 
-    const adversaireId = await utilGame.getOtherUserId(req)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: failed to utilGame.getOtherUserId", res)
-        })
-
-    if (adversaireId === null) {
-        console.log("file: ../middleware/game methode: tryCase error: adversaireId is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: adversaireId is null", res)
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
     }
 
-    const arrayY = await utilGame.switchArrayY(req.method)
-        .catch(error => {
-            console.log(error)
+    await utilGame.getOtherUserId(req)
+        .then(value => {
+            req.adversaireId = value
 
-            utilRes.sendError(500, "file: ../middleware/game methode: tryCase error: failed to utilGame.switchArrayY", res)
+            req.data.push({
+                name: "utilGame.getOtherUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilGame.getOtherUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (arrayY === null) {
-        console.log("file: ../middleware/game methode: tryCase error: adversaireId is arrayY")
+    await utilGame.switchArrayY(req.method)
+        .then(value => {
+            req.arrayY = value
 
-        utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: adversaireId is arrayY", res)
-    }
-
-    const arrayX = await utilGame.switchArrayX(req.route)
+            req.data.push({
+                name: "utilGame.switchArrayY",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
         .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../middleware/game methode: tryCase error: failed to utilGame.switchArrayX", res)
+            req.data.push({
+                name: "utilGame.switchArrayY",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (arrayX === null) {
-        console.log("file: ../middleware/game methode: tryCase error: adversaireId is arrayX")
+    await utilGame.switchArrayX(req.route)
+        .then(value => {
+            req.arrayX = value
 
-        utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: adversaireId is arrayX", res)
-    }
-
-    const check = await utilBoard.checkBoard(arrayY, arrayX, req.body.gameId, adversaireId)
+            req.data.push({
+                name: "utilGame.switchArrayX",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
         .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../middleware/game methode: tryCase error: failed to utilBoard.checkBoard", res)
+            req.data.push({
+                name: "utilGame.switchArrayX",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (check === null) {
-        console.log("file: ../middleware/game methode: tryCase error: check is null")
+    await utilBoard.checkBoard(req.arrayY, req.arrayX, req.body.gameId, req.adversaireId)
+        .then(value => {
+            req.check = value
 
-        utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: check is null", res)
-    }
+            req.data.push({
+                name: "utilBoard.checkBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilBoard.checkBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
     await this.getGame(req, res)
+        .then(value => {
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
         .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: failed to this.getGame", res)
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (check.result) {
+    if (req.check.result) {
 
         req.tryCaseMessage = {
             case: req.method + " " + req.route,
             result: "Touché!",
-            word: check.word.content,
-            position: check.word.position
+            word: req.check.word.content,
+            position: req.check.word.position
         }
 
     } else {
@@ -434,21 +624,45 @@ exports.tryCase = async (req, res, next) => {
 }
 
 exports.updateGame = async (req, res, next) => {
+    const LOC_LOC = "methode: updateGame"
+
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
+
     if (typeof req.newState !== 'undefined') {
         await utilGame.updateGameState(req, res)
+            .then(value => {
+                req.data.push({
+                    name: "utilGame.updateGameState",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
             .catch(error => {
-                console.log(error)
-
-                utilRes.sendError(500, "file: ../middleware/game methode: updateGame error: failed to utilGame.updateGameState", res)
+                req.data.push({
+                    name: "utilGame.updateGameState",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
             })
     }
 
     if (typeof req.newChallenger !== 'undefined') {
         await utilGame.updateGameChallenger(req, res)
+            .then(value => {
+                req.data.push({
+                    name: "utilGame.updateGameChallenger",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
             .catch(error => {
-                console.log(error)
-
-                utilRes.sendError(500, "file: ../middleware/game methode: updateGame error: failed to utilGame.updateGameChallenger", res)
+                req.data.push({
+                    name: "utilGame.updateGameChallenger",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
             })
     }
 
@@ -459,6 +673,11 @@ exports.updateGame = async (req, res, next) => {
 
 // change le toour 
 exports.switchTurn = async (req, res, next) => {
+    const LOC_LOC = "methode: switchTurn"
+
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
+    }
 
     if (req.game.state === "CREATEUR_TURN") {
         req.newState = "CHALLENGER_TURN"
@@ -473,35 +692,67 @@ exports.switchTurn = async (req, res, next) => {
 }
 
 exports.checkStartUserId = async (req, res, next) => {
+    const LOC_LOC = "methode: checkStartUserId"
 
-    const check = await utilGame.checkStartStat(req)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../middleware/game methode: checkStartUserId error: failed utilGame.checkStartStat", res)
-        })
-
-    if (check === null) {
-        console.log("file: ../middleware/game methode: checkStartUserId error: check is null")
-
-        utilRes.sendError(404, "file: ../middleware/game methode: tryCase error: check is null", res)
+    if (await utilCheck.dataValidityTest(req, next)) {
+        return null
     }
 
-    if (check) {
-        req.startUserId = await utilGame.startCoinFlip(req, res)
-            .catch(error => {
-                console.log(error)
+    await utilGame.checkStartStat(req)
+        .then(value => {
+            req.check = value
 
-                utilRes.sendError(500, "file: ../middleware/game methode: checkStartUserId error: failed utilGame.startCoinFlip", res)
+            req.data.push({
+                name: "utilGame.checkStartStat",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilGame.checkStartStat",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.check) {
+        await utilGame.startCoinFlip(req, res)
+            .then(value => {
+                req.startUserId = value
+
+                req.data.push({
+                    name: "utilGame.startCoinFlip",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "utilGame.startCoinFlip",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
             })
 
     } else {
 
-        req.startUserId = await utilGame.testTurnUserId(req, res)
-            .catch(error => {
-                console.log(error)
+        await utilGame.testTurnUserId(req, res)
+            .then(value => {
+                req.startUserId = value
 
-                utilRes.sendError(500, "file: ../middleware/game methode: checkStartUserId error: failed utilGame.testTurnUserId", res)
+                req.data.push({
+                    name: "utilGame.testTurnUserId",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "utilGame.testTurnUserId",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
             })
     }
 
