@@ -96,7 +96,7 @@
             .initContentContainer {
                 position: absolute;
                 display: flex;
-                gap: 600px;
+                /* gap: 600px;*/
                 margin-left: 50px;
             }
 
@@ -109,7 +109,9 @@
             }
 
             /*
+            
                 Fin Liste de mots ---------------------------------------------------------
+            
             */
 
 
@@ -122,7 +124,7 @@
                     align-items: center;
                     justify-content: center;
                 
-                    gap: 200px;
+                    /*gap: 200px;*/
                 }
                     /*     Titre du container de validation     */
                     
@@ -174,7 +176,7 @@
                 position: absolute;
 
                 left: 20%;
-                top: 42%;
+                top: 46%;
 
                 width: 100px;
                 height: 100px;
@@ -184,7 +186,7 @@
                 position: absolute;
 
                 right: 20%;
-                top: 42%;
+                top: 46%;
 
                 width: 100px;
                 height: 100px;
@@ -220,9 +222,8 @@
                 flex-flow: row;
                 align-items: flex-start;
                 justify-content: center;
-                left: 0;
-                gap: 200px;
-                height: 900px;
+               /* gap: 200px;*/
+                height: 280px;
                 width: 1000px;
 
                 overflow: hidden;
@@ -231,8 +232,9 @@
             .initContainerContent {
                 position: absolute;
                 display: flex;
-                gap: 600px;
-                left:24%;
+                width:500%;
+           /*     gap: 600px; */
+                left: 0;
             }
             
             /*
@@ -242,28 +244,49 @@
             .initContainerContentX {
                 display: flex;
                 flex-flow: row ;    
+                width:100%;
                 justify-content: center;
-                gap: 200px;
+                /*gap: 200px;*/
             }
 
+            .initWord, .initRoute, .initMethod{
+                position:relative;
+                flex:1;
 
+            }
+            .initWord h3, .initRoute h3, .initMethod h3{
+                width:100%;
+                text-align: center;
+                
+            }
             /*      Liste déroulantes      */
 
             .initUl {
+                display: flex;
+                flex-flow: column nowrap;
                 list-style-type: none;
                 padding: 0;
                 margin: 0;
                 height: 300px;
                 width: 200px;
+                left:calc(50% - 100px);
                 background: transparent;
                 border: 0px solid blue;
                 border-radius: 5px;
                 position: absolute;
                 z-index: 10;
+                padding-top:30px;
             /*    overflow: hidden;*/
-
+            
             /*    display: none; /*  Caché par défaut */
                 position: absolute;
+            }
+
+            .initLiContainer {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
             .initUl:active {
@@ -271,22 +294,25 @@
             }
 
             .initLi {
+                position: relative;
                 background-color: transparent;
                 border: 2px solid black;
-                position: relative;
-                padding: 10px;
                 color: #333;
                 transition: background 0.2s ease-in-out, transform 0.5s ease-in-out;
+                /*left: 20px;*/
+                padding: 8px;
 
                 opacity: 0;
                 visibility: hidden;
-                transform:translateY(-10px);
-                transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s;
+         /*       transform:translateY(-10px);
+                transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s;*/
 
             }
 
             .initUl:hover .initLi {
-                top: 30px;
+               /* top: 30px;
+                left: -30px; */
+
                 opacity: 1;
                 visibility: visible;
                 transform: translateY(0);
@@ -295,6 +321,7 @@
 
      
             .initLi:hover {
+               /* left:0; */
                 background: pink;
                 font-size: large;
                 cursor: pointer;

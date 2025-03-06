@@ -6,7 +6,6 @@ function MyList({ handleChange, valeurs = [], i, tech, dynamicVal}) {
 
     switch (tech) {
         case "dynamicVal":
-            console.log("dynamicVal")
             return(<>
                 <ul className="initUl" style={{ color: "black"}}>
                     {valeurs[i-1] && valeurs[i-1].map((value, index) => (
@@ -18,14 +17,15 @@ function MyList({ handleChange, valeurs = [], i, tech, dynamicVal}) {
             </>);
     
         default:
-            console.log("default")
             return (<>
                 <ul className="initUl" style={{ color: "black" }}>
-                     {valeurs.map((valeur, index) => (
-                        <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${tech}[${i}]`, value: valeur } })} style={{ cursor: "pointer" }}>
-                            {valeur}
-                        </li>
-                    ))}
+                     <div className="initLiContainer">
+                        {valeurs.map((valeur, index) => (
+                            <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${tech}[${i}]`, value: valeur } })} style={{ cursor: "pointer" }}>
+                                {valeur}
+                            </li>
+                        ))}
+                    </div>
                 </ul>
             </>);
     }
