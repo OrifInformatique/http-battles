@@ -3,7 +3,35 @@ const utilGame = require('../util/game')
 const utilPhrase = require('../util/phrase')
 const utilWord = require('../util/word')
 
+// import fonctions util pour check
+const utilCheck = require('../util/check')
+
+const LOC_GLOB = "file: ../util/board"
+
 exports.createBoard = async (gameId, userId) => {
+    const LOC_LOC = "methode: createBoard"
+
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
     const board = new Board({
         gameId: gameId,
         userId: userId,
@@ -15,25 +43,160 @@ exports.createBoard = async (gameId, userId) => {
         ]
     })
 
-    return await this.saveBoard(board)
+    await this.saveBoard(board)
+        .then(value => {
+            req.newBoard = value
+            req.data.push({
+                name: "this.saveBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "this.saveBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.newBoard
 }
 
 exports.saveBoard = async (board) => {
-    return await board.save()
+    const LOC_LOC = "methode: saveBoard"
+
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
+    await board.save()
+        .then(value => {
+            req.newBoard = value
+            req.data.push({
+                name: "board.save",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "board.save",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.newBoard
 }
 
-exports.getBoard = async (boardId) => {
-    return await Board.findOne({ _id: boardId })
+exports.getBoard = async (req, boardId) => {
+    const LOC_LOC = "methode: getBoard"
+
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
+    await Board.findOne({ _id: boardId })
+        .then(value => {
+            req.board = value
+            req.data.push({
+                name: "Board.findOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "Board.findOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.board
 }
 
 
-exports.getBoardGameUser = async (gameId, userId) => {
-    const board = await Board.findOne({
+exports.getBoardGameUser = async (gameId, userId, req) => {
+    const LOC_LOC = "methode: getBoardGameUser"
+
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
+    await Board.findOne({
         gameId: gameId,
         userId: userId
     })
+        .then(value => {
+            req.board = value
+            req.data.push({
+                name: "Board.findOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "Board.findOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
-    return board
+    return req.board
 }
 
 exports.fillBoard = async (req) => {
@@ -42,7 +205,8 @@ exports.fillBoard = async (req) => {
 
     req.board.board = await this.insertPhraseInBoard(req.board, req.board.phrase)
     console.log(req.board)
-    return req.board = await this.updateBoard(req.board)
+    req.board = await this.updateBoard(req.board)
+    return req.board
 }
 
 
@@ -77,45 +241,215 @@ exports.insertPhraseInBoardW = async (newBoard, userPhrase, keyY, keyX, keyW) =>
     }
 }
 
-exports.checkBoard = async (y, x, gameId, userId) => {
+exports.checkBoard = async (y, x, gameId, userId, req) => {
+    const LOC_LOC = "methode: checkBoard"
 
-    var board = await this.getBoardGameUser(gameId, userId)
-    if (board.board[y][x] !== null) {
-        var result = await this.checkBoardSuccess(board, y, x)
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.getBoardGameUser(gameId, userId, req)
+        .then(value => {
+            req.board = value
+            req.data.push({
+                name: "this.getBoardGameUser",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "this.getBoardGameUser",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.board.board[y][x] !== null) {
+
+        await this.checkBoardSuccess(y, x, req)
+            .then(value => {
+                req.result = value
+
+                req.data.push({
+                    name: "this.checkBoardSuccess",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "this.checkBoardSuccess",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
     } else {
-        var result = {
+        req.result = {
             result: false
         }
     }
 
-    return result
+    return req.result
 }
 
-exports.checkBoardSuccess = async (board, y, x) => {
-    board.board[y][x] = await utilWord.revealWord(board.board[y][x])
-    board = await this.updateBoard(board)
+exports.checkBoardSuccess = async (y, x, req) => {
+    const LOC_LOC = "methode: checkBoardSuccess"
 
-    return {
-        word: board.board[y][x],
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
+
+
+    await utilWord.revealWord(req.board.board[y][x])
+        .then(value => {
+            req.board.board[y][x] = value
+
+            req.data.push({
+                name: "utilWord.revealWord",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilWord.revealWord",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+    console.log("test")
+    await this.updateBoard(req)
+        .then(value => {
+            req.board = value
+
+            req.data.push({
+                name: "this.updateBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "this.updateBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    req.result = {
+        word: req.board.board[y][x],
         result: true
     }
+
+    return req.result
 }
 
-exports.updateBoard = async (newBoard) => {
-    await Board.updateOne({ _id: newBoard._id }, {
+exports.updateBoard = async (req) => {
+    const LOC_LOC = "methode: updateBoard"
+
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
+    await Board.updateOne({ _id: req.board._id }, {
         $set: {
-            gameId: newBoard.gameId,
-            userId: newBoard.userId,
-            phrase: newBoard.phrase,
-            board: newBoard.board
+            gameId: req.board.gameId,
+            userId: req.board.userId,
+            phrase: req.board.phrase,
+            board: req.board.board
         }
     })
+        .then(value => {
+            req.data.push({
+                name: "Board.updateOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "Board.updateOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
-    return await this.getBoard(newBoard._id)
+    await this.getBoard(req, req.board._id)
+        .then(value => {
+            req.board = value
+
+            req.data.push({
+                name: "this.getBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "this.getBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.board
 }
 
 exports.tryPhrase = async (adversaireId, req) => {
-    const advBoard = await this.getBoardGameUser(req.body.gameId, adversaireId)
+    const advBoard = await this.getBoardGameUser(req.body.gameId, adversaireId, req)
 
     var wordCounter = 0
     wordCounter = await this.tryPhraseCheckAdv(advBoard, req, wordCounter)

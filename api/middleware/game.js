@@ -572,7 +572,7 @@ exports.testTurn = async (req, res, next) => {
         req.testTurnMessage = { message: "Game Over" }
     }
 
-    await utilBoard.getBoardGameUser(req.body.gameId, req.body.userId)
+    await utilBoard.getBoardGameUser(req.body.gameId, req.body.userId, req)
         .then(value => {
             req.testTurnMessage.userBoard = value.board
 
@@ -590,7 +590,7 @@ exports.testTurn = async (req, res, next) => {
             })
         })
 
-    await utilBoard.getBoardGameUser(req.body.gameId, req.game.challengerId)
+    await utilBoard.getBoardGameUser(req.body.gameId, req.game.challengerId, req)
         .then(value => {
             req.testTurnMessage.adversaireBoard = value.board
 
@@ -745,7 +745,24 @@ exports.endGame = async (req, res, next) => {
 exports.tryCase = async (req, res, next) => {
     const LOC_LOC = "methode: tryCase"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -803,10 +820,10 @@ exports.tryCase = async (req, res, next) => {
             })
         })
 
-    await utilBoard.checkBoard(req.arrayY, req.arrayX, req.body.gameId, req.adversaireId)
+    await utilBoard.checkBoard(req.arrayY, req.arrayX, req.body.gameId, req.adversaireId, req)
         .then(value => {
             req.check = value
-
+            console.log(value)
             req.data.push({
                 name: "utilBoard.checkBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -814,12 +831,18 @@ exports.tryCase = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilBoard.checkBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
+
+    if (req.check === undefined) {
+        next()
+        return null
+    }
 
     await this.getGame(req, res)
         .then(value => {

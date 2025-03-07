@@ -15,7 +15,7 @@ const utilRes = require('../util/res')
 
 const middleGame = require('../middleware/game')
 
-// import fonctions util pour board
+// import fonctions util pour check
 const utilCheck = require('../util/check')
 
 const LOC_GLOB = "file: ../util/game"
@@ -56,7 +56,7 @@ exports.checkStartStat = async (req) => {
 exports.startCoinFlip = async (req, res) => {
     const LOC_LOC = "methode: startCoinFlip"
 
-    await utilCheck.dataValidityTest(req, next)
+    await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
             req.data.push({
@@ -186,8 +186,8 @@ exports.startMessageTest = async (userId, startUserId) => {
 
 exports.testTurnUserId = async (req, res) => {
     const LOC_LOC = "methode: testTurnUserId"
-
-    await utilCheck.dataValidityTest(req, next)
+    
+    await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
             req.data.push({
@@ -227,7 +227,7 @@ exports.testTurnUserId = async (req, res) => {
         })
 
     if (req.turn.message === "Your turn") {
-
+        
         return req.body.userId
 
     } else if (req.turn.message === "Wait") {
@@ -251,6 +251,7 @@ exports.testTurnUserId = async (req, res) => {
             })
         return req.testTurnUserId
     }
+    
 }
 
 
