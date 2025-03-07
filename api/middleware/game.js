@@ -592,7 +592,7 @@ exports.testTurn = async (req, res, next) => {
 
     await utilBoard.getBoardGameUser(req.body.gameId, req.game.challengerId)
         .then(value => {
-            req.testTurnMessage.adversairBoard = value.board
+            req.testTurnMessage.adversaireBoard = value.board
 
             req.data.push({
                 name: "utilBoard.getBoardGameUser",

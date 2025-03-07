@@ -1,5 +1,7 @@
+const LOC_GLOB = "file: ../middleware/routeParam"
 
 exports.a = (req, res, next) => {
+    const LOC_LOC = "methode: a"
     // test le code contenu
     try {
         req.route = "A"
@@ -7,13 +9,17 @@ exports.a = (req, res, next) => {
         next()
         // en cas d'erreur
     } catch (error) {
-        // renvoie le status de l'erreur
-        res.status(401).json({ error })
+        req.data.push({
+            name: "a",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
     }
 
 }
 
 exports.b = (req, res, next) => {
+    const LOC_LOC = "methode: b"
     // test le code contenu
     try {
         req.route = "B"
@@ -21,13 +27,17 @@ exports.b = (req, res, next) => {
         next()
         // en cas d'erreur
     } catch (error) {
-        // renvoie le status de l'erreur
-        res.status(401).json({ error })
+        req.data.push({
+            name: "b",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
     }
 
 }
 
 exports.c = (req, res, next) => {
+    const LOC_LOC = "methode: c"
     // test le code contenu
     try {
         req.route = "C"
@@ -35,13 +45,17 @@ exports.c = (req, res, next) => {
         next()
         // en cas d'erreur
     } catch (error) {
-        // renvoie le status de l'erreur
-        res.status(401).json({ error })
+        req.data.push({
+            name: "c",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
     }
 
 }
 
 exports.d = (req, res, next) => {
+    const LOC_LOC = "methode: d"
     // test le code contenu
     try {
         req.route = "D"
@@ -49,8 +63,11 @@ exports.d = (req, res, next) => {
         next()
         // en cas d'erreur
     } catch (error) {
-        // renvoie le status de l'erreur
-        res.status(401).json({ error })
+        req.data.push({
+            name: "d",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
     }
 
 }
