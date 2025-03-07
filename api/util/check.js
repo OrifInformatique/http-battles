@@ -1,20 +1,19 @@
 exports.dataValidityTest = async (req, next) => {
-    if (req.data !== undefined) {
-        console.log("data")
+
+    if (req.data !== undefined && req.data !== null && req.data.length > 0) {
         for (const d of req.data) {
-            console.log(d)
             if (d.value === null || d.value === undefined) {
-                console.log("test")
                 if (next !== undefined) {
                     next()
                 }
 
                 return true
-            } else {
-
-                return false
             }
         }
+        return false
+    } else {
+
+        return false
     }
 }
 

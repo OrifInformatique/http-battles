@@ -23,14 +23,33 @@ const LOC_GLOB = "file: ../middleware/game"
 exports.getGame = async (req, res, next) => {
     const LOC_LOC = "methode: getGame"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
     await Game.findOne({ _id: req.body.gameId })
         .then(value => {
             req.game = value
-            
+
             req.data.push({
                 name: "Game.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -49,14 +68,33 @@ exports.getGame = async (req, res, next) => {
         next()
     }
 
+
+
     return req.game
 }
 
 // retourne toute les partie
 exports.getGames = async (req, res, next) => {
     const LOC_LOC = "methode: getGames"
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    if (req.utilCheck) {
         return null
     }
 
@@ -86,7 +124,25 @@ exports.getGames = async (req, res, next) => {
 exports.formatedGames = async (req, res, next) => {
     const LOC_LOC = "methode: formatedGames"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -129,7 +185,25 @@ exports.formatedGames = async (req, res, next) => {
 exports.formatedGame = async (req, res, next) => {
     const LOC_LOC = "methode: formatedGame"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -216,7 +290,25 @@ exports.createGame = async (req, res, next) => {
 exports.saveGame = async (req, res, next) => {
     const LOC_LOC = "methode: saveGame"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -247,8 +339,26 @@ exports.saveGame = async (req, res, next) => {
 // permet à un utilisateur de rejoindre une partie
 exports.joinGame = async (req, res, next) => {
     const LOC_LOC = "methode: joinGame"
-    
-    if (await utilCheck.dataValidityTest(req, next)) {
+
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -264,10 +374,28 @@ exports.joinGame = async (req, res, next) => {
 exports.startMessage = async (req, res, next) => {
     const LOC_LOC = "methode: startMessage"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
-    
+
     await utilGame.startMessageTest(req.body.userId, req.startUserId)
         .then(value => {
             req.startMessageContent = value
@@ -299,10 +427,28 @@ exports.startMessage = async (req, res, next) => {
 exports.joinSuccessMessage = async (req, res, next) => {
     const LOC_LOC = "methode: joinSuccessMessage"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
-    
+
     await utilGame.getCreateur(req)
         .then(value => {
             req.createur = value
@@ -338,7 +484,7 @@ exports.joinSuccessMessage = async (req, res, next) => {
                 error: error
             })
         })
-    
+
     req.joinSuccessMessage = {
         message: "Partie rejointe !",
         state: req.game.state,
@@ -355,7 +501,25 @@ exports.joinSuccessMessage = async (req, res, next) => {
 exports.testTurn = async (req, res, next) => {
     const LOC_LOC = "methode: testTurn"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -411,14 +575,32 @@ exports.testTurn = async (req, res, next) => {
     if (next !== undefined) {
         next()
     }
-    
+
     return req.testTurnMessage
 }
 
 exports.tryPhraseResult = async (req, res, next) => {
     const LOC_LOC = "methode: tryPhraseResult"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -492,7 +674,25 @@ exports.tryPhraseResult = async (req, res, next) => {
 exports.endGame = async (req, res, next) => {
     const LOC_LOC = "methode: endGame"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -626,7 +826,26 @@ exports.tryCase = async (req, res, next) => {
 exports.updateGame = async (req, res, next) => {
     const LOC_LOC = "methode: updateGame"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -675,7 +894,25 @@ exports.updateGame = async (req, res, next) => {
 exports.switchTurn = async (req, res, next) => {
     const LOC_LOC = "methode: switchTurn"
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 

@@ -9,19 +9,38 @@ const LOC_GLOB = "file: ../util/user"
 exports.getUserById = async (userId, req) => {
     const LOC_LOC = "methode: getUserById"
 
-    if (await utilCheck.dataValidityTest(req)) {
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
-    
-    return await User.findOne({ _id: userId })
+
+    await User.findOne({ _id: userId })
         .then(value => {
+            req.user = value
+
             req.data.push({
                 name: "User.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
 
-            return value
         })
         .catch(error => {
             req.data.push({
@@ -29,8 +48,10 @@ exports.getUserById = async (userId, req) => {
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
-
-            return error
         })
+    
+
+
+    return req.user
 }
 

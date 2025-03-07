@@ -262,14 +262,51 @@ exports.switchArrayX = async (requestRoad) => {
 
 
 exports.getCreateur = async (req) => {
-    const createur = await utilUser.getUserById(req.game.createurId, req)
+    const LOC_LOC = "methode: getCreateur"
+    console.log(LOC_GLOB + " " + LOC_LOC)
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
         .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../util/game methode: getCreateur error: failed to utilUser.getUserById", res)
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    return createur
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilUser.getUserById(req.game.createurId, req)
+        .then(value => {
+            req.createur = value
+            console.log(value)
+            req.data.push({
+                name: "utilUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
+    return req.createur
 }
 
 exports.updateGameChallenger = async (req, res) => {
@@ -321,7 +358,26 @@ exports.updateGameChallenger = async (req, res) => {
 exports.updateGameState = async (req, res) => {
     const LOC_LOC = "methode: updateGameState"
 
-    if (await utilCheck.dataValidityTest(req, res)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 

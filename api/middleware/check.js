@@ -32,7 +32,18 @@ exports.dataValidity = async (req, res, next) => {
             if (d.value === null || d.value === undefined) {
                 console.log(d)
 
-                utilRes.sendError(404, d, res)
+                if(d.error !== undefined ){
+                    console.log(d)
+                    
+                    if(d.error.reason !== undefined) {
+                        console.log(d.error.reason.toString())
+                        d.reason = d.error.reason.toString()
+                    }
+                    
+                    var errorCode = await utilRes.errorCodeTest(d)
+                }
+
+                utilRes.sendError(errorCode, d, res)
             }
         }
         console.log(req.log)
@@ -47,14 +58,31 @@ exports.dataInit = async (req, res, next) => {
     req.data = []
 
     const LOC_LOC = "methode: dataInit"
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
 
-    if (await utilCheck.dataValidityTest(req)) {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
-    
+
     await this.logInit(req, res)
         .then(value => {
-            
             req.data.push({
                 name: "this.logInit",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -75,17 +103,36 @@ exports.dataInit = async (req, res, next) => {
 }
 
 exports.logInit = async (req, res, next) => {
-    
+    req.log = {
+        data: []
+    }
     const LOC_LOC = "methode: logInit"
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
-    if (await utilCheck.dataValidityTest(req, next)) {
+    if (req.utilCheck) {
         return null
     }
-    
+
     await utilUser.getUserById(req.body.userId, req)
         .then(value => {
             req.user = value
-            
+
             req.data.push({
                 name: "utilUser.getUserById",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -99,7 +146,7 @@ exports.logInit = async (req, res, next) => {
                 error: error
             })
         })
-        
+
     await middleGame.getGame(req, res)
         .then(value => {
             req.game = value
@@ -116,13 +163,13 @@ exports.logInit = async (req, res, next) => {
                 error: error
             })
         })
-        
+
     const date = new Date()
     const year = date.getFullYear()
     const month = date.getMonth()
     const hour = date.getHours()
     const minute = date.getMinutes()
-    
+
     req.log = {
         user: req.user,
         game: req.game,
@@ -132,10 +179,12 @@ exports.logInit = async (req, res, next) => {
         minute: minute,
         data: []
     }
-    
+
     if (next !== undefined) {
         next()
     }
-    
+
+
+
     return req.log
 }
