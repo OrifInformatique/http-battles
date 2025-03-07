@@ -54,45 +54,85 @@ exports.checkStartStat = async (req) => {
 
 // choisit aléatoirement le premier utilisateur à commencer
 exports.startCoinFlip = async (req, res) => {
+    const LOC_LOC = "methode: startCoinFlip"
+
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
     // sort aléatoirement un résultat true or false et le stock dans une constante
     const coinFlip = Math.floor(Math.random() * 2) == 0
 
-    const startUserId = await this.coinFlipStartUserId(coinFlip, req)
+    await this.coinFlipStartUserId(coinFlip, req)
+        .then(value => {
+            req.startUserId = value
+            req.data.push({
+                name: "this.coinFlipStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
         .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../util/game methode: startCoinFlip error: failed to this.coinFlipStartUserId", res)
+            req.data.push({
+                name: "this.coinFlipStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    if (startUserId === null) {
-        console.log("file: ../util/game methode: startCoinFlip error: startUserId is null")
-
-        utilRes.sendError(404, "file: ../util/game methode: startCoinFlip error: startUserId is null", res)
-    }
-
-    const startGameState = await this.coinFlipStartGameState(coinFlip)
-        .catch(error => {
-            console.log(error)
-
-            utilRes.sendError(500, "file: ../util/game methode: startCoinFlip error: failed to this.coinFlipStartGameState", res)
+    await this.coinFlipStartGameState(coinFlip)
+        .then(value => {
+            req.newState = value
+            req.data.push({
+                name: "this.coinFlipStartGameState",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
         })
-
-    if (startGameState === null) {
-        console.log("file: ../util/game methode: startCoinFlip error: startGameState is null")
-
-        utilRes.sendError(404, "file: ../util/game methode: startCoinFlip error: startGameState is null", res)
-    }
-
-    req.newState = startGameState
+        .catch(error => {
+            req.data.push({
+                name: "this.coinFlipStartGameState",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
     await middleGame.updateGame(req, res)
-        .catch(error => {
-            console.log(error)
+        .then(value => {
+            req.newState = value
 
-            utilRes.sendError(500, "file: ../util/game methode: startCoinFlip error: failed to middleGame.updateGame", res)
+            req.data.push({
+                name: "middleGame.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "middleGame.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
         })
 
-    return startUserId
+    return req.startUserId
 }
 
 exports.coinFlipStartUserId = async (coinFlip, req) => {
@@ -147,7 +187,24 @@ exports.startMessageTest = async (userId, startUserId) => {
 exports.testTurnUserId = async (req, res) => {
     const LOC_LOC = "methode: testTurnUserId"
 
-    if (await utilCheck.dataValidityTest(req)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 
@@ -175,14 +232,15 @@ exports.testTurnUserId = async (req, res) => {
 
     } else if (req.turn.message === "Wait") {
 
-        return await this.getOtherUserId(req)
+        await this.getOtherUserId(req)
             .then(value => {
+                req.testTurnUserId = value
+
                 req.data.push({
                     name: "this.getOtherUserId",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
-                return value
             })
             .catch(error => {
                 req.data.push({
@@ -191,6 +249,7 @@ exports.testTurnUserId = async (req, res) => {
                     error: error
                 })
             })
+        return req.testTurnUserId
     }
 }
 
@@ -263,7 +322,7 @@ exports.switchArrayX = async (requestRoad) => {
 
 exports.getCreateur = async (req) => {
     const LOC_LOC = "methode: getCreateur"
-    console.log(LOC_GLOB + " " + LOC_LOC)
+
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -312,7 +371,24 @@ exports.getCreateur = async (req) => {
 exports.updateGameChallenger = async (req, res) => {
     const LOC_LOC = "methode: updateGameChallenger"
 
-    if (await utilCheck.dataValidityTest(req, res)) {
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
         return null
     }
 

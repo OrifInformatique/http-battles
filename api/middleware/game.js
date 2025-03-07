@@ -888,6 +888,8 @@ exports.updateGame = async (req, res, next) => {
     if (typeof req.newState !== 'undefined') {
         await utilGame.updateGameState(req, res)
             .then(value => {
+                req.update = value
+
                 req.data.push({
                     name: "utilGame.updateGameState",
                     loc: LOC_GLOB + " " + LOC_LOC,
@@ -906,6 +908,8 @@ exports.updateGame = async (req, res, next) => {
     if (typeof req.newChallenger !== 'undefined') {
         await utilGame.updateGameChallenger(req, res)
             .then(value => {
+                req.update = value
+
                 req.data.push({
                     name: "utilGame.updateGameChallenger",
                     loc: LOC_GLOB + " " + LOC_LOC,
@@ -924,6 +928,8 @@ exports.updateGame = async (req, res, next) => {
     if (next !== undefined) {
         next()
     }
+
+    return req.update
 }
 
 // change le toour 
