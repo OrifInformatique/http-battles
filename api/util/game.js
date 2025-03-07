@@ -358,7 +358,7 @@ exports.updateGameChallenger = async (req, res) => {
 exports.updateGameState = async (req, res) => {
     const LOC_LOC = "methode: updateGameState"
 
-    await utilCheck.dataValidityTest(req, next)
+    await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
 
@@ -418,7 +418,5 @@ exports.updateGameState = async (req, res) => {
         })
 
     return req.game
-
-
 }
 

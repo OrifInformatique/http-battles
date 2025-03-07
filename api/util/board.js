@@ -77,9 +77,9 @@ exports.insertPhraseInBoardW = async (newBoard, userPhrase, keyY, keyX, keyW) =>
     }
 }
 
-exports.checkBoard = async (y, x, gameId, adversaireId) => {
+exports.checkBoard = async (y, x, gameId, userId) => {
 
-    var board = await this.getBoardGameUser(gameId, adversaireId)
+    var board = await this.getBoardGameUser(gameId, userId)
     if (board.board[y][x] !== null) {
         var result = await this.checkBoardSuccess(board, y, x)
     } else {

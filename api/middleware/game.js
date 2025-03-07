@@ -572,6 +572,42 @@ exports.testTurn = async (req, res, next) => {
         req.testTurnMessage = { message: "Game Over" }
     }
 
+    await utilBoard.getBoardGameUser(req.body.gameId, req.body.userId)
+        .then(value => {
+            req.testTurnMessage.userBoard = value.board
+
+            req.data.push({
+                name: "utilBoard.getBoardGameUser",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilBoard.getBoardGameUser",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await utilBoard.getBoardGameUser(req.body.gameId, req.game.challengerId)
+        .then(value => {
+            req.testTurnMessage.adversairBoard = value.board
+
+            req.data.push({
+                name: "utilBoard.getBoardGameUser",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilBoard.getBoardGameUser",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     if (next !== undefined) {
         next()
     }

@@ -30,8 +30,8 @@ exports.dataValidity = async (req, res, next) => {
         for (const d of req.data) {
             req.log.data.push(d)
             if (d.value === null || d.value === undefined) {
-                console.log(d)
 
+                var errorCode = 400
                 if(d.error !== undefined ){
                     console.log(d)
                     
