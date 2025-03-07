@@ -74,6 +74,25 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
 }
 
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
+/*
+    const click = document.querySelector(".initLeftArrow");
+    const slides = document.querySelectorAll(".initContainerContent");
+    let position = 0;
+    const totalSlides = 5;
+
+    click.addEventListener("click", function(){
+        position += 1;
+
+        if (position >= totalSlides){
+
+            position = 0;
+        }
+
+        slides.style.transform = `translateX(-${position * 100}%)`
+    });
+*/
+
+
     return(<>
         <div className="initInitialisationContainer">
             <h1 className="initTitle"style={{fontWeight:'bold', display:"flex",flexFlow:"column",alignItems:"center"}}> Initialisation de la phrase </h1>
@@ -84,7 +103,6 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
                     </div>
                 </div>
             </div>
-            <img src="/assets/images" alt="" />
 
             <div className="initPhrase">
                 {phrase[0].word} {phrase[1].word} {phrase[2].word} {phrase[3].word} {phrase[4].word}
@@ -92,14 +110,18 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
 
             
 
-            <img className="initLeftArrow" src="/assets/images/element/left-arrow.png" alt="Left arrow"/>
-            <img className="initRightArrow" src="/assets/images/element/right-arrow.png" alt="Right arrow"/>
+            <img className="initLeftArrow arrow" src="/assets/images/element/freeright/left-arrow.png" alt="Left arrow"/>
+
+            <img className="initRightArrow arrow" src="/assets/images/element/freeright/right-arrow.png" alt="Right arrow"/>
+
+
+
 
             <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>
 
                 <div className="initContainerVisible">       
                     <div className="initContainerContent">
-                        <div className="initContainerContent1 initContainerContentX">          
+                        <div className="initContainerContent1 initContainerContentX">
                             <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase[1]}/> 
                         </div >    
                         <div className="initContainerContent2 initContainerContentX">          

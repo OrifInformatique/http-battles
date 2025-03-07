@@ -27,7 +27,18 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
+  }
+    @keyframes slider {
+        0%{ transform: translateX(0%);}
+        20% { transform: translateX(-100%);}
+        40% { transform: translateX(-200%);}
+        60% { transform: translateX(-300%);}
+        80% { transform: translateX(-400%);}
+        100% { transform: translateX(0%);}
+
+
+    }
+
 
 * {
     font-size: large;
@@ -175,22 +186,34 @@
             .initLeftArrow {
                 position: absolute;
 
-                left: 20%;
+                left: 18%;
                 top: 46%;
 
                 width: 100px;
                 height: 100px;
+
+                z-index: 13;
 
             }
             .initRightArrow {
                 position: absolute;
 
-                right: 20%;
+                right: 18%;
                 top: 46%;
 
                 width: 100px;
                 height: 100px;
 
+                z-index: 13;
+
+            }
+            .initLeftArrow {
+   
+
+            }
+
+            .initLeftArrow:active, .initRightArrow:active {
+                background-color: #23fd34;
 
             }
 
@@ -234,6 +257,7 @@
                 display: flex;
                 width:500%;
            /*     gap: 600px; */
+           
                 left: 0;
             }
             
@@ -246,7 +270,9 @@
                 flex-flow: row ;    
                 width:100%;
                 justify-content: center;
-                /*gap: 200px;*/
+                /*gap: 200px;*/               
+                animation: slider 9s infinite;
+
             }
 
             .initWord, .initRoute, .initMethod{
@@ -264,12 +290,14 @@
             .initUl {
                 display: flex;
                 flex-flow: column nowrap;
+                align-items: center;
                 list-style-type: none;
+
                 padding: 0;
                 margin: 0;
                 height: 300px;
-                width: 200px;
-                left:calc(50% - 100px);
+                width: 150px;
+                left:calc(50% - 75px);
                 background: transparent;
                 border: 0px solid blue;
                 border-radius: 5px;
@@ -287,6 +315,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                flex-flow: column;
             }
 
             .initUl:active {
@@ -295,6 +324,7 @@
 
             .initLi {
                 position: relative;
+                width: 150px;
                 background-color: transparent;
                 border: 2px solid black;
                 color: #333;
