@@ -372,7 +372,7 @@ exports.getCreateur = async (req) => {
 exports.updateGameChallenger = async (req, res) => {
     const LOC_LOC = "methode: updateGameChallenger"
 
-    await utilCheck.dataValidityTest(req, next)
+    await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
             req.data.push({

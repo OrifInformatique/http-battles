@@ -35,12 +35,8 @@ exports.dataValidity = async (req, res, next) => {
                 if(d.error !== undefined ){
                     console.log(d)
                     
-                    if(d.error.reason !== undefined) {
-                        console.log(d.error.reason.toString())
-                        d.reason = d.error.reason.toString()
-                    }
-                    
                     var errorCode = await utilRes.errorCodeTest(d)
+                    d.error = d.error.toString()
                 }
 
                 utilRes.sendError(errorCode, d, res)
