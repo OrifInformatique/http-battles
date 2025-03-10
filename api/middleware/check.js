@@ -11,30 +11,89 @@ const utilRes = require('../util/res')
 // import fonctions util pour board
 const utilCheck = require('../util/check')
 
+// constante Global le dossier et la page pour le traitement des erreures
 const LOC_GLOB = "file: ../middlware/check"
 
+// vérify si il s'agit du tour du client
 exports.checkTurn = async (req, res, next) => {
-    await middleGame.testTurn(req, res)
+    // constante local indiquant la methode pour le traitement des erreures
+    const LOC_LOC = "methode: checkTurn"
 
+    // test de validité des données de la requète passant la methode en cas de problème
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            // stocke la donnée avec le résultat de la méthode dans la requète
+            req.utilCheck = value
+
+            // donnée ajouté ave la méthode utiliser, la méthode dans laquel elle est localiser, la page global et le résultat
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            // donnée ajouté ave la méthode utiliser, la méthode dans laquel elle est localiser, la page global et l'erreur'
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // test pour sortir de la méthodes et empecher son execution si les donées ne sont pas validé   
+    if (req.utilCheck) {
+        return null
+    }
+
+    // test si il s'agit du tour du client
+    await middleGame.testTurn(req, res)
+        .then(value => {
+            req.testTurnMessage = value
+
+            // donnée ajouté ave la méthode utiliser, la méthode dans laquel elle est localiser, la page global et le résultat
+            req.data.push({
+                name: " middleGame.testTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            // donnée ajouté ave la méthode utiliser, la méthode dans laquel elle est localiser, la page global et l'erreur'
+            req.data.push({
+                name: " middleGame.testTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+    
+    // verifie le résultat du test pour voir si il s'agit du tour du client
     if (req.testTurnMessage.message !== "Your turn") {
+        // si ce n'est pas son tour renvoi un message pour l'en informer et arrète les opérations
         await utilRes.sendSuccess(200, { message: req.testTurnMessage.message }, res)
 
     } else {
-        next()
+        // sinon test si la méthode doit passer la main au prochain middleware
+        if (next !== undefined) {
+            // passe au prochain middleware
+            next()
+        }
     }
 
 }
 
+// vérifie si les donéées récolter son valide et envoye une erreur dans le cas contraire
 exports.dataValidity = async (req, res, next) => {
+    
     if (req.data !== undefined) {
         for (const d of req.data) {
             req.log.data.push(d)
             if (d.value === null || d.value === undefined) {
-
+                console.log(d)
                 var errorCode = 400
-                if(d.error !== undefined ){
+                if (d.error !== undefined) {
                     console.log(d)
-                    
+
                     var errorCode = await utilRes.errorCodeTest(d)
                     d.error = d.error.toString()
                 }
@@ -42,7 +101,7 @@ exports.dataValidity = async (req, res, next) => {
                 utilRes.sendError(errorCode, d, res)
             }
         }
-        console.log(req.log)
+        //console.log(req.log)
     }
 
     if (next !== undefined) {
@@ -51,9 +110,9 @@ exports.dataValidity = async (req, res, next) => {
 }
 
 exports.dataInit = async (req, res, next) => {
+    const LOC_LOC = "methode: dataInit"
     req.data = []
 
-    const LOC_LOC = "methode: dataInit"
     await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value
@@ -180,7 +239,7 @@ exports.logInit = async (req, res, next) => {
         next()
     }
 
-
-
     return req.log
 }
+
+

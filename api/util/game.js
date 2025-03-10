@@ -15,10 +15,198 @@ const utilRes = require('../util/res')
 
 const middleGame = require('../middleware/game')
 
+const middleUser = require('../middleware/user')
+
 // import fonctions util pour check
 const utilCheck = require('../util/check')
 
 const LOC_GLOB = "file: ../util/game"
+
+exports.formatAndFilterGames = async (req) => {
+    const LOC_LOC = "methode: formatAndFilterGame"
+
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
+    req.formatedGames = []
+
+    for (const game of req.games) {
+        req.game = game
+
+        await this.formatAndFilterGame(req)
+            .then(value => {
+                req.formatedGames.push(value)
+
+                req.data.push({
+                    name: "this.formatAndFilterGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "this.formatAndFilterGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+
+    return req.formatedGames
+}
+
+exports.formatAndFilterGame = async (req) => {
+    const LOC_LOC = "methode: formatAndFilterGame"
+
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        return null
+    }
+
+    await middleUser.getCreatorById(req)
+        .then(value => {
+            req.createur = value
+
+            req.data.push({
+                name: "middleUser.getCreatorById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "middleUser.getCreatorById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await utilCheck.dataValidityFilter(req, "middleUser.getCreatorById")
+        .then(value => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await utilCheck.dataValidityFilter(req, "User.findOne")
+        .then(value => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await middleGame.getCreateurUsername(req)
+        .then(value => {
+            req.createurUsername = value
+
+            req.data.push({
+                name: "middleGame.getCreateurUsername",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "middleGame.getCreateurUsername",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await middleGame.formatedGame(req)
+        .then(value => {
+            req.formatedGame = value
+
+            req.data.push({
+                name: "middleGame.formatedGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "middleGame.formatedGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await utilCheck.dataValidityFilter(req, "middleUser.getCreatorById")
+        .then(value => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
+
+    return req.formatedGame
+}
 
 exports.checkCreatorNotNull = async (createur) => {
 
@@ -186,7 +374,7 @@ exports.startMessageTest = async (userId, startUserId) => {
 
 exports.testTurnUserId = async (req, res) => {
     const LOC_LOC = "methode: testTurnUserId"
-    
+
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -227,7 +415,7 @@ exports.testTurnUserId = async (req, res) => {
         })
 
     if (req.turn.message === "Your turn") {
-        
+
         return req.body.userId
 
     } else if (req.turn.message === "Wait") {
@@ -251,7 +439,7 @@ exports.testTurnUserId = async (req, res) => {
             })
         return req.testTurnUserId
     }
-    
+
 }
 
 
@@ -334,7 +522,6 @@ exports.getCreateur = async (req) => {
             })
         })
         .catch(error => {
-            console.log("error")
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -357,7 +544,6 @@ exports.getCreateur = async (req) => {
             })
         })
         .catch(error => {
-            console.log("error")
             req.data.push({
                 name: "utilUser.getUserById",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -415,6 +601,8 @@ exports.updateGameChallenger = async (req, res) => {
 
     await middleGame.getGame(req, res)
         .then(value => {
+            req.game = value
+            
             req.data.push({
                 name: "middleGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -446,7 +634,6 @@ exports.updateGameState = async (req, res) => {
             })
         })
         .catch(error => {
-            console.log("error")
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -480,6 +667,8 @@ exports.updateGameState = async (req, res) => {
 
     await middleGame.getGame(req, res)
         .then(value => {
+            req.game = value
+
             req.data.push({
                 name: "middleGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,

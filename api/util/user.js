@@ -8,7 +8,7 @@ const LOC_GLOB = "file: ../util/user"
 
 exports.getUserById = async (userId, req) => {
     const LOC_LOC = "methode: getUserById"
-
+    
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -50,8 +50,6 @@ exports.getUserById = async (userId, req) => {
             })
         })
     
-
-
     return req.user
 }
 
