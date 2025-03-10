@@ -28,8 +28,8 @@
         transform: translateY(0);
     }
   }
-    @keyframes slider {
-        0%{ transform: translateX(0%);}
+    @keyframes sliderleft {
+        0% { transform: translateX(0%);}
         20% { transform: translateX(-100%);}
         40% { transform: translateX(-200%);}
         60% { transform: translateX(-300%);}
@@ -38,7 +38,16 @@
 
 
     }
+    @keyframes sliderright {
+        0% { transform: translateX(0%);}
+        20% { transform: translateX(100%);}
+        40% { transform: translateX(200%);}
+        60% { transform: translateX(300%);}
+        80% { transform: translateX(400%);}
+        100% { transform: translateX(0%);}
 
+
+    }
 
 * {
     font-size: large;
@@ -84,47 +93,6 @@
                 .initContainer {
                     color:white;
                 }
-
-            /*
-                SLIDER Liste de mots ---------------------------------------------------------
-            */
-
-                    .initListLaunchContainer {
-                        display: flex;
-                        flex-flow: row;
-                        justify-content: space-between;
-                        align-items: flex-start;
-
-                        position: absolute;
-
-                        padding-top: 20%;
-                        left: 30%;
-                        min-width: 450px;
-                        gap: 70px;
-                    }
-
-            
-            .initContentContainer {
-                position: absolute;
-                display: flex;
-                /* gap: 600px;*/
-                margin-left: 50px;
-            }
-
-            .initThirdListLaunchContainer {
-                background-color: rgba(0, 0, 0, 0%);
-            }
-
-            .initInitialisationList1 {
-                
-            }
-
-            /*
-            
-                Fin Liste de mots ---------------------------------------------------------
-            
-            */
-
 
 
             /*     Container de la phrase avec mandala de fond     */
@@ -181,42 +149,98 @@
                         padding-bottom: 20%;
                     }
 
-            /*       Flèches des listes       */
+        /*
+
+                SLIDER Liste de mots ---------------------------------------------------------
+        
+        */
+
+            /*  Style de base des containers  */
+        
+                .initContainerVisible {
+                    position: relative;
+                    display: flex;
+                    flex-flow: row;
+                    align-items: flex-start;
+                    justify-content: center;
+                /* gap: 200px;*/
+                    height: 280px;
+                    width: 1000px;
+
+                    overflow: hidden;
+                }
+
+                .initContainerContent {
+                    position: absolute;
+                    display: flex;
+                    width:500%;
+            /*     gap: 600px; */
             
-            .initLeftArrow {
-                position: absolute;
+                    left: 0;
+                }
+                
+            /*
+            Containers de content 1-2-3-4-5 
+            */
+                
+                .initContainerContentX {
+                    display: flex;
+                    flex-flow: row ;    
+                    width:100%;
+                    justify-content: center;
+                    /*gap: 200px;*/               
+                    animation-play-state: paused; 
+                }
+                /*       Flèches des listes       */
+                    
+                    .initLeftArrow {
+                        position: absolute;
 
-                left: 18%;
-                top: 46%;
+                        left: 18%;
+                        top: 46%;
 
-                width: 100px;
-                height: 100px;
+                        width: 100px;
+                        height: 100px;
 
-                z-index: 13;
+                        z-index: 13;
 
-            }
-            .initRightArrow {
-                position: absolute;
+                    }
+                    .initRightArrow {
+                        position: absolute;
 
-                right: 18%;
-                top: 46%;
+                        right: 18%;
+                        top: 46%;
 
-                width: 100px;
-                height: 100px;
+                        width: 100px;
+                        height: 100px;
 
-                z-index: 13;
+                        z-index: 13;
 
-            }
-            .initLeftArrow {
-   
+                    }
 
-            }
 
-            .initLeftArrow:active, .initRightArrow:active {
-                background-color: #23fd34;
+                    .initLeftArrow:active, .initRightArrow:active {
+                        background-color: #23fd34;
 
-            }
+                    }
+                /*       Animation des flèches des listes       */
 
+                    .handleChangeArrow {
+                        animation: sliderleft 9s infinite;
+                    }
+
+                    .initAnimationLeft {
+                        animation: sliderright 9s infinite;
+
+                    }
+
+            /*
+            
+                Fin Liste de mots ---------------------------------------------------------
+            
+            */
+
+            
             /*     Boutton de validation de la phrase     */
 
             .initbtn {
@@ -237,43 +261,7 @@
             }
 
 
-                /* Style de base du conteneur */
- 
-            .initContainerVisible {
-                position: relative;
-                display: flex;
-                flex-flow: row;
-                align-items: flex-start;
-                justify-content: center;
-               /* gap: 200px;*/
-                height: 280px;
-                width: 1000px;
-
-                overflow: hidden;
-            }
-
-            .initContainerContent {
-                position: absolute;
-                display: flex;
-                width:500%;
-           /*     gap: 600px; */
-           
-                left: 0;
-            }
-            
-            /*
-            Containers de content 1-2-3-4-5 
-            */
-            
-            .initContainerContentX {
-                display: flex;
-                flex-flow: row ;    
-                width:100%;
-                justify-content: center;
-                /*gap: 200px;*/               
-                animation: slider 9s infinite;
-
-            }
+       
 
             .initWord, .initRoute, .initMethod{
                 position:relative;

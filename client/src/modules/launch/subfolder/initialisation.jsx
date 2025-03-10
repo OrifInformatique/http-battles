@@ -74,13 +74,17 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
 }
 
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
-/*
-    const click = document.querySelector(".initLeftArrow");
-    const slides = document.querySelectorAll(".initContainerContent");
-    let position = 0;
-    const totalSlides = 5;
 
-    click.addEventListener("click", function(){
+
+    function handleChangeArrow() {
+        //document.getElementById("box").style.animationPlayState = "running";
+        const slides = document.querySelectorAll(".initContainerContentX");
+        document.getElementById("arrowLeft").classList.toggle("handleChangeArrow")
+
+
+        let position = 0;
+        const totalSlides = 5;
+
         position += 1;
 
         if (position >= totalSlides){
@@ -89,8 +93,7 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
         }
 
         slides.style.transform = `translateX(-${position * 100}%)`
-    });
-*/
+    }
 
 
     return(<>
@@ -110,9 +113,9 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
 
             
 
-            <img className="initLeftArrow arrow" src="/assets/images/element/freeright/left-arrow.png" alt="Left arrow"/>
+            <img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/freeright/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrow}/>
 
-            <img className="initRightArrow arrow" src="/assets/images/element/freeright/right-arrow.png" alt="Right arrow"/>
+            <img className="initRightArrow" id="arrow" src="/assets/images/element/freeright/right-arrow.png" alt="Right arrow"/>
 
 
 
