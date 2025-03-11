@@ -133,6 +133,22 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    await utilCheck.dataValidityFilter(req, "utilUser.getUserById")
+        .then(value => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     await utilCheck.dataValidityFilter(req, "User.findOne")
         .then(value => {
             req.data.push({
@@ -168,6 +184,22 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    await utilCheck.dataValidityFilter(req, "middleUser.getCreatorById")
+        .then(value => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     await middleGame.formatedGame(req)
         .then(value => {
             req.formatedGame = value
@@ -186,24 +218,6 @@ exports.formatAndFilterGame = async (req) => {
                 error: error
             })
         })
-
-    await utilCheck.dataValidityFilter(req, "middleUser.getCreatorById")
-        .then(value => {
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-
 
     return req.formatedGame
 }
@@ -602,7 +616,7 @@ exports.updateGameChallenger = async (req, res) => {
     await middleGame.getGame(req, res)
         .then(value => {
             req.game = value
-            
+
             req.data.push({
                 name: "middleGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
