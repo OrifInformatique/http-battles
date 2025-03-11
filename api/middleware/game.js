@@ -64,7 +64,7 @@ exports.getGame = async (req, res, next) => {
         next()
     }
 
-    // retourn la variable traité pour la gestion d'erreur en dehors des middleware
+    // retourne la variable traité pour la gestion d'erreur en dehors des middleware
     return req.game
 }
 

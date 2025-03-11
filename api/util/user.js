@@ -4,6 +4,7 @@ const User = require("../models/User")
 // import fonctions util pour board
 const utilCheck = require('../util/check')
 
+// location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/user"
 
 exports.getUserById = async (userId, req) => {
