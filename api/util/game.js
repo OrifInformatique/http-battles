@@ -4,22 +4,16 @@ const Game = require("../models/Game")
 // import les fonction utiles pour utilisateur
 const utilUser = require('../util/user')
 
-// import les fonction utiles pour board
-const utilBoard = require('../util/board')
-
-// import les fonction utiles pour board
-const utilWord = require('../util/word')
-
-// import fonctions util pour res
-const utilRes = require('../util/res')
-
-const middleGame = require('../middleware/game')
-
-const middleUser = require('../middleware/user')
-
 // import fonctions util pour check
 const utilCheck = require('../util/check')
 
+// import fonctions middleware pour game
+const middleGame = require('../middleware/game')
+
+// import fonctions middleware pour user
+const middleUser = require('../middleware/user')
+
+// location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game"
 
 exports.formatAndFilterGames = async (req) => {

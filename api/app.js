@@ -15,6 +15,8 @@ const userRoutes = require('./routes/user')
 
 const gameRoutes = require('./routes/game')
 
+const logRoutes = require('./routes/log')
+
 
 // connection à la base de donnée mongodb, plus précisément le cluster 0 avec l'utilisateur KenCacciabue
 mongoose.set('strictQuery', false);
@@ -68,6 +70,8 @@ app.use('/api', userRoutes)
  *  http://localhost:3000/api/games/endGame
  **/
 app.use('/api', gameRoutes)
+
+app.use('/api', logRoutes)
 
 
 /** 

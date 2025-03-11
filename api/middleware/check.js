@@ -7,6 +7,9 @@ const utilRes = require('../util/res')
 // import fonctions util pour board
 const utilCheck = require('../util/check')
 
+// import fonctions util pour log
+const utilLog = require('../util/log')
+
 // import fonctions contenu dans middleware/game
 const middleGame = require('./game')
 
@@ -86,6 +89,7 @@ exports.dataValidity = async (req, res, next) => {
     // test si les données exist
     if (req.data !== undefined) {
         // parcour les données 
+       
         for (const d of req.data) {
             // stock les donnée dans le log
             req.log.data.push(d)
@@ -106,7 +110,9 @@ exports.dataValidity = async (req, res, next) => {
                 utilRes.sendError(errorCode, d, res)
             }
         }
-        //console.log(req.log)
+        
+
+        await utilLog.logToDatabase(req.log)
     }
     // test si la fonction next à été transmise
     if (next !== undefined) {
@@ -149,11 +155,11 @@ exports.dataInit = async (req, res, next) => {
 
     // initialise le log
     await this.logInit(req, res)
-        .then(value => {
+        .then(() => {
             req.data.push({
                 name: "this.logInit",
                 loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
+                value: "success"
             })
         })
         .catch(error => {
@@ -172,11 +178,8 @@ exports.dataInit = async (req, res, next) => {
 
 // initialise le log
 exports.logInit = async (req, res, next) => {
-    // initialise l'emplacement des donées dans le log
-    req.log = {
-        data: []
-    }
-
+    req.log = {}
+    
     // renseigne dans quel méthode les futur erreures sont
     const LOC_LOC = "methode: logInit"
 
@@ -191,7 +194,6 @@ exports.logInit = async (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log("error")
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -291,9 +293,9 @@ exports.logInit = async (req, res, next) => {
         day: day,
         hour: hour,
         minute: minute,
-        data: []
+        data: req.data.slice()
     }
-
+    
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()
