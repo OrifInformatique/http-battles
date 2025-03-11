@@ -318,7 +318,7 @@ exports.startCoinFlip = async (req, res) => {
 
     await middleGame.updateGame(req, res)
         .then(value => {
-            req.newState = value
+            req.newState = value.newState
 
             req.data.push({
                 name: "middleGame.updateGame",
@@ -378,8 +378,34 @@ exports.getOtherUserId = async (req) => {
 }
 
 
-exports.startMessageTest = async (userId, startUserId) => {
-    if (userId === startUserId) {
+exports.startMessageTest = async (req) => {
+    // location local pour la gestion d'erreur
+        const LOC_LOC = "methode: startMessageTest"
+    
+        // test de la validité des données
+        await utilCheck.dataValidityTest(req)
+            .then(value => {
+                req.utilCheck = value
+                req.data.push({
+                    name: "utilCheck.dataValidityTest",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "utilCheck.dataValidityTest",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+        
+        // stop la méthode en cas d'échèque du test
+        if (req.utilCheck) {
+            return null
+        }
+
+    if (req.body.userId === req.startUserId) {
         return "You start"
     } else {
         return "Your opponent start"
@@ -658,13 +684,14 @@ exports.updateGameState = async (req, res) => {
     if (req.utilCheck) {
         return null
     }
-
+    console.log(typeof req.newState.toString())
     await Game.updateOne({ _id: req.body.gameId }, {
         $set: {
             state: req.newState
         }
     })
         .then(value => {
+            
             req.data.push({
                 name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -678,7 +705,7 @@ exports.updateGameState = async (req, res) => {
                 error: error
             })
         })
-
+        
     await middleGame.getGame(req, res)
         .then(value => {
             req.game = value
