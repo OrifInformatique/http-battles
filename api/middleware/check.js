@@ -1,15 +1,14 @@
-// import fonctions util pour partie
-const utilGame = require('../util/game')
-
 // import fonctions util pour user
 const utilUser = require('../util/user')
 
-const middleGame = require('./game')
 // import fonctions util pour res
 const utilRes = require('../util/res')
 
 // import fonctions util pour board
 const utilCheck = require('../util/check')
+
+// import fonctions contenu dans middleware/game
+const middleGame = require('./game')
 
 // constante Global le dossier et la page pour le traitement des erreures
 const LOC_GLOB = "file: ../middlware/check"
