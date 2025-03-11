@@ -66,7 +66,7 @@ exports.checkTurn = async (req, res, next) => {
                 error: error
             })
         })
-    
+
     // verifie le résultat du test pour voir si il s'agit du tour du client
     if (req.testTurnMessage.message !== "Your turn") {
         // si ce n'est pas son tour renvoi un message pour l'en informer et arrète les opérations
@@ -84,37 +84,48 @@ exports.checkTurn = async (req, res, next) => {
 
 // vérifie si les donéées récolter son valide et envoye une erreur dans le cas contraire
 exports.dataValidity = async (req, res, next) => {
-    
+    // test si les données exist
     if (req.data !== undefined) {
+        // parcour les données 
         for (const d of req.data) {
+            // stock les donnée dans le log
             req.log.data.push(d)
+            // test si les donées ont une valeur (si non cela veut dire qu'il s'agit d'une erreure)
             if (d.value === null || d.value === undefined) {
+                // affiche l'erreur dans la console
                 console.log(d)
+                // set le code d'erreur à 400 (erreur dans la requette reçu du client) comme base
                 var errorCode = 400
+                // test si l'erreur est défini (si l'erreur est défini run le code dans le test)
                 if (d.error !== undefined) {
-                    console.log(d)
-
-                    var errorCode = await utilRes.errorCodeTest(d)
+                    // test quel code d'erreur est le plus aproprier et remplace le code précedent
+                    errorCode = await utilRes.errorCodeTest(d)
+                    // transforme l'erreur en string pour que le client puis la voire
                     d.error = d.error.toString()
                 }
-
+                // renvoit l'erreur ave son code
                 utilRes.sendError(errorCode, d, res)
             }
         }
         //console.log(req.log)
     }
-
+    // test si la fonction next à été transmise
     if (next !== undefined) {
+        // si oui passe au prochain middleWare
         next()
     }
 }
 
+// initialise les données et le log pour pouvoire les tester
 exports.dataInit = async (req, res, next) => {
+    // informe dans quel méthodes les potentielles erreurs interne se trouve
     const LOC_LOC = "methode: dataInit"
+    //initialise les données
     req.data = []
-
+    // test les données
     await utilCheck.dataValidityTest(req, next)
         .then(value => {
+            // résultat du test
             req.utilCheck = value
 
             req.data.push({
@@ -132,10 +143,12 @@ exports.dataInit = async (req, res, next) => {
             })
         })
 
+    // arrète la méthode en cas de test échoué
     if (req.utilCheck) {
         return null
     }
 
+    // initialise le log
     await this.logInit(req, res)
         .then(value => {
             req.data.push({
@@ -152,16 +165,23 @@ exports.dataInit = async (req, res, next) => {
             })
         })
 
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()
     }
 }
 
+// initialise le log
 exports.logInit = async (req, res, next) => {
+    // initialise l'emplacement des donées dans le log
     req.log = {
         data: []
     }
+
+    // renseigne dans quel méthode les futur erreures sont
     const LOC_LOC = "methode: logInit"
+
+    // test la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -180,10 +200,12 @@ exports.logInit = async (req, res, next) => {
             })
         })
 
+    // arrète la méthode en cas de test échoué
     if (req.utilCheck) {
         return null
     }
 
+    // récupère les donnée utilisateur du client
     await utilUser.getUserById(req.body.userId, req)
         .then(value => {
             req.user = value
@@ -201,7 +223,8 @@ exports.logInit = async (req, res, next) => {
                 error: error
             })
         })
-
+    
+    // récupère les données de la partie
     await middleGame.getGame(req, res)
         .then(value => {
             req.game = value
@@ -219,26 +242,64 @@ exports.logInit = async (req, res, next) => {
             })
         })
 
+    // filtre les erreurs dans le cas ou la partie n'existe pas car toutes les requette n'auront pas de partie associées
+    await utilCheck.dataValidityFilter(req, "Game.findOne")
+        .then(value => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+    // filtre les erreurs dans le cas ou la partie n'existe pas car toutes les requette n'auront pas de partie associées
+    await utilCheck.dataValidityFilter(req, "middleGame.getGame")
+        .then(value => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+    
+    // récupère la date de la requette et sotque ses différent élément dans différente variables
     const date = new Date()
     const year = date.getFullYear()
     const month = date.getMonth()
+    const day = date.getDay()
     const hour = date.getHours()
     const minute = date.getMinutes()
 
+    // stock l'utilisateur, la partie et la dates dans le log
     req.log = {
         user: req.user,
         game: req.game,
         year: year,
         month: month,
+        day: day,
         hour: hour,
         minute: minute,
         data: []
     }
 
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()
     }
-
+    // retourn la variable traité dans cette méthode pour la gestion d'erreure si on décide de l'appeler en dehore d'une route.
     return req.log
 }
 
