@@ -1,4 +1,5 @@
 // import jsonwebtoken pour verifier des token
+const { error } = require('console');
 const jwt = require('jsonwebtoken');
 const path = require('path')
 const dotenv = require('dotenv').config({ path: path.resolve(__dirname, '../env/.env') })
@@ -15,6 +16,13 @@ module.exports = (req, res, next) => {
             const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET')
             // récupère l'id utilisateur
             const userId = decodedToken.userId
+            
+            if (userId !== req.body.userId) {
+                throw {
+                    "message": "invalid token"
+                }
+            }
+
             // le rajoute à la requete
             req.auth = {
 

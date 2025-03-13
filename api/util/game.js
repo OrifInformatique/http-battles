@@ -360,7 +360,7 @@ exports.coinFlipStartGameState = async (coinFlip) => {
 // construit le message de départ
 exports.getOtherUserId = async (req) => {
 
-    if (req.body.userId === req.game.createurId) {
+    if (req.auth.userId === req.game.createurId) {
 
         return req.game.challengerId
 
@@ -399,7 +399,7 @@ exports.startMessageTest = async (req) => {
             return null
         }
 
-    if (req.body.userId === req.startUserId) {
+    if (req.auth.userId === req.startUserId) {
         return "You start"
     } else {
         return "Your opponent start"
@@ -450,7 +450,7 @@ exports.testTurnUserId = async (req, res) => {
 
     if (req.turn.message === "Your turn") {
 
-        return req.body.userId
+        return req.auth.userId
 
     } else if (req.turn.message === "Wait") {
 

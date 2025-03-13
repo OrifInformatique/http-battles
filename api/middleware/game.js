@@ -326,7 +326,7 @@ exports.createGame = async (req, res, next) => {
     // cée un objet de partie avec l'id du client avec un status d'attente du challenger
     var game = new Game({
         state: "WAITING_PLAYER",
-        createurId: req.body.userId
+        createurId: req.auth.userId
     })
 
     // stocke le jeux dans la requete
@@ -429,7 +429,7 @@ exports.joinGame = async (req, res, next) => {
 
     // stock le nouelle état de la partie et le nouveaux challenger dans la requette
     req.newState = "SETTINGS"
-    req.newChallenger = req.body.userId
+    req.newChallenger = req.auth.userId
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -617,7 +617,7 @@ exports.testTurn = async (req, res, next) => {
     // si c'est le tour du créateur
     if (req.game.state === "CREATEUR_TURN") {
         // test si le client est le créateur et renvoit un message pour lui indiquer si c'est son tour
-        await utilGame.testUserTurn(req.game.createurId, req.body.userId)
+        await utilGame.testUserTurn(req.game.createurId, req.auth.userId)
             .then(value => {
                 // stocke le message de réponse dans la requete
                 req.testTurnMessage = value
@@ -639,7 +639,7 @@ exports.testTurn = async (req, res, next) => {
         // si c'est le tour du challenger
     } else if (req.game.state === "CHALLENGER_TURN") {
         // test si le client est le challenger et renvoit un message pour lui indiquer si c'est son tour
-        await utilGame.testUserTurn(req.game.challengerId, req.body.userId)
+        await utilGame.testUserTurn(req.game.challengerId, req.auth.userId)
             .then(value => {
                 req.testTurnMessage = value
 

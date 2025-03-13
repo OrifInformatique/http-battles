@@ -97,7 +97,7 @@ exports.createBoard = async (req, res, next) => {
     }
 
     // crée un plateau pour le client pour la partie dans la requete
-    await utilBoard.createBoard(req.body.gameId, req.body.userId, req)
+    await utilBoard.createBoard(req.body.gameId, req.auth.userId, req)
         .then(value => {
             //stoque le plateau dans la requete
             req.board = value
@@ -269,7 +269,7 @@ exports.getBoardGameUser = async (req, res, next) => {
     }
 
     // retourn un plateau suivant l'id de l'utilisateur
-    await utilBoard.getBoardGameUser(req.body.gameId, req.body.userId, req)
+    await utilBoard.getBoardGameUser(req.body.gameId, req.auth.userId, req)
         .then(value => {
             // stoque le plateau de l'utilisateur dans le message dans la requete pour le client
             req.testTurnMessage.userBoard = value.board

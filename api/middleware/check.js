@@ -207,7 +207,7 @@ exports.logInit = async (req, res, next) => {
     }
 
     // récupère les donnée utilisateur du client
-    await utilUser.getUserById(req.body.userId, req)
+    await utilUser.getUserById(req.auth.userId, req)
         .then(value => {
             req.user = value
 

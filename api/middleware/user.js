@@ -99,7 +99,7 @@ exports.getUserById = async (req, res, next) => {
     }
 
     // récupère un objet utilisateur en fonction de son id
-    await utilUser.getUserById(req.body.userId, req)
+    await utilUser.getUserById(req.auth.userId, req)
         .then(value => {
             // stock l'utilisateur dans la requette
             req.user = value

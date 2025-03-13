@@ -49,9 +49,9 @@ exports.listLogs = async (req) => {
         Object.assign(query, user.userId)
     }
 
-    if (req.body.userId !== undefined) {
+    if (req.auth.userId !== undefined) {
         user.userId = {
-            "user._id": mongoose.Types.ObjectId(req.body.userId)
+            "user._id": mongoose.Types.ObjectId(req.auth.userId)
         }
         Object.assign(query, user.userId)
     }

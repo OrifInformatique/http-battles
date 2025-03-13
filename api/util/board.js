@@ -223,7 +223,7 @@ exports.fillBoard = async (req) => {
         return null
     }
 
-    await this.createBoard(req.body.gameId, req.body.userId, req)
+    await this.createBoard(req.body.gameId, req.auth.userId, req)
         .then(value => {
             req.board = value
             req.data.push({
