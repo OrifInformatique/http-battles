@@ -16,42 +16,31 @@
     }
 }
 
+@keyframes scale {
+    0% {
+        transform: translateY(0px);
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.5);
+        transform: translateY(-10px);
+    }
+}
+@keyframes notScale {
+    0% {
+        transform: scale(1.5);
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+        transform: scale(1);
+    }
+}
   /* Listes déroulantes */
 
-  @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-  }
-    @keyframes sliderleft {
-        0% { transform: translateX(0%);}
-        20% { transform: translateX(-100%);}
-        40% { transform: translateX(-200%);}
-        60% { transform: translateX(-300%);}
-        80% { transform: translateX(-400%);}
-        100% { transform: translateX(0%);}
 
 
-    }
-    @keyframes sliderright {
-        0% { transform: translateX(0%);}
-        20% { transform: translateX(100%);}
-        40% { transform: translateX(200%);}
-        60% { transform: translateX(300%);}
-        80% { transform: translateX(400%);}
-        100% { transform: translateX(0%);}
 
-
-    }
-
-* {
-    font-size: large;
-}
 /* ----------------------------------------------------------------------------------------------------------
 
     Initialisation
@@ -146,10 +135,37 @@
 
                     /*     Phrase choisie   */
                     .initPhrase {
-                        padding-bottom: 20%;
+                        width: 500px;
+                        height: 100px;
+
+                        font-size: 20px;
+                        display: flex;
+                        flex-flow: row wrap;
+                        align-items: center;
+                        justify-content: center;
+                        padding-bottom: 15%;
+
+                        gap: 30px;
+                    }
+                    /*       Styles pour chaque mots       */
+                    .init5Word {
+                        display: flex;
+                        flex-flow: column;
+                        align-items: center;
                     }
 
-        /*
+                    .init5Word:hover {
+                        animation: scale 0.5s ease-in-out forwards;
+                    }
+                    .init5Word:not(:hover) {
+                        animation: notScale 0.5s ease-in-out forwards;
+                    }
+
+                    .p {
+                        font-size: 130px;
+                    }
+                    
+        /*          
 
                 SLIDER Liste de mots ---------------------------------------------------------
         
@@ -159,13 +175,13 @@
         
                 .initContainerVisible {
                     position: relative;
+                    padding-top: 8%;
                     display: flex;
                     flex-flow: row;
                     align-items: flex-start;
                     justify-content: center;
-                /* gap: 200px;*/
-                    height: 280px;
-                    width: 1000px;
+                    height: 350px;
+                    width: 800px;
 
                     overflow: hidden;
                 }
@@ -174,15 +190,34 @@
                     position: absolute;
                     display: flex;
                     width:500%;
-            /*     gap: 600px; */
-            
+                /*     gap: 600px; */
                     left: 0;
                 }
                 
             /*
             Containers de content 1-2-3-4-5 
             */
-                
+
+            .initContainerContent.position-1 {
+                transform: translateX(0%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .initContainerContent.position-2 {
+                transform: translateX(-20%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .initContainerContent.position-3 {
+                transform: translateX(-40%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .initContainerContent.position-4 {
+                transform: translateX(-60%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .initContainerContent.position-5 {
+                transform: translateX(-80%);
+                transition: transform 0.5s ease-in-out;
+            }  
                 .initContainerContentX {
                     display: flex;
                     flex-flow: row ;    
@@ -193,7 +228,7 @@
                 }
                 /*       Flèches des listes       */
                     
-                    .initLeftArrow {
+                    #arrowLeft {
                         position: absolute;
 
                         left: 18%;
@@ -220,20 +255,9 @@
 
 
                     .initLeftArrow:active, .initRightArrow:active {
-                        background-color: #23fd34;
+   
 
                     }
-                /*       Animation des flèches des listes       */
-
-                    .handleChangeArrow {
-                        animation: sliderleft 9s infinite;
-                    }
-
-                    .initAnimationLeft {
-                        animation: sliderright 9s infinite;
-
-                    }
-
             /*
             
                 Fin Liste de mots ---------------------------------------------------------
@@ -284,7 +308,7 @@
                 padding: 0;
                 margin: 0;
                 height: 300px;
-                width: 150px;
+                width: 180px;
                 left:calc(50% - 75px);
                 background: transparent;
                 border: 0px solid blue;
@@ -314,8 +338,8 @@
                 position: relative;
                 width: 150px;
                 background-color: transparent;
-                border: 2px solid black;
-                color: #333;
+                border: 1px solid black;
+                color: black /*#333*/;
                 transition: background 0.2s ease-in-out, transform 0.5s ease-in-out;
                 /*left: 20px;*/
                 padding: 8px;
@@ -336,22 +360,19 @@
                 transform: translateY(0);
                 
             }
-
      
             .initLi:hover {
                /* left:0; */
-                background: pink;
+                background: white;
                 font-size: large;
                 cursor: pointer;
+                
                 transform: scale(1.2);
             }
 
-
             .initLi:active {
-                background: #23fd34;
+                background: wheat;
             }
-
-          
 
 /* -----------------------------------------------------------------------------------------------------------
         
@@ -364,7 +385,7 @@
             align-items: center;
             justify-content: center;
 
-            color:white;
+            color:pink;
 
             background-image: url(../../../public/assets/images/background/launchbackground_upscale.webp);
             background-repeat: no-repeat;

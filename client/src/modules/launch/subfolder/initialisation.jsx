@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../ui/button";
 import '../../general.css';
 
-function MyList({ handleChange, valeurs = [], i, tech, dynamicVal}) {
+function MyList({ handleChange, valeurs = [], i, tech}) {
 
     switch (tech) {
         case "dynamicVal":
             return(<>
                 <ul className="initUl" style={{ color: "black"}}>
-                    {valeurs[i-1] && valeurs[i-1].map((value, index) => (
-                    <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${i}.${tech}` } })}>
-                        {value}
-                    </li>
-                    ))}
+                    <div className="initLiContainer">
+                        {valeurs[i-1] && valeurs[i-1].map((value, index) => (
+                        <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${i}.${tech}` } })}>
+                            {value}
+                        </li>
+                        ))}
+                    </div>
                 </ul>
             </>);
     
@@ -31,28 +33,7 @@ function MyList({ handleChange, valeurs = [], i, tech, dynamicVal}) {
     }
 }
 
-function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, i, phrase, tech}) {
-    
-    {/*
-    <div className="initContainerVisible">
-        <div className="Container">
-            <div className="initWord"style={{display:"flex",flexFlow:"column"}}>
-            <h3>Mot {i}</h3>
-            <MyList handleChange={handleChange} tech={"dynamicVal"} valeurs={dynamicVal} i={i}/> 
-            </div>
-
-            <div className="initRoute" style={{display:"flex",flexFlow:"column"}}>
-            <h3>Route</h3>
-            <MyList handleChange={handleChange} tech={"route"} valeurs={staticVal1} i={i}/> 
-            </div>
-
-            <div className="initMethod" style={{display:"flex",flexFlow:"column"}}>
-            <h3>Methode</h3>
-            <MyList handleChange={handleChange} tech={"method"} valeurs={staticVal2} i={i}/>
-            <br/><br/><br/><br/>
-            </div>
-        </div>
-    </div>*/}
+function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, i}) {
 
     return (<>   
                 <div className="initWord"style={{display:"flex",flexFlow:"row" }}>
@@ -74,29 +55,48 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
 }
 
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
+const [position, setPosition] = useState(1)
+
+const totalSlides = 5;
+let arrowd = null;
+
+//   Enlever la flèche lorsque on est sur le 1er ou dernier élément.
 
 
-    function handleChangeArrow() {
-        //document.getElementById("box").style.animationPlayState = "running";
-        const slides = document.querySelectorAll(".initContainerContentX");
-        document.getElementById("arrowLeft").classList.toggle("handleChangeArrow")
-
-
-        let position = 0;
-        const totalSlides = 5;
-
-        position += 1;
-
-        if (position >= totalSlides){
-
-            position = 0;
+    function handleChangeArrowLeft() {
+        if (position > 1) { 
+            setPosition(position- 1)
         }
-
-        slides.style.transform = `translateX(-${position * 100}%)`
     }
+/*
+--------------------------------------------------
+*/
+    function handleChangeArrowRight() {
+        if ( position < totalSlides) {
+            setPosition(position + 1)
+        }
+    }
+/*
+--------------------------------------------------
+*/
 
+switch ( position ){
+    case 1:
+     
+    arrowd = (<> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/freeright/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }/></>);
+    break;
 
-    return(<>
+    case 5:
+    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/freeright/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/></>)
+    break;
+
+    default:
+    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/freeright/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/freeright/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>)
+
+}
+
+    return(<> 
+  
         <div className="initInitialisationContainer">
             <h1 className="initTitle"style={{fontWeight:'bold', display:"flex",flexFlow:"column",alignItems:"center"}}> Initialisation de la phrase </h1>
             <div className="initPhraseLaunchContainer">
@@ -106,24 +106,40 @@ export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIs
                     </div>
                 </div>
             </div>
-
+                
             <div className="initPhrase">
-                {phrase[0].word} {phrase[1].word} {phrase[2].word} {phrase[3].word} {phrase[4].word}
+                <div className="init5Word position-0">
+                {phrase[0].word} 
+                <p className="p">_</p>
+                </div>
+
+                <div className="init5Word position-1">
+                {phrase[1].word} 
+                <p className="p">_</p>
+                </div>
+
+                <div className="init5Word position-2">
+                {phrase[2].word} 
+                <p className="p">_</p>
+                </div>
+
+                <div className="init5Word position-3">
+                {phrase[3].word}  
+                <p className="p">_</p>
+                </div>
+
+                <div className="init5Word position-4">      
+                {phrase[4].word} 
+                <p className="p">_</p>
+                </div>
             </div>
 
-            
-
-            <img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/freeright/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrow}/>
-
-            <img className="initRightArrow" id="arrow" src="/assets/images/element/freeright/right-arrow.png" alt="Right arrow"/>
-
-
-
+            {arrowd}
 
             <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>
 
-                <div className="initContainerVisible">       
-                    <div className="initContainerContent">
+                <div className="initContainerVisible"> 
+                    <div className={"initContainerContent position-" + position} id="slider">
                         <div className="initContainerContent1 initContainerContentX">
                             <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase[1]}/> 
                         </div >    
