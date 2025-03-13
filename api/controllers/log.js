@@ -9,6 +9,7 @@ exports.listLogs = async (req, res, next) => {
 
     const logs = await utilLog.listLogs(req)
         .catch(error => {
+            console.log(error)
             utilRes.sendError(404, error.toString(), res)
         })
 

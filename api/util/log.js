@@ -153,24 +153,38 @@ exports.listLogs = async (req) => {
         }
         Object.assign(query, minute)
     }
-
-    console.log(user)
-
-
-
     console.log(query)
 
 
     const logs = await Log.find(query)
     var logMessage = {}
     var i = 0
-    var j = 0
+
     for (const log of logs) {
+        var j = 0
         //console.log("const log of logs")
         var newLog = {}
+        if (log.game === undefined || log.game === null) {
+            log.game = {}
+            log.game._id = "none"
+            log.game.state = "none"
+            log.game.createurId = "none"
+            log.game.challengerId = "none"
+        }
+        if (log.user === undefined || log.user === null) {
+            log.user = {}
+            log.user._id = "none"
+            log.user.email = "none"
+            log.user.password = "none"
+            log.user.username = "none"
+            log.user.firstname = "none"
+            log.user.lastname = "none"
+        }
         if (req.body.data !== undefined && log.data !== undefined) {
             newLog[i] = {
                 logId: log._id,
+                reqParam: log.reqParam,
+                reqBody: log.reqBody,
                 userId: log.user._id,
                 userEmail: log.user.email,
                 userPassword: log.user.password,
@@ -187,58 +201,30 @@ exports.listLogs = async (req) => {
                 logHour: log.hour,
                 logMinute: log.minute
             }
-            //console.log("req.body.data !== undefined")
             newLog[i].data = {}
+            
             for (const d of log.data) {
-                //console.log("const d of log.data")
                 if (req.body.data.name !== undefined || req.body.data.loc !== undefined || req.body.data.value !== undefined || req.body.data.error !== undefined) {
-                    //console.log("req.data... defined")
-                    if (req.body.data.name !== undefined && d.name === req.body.data.name) {
-                        //console.log("req.body.data.name defined")
+                    if (req.body.data.name !== undefined && d.name !== undefined && d.name.toUpperCase().includes(req.body.data.name.toUpperCase())) {
                         newLog[i].data[j] = d
-                    } else if (req.body.data.loc !== undefined && d.loc === req.body.data.loc) {
-                        //console.log("req.body.data.loc defined")
+                    } else if (req.body.data.loc !== undefined && d.loc !== undefined &&  d.loc.toUpperCase().includes(req.body.data.loc.toUpperCase())) {
                         newLog[i].data[j] = d
-                    } else if (req.body.data.value !== undefined && d.value === req.body.data.value) {
-                        //console.log("req.body.data.loc value")
+                    } else if (req.body.data.value !== undefined && d.value !== undefined && JSON.stringify(d.value).toUpperCase().includes(req.body.data.value.toUpperCase())) {
+                        
                         newLog[i].data[j] = d
-                    } else if (req.body.data.error !== undefined && d.error === req.body.data.error) {
-                        //console.log("req.body.data.loc error")
+                    } else if (req.body.data.error !== undefined && d.error !== undefined && JSON.stringify(d.error).toUpperCase().includes(req.body.data.error.toUpperCase())) {
                         newLog[i].data[j] = d
-                    } else {
-                        //console.log("delete log")
                     }
-                    //console.log("req.data... defined")
                 } else {
                     newLog[i].data[j] = d
                 }
-                //console.log("const d of log.data")
                 j = j + 1
             }
-            //console.log("req.body.data !== undefined")
-        } else if (log.data !== undefined){
-            newLog[i] = {
-                logId: log._id,
-                userId: log.user._id,
-                userEmail: log.user.email,
-                userPassword: log.user.password,
-                userUsername: log.user.username,
-                userFirstname: log.user.firstname,
-                userLastname: log.user.lastname,
-                gameId: log.game._id,
-                gameState: log.game.state,
-                gameCreateurId: log.game.createurId,
-                gameChallengerId: log.game.challengerId,
-                logYear: log.year,
-                logMonth: log.month,
-                logDay: log.day,
-                logHour: log.hour,
-                logMinute: log.minute,
-                logData: log.data
-            } 
         } else {
             newLog[i] = {
                 logId: log._id,
+                reqParam: log.reqParam,
+                reqBody: log.reqBody,
                 userId: log.user._id,
                 userEmail: log.user.email,
                 userPassword: log.user.password,
@@ -254,12 +240,10 @@ exports.listLogs = async (req) => {
                 logDay: log.day,
                 logHour: log.hour,
                 logMinute: log.minute
-            } 
+            }
         }
         Object.assign(logMessage, newLog)
         i = i + 1
-        console.log(i)
-        console.log("const log of logs")
     }
 
     return logMessage

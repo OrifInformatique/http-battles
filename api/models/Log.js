@@ -3,8 +3,10 @@ const mongoose = require('mongoose')
 
 // crée un schema definissant un log
 const logSchema = mongoose.Schema({
+    reqParam: { type: Object, required: false },
+    reqBody: { type: Object, required: false },
     // client à l'origine de la requete
-    user: { type: Object, required: true },
+    user: { type: Object, required: false },
     // partie concernant la requete
     game: { type: Object, required: false },
     // année de la requete

@@ -279,13 +279,15 @@ exports.logInit = async (req, res, next) => {
     // récupère la date de la requette et sotque ses différent élément dans différente variables
     const date = new Date()
     const year = date.getFullYear()
-    const month = date.getMonth()
-    const day = date.getDay()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
     const hour = date.getHours()
     const minute = date.getMinutes()
 
     // stock l'utilisateur, la partie et la dates dans le log
     req.log = {
+        reqParam: req.param,
+        reqBody: req.body,
         user: req.user,
         game: req.game,
         year: year,
