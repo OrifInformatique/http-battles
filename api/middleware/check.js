@@ -297,30 +297,6 @@ exports.logInit = async (req, res, next) => {
     // renseigne dans quel méthode les futur erreures sont
     const LOC_LOC = "methode: logInit"
 
-    // test la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // arrète la méthode en cas de test échoué
-    if (req.utilCheck) {
-        return null
-    }
-
     await utilLog.logInitFindUserAndGame(req)
         .then(value => {
             req.package = value
