@@ -21,6 +21,7 @@ exports.getUserById = async (userId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -44,6 +45,7 @@ exports.getUserById = async (userId, req) => {
 
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "User.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,

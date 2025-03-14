@@ -32,6 +32,7 @@ exports.formatAndFilterGames = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -92,6 +93,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -135,6 +137,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityFilter",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -152,6 +155,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityFilter",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -169,6 +173,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityFilter",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -189,6 +194,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "middleGame.getCreateurUsername",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -206,6 +212,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityFilter",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -226,6 +233,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "middleGame.formatedGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -254,6 +262,7 @@ exports.checkCreatorNotNull = async (createur, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -295,6 +304,7 @@ exports.formatedMessage = async (game, createurUsername, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -334,6 +344,7 @@ exports.checkStartStat = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -357,8 +368,10 @@ exports.checkStartStat = async (req) => {
 
 // choisit aléatoirement le premier utilisateur à commencer
 exports.startCoinFlip = async (req, res) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: startCoinFlip"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -369,6 +382,7 @@ exports.startCoinFlip = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -376,6 +390,7 @@ exports.startCoinFlip = async (req, res) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
@@ -383,8 +398,10 @@ exports.startCoinFlip = async (req, res) => {
     // sort aléatoirement un résultat true or false et le stock dans une constante
     const coinFlip = Math.floor(Math.random() * 2) == 0
 
+    // retourn l'id de l'utilisateur en fonctions du resultat du test
     await this.coinFlipStartUserId(coinFlip, req)
         .then(value => {
+            // stoque cette id dans la requete
             req.startUserId = value
             req.data.push({
                 name: "this.coinFlipStartUserId",
@@ -393,6 +410,7 @@ exports.startCoinFlip = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.coinFlipStartUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -400,8 +418,10 @@ exports.startCoinFlip = async (req, res) => {
             })
         })
 
+    // retourn l'état de la partie en fonction du résultat du test
     await this.coinFlipStartGameState(coinFlip)
         .then(value => {
+            // stoque le nouvel étàt de la partie dans la requete
             req.newState = value
             req.data.push({
                 name: "this.coinFlipStartGameState",
@@ -410,6 +430,7 @@ exports.startCoinFlip = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.coinFlipStartGameState",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -417,6 +438,7 @@ exports.startCoinFlip = async (req, res) => {
             })
         })
 
+    // update la parite dans la base de donnée
     await middleGame.updateGame(req, res)
         .then(value => {
             req.newState = value.newState
@@ -428,18 +450,47 @@ exports.startCoinFlip = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "middleGame.updateGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
-
+    // retourne la variable traité pour la gestion d'erreur
     return req.startUserId
 }
 
+// retourn l'id utilisateur qui commence
 exports.coinFlipStartUserId = async (coinFlip, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: coinFlipStartUserId"
 
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // retourn l'id utilisateur contenu dans la partie en fonction du test
     if (coinFlip) {
 
         return req.game.createurId
@@ -451,8 +502,36 @@ exports.coinFlipStartUserId = async (coinFlip, req) => {
     }
 }
 
+//  retourn l'état de la partie en fonction du resultat du test
 exports.coinFlipStartGameState = async (coinFlip) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: coinFlipStartGameState"
 
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    //  retourn l'état de la partie en fonction du résultat du test
     if (coinFlip) {
 
         return "CREATEUR_TURN"
@@ -466,19 +545,46 @@ exports.coinFlipStartGameState = async (coinFlip) => {
 
 // construit le message de départ
 exports.getOtherUserId = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getOtherUserId"
 
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // si le client est le créateur, retourn l'id du challenger
     if (req.auth.userId === req.game.createurId) {
 
         return req.game.challengerId
 
     } else {
-
+        // sinon retourn l'id du créateur créateur
         return req.game.createurId
 
     }
 }
 
-
+// renvoie le message de départ décrivamt qui commence par rapport au client à l'origin de la requete
 exports.startMessageTest = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: startMessageTest"
@@ -494,6 +600,7 @@ exports.startMessageTest = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -506,16 +613,21 @@ exports.startMessageTest = async (req) => {
         return null
     }
 
+    // renvoit le message de dépar, si le client est l'utilisateur qui commence, l'informe de cela
     if (req.auth.userId === req.startUserId) {
         return "You start"
     } else {
+        // sinon, communique que l'autre utilisateur commence
         return "Your opponent start"
     }
 }
 
+// test si il s'agit du tour du client et renvoie l'identifiant du client qui commence
 exports.testTurnUserId = async (req, res) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: testTurnUserId"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -526,6 +638,7 @@ exports.testTurnUserId = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -533,12 +646,15 @@ exports.testTurnUserId = async (req, res) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // test quel utilisateur commence
     await middleGame.testTurn(req, res)
         .then(value => {
+            // retourn le résultat et le stoque dans la requete
             req.turn = value
 
             req.data.push({
@@ -548,6 +664,7 @@ exports.testTurnUserId = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "middleGame.testTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -555,15 +672,20 @@ exports.testTurnUserId = async (req, res) => {
             })
         })
 
+    // suivant le resultat du test
     if (req.turn.message === "Your turn") {
+        // stoque l'id du clien dans la requet en tant que l'utilisateur qui commence
+        req.startUserId = req.auth.userId
 
+        // retourne la variable traité pour la gestion d'erreur
         return req.auth.userId
 
     } else if (req.turn.message === "Wait") {
-
+        // retourn l'id de l'adversaire du client
         await this.getOtherUserId(req)
             .then(value => {
-                req.testTurnUserId = value
+                // stoque cette id dans la requete
+                req.startUserId = value
 
                 req.data.push({
                     name: "this.getOtherUserId",
@@ -578,13 +700,40 @@ exports.testTurnUserId = async (req, res) => {
                     error: error
                 })
             })
-        return req.testTurnUserId
+        // retourne la variable traité pour la gestion d'erreur
+        return req.startUserId
     }
 
 }
 
-
+// test quel utilisateur commence
 exports.testUserTurn = async (gameUserId, reqId) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: testUserTurn"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
 
     // test si le client est le créateur
     // si oui
@@ -602,8 +751,36 @@ exports.testUserTurn = async (gameUserId, reqId) => {
     }
 }
 
+// retourn la position y sur le plateau en fonction de la methode utilisée
 exports.switchArrayY = async (requestMode) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: switchArrayY"
 
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // retourn la position y sur le plateau en fonction de la methode utilisée
     switch (requestMode) {
 
         case "GET":
@@ -625,8 +802,36 @@ exports.switchArrayY = async (requestMode) => {
     }
 }
 
+// retourn la position x sur le plateau en fonction de la route utilisée
 exports.switchArrayX = async (requestRoad) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: switchArrayX"
 
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // retourn la position x sur le plateau en fonction de la route utilisée
     switch (requestRoad) {
 
         case "A":
@@ -649,10 +854,12 @@ exports.switchArrayX = async (requestRoad) => {
     }
 }
 
-
+// retourn l'objet du créateur de la partie en fonction de son id stocké dans la partie
 exports.getCreateur = async (req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getCreateur"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -663,6 +870,7 @@ exports.getCreateur = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -670,12 +878,15 @@ exports.getCreateur = async (req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // récupère un utilisateur suivant son id
     await utilUser.getUserById(req.game.createurId, req)
         .then(value => {
+            // stoque cette utilisateur dans la requete en tant que createur
             req.createur = value
             console.log(value)
             req.data.push({
@@ -685,6 +896,7 @@ exports.getCreateur = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilUser.getUserById",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -692,13 +904,16 @@ exports.getCreateur = async (req) => {
             })
         })
 
-
+    // retourne la variable traité pour la gestion d'erreur
     return req.createur
 }
 
+// Update le challenger de la partie dans la base de donnée
 exports.updateGameChallenger = async (req, res) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: updateGameChallenger"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -709,6 +924,7 @@ exports.updateGameChallenger = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -716,10 +932,12 @@ exports.updateGameChallenger = async (req, res) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // update le challenger de la partie en fonction des informations contenu dans la requete
     await Game.updateOne({ _id: req.body.gameId }, {
         $set: {
             challengerId: req.newChallenger
@@ -733,6 +951,7 @@ exports.updateGameChallenger = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -740,8 +959,10 @@ exports.updateGameChallenger = async (req, res) => {
             })
         })
 
+    // recupère la partie après l'update et la stoque dans la requete
     await middleGame.getGame(req, res)
         .then(value => {
+            // stoque la partie dans la requete
             req.game = value
 
             req.data.push({
@@ -751,6 +972,7 @@ exports.updateGameChallenger = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "middleGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -758,6 +980,7 @@ exports.updateGameChallenger = async (req, res) => {
             })
         })
 
+    // retourne la variable traité pour la gestion d'erreur
     return req.game
 }
 
@@ -775,6 +998,7 @@ exports.updateGameState = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -800,6 +1024,7 @@ exports.updateGameState = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -818,6 +1043,7 @@ exports.updateGameState = async (req, res) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "middleGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,

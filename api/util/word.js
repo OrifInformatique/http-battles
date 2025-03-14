@@ -18,6 +18,7 @@ exports.getWord = async (wordId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -46,6 +47,7 @@ exports.createWord = async (word, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -72,6 +74,7 @@ exports.createWord = async (word, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "newWord.save()",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -95,6 +98,7 @@ exports.revealWord = async (word, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -119,6 +123,7 @@ exports.revealWord = async (word, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "Word.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -136,6 +141,7 @@ exports.revealWord = async (word, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.getWord",
                 loc: LOC_GLOB + " " + LOC_LOC,

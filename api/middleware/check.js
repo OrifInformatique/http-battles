@@ -123,7 +123,7 @@ exports.dataValidity = async (req, res, next) => {
                     // test quel code d'erreur est le plus aproprier et remplace le code précedent
                     errorCode = await utilRes.errorCodeTest(d)
                     // transforme l'erreur en string pour que le client puis la voire
-                    d.error = d.error.toString()
+                    d.error = d.error
                 }
                 // renvoit l'erreur ave son code
                 utilRes.sendError(errorCode, d, res)
@@ -183,6 +183,7 @@ exports.dataInit = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.logInit",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -214,6 +215,7 @@ exports.logInit = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -238,6 +240,7 @@ exports.logInit = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilUser.getUserById",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -256,6 +259,7 @@ exports.logInit = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "middleGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -273,6 +277,7 @@ exports.logInit = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityFilter",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -289,6 +294,7 @@ exports.logInit = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityFilter",
                 loc: LOC_GLOB + " " + LOC_LOC,

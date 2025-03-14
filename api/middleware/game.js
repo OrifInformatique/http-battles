@@ -54,6 +54,7 @@ exports.getGame = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "Game.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -112,6 +113,7 @@ exports.getGames = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "Game.find",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -199,6 +201,7 @@ exports.formatedGame = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -224,6 +227,7 @@ exports.formatedGame = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilGame.formatedMessage",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -255,6 +259,7 @@ exports.getCreateurUsername = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -280,6 +285,7 @@ exports.getCreateurUsername = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilGame.checkCreatorNotNull",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -385,6 +391,7 @@ exports.saveGame = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "req.game.save",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -417,6 +424,7 @@ exports.joinGame = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -458,6 +466,7 @@ exports.startMessage = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -500,6 +509,7 @@ exports.startMessageTest = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -525,6 +535,7 @@ exports.startMessageTest = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilGame.startMessageTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -716,6 +727,7 @@ exports.getOtherUserId = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilGame.getOtherUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -855,6 +867,7 @@ exports.tryCase = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -912,6 +925,7 @@ exports.switchArrayY = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -937,6 +951,7 @@ exports.switchArrayY = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilGame.switchArrayY",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -970,6 +985,7 @@ exports.switchArrayX = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -995,6 +1011,7 @@ exports.switchArrayX = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilGame.switchArrayX",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -1272,6 +1289,7 @@ exports.checkStartStat = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilGame.checkStartStat",
                 loc: LOC_GLOB + " " + LOC_LOC,

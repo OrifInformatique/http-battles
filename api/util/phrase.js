@@ -20,6 +20,7 @@ exports.createPhrase = async (userPhrase, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -41,6 +42,7 @@ exports.createPhrase = async (userPhrase, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.fillPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -62,6 +64,7 @@ exports.createPhrase = async (userPhrase, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "phrase.save",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -85,6 +88,7 @@ exports.fillPhrase = async (userPhrase, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,

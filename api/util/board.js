@@ -21,6 +21,7 @@ exports.createBoard = async (gameId, userId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -53,6 +54,7 @@ exports.createBoard = async (gameId, userId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.saveBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -76,6 +78,7 @@ exports.saveBoard = async (board, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -97,6 +100,7 @@ exports.saveBoard = async (board, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "board.save",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -120,6 +124,7 @@ exports.getBoard = async (req, boardId) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -141,6 +146,7 @@ exports.getBoard = async (req, boardId) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -165,6 +171,7 @@ exports.getBoardGameUser = async (gameId, userId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -189,6 +196,7 @@ exports.getBoardGameUser = async (gameId, userId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -212,6 +220,7 @@ exports.fillBoard = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -233,6 +242,7 @@ exports.fillBoard = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.createBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -250,6 +260,7 @@ exports.fillBoard = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilPhrase.createPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -267,6 +278,7 @@ exports.fillBoard = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.insertPhraseInBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -284,6 +296,7 @@ exports.fillBoard = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.updateBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -307,6 +320,7 @@ exports.insertPhraseInBoard = async (board, userPhrase, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -352,6 +366,7 @@ exports.insertPhraseInBoardY = async (board, userPhrase, keyY, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -397,6 +412,7 @@ exports.insertPhraseInBoardX = async (userPhrase, keyY, keyX, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -452,6 +468,7 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -473,6 +490,7 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.getBoardGameUser",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -521,6 +539,7 @@ exports.checkBoardSuccess = async (y, x, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -545,6 +564,7 @@ exports.checkBoardSuccess = async (y, x, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilWord.revealWord",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -563,6 +583,7 @@ exports.checkBoardSuccess = async (y, x, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.updateBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -591,6 +612,7 @@ exports.updateBoard = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -618,6 +640,7 @@ exports.updateBoard = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "Board.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -636,6 +659,7 @@ exports.updateBoard = async (req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.getBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -659,6 +683,7 @@ exports.tryPhrase = async (adversaireId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -680,6 +705,7 @@ exports.tryPhrase = async (adversaireId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.getBoardGameUser",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -698,6 +724,7 @@ exports.tryPhrase = async (adversaireId, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "this.tryPhraseCheckAdv",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -725,6 +752,7 @@ exports.tryPhraseCheckAdv = async (advBoard, req) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -770,6 +798,7 @@ exports.tryPhraseCheckReq = async (advBoard, req, keyAdv) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -815,6 +844,7 @@ exports.tryPhraseCheckAll = async (advBoard, req, keyAdv, keyReq) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,

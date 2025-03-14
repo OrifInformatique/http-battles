@@ -27,6 +27,7 @@ exports.getCreatorById = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -52,6 +53,7 @@ exports.getCreatorById = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilUser.getUserById",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -86,6 +88,7 @@ exports.getUserById = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -111,6 +114,7 @@ exports.getUserById = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilUser.getUserById",
                 loc: LOC_GLOB + " " + LOC_LOC,
