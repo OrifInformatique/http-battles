@@ -178,10 +178,10 @@ exports.listLogs = async (req) => {
     var query = {}
 
     if (req.body.logId !== undefined) {
-        logId = {
+        var logId = {
             "_id": mongoose.Types.ObjectId(req.body.logId)
         }
-        Object.assign(query, user.userId)
+        Object.assign(query, logId)
     }
 
     if (req.auth.userId !== undefined) {
