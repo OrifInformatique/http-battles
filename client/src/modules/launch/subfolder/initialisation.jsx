@@ -56,29 +56,23 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
 
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
 const [position, setPosition] = useState(1)
-
 const totalSlides = 5;
+let positionSet = "position-";
 let arrowd = null;
-
+let positiond = null;
+console.log(positionSet+position)
 //   Enlever la flèche lorsque on est sur le 1er ou dernier élément.
-
-
     function handleChangeArrowLeft() {
         if (position > 1) { 
             setPosition(position- 1)
         }
     }
-/*
---------------------------------------------------
-*/
+
     function handleChangeArrowRight() {
         if ( position < totalSlides) {
             setPosition(position + 1)
         }
     }
-/*
---------------------------------------------------
-*/
 
 switch ( position ){
     case 1:
@@ -92,9 +86,33 @@ switch ( position ){
 
     default:
     arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/freeright/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/freeright/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>)
+    
 
 }
 
+switch ( position ) {
+    case 1: 
+        
+    break;
+    case 2: 
+    break;
+    case 3: 
+    break;
+    case 4: 
+    break;
+    case 5: 
+    break;
+    
+}
+
+
+
+/*
+if (position === 1)
+{
+    document.getElementById(positionSet+position).classList.add("active")
+}
+*/
     return(<> 
   
         <div className="initInitialisationContainer">
@@ -108,8 +126,9 @@ switch ( position ){
             </div>
                 
             <div className="initPhrase">
-                <div className="init5Word position-0">
+                <div className="init5Word " id="position-0">
                 {phrase[0].word} 
+               {/* <img className="p" src="/assets/images/element/sword_1.png" alt="sword" style={{position:"absolute",width:"200px",height:"30px"}}/>*/}
                 <p className="p">_</p>
                 </div>
 
