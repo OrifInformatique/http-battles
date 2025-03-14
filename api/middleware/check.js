@@ -17,23 +17,162 @@ const middleGame = require('./game')
 const LOC_GLOB = "file: ../middlware/check"
 
 
-exports.checkReqDataStart = async (req, res, next) => {
+exports.checkReqDataStartGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
-    const LOC_LOC = "methode: checkReqDataStart"
+    const LOC_LOC = "methode: checkReqDataStartGame"
     const error = {
-        name: "Wrong input"
+        name: "Client input error"
     }
 
-    if(req.body.phrase === undefined){
+    if (req.body.phrase === undefined) {
+        error.error = "phrase not found"
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
             error: error
         })
     }
-    
+
+    if (req.body.gameId === undefined) {
+        error.error = "gameId not found"
+        req.data.push({
+            name: "utilCheck.dataValidityTest",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+    }
+
     next()
-    
+
+}
+
+exports.checkReqDataTryPhrase = async (req, res, next) => {
+    // constante local indiquant la methode pour le traitement des erreures
+    const LOC_LOC = "methode: checkReqDataTryPhrase"
+    const error = {
+        name: "Client input error"
+    }
+
+    if (req.body.phrase === undefined) {
+        error.error = "phrase not found"
+        req.data.push({
+            name: "utilCheck.dataValidityTest",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+    }
+
+    if (req.body.gameId === undefined) {
+        error.error = "gameId not found"
+        req.data.push({
+            name: "utilCheck.dataValidityTest",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+    }
+
+    next()
+
+}
+
+exports.checkReqDataFindGame = async (req, res, next) => {
+    // constante local indiquant la methode pour le traitement des erreures
+    const LOC_LOC = "methode: checkReqDataFindGame"
+    const error = {
+        name: "Client input error"
+    }
+
+    if (req.body.gameId === undefined) {
+        error.error = "gameId not found"
+        req.data.push({
+            name: "utilCheck.dataValidityTest",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+    }
+
+    next()
+
+}
+
+exports.checkReqDataJoinGame = async (req, res, next) => {
+    // constante local indiquant la methode pour le traitement des erreures
+    const LOC_LOC = "methode: checkReqDataJoinGame"
+    const error = {
+        name: "Client input error"
+    }
+
+    if (req.body.gameId === undefined) {
+        error.error = "gameId not found"
+        req.data.push({
+            name: "utilCheck.dataValidityTest",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+    }
+
+    next()
+
+}
+
+exports.checkReqDataCheckTurn = async (req, res, next) => {
+    // constante local indiquant la methode pour le traitement des erreures
+    const LOC_LOC = "methode: checkReqDataCheckTurn"
+    const error = {
+        name: "Client input error"
+    }
+
+    if (req.body.gameId === undefined) {
+        error.error = "gameId not found"
+        req.data.push({
+            name: "utilCheck.dataValidityTest",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+    }
+
+    next()
+
+}
+
+exports.checkReqDataEndGame = async (req, res, next) => {
+    // constante local indiquant la methode pour le traitement des erreures
+    const LOC_LOC = "methode: checkReqDataEndGame"
+    const error = {
+        name: "Client input error"
+    }
+
+    if (req.body.gameId === undefined) {
+        error.error = "gameId not found"
+        req.data.push({
+            name: "utilCheck.dataValidityTest",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+    }
+
+    next()
+
+}
+
+exports.checkReqDataTryCase = async (req, res, next) => {
+    // constante local indiquant la methode pour le traitement des erreures
+    const LOC_LOC = "methode: checkReqDataTryCase"
+    const error = {
+        name: "Client input error"
+    }
+
+    if (req.body.gameId === undefined) {
+        error.error = "gameId not found"
+        req.data.push({
+            name: "utilCheck.dataValidityTest",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+    }
+
+    next()
+
 }
 
 // vérify si il s'agit du tour du client
@@ -109,7 +248,7 @@ exports.dataValidity = async (req, res, next) => {
     // test si les données exist
     if (req.data !== undefined) {
         // parcour les données 
-       
+
         for (const d of req.data) {
             // stock les donnée dans le log
             req.log.data.push(d)
@@ -128,7 +267,7 @@ exports.dataValidity = async (req, res, next) => {
                 utilRes.sendError(errorCode, d, res)
             }
         }
-        
+
 
         await utilLog.logToDatabase(req.log)
     }
@@ -141,55 +280,12 @@ exports.dataValidity = async (req, res, next) => {
 
 // initialise les données et le log pour pouvoire les tester
 exports.dataInit = async (req, res, next) => {
-    
     // informe dans quel méthodes les potentielles erreurs interne se trouve
     const LOC_LOC = "methode: dataInit"
+
     //initialise les données
     req.data = []
-    // test les données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            // résultat du test
-            req.utilCheck = value
 
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // arrète la méthode en cas de test échoué
-    if (req.utilCheck) {
-        return null
-    }
-
-    // initialise le log
-    await this.logInit(req, res)
-        .then(() => {
-            req.data.push({
-                name: "this.logInit",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: "success"
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.logInit",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-    
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()
@@ -198,13 +294,11 @@ exports.dataInit = async (req, res, next) => {
 
 // initialise le log
 exports.logInit = async (req, res, next) => {
-    req.log = {}
-    
     // renseigne dans quel méthode les futur erreures sont
     const LOC_LOC = "methode: logInit"
 
     // test la validité des données
-    await utilCheck.dataValidityTest(req)
+    await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value
             req.data.push({
@@ -227,13 +321,12 @@ exports.logInit = async (req, res, next) => {
         return null
     }
 
-    // récupère les donnée utilisateur du client
-    await utilUser.getUserById(req.auth.userId, req)
+    await utilLog.logInitFindUserAndGame(req)
         .then(value => {
-            req.user = value
+            req.package = value
 
             req.data.push({
-                name: "utilUser.getUserById",
+                name: "utilLog.logInitFindUserAndGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -241,88 +334,50 @@ exports.logInit = async (req, res, next) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilUser.getUserById",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-    
-    // récupère les données de la partie
-    await middleGame.getGame(req, res)
-        .then(value => {
-            req.game = value
-            req.data.push({
-                name: "middleGame.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "middleGame.getGame",
+                name: "utilLog.logInitFindUserAndGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // filtre les erreurs dans le cas ou la partie n'existe pas car toutes les requette n'auront pas de partie associées
-    await utilCheck.dataValidityFilter(req, "Game.findOne")
+    await utilLog.logDate(req)
         .then(value => {
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-    // filtre les erreurs dans le cas ou la partie n'existe pas car toutes les requette n'auront pas de partie associées
-    await utilCheck.dataValidityFilter(req, "middleGame.getGame")
-        .then(value => {
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-    
-    // récupère la date de la requette et sotque ses différent élément dans différente variables
-    const date = new Date()
-    const year = date.getFullYear()
-    const month = date.getMonth() + 1
-    const day = date.getDate()
-    const hour = date.getHours() + 1
-    const minute = date.getMinutes() + 1
+            req.package = value
 
-    // stock l'utilisateur, la partie et la dates dans le log
-    req.log = {
-        reqParam: req.param,
-        reqBody: req.body,
-        user: req.user,
-        game: req.game,
-        year: year,
-        month: month,
-        day: day,
-        hour: hour,
-        minute: minute,
-        data: req.data.slice()
-    }
-    
+            req.data.push({
+                name: "utilLog.logDate",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilLog.logDate",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await utilLog.logConstructor(req)
+        .then(() => {
+
+            req.data.push({
+                name: "utilLog.logDate",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: "log construction"
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilLog.logDate",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()

@@ -3,6 +3,18 @@ const mongoose = require('mongoose');
 // import le schema d'un utilisateur
 const Log = require("../models/Log")
 
+// import fonctions contenu dans middleware/game
+const middleGame = require('../middleware/game')
+
+// import fonctions util pour board
+const utilCheck = require('../util/check')
+
+// import fonctions util pour user
+const utilUser = require('../util/user')
+
+// location global pour la gestion d'erreur
+const LOC_GLOB = "file: ../util/log"
+
 exports.logObjectCreation = async (log) => {
 
     // cée un objet de log
@@ -36,10 +48,133 @@ exports.logToDatabase = async (log) => {
     return savedLog
 }
 
+exports.logInitFindUserAndGame = async (req) => {
+    // renseigne dans quel méthode les futur erreures sont
+    const LOC_LOC = "methode: logInitFindUserAndGame"
+
+    if(req.package === undefined){
+        req.package = {}
+    }
+
+    if (req.auth.userId !== undefined) {
+        // récupère les donnée utilisateur du client
+        await utilUser.getUserById(req.auth.userId, req)
+            .then(value => {
+                req.user = value
+                req.package.user = value
+
+                req.data.push({
+                    name: "utilUser.getUserById",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilUser.getUserById",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+
+    if (req.body.gameId !== undefined) {
+        // récupère les données de la partie
+        await middleGame.getGame(req)
+            .then(value => {
+                req.game = value
+                req.package.game = value
+
+                req.data.push({
+                    name: "middleGame.getGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "middleGame.getGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+
+    return req.package
+}
+
+exports.logDate = async (req) => {
+    // renseigne dans quel méthode les futur erreures sont
+    const LOC_LOC = "methode: logDate"
+
+    if(req.package === undefined){
+        req.package = {}
+    }
+
+    // récupère la date de la requette et sotque ses différent élément dans différente variables
+    req.package.date = new Date()
+    req.package.year = req.package.date.getFullYear()
+    req.package.month = req.package.date.getMonth() + 1
+    req.package.day = req.package.date.getDate()
+    req.package.hour = req.package.date.getHours() + 1
+    req.package.minute = req.package.date.getMinutes() + 1
+
+    return req.package
+}
+
+exports.logConstructor = async (req) => {
+    // renseigne dans quel méthode les futur erreures sont
+    const LOC_LOC = "methode: logConstructor"
+
+
+    req.log = {}
+
+    if (req.body !== undefined) {
+        req.log.body = req.body
+    }
+
+    if (req.package.user !== undefined) {
+        req.log.user = req.package.user
+    }
+
+    if (req.package.game !== undefined) {
+        req.log.game = req.package.game
+    }
+
+    if (req.package.date !== undefined) {
+        req.log.date = req.package.date
+    }
+
+    if (req.package.year !== undefined) {
+        req.log.year = req.package.year
+    }
+
+    if (req.package.month !== undefined) {
+        req.log.month = req.package.month
+    }
+
+    if (req.package.day !== undefined) {
+        req.log.day = req.package.day
+    }
+
+    if (req.package.hour !== undefined) {
+        req.log.hour = req.package.hour
+    }
+
+    if (req.package.hour !== undefined) {
+        req.log.minute = req.package.minute
+    }
+
+    if (req.data !== undefined) {
+        req.log.data = req.data.slice()
+    }
+}
+
 exports.listLogs = async (req) => {
     var user = {}
     var game = {}
-    var data = {}
     var query = {}
 
     if (req.body.logId !== undefined) {
@@ -200,15 +335,15 @@ exports.listLogs = async (req) => {
                 logMinute: log.minute
             }
             newLog[i].data = {}
-            
+
             for (const d of log.data) {
                 if (req.body.data.name !== undefined || req.body.data.loc !== undefined || req.body.data.value !== undefined || req.body.data.error !== undefined) {
                     if (req.body.data.name !== undefined && d.name !== undefined && d.name.toUpperCase().includes(req.body.data.name.toUpperCase())) {
                         newLog[i].data[j] = d
-                    } else if (req.body.data.loc !== undefined && d.loc !== undefined &&  d.loc.toUpperCase().includes(req.body.data.loc.toUpperCase())) {
+                    } else if (req.body.data.loc !== undefined && d.loc !== undefined && d.loc.toUpperCase().includes(req.body.data.loc.toUpperCase())) {
                         newLog[i].data[j] = d
                     } else if (req.body.data.value !== undefined && d.value !== undefined && JSON.stringify(d.value).toUpperCase().includes(req.body.data.value.toUpperCase())) {
-                        
+
                         newLog[i].data[j] = d
                     } else if (req.body.data.error !== undefined && d.error !== undefined && JSON.stringify(d.error).toUpperCase().includes(req.body.data.error.toUpperCase())) {
                         newLog[i].data[j] = d

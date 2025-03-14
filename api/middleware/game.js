@@ -12,7 +12,6 @@ const LOC_GLOB = "file: ../middleware/game"
 
 // retourne une partie selon sont id
 exports.getGame = async (req, res, next) => {
-    console.log(req.data)
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getGame"
 
