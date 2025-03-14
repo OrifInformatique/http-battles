@@ -605,7 +605,7 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
             })
         })
 
-        // test si la case du plateau n'est pas null
+    // test si la case du plateau n'est pas null
     if (req.board.board[y][x] !== null) {
 
         // si elle n'est pas null revelle la cas et retourn le mot
@@ -638,9 +638,12 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
     return req.result
 }
 
+// effectue les opération en cas de success pour le cheque de la case
 exports.checkBoardSuccess = async (y, x, req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: checkBoardSuccess"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -659,14 +662,15 @@ exports.checkBoardSuccess = async (y, x, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
-
-
+    // revèle le mot
     await utilWord.revealWord(req.board.board[y][x], req)
         .then(value => {
+            // stoque le mot dans la case du tableau du plateau dans la requete
             req.board.board[y][x] = value
 
             req.data.push({
@@ -683,9 +687,11 @@ exports.checkBoardSuccess = async (y, x, req) => {
                 error: error
             })
         })
-    console.log("test")
+
+    // updadet le plateau avec le nouveaux tableaux
     await this.updateBoard(req)
         .then(value => {
+            // stoque le nouveaux tableaux dans la requete
             req.board = value
 
             req.data.push({
@@ -703,17 +709,22 @@ exports.checkBoardSuccess = async (y, x, req) => {
             })
         })
 
+    // stoque le mot et le succes du check dans un objet résultat dans la requete
     req.result = {
         word: req.board.board[y][x],
         result: true
     }
 
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.result
 }
 
+// update le plateau
 exports.updateBoard = async (req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: updateBoard"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -732,10 +743,12 @@ exports.updateBoard = async (req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // update le tableau en fonction du contenu de la requete
     await Board.updateOne({ _id: req.board._id }, {
         $set: {
             gameId: req.board.gameId,
@@ -760,8 +773,10 @@ exports.updateBoard = async (req) => {
             })
         })
 
+    // récupère le tableau après l'update
     await this.getBoard(req, req.board._id)
         .then(value => {
+            // stoque le tableaux dans la requete
             req.board = value
 
             req.data.push({
@@ -779,12 +794,16 @@ exports.updateBoard = async (req) => {
             })
         })
 
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.board
 }
 
+// test la phrase fourni par le client
 exports.tryPhrase = async (adversaireId, req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: tryPhrase"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -803,12 +822,15 @@ exports.tryPhrase = async (adversaireId, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // récupère le plateau en fonction d'un id utilisateur et d'un id de pertie
     await this.getBoardGameUser(req.body.gameId, adversaireId, req)
         .then(value => {
+            // retourne le plateau de l'adversaire du client et le stoque dans la requete
             req.advBoard = value
             req.data.push({
                 name: "this.getBoardGameUser",
@@ -825,9 +847,12 @@ exports.tryPhrase = async (adversaireId, req) => {
             })
         })
 
+    // intialise un compteur de mot de la phrase dans la requete
     req.wordCounter = 0
+    // test si la phrase proposé par le client est la mème que celle de 'l'adversaire
     await this.tryPhraseCheckAdv(req.advBoard, req)
         .then(value => {
+            // retourn le nombre de mot juste
             req.wordCounter = value
             req.data.push({
                 name: "this.tryPhraseCheckAdv",
@@ -843,7 +868,7 @@ exports.tryPhrase = async (adversaireId, req) => {
                 error: error
             })
         })
-
+    // si le nombre de mot just est égale à la longueur en mots de la phrase, renvoie vrai sinon faux
     if (req.wordCounter === req.advBoard.phrase.words.length) {
         return true
     } else {
@@ -851,9 +876,12 @@ exports.tryPhrase = async (adversaireId, req) => {
     }
 }
 
+// test si la phrase proposé par le client est la mème que celle de 'l'adversaire
 exports.tryPhraseCheckAdv = async (advBoard, req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: tryPhraseCheckAdv"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -872,13 +900,17 @@ exports.tryPhraseCheckAdv = async (advBoard, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // parcour la phrase du plateau adverse
     for (const keyAdv in advBoard.phrase.words) {
+        // test si le mot est le même que celui de la requete et au même endroit
         await this.tryPhraseCheckReq(advBoard, req, keyAdv)
             .then(value => {
+                // retourn le nombre de mot juste
                 req.wordCounter = value
                 req.data.push({
                     name: "this.tryPhraseCheckReq",
@@ -894,12 +926,17 @@ exports.tryPhraseCheckAdv = async (advBoard, req) => {
                 })
             })
     }
+
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.wordCounter
 }
 
+// test si le mot est le même que celui de la requete et au même endroit
 exports.tryPhraseCheckReq = async (advBoard, req, keyAdv) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: tryPhraseCheckReq"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -918,13 +955,17 @@ exports.tryPhraseCheckReq = async (advBoard, req, keyAdv) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // parcoure la phrase de la requete
     for (const keyReq in req.body.phrase) {
+        // test si le mot est le même que celui contenu dans le plateau
         await this.tryPhraseCheckAll(advBoard, req, keyAdv, keyReq)
             .then(value => {
+                // retourn le nombre de mot just
                 req.wordCounter = value
                 req.data.push({
                     name: "this.tryPhraseCheckAll",
@@ -940,12 +981,17 @@ exports.tryPhraseCheckReq = async (advBoard, req, keyAdv) => {
                 })
             })
     }
+
+    // retourne la variable traitéeF pour la gestion d'erreu
     return req.wordCounter
 }
 
+// test si le mot est le même que celui contenu dans le plateau
 exports.tryPhraseCheckAll = async (advBoard, req, keyAdv, keyReq) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: tryPhraseCheckAll"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -964,12 +1010,17 @@ exports.tryPhraseCheckAll = async (advBoard, req, keyAdv, keyReq) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // test si le mot est le mem que celui contenu dans cette case du plateau et au meme endroit
     if (advBoard.phrase.words[keyAdv].content === req.body.phrase[keyReq].word.content && keyAdv === keyReq) {
+        // si oui, incremente le compteur de mot juste
         req.wordCounter = req.wordCounter + 1
     }
+
+    // retourne la variable traitéeF pour la gestion d'erreu
     return req.wordCounter
 }
