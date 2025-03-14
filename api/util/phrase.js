@@ -2,10 +2,13 @@ const Phrase = require('../models/Phrase')
 // import fonctions util pour word
 const utilWord = require('../util/word')
 
-const LOC_GLOB = "file: ../util/phrase"
-
 // import fonctions util pour board
 const utilCheck = require('../util/check')
+
+// location global pour la gestion d'erreur
+const LOC_GLOB = "file: ../util/phrase"
+
+
 
 // crée une phrase et l'enregistre dans la base donnée
 exports.createPhrase = async (userPhrase, req) => {
@@ -142,7 +145,7 @@ exports.fillPhrase = async (userPhrase, req) => {
         // ajoute le mot au tableaux d'objet dans la requete
         req.wordObjectsArray.push(req.word)
     }
-    
+
     // retourne la variable traitée pour la gestion d'erreur
     return req.wordObjectsArray
 }
