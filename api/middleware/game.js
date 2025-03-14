@@ -630,7 +630,7 @@ exports.testTurn = async (req, res, next) => {
     // si c'est le tour du créateur
     if (req.game.state === "CREATEUR_TURN") {
         // test si le client est le créateur et renvoit un message pour lui indiquer si c'est son tour
-        await utilGame.testUserTurn(req.game.createurId, req.auth.userId)
+        await utilGame.testUserTurn(req.game.createurId, req.auth.userId, req)
             .then(value => {
                 // stocke le message de réponse dans la requete
                 req.testTurnMessage = value
@@ -652,7 +652,7 @@ exports.testTurn = async (req, res, next) => {
         // si c'est le tour du challenger
     } else if (req.game.state === "CHALLENGER_TURN") {
         // test si le client est le challenger et renvoit un message pour lui indiquer si c'est son tour
-        await utilGame.testUserTurn(req.game.challengerId, req.auth.userId)
+        await utilGame.testUserTurn(req.game.challengerId, req.auth.userId, req)
             .then(value => {
                 req.testTurnMessage = value
 
@@ -939,7 +939,7 @@ exports.switchArrayY = async (req, res, next) => {
     }
 
     // retourne la position y de la case sur le plateaux en fonction de la méthode utilisée
-    await utilGame.switchArrayY(req.method)
+    await utilGame.switchArrayY(req.method, req)
         .then(value => {
             // stoque la position Y du plateau dans la requette
             req.arrayY = value
@@ -999,7 +999,7 @@ exports.switchArrayX = async (req, res, next) => {
     }
 
     // retourne la position X de la case sur le plateaux en fonction de la route utilisée
-    await utilGame.switchArrayX(req.route)
+    await utilGame.switchArrayX(req.route, req)
         .then(value => {
             // stoque la position X du plateau dans la requette
             req.arrayX = value

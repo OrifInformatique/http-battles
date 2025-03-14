@@ -23,7 +23,7 @@ exports.checkReqDataStart = async (req, res, next) => {
     const error = {
         name: "Wrong input"
     }
-    if(req.body.phase === undefined){
+    if(req.body.phrase === undefined){
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -114,8 +114,6 @@ exports.dataValidity = async (req, res, next) => {
             req.log.data.push(d)
             // test si les donées ont une valeur (si non cela veut dire qu'il s'agit d'une erreure)
             if (d.value === null || d.value === undefined) {
-                // affiche l'erreur dans la console
-                console.log(d)
                 // set le code d'erreur à 400 (erreur dans la requette reçu du client) comme base
                 var errorCode = 400
                 // test si l'erreur est défini (si l'erreur est défini run le code dans le test)
@@ -123,7 +121,7 @@ exports.dataValidity = async (req, res, next) => {
                     // test quel code d'erreur est le plus aproprier et remplace le code précedent
                     errorCode = await utilRes.errorCodeTest(d)
                     // transforme l'erreur en string pour que le client puis la voire
-                    d.error = d.error
+                    d.error = d.error.toString()
                 }
                 // renvoit l'erreur ave son code
                 utilRes.sendError(errorCode, d, res)

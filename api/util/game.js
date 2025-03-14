@@ -419,7 +419,7 @@ exports.startCoinFlip = async (req, res) => {
         })
 
     // retourn l'état de la partie en fonction du résultat du test
-    await this.coinFlipStartGameState(coinFlip)
+    await this.coinFlipStartGameState(coinFlip, req)
         .then(value => {
             // stoque le nouvel étàt de la partie dans la requete
             req.newState = value
@@ -503,7 +503,7 @@ exports.coinFlipStartUserId = async (coinFlip, req) => {
 }
 
 //  retourn l'état de la partie en fonction du resultat du test
-exports.coinFlipStartGameState = async (coinFlip) => {
+exports.coinFlipStartGameState = async (coinFlip, req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: coinFlipStartGameState"
 
@@ -707,7 +707,7 @@ exports.testTurnUserId = async (req, res) => {
 }
 
 // test quel utilisateur commence
-exports.testUserTurn = async (gameUserId, reqId) => {
+exports.testUserTurn = async (gameUserId, reqId, req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: testUserTurn"
 
@@ -752,7 +752,7 @@ exports.testUserTurn = async (gameUserId, reqId) => {
 }
 
 // retourn la position y sur le plateau en fonction de la methode utilisée
-exports.switchArrayY = async (requestMode) => {
+exports.switchArrayY = async (requestMode, req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: switchArrayY"
 
@@ -803,7 +803,7 @@ exports.switchArrayY = async (requestMode) => {
 }
 
 // retourn la position x sur le plateau en fonction de la route utilisée
-exports.switchArrayX = async (requestRoad) => {
+exports.switchArrayX = async (requestRoad, req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: switchArrayX"
 
