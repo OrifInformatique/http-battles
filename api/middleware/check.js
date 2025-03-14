@@ -23,6 +23,7 @@ exports.checkReqDataStart = async (req, res, next) => {
     const error = {
         name: "Wrong input"
     }
+
     if(req.body.phrase === undefined){
         req.data.push({
             name: "utilCheck.dataValidityTest",
@@ -158,7 +159,7 @@ exports.dataInit = async (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log("error")
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -305,8 +306,8 @@ exports.logInit = async (req, res, next) => {
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
-    const hour = date.getHours()
-    const minute = date.getMinutes()
+    const hour = date.getHours() + 1
+    const minute = date.getMinutes() + 1
 
     // stock l'utilisateur, la partie et la dates dans le log
     req.log = {

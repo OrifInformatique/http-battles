@@ -21,7 +21,7 @@ exports.logObjectCreation = async (log) => {
 }
 
 exports.logObjectSave = async (log) => {
-    console.log(log.data)
+
     const savedLog = await log.save()
 
     return savedLog
@@ -153,7 +153,6 @@ exports.listLogs = async (req) => {
         }
         Object.assign(query, minute)
     }
-    console.log(query)
 
 
     const logs = await Log.find(query)
@@ -162,7 +161,6 @@ exports.listLogs = async (req) => {
 
     for (const log of logs) {
         var j = 0
-        //console.log("const log of logs")
         var newLog = {}
         if (log.game === undefined || log.game === null) {
             log.game = {}
