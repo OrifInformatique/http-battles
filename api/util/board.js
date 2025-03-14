@@ -6,11 +6,15 @@ const utilWord = require('../util/word')
 // import fonctions util pour check
 const utilCheck = require('../util/check')
 
+// location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/board"
 
+// ccrée un plateau de jeux
 exports.createBoard = async (gameId, userId, req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: createBoard"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -29,10 +33,12 @@ exports.createBoard = async (gameId, userId, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // crée un nouveaux plateau de jeux
     const board = new Board({
         gameId: gameId,
         userId: userId,
@@ -44,8 +50,10 @@ exports.createBoard = async (gameId, userId, req) => {
         ]
     })
 
+    // stoque le plateau dans la base donnée
     await this.saveBoard(board, req)
         .then(value => {
+            // retourne le plateau sauvegarder et le stoque dans la requete
             req.newBoard = value
             req.data.push({
                 name: "this.saveBoard",
@@ -61,13 +69,16 @@ exports.createBoard = async (gameId, userId, req) => {
                 error: error
             })
         })
-    console.log(req.newBoard)
+    // retourne la variable traité pour la gestion d'erreur
     return req.newBoard
 }
 
+// stoque le plateua dans la requete
 exports.saveBoard = async (board, req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: saveBoard"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -86,12 +97,15 @@ exports.saveBoard = async (board, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // sauvegarde le plateau dans la base donnée
     await board.save()
         .then(value => {
+            // stoque le plateau dans la requete
             req.newBoard = value
             req.data.push({
                 name: "board.save",
@@ -108,12 +122,16 @@ exports.saveBoard = async (board, req) => {
             })
         })
 
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.newBoard
 }
 
+// retourne le plateau selon son id
 exports.getBoard = async (req, boardId) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getBoard"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -132,12 +150,15 @@ exports.getBoard = async (req, boardId) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // récupère le plateau dans la base données selon son id
     await Board.findOne({ _id: boardId })
         .then(value => {
+            // stoque le plateau dans la requete
             req.board = value
             req.data.push({
                 name: "Board.findOne",
@@ -154,13 +175,16 @@ exports.getBoard = async (req, boardId) => {
             })
         })
 
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.board
 }
 
-
+// retourn un plateau de jeux selon l'identifiant de son utilisateur et de la partie
 exports.getBoardGameUser = async (gameId, userId, req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getBoardGameUser"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -179,15 +203,18 @@ exports.getBoardGameUser = async (gameId, userId, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // trouve le plateau en fonction de l'id de son utilisateur et de la partie
     await Board.findOne({
         gameId: gameId,
         userId: userId
     })
         .then(value => {
+            // stoque le plateau dans la requete
             req.board = value
             req.data.push({
                 name: "Board.findOne",
@@ -204,12 +231,16 @@ exports.getBoardGameUser = async (gameId, userId, req) => {
             })
         })
 
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.board
 }
 
+// crée et remplie le plateau avec les mot de la phrase
 exports.fillBoard = async (req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: fillBoard"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -228,12 +259,15 @@ exports.fillBoard = async (req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // crée le plateau pour le client pour une partie
     await this.createBoard(req.body.gameId, req.auth.userId, req)
         .then(value => {
+            // stoque le plateau dans la requete
             req.board = value
             req.data.push({
                 name: "this.createBoard",
@@ -249,9 +283,11 @@ exports.fillBoard = async (req) => {
                 error: error
             })
         })
-        
+
+    // crée une phrase en fonction de la phrase dans la requete
     await utilPhrase.createPhrase(req.board._id, req.body.phrase, req)
         .then(value => {
+            // stoque la nouvele phrase dans le plateau de la requete
             req.board.phrase = value
             req.data.push({
                 name: "utilPhrase.createPhrase",
@@ -267,9 +303,11 @@ exports.fillBoard = async (req) => {
                 error: error
             })
         })
-        
+
+    // insert la phrase dans le plateau du plateau de la requete
     await this.insertPhraseInBoard(req.board, req.board.phrase, req)
         .then(value => {
+            // retourn le plateau rempli et le stoque dans le plateau de la requete
             req.board.board = value
             req.data.push({
                 name: "this.insertPhraseInBoard",
@@ -286,8 +324,10 @@ exports.fillBoard = async (req) => {
             })
         })
 
+    // update le plateau de la requette
     await this.updateBoard(req)
         .then(value => {
+            // stoque le plateau après update dans la requete
             req.board = value
             req.data.push({
                 name: "this.updateBoard",
@@ -303,13 +343,16 @@ exports.fillBoard = async (req) => {
                 error: error
             })
         })
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.board
 }
 
-
+// insert les mot de la phrse dans le plateau selon leur position
 exports.insertPhraseInBoard = async (board, userPhrase, req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: insertPhraseInBoard"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -328,11 +371,17 @@ exports.insertPhraseInBoard = async (board, userPhrase, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
+
+    // initialise le nouveau plateau qui sera remplit
     req.newBoardFull = []
+
+    // parcoure l'ancien plateau dans le plateau de la requette
     for (const keyY in board.board) {
+        // Crée et remplie les ligne du plateau
         await this.insertPhraseInBoardY(board, userPhrase, keyY, req)
             .then(value => {
                 req.data.push({
@@ -349,13 +398,16 @@ exports.insertPhraseInBoard = async (board, userPhrase, req) => {
                 })
             })
     }
-
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.newBoardFull
 }
 
+// Crée et remplie les ligne du plateau
 exports.insertPhraseInBoardY = async (board, userPhrase, keyY, req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: insertPhraseInBoardY"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -374,12 +426,17 @@ exports.insertPhraseInBoardY = async (board, userPhrase, keyY, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // pousse une ligne dans le plateau
     req.newBoardFull.push([])
+
+    // parcour les case de la ligne Y de l'ancient plateaux
     for (const keyX in board.board[keyY]) {
+        // insert les case de la ligne du nouveaux plateaux et les remplie 
         await this.insertPhraseInBoardX(userPhrase, keyY, keyX, req)
             .then(value => {
                 req.data.push({
@@ -389,6 +446,7 @@ exports.insertPhraseInBoardY = async (board, userPhrase, keyY, req) => {
                 })
             })
             .catch(error => {
+                console.log(error)
                 req.data.push({
                     name: "this.insertPhraseInBoardX",
                     loc: LOC_GLOB + " " + LOC_LOC,
@@ -396,12 +454,16 @@ exports.insertPhraseInBoardY = async (board, userPhrase, keyY, req) => {
                 })
             })
     }
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.newBoardFull
 }
 
+// insert les case de la ligne du nouveaux plateaux et les remplie 
 exports.insertPhraseInBoardX = async (userPhrase, keyY, keyX, req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: insertPhraseInBoardX"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -420,11 +482,14 @@ exports.insertPhraseInBoardX = async (userPhrase, keyY, keyX, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // parcour la phrase du plateaux
     for (const keyW in userPhrase.words) {
+        // insert les mot de la phrase dans les case du plateaux si leurs positions est égal
         await this.insertPhraseInBoardW(userPhrase, keyY, keyX, keyW, req)
             .then(value => {
                 req.data.push({
@@ -434,6 +499,7 @@ exports.insertPhraseInBoardX = async (userPhrase, keyY, keyX, req) => {
                 })
             })
             .catch(error => {
+                console.log(error)
                 req.data.push({
                     name: "this.insertPhraseInBoardW",
                     loc: LOC_GLOB + " " + LOC_LOC,
@@ -441,23 +507,22 @@ exports.insertPhraseInBoardX = async (userPhrase, keyY, keyX, req) => {
                 })
             })
     }
+
+    // si la case du tableau n'existe pas, la crée rempli d'une valeur null
     if (req.newBoardFull[keyY][keyX] === undefined) {
         req.newBoardFull[keyY].push(null)
     }
+
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.newBoardFull
 }
 
+// insert les mot de la phrase dans les case du plateaux si leurs positions est égal
 exports.insertPhraseInBoardW = async (userPhrase, keyY, keyX, keyW, req) => {
-    if (userPhrase.words[keyW].position[0].toString() === keyY && userPhrase.words[keyW].position[1].toString() === keyX) {
-        req.newBoardFull[keyY].push(userPhrase.words[keyW])
-    }
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: insertPhraseInBoardW"
 
-    return req.newBoardFull
-}
-
-exports.checkBoard = async (y, x, gameId, userId, req) => {
-    const LOC_LOC = "methode: checkBoard"
-
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -476,12 +541,54 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // test si la position de la case est égal à la postion du mot
+    if (userPhrase.words[keyW].position[0].toString() === keyY && userPhrase.words[keyW].position[1].toString() === keyX) {
+        // si oui, rempli la case avec le mot
+        req.newBoardFull[keyY].push(userPhrase.words[keyW])
+    }
+
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.newBoardFull
+}
+
+// check si la case du plateau testée est rempli avec un mot
+exports.checkBoard = async (y, x, gameId, userId, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: checkBoard"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // récupère le plateau suivant son utilisateur et la partie
     await this.getBoardGameUser(gameId, userId, req)
         .then(value => {
+            // stoque le plateau dans la requette
             req.board = value
             req.data.push({
                 name: "this.getBoardGameUser",
@@ -498,10 +605,13 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
             })
         })
 
+        // test si la case du plateau n'est pas null
     if (req.board.board[y][x] !== null) {
 
+        // si elle n'est pas null revelle la cas et retourn le mot
         await this.checkBoardSuccess(y, x, req)
             .then(value => {
+                // stoque le resultat dans la requette
                 req.result = value
 
                 req.data.push({
@@ -518,11 +628,13 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
                 })
             })
     } else {
+        // si la case est vide, stoque un resutat d'échèque dans la requete
         req.result = {
             result: false
         }
     }
 
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.result
 }
 

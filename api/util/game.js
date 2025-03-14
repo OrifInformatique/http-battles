@@ -984,9 +984,12 @@ exports.updateGameChallenger = async (req, res) => {
     return req.game
 }
 
+// update l'état de la partie
 exports.updateGameState = async (req, res) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: updateGameState"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -1006,10 +1009,12 @@ exports.updateGameState = async (req, res) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
-    console.log(typeof req.newState.toString())
+
+    // update l'état de la partie
     await Game.updateOne({ _id: req.body.gameId }, {
         $set: {
             state: req.newState
@@ -1032,8 +1037,10 @@ exports.updateGameState = async (req, res) => {
             })
         })
 
+    // retourne la partie après l'update
     await middleGame.getGame(req, res)
         .then(value => {
+            // stoque la partie dans la requete
             req.game = value
 
             req.data.push({
@@ -1051,6 +1058,7 @@ exports.updateGameState = async (req, res) => {
             })
         })
 
+    // retourne la variable traité pour la gestion d'erreur
     return req.game
 }
 
