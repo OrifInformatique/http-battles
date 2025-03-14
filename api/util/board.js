@@ -1,5 +1,5 @@
 const Board = require('../models/Board')
-const utilGame = require('../util/game')
+
 const utilPhrase = require('../util/phrase')
 const utilWord = require('../util/word')
 
