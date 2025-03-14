@@ -26,7 +26,7 @@ router.get('/games/listGames', auth, check.dataInit, middleGame.getGames, middle
 // permet à un utilisateur de rjoindre une partie
 router.post('/games/joinGame', auth, check.dataInit, middleGame.getGame, middleGame.joinGame, middleGame.updateGame, middleUser.getCreatorById, middleUser.getUserById, middleGame.joinSuccessMessage, check.dataValidity, gameCtrl.joinGame)
 // commence la partie
-router.post('/games/startGame', auth, check.dataInit, middleGame.getGame, middleGame.checkStartStat, middleGame.checkStartUserId, middleBoard.createBoard, middleBoard.insertPhrase, middleBoard.insertPhraseInBoard, middleBoard.fillBoard, middleGame.startMessageTest, middleGame.startMessage, middleGame.updateGame, check.dataValidity, gameCtrl.startGame)
+router.post('/games/startGame', auth, check.dataInit, check.checkReqDataStart, middleGame.getGame, middleGame.checkStartStat, middleGame.checkStartUserId, middleBoard.createBoard, middleBoard.insertPhrase, middleBoard.insertPhraseInBoard, middleBoard.fillBoard, middleGame.startMessageTest, middleGame.startMessage, middleGame.updateGame, check.dataValidity, gameCtrl.startGame)
 // vérifie à qui est le tour
 router.get('/games/checkTurn', auth, check.dataInit, middleGame.getGame, middleGame.testTurn, middleGame.getOtherUserId, middleBoard.getBoardGameUser, middleBoard.getBoardGameAdversaire, check.dataValidity, gameCtrl.checkTurn)
 // términe la partie

@@ -22,7 +22,7 @@ module.exports = (req, res, next) => {
                     "message": "invalid token"
                 }
             }
-
+            
             // le rajoute à la requete
             req.auth = {
 

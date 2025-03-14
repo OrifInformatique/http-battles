@@ -16,9 +16,12 @@ const middleUser = require('../middleware/user')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game"
 
+// formate et filtres une liste de jeux
 exports.formatAndFilterGames = async (req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: formatAndFilterGame"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -36,17 +39,22 @@ exports.formatAndFilterGames = async (req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
-
+    // initialise la liste de jeux formatté dans la requete
     req.formatedGames = []
 
+    // parcoure la liste de jeux dans la requet
     for (const game of req.games) {
+        // enregistre le jeux de chaque boucle dans la requet
         req.game = game
 
+        // formate le jeu et filtre les erreurs due aux donnée invalide
         await this.formatAndFilterGame(req)
             .then(value => {
+                // stocke la partie formaté dans la list contenu dans la requet
                 req.formatedGames.push(value)
 
                 req.data.push({
@@ -56,7 +64,6 @@ exports.formatAndFilterGames = async (req) => {
                 })
             })
             .catch(error => {
-                console.log(error)
                 req.data.push({
                     name: "this.formatAndFilterGame",
                     loc: LOC_GLOB + " " + LOC_LOC,
@@ -65,12 +72,16 @@ exports.formatAndFilterGames = async (req) => {
             })
     }
 
+    // retourne la variable traité pour la gestion d'erreur
     return req.formatedGames
 }
 
+// formate une partie et filtre les erreures due au données invalide
 exports.formatAndFilterGame = async (req) => {
+    // location local pour la gestion d'erreur
     const LOC_LOC = "methode: formatAndFilterGame"
 
+    // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
@@ -88,12 +99,15 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
     }
 
+    // récupère le créateur suivant l'id contenu dans le jeux dans la requete
     await middleUser.getCreatorById(req)
         .then(value => {
+            // stoque le créateur dans la requete
             req.createur = value
 
             req.data.push({
@@ -111,6 +125,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    // filtre les erreur de la fonction middleUser.getCreatorById qui sont attendue à cause des donnée invalides
     await utilCheck.dataValidityFilter(req, "middleUser.getCreatorById")
         .then(value => {
             req.data.push({
@@ -127,6 +142,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    // filtre les erreur de la fonction utilUser.getUserById qui sont attendue à cause des donnée invalides
     await utilCheck.dataValidityFilter(req, "utilUser.getUserById")
         .then(value => {
             req.data.push({
@@ -143,6 +159,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    // filtre les erreur de la fonction User.findOne qui sont attendue à cause des donnée invalides
     await utilCheck.dataValidityFilter(req, "User.findOne")
         .then(value => {
             req.data.push({
@@ -159,8 +176,10 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    // récupère l'username de l'objet createur contenu dans la requete
     await middleGame.getCreateurUsername(req)
         .then(value => {
+            // stoque cette username dans la requete
             req.createurUsername = value
 
             req.data.push({
@@ -170,7 +189,6 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
         .catch(error => {
-            console.log(error)
             req.data.push({
                 name: "middleGame.getCreateurUsername",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -178,6 +196,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    // filtre les erreur de la fonction middleUser.getCreatorById qui sont attendue à cause des donnée invalides
     await utilCheck.dataValidityFilter(req, "middleUser.getCreatorById")
         .then(value => {
             req.data.push({
@@ -194,8 +213,10 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    // formate la partie contenu dans la requete
     await middleGame.formatedGame(req)
         .then(value => {
+            // stoque le jeux formaté dans la requete
             req.formatedGame = value
 
             req.data.push({
@@ -205,7 +226,6 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
         .catch(error => {
-            console.log(error)
             req.data.push({
                 name: "middleGame.formatedGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -213,11 +233,41 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
+    // retourne la variable traité pour la gestion d'erreur
     return req.formatedGame
 }
 
-exports.checkCreatorNotNull = async (createur) => {
 
+// test si le créateur exist et si il a un username, si non, retourn "unknown" 
+exports.checkCreatorNotNull = async (createur, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: checkCreatorNotNull"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // test si le créateur exist et si il a un username, si non, retourn "unknown" 
     if (createur === null || createur === undefined) {
         var createurUsername = "unknown"
     } else if (createur.username === undefined) {
@@ -225,22 +275,79 @@ exports.checkCreatorNotNull = async (createur) => {
     } else {
         var createurUsername = createur.username
     }
+    // retourne la variable 
     return createurUsername
 }
 
-exports.formatedMessage = async (game, createurUsername) => {
+// formate le message
+exports.formatedMessage = async (game, createurUsername, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: formatedMessage"
 
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // formate le message
     var message = {
         state: game.state,
         createurUsername: createurUsername,
         gameId: game._id
     }
-
+    // retourn le message
     return message
 }
 
 
 exports.checkStartStat = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: checkStartStat"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // retourne true si la party est en mode settings
     if (req.game.state === "SETTINGS") {
         return true
     } else {
@@ -374,30 +481,30 @@ exports.getOtherUserId = async (req) => {
 
 exports.startMessageTest = async (req) => {
     // location local pour la gestion d'erreur
-        const LOC_LOC = "methode: startMessageTest"
-    
-        // test de la validité des données
-        await utilCheck.dataValidityTest(req)
-            .then(value => {
-                req.utilCheck = value
-                req.data.push({
-                    name: "utilCheck.dataValidityTest",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
+    const LOC_LOC = "methode: startMessageTest"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            .catch(error => {
-                req.data.push({
-                    name: "utilCheck.dataValidityTest",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
             })
-        
-        // stop la méthode en cas d'échèque du test
-        if (req.utilCheck) {
-            return null
-        }
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
 
     if (req.auth.userId === req.startUserId) {
         return "You start"
@@ -685,7 +792,7 @@ exports.updateGameState = async (req, res) => {
         }
     })
         .then(value => {
-            
+
             req.data.push({
                 name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -699,7 +806,7 @@ exports.updateGameState = async (req, res) => {
                 error: error
             })
         })
-        
+
     await middleGame.getGame(req, res)
         .then(value => {
             req.game = value

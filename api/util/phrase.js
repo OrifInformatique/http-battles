@@ -74,7 +74,7 @@ exports.createPhrase = async (userPhrase, req) => {
 
 exports.fillPhrase = async (userPhrase, req) => {
     const LOC_LOC = "methode: fillPhrase"
-
+    
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value

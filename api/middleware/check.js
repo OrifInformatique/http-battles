@@ -16,6 +16,25 @@ const middleGame = require('./game')
 // constante Global le dossier et la page pour le traitement des erreures
 const LOC_GLOB = "file: ../middlware/check"
 
+
+exports.checkReqDataStart = async (req, res, next) => {
+    // constante local indiquant la methode pour le traitement des erreures
+    const LOC_LOC = "methode: checkReqDataStart"
+    const error = {
+        name: "Wrong input"
+    }
+    if(req.body.phase === undefined){
+        req.data.push({
+            name: "utilCheck.dataValidityTest",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+    }
+    
+    next()
+    
+}
+
 // vérify si il s'agit du tour du client
 exports.checkTurn = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
@@ -123,6 +142,7 @@ exports.dataValidity = async (req, res, next) => {
 
 // initialise les données et le log pour pouvoire les tester
 exports.dataInit = async (req, res, next) => {
+    
     // informe dans quel méthodes les potentielles erreurs interne se trouve
     const LOC_LOC = "methode: dataInit"
     //initialise les données
@@ -169,7 +189,7 @@ exports.dataInit = async (req, res, next) => {
                 error: error
             })
         })
-
+    
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()

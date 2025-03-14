@@ -12,6 +12,7 @@ const LOC_GLOB = "file: ../middleware/game"
 
 // retourne une partie selon sont id
 exports.getGame = async (req, res, next) => {
+    console.log(req.data)
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getGame"
 
@@ -70,9 +71,10 @@ exports.getGame = async (req, res, next) => {
 
 // retourne toute les partie
 exports.getGames = async (req, res, next) => {
+    
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getGames"
-
+ 
     // test de la validité des données
     await utilCheck.dataValidityTest(req, next)
         .then(value => {
@@ -210,7 +212,7 @@ exports.formatedGame = async (req, res, next) => {
     }
 
     // formate le jeux pour le client
-    await utilGame.formatedMessage(req.game, req.createurUsername)
+    await utilGame.formatedMessage(req.game, req.createurUsername, req)
         .then(value => {
             // stoque le jeux formaté dans la requete
             req.formatedGame = value
@@ -266,7 +268,7 @@ exports.getCreateurUsername = async (req, res, next) => {
     }
 
     // check si le créateur exist et si il a un username atribué, si oui, retourn son nom d'utilisateur
-    await utilGame.checkCreatorNotNull(req.createur)
+    await utilGame.checkCreatorNotNull(req.createur, req)
         .then(value => {
             // ajoute le nom d'utilisateur à la requete
             req.createurUsername = value
@@ -542,7 +544,7 @@ exports.startMessageTest = async (req, res, next) => {
 exports.joinSuccessMessage = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: joinSuccessMessage"
-
+    
     // test de la validité des données
     await utilCheck.dataValidityTest(req, next)
         .then(value => {
@@ -566,7 +568,7 @@ exports.joinSuccessMessage = async (req, res, next) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     // stoque un message de success pour la partie rejointe qui contient le message, l'état de la partie, l'username du créateur, l'username du client
     req.joinSuccessMessage = {
         message: "Partie rejointe !",
@@ -674,13 +676,13 @@ exports.testTurn = async (req, res, next) => {
 
 // récupère l'identifiant de l'utilisateur opposant le client dans la partie 
 exports.getOtherUserId = async (req, res, next) => {
+    console.log("test")
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getOtherUserId"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req, next)
         .then(value => {
-            req.utilCheck = value
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -1146,6 +1148,7 @@ exports.switchTurn = async (req, res, next) => {
 
 // test qui est l'utilisateur qui commence
 exports.checkStartUserId = async (req, res, next) => {
+    
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: checkStartUserId"
 
@@ -1228,6 +1231,7 @@ exports.checkStartUserId = async (req, res, next) => {
 
 // test si la partie à déja commencé
 exports.checkStartStat = async (req, res, next) => {
+    
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: checkStartStat"
 

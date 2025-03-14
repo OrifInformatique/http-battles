@@ -239,7 +239,7 @@ exports.fillBoard = async (req) => {
                 error: error
             })
         })
-
+        
     await utilPhrase.createPhrase(req.board._id, req.body.phrase, req)
         .then(value => {
             req.board.phrase = value
@@ -256,7 +256,7 @@ exports.fillBoard = async (req) => {
                 error: error
             })
         })
-
+        
     await this.insertPhraseInBoard(req.board, req.board.phrase, req)
         .then(value => {
             req.board.board = value

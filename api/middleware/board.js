@@ -13,11 +13,12 @@ const LOC_GLOB = "file: ../middleware/board"
 
 // remplie le plateau dans la base donnée
 exports.fillBoard = async (req, res, next) => {
+    
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: fillBoard"
 
     // test de la validité des données
-    await utilCheck.dataValidityTest(req)
+    await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value
             req.data.push({
@@ -70,11 +71,12 @@ exports.fillBoard = async (req, res, next) => {
 
 // crée un plateau pour le client pour la partie dans la requete
 exports.createBoard = async (req, res, next) => {
+    
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: createBoard"
 
     // test de la validité des données
-    await utilCheck.dataValidityTest(req)
+    await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value
             req.data.push({
@@ -115,23 +117,24 @@ exports.createBoard = async (req, res, next) => {
                 error: error
             })
         })
-
+        
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()
     }
-
+    
     // retourne la variable traité pour la gestion d'erreur en dehors des middleware
     return req.board
 }
 
 // insert la phrase dans le tableau (objet)
 exports.insertPhrase = async (req, res, next) => {
+    
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: insertPhrase"
 
     // test de la validité des données
-    await utilCheck.dataValidityTest(req)
+    await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value
             req.data.push({
@@ -152,7 +155,7 @@ exports.insertPhrase = async (req, res, next) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     // crée la phrase (objet)
     await utilPhrase.createPhrase(req.body.phrase, req)
         .then(value => {
@@ -184,11 +187,12 @@ exports.insertPhrase = async (req, res, next) => {
 
 // insert la phrase (suite de mots) dans le plateau (table)
 exports.insertPhraseInBoard = async (req, res, next) => {
+    
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: insertPhraseInBoard"
 
     // test de la validité des données
-    await utilCheck.dataValidityTest(req)
+    await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value
             req.data.push({
@@ -209,7 +213,7 @@ exports.insertPhraseInBoard = async (req, res, next) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     // insert la phrase (suite de mots) dans le plateau (table)
     await utilBoard.insertPhraseInBoard(req.board, req.board.phrase, req)
         .then(value => {
