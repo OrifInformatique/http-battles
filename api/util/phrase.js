@@ -7,7 +7,9 @@ const LOC_GLOB = "file: ../util/phrase"
 // import fonctions util pour board
 const utilCheck = require('../util/check')
 
+// crée une phrase et l'enregistre dans la base donnée
 exports.createPhrase = async (userPhrase, req) => {
+    // test de la validité des données
     const LOC_LOC = "methode: createPhrase"
 
     await utilCheck.dataValidityTest(req)

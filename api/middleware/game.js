@@ -857,7 +857,7 @@ exports.tryCase = async (req, res, next) => {
     const LOC_LOC = "methode: tryCase"
 
     // test de la validité des données
-    await utilCheck.dataValidityTest(req)
+    await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value
             req.data.push({
