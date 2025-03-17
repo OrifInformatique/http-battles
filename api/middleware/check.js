@@ -16,32 +16,37 @@ const middleGame = require('./game')
 // constante Global le dossier et la page pour le traitement des erreures
 const LOC_GLOB = "file: ../middlware/check"
 
-
+// check si les données de la requete pour le début de la partie sons valide
 exports.checkReqDataStartGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataStartGame"
-    const error = {
-        name: "Client input error"
-    }
+
+    // crée une erreur
+    var error = new Error()
+    // donne un nom informant sur la nature de l'erreur
+    error.name = "Bad Request Data"
 
     if (req.body.phrase === undefined) {
-        error.error = "phrase not found"
+        error.message = "phrase not found"
+
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
             error: error
         })
     }
+    
 
     if (req.body.gameId === undefined) {
-        error.error = "gameId not found"
+        error.message = "gameId not found"
+
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
             error: error
         })
     }
-
+    
     next()
 
 }
@@ -49,12 +54,12 @@ exports.checkReqDataStartGame = async (req, res, next) => {
 exports.checkReqDataTryPhrase = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataTryPhrase"
-    const error = {
-        name: "Client input error"
-    }
+
+    var error = new Error()
+    error.name = "Bad Request Data"
 
     if (req.body.phrase === undefined) {
-        error.error = "phrase not found"
+        error.message = "phrase not found"
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -63,7 +68,7 @@ exports.checkReqDataTryPhrase = async (req, res, next) => {
     }
 
     if (req.body.gameId === undefined) {
-        error.error = "gameId not found"
+        error.message = "gameId not found"
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -78,12 +83,12 @@ exports.checkReqDataTryPhrase = async (req, res, next) => {
 exports.checkReqDataFindGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataFindGame"
-    const error = {
-        name: "Client input error"
-    }
+    
+    var error = new Error()
+    error.name = "Bad Request Data"
 
     if (req.body.gameId === undefined) {
-        error.error = "gameId not found"
+        error.message = "gameId not found"
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -98,12 +103,12 @@ exports.checkReqDataFindGame = async (req, res, next) => {
 exports.checkReqDataJoinGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataJoinGame"
-    const error = {
-        name: "Client input error"
-    }
+    
+    var error = new Error()
+    error.name = "Bad Request Data"
 
     if (req.body.gameId === undefined) {
-        error.error = "gameId not found"
+        error.message = "gameId not found"
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -118,12 +123,12 @@ exports.checkReqDataJoinGame = async (req, res, next) => {
 exports.checkReqDataCheckTurn = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataCheckTurn"
-    const error = {
-        name: "Client input error"
-    }
+    
+    var error = new Error()
+    error.name = "Bad Request Data"
 
     if (req.body.gameId === undefined) {
-        error.error = "gameId not found"
+        error.message = "gameId not found"
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -138,12 +143,12 @@ exports.checkReqDataCheckTurn = async (req, res, next) => {
 exports.checkReqDataEndGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataEndGame"
-    const error = {
-        name: "Client input error"
-    }
+    
+    var error = new Error()
+    error.name = "Bad Request Data"
 
     if (req.body.gameId === undefined) {
-        error.error = "gameId not found"
+        error.message = "gameId not found"
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -158,9 +163,9 @@ exports.checkReqDataEndGame = async (req, res, next) => {
 exports.checkReqDataTryCase = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataTryCase"
-    const error = {
-        name: "Client input error"
-    }
+    
+    var error = new Error()
+    error.name = "Bad Request Data"
 
     if (req.body.gameId === undefined) {
         error.error = "gameId not found"
