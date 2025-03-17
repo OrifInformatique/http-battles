@@ -214,7 +214,7 @@ exports.formatedGame = async (req, res, next) => {
     }
 
     // formate le jeux pour le client
-    await utilGame.formatedMessage(req.game, req.createurUsername, req)
+    await utilGame.formatedMessage(req)
         .then(value => {
             // stoque le jeux formaté dans la requete
             req.formatedGame = value

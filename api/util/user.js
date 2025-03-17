@@ -63,3 +63,38 @@ exports.getUserById = async (userId, req) => {
     return req.user
 }
 
+
+exports.getCreatorFiltered = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getCreatorFiltered"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+    
+
+    return req.createur
+}
+
+

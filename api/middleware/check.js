@@ -1,5 +1,4 @@
-// import fonctions util pour user
-const utilUser = require('../util/user')
+
 
 // import fonctions util pour res
 const utilRes = require('../util/res')
@@ -351,8 +350,7 @@ exports.dataValidity = async (req, res, next) => {
                 utilRes.sendError(errorCode, d, res)
             }
         }
-
-
+        // enregistre le log
         await utilLog.logToDatabase(req.log)
     }
     // test si la fonction next à été transmise

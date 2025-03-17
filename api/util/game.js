@@ -105,15 +105,15 @@ exports.formatAndFilterGame = async (req) => {
     if (req.utilCheck) {
         return null
     }
-
-    // récupère le créateur suivant l'id contenu dans le jeux dans la requete
-    await middleUser.getCreatorById(req)
+    req.formatedGame = {}
+    // récupère l'utilisateur en fonction de son id en parametre (ici l'id du créateur contenu dans le jeux)
+    await utilUser.getUserById(req.game.createurId, req)
         .then(value => {
-            // stoque le créateur dans la requete
-            req.createur = value
+            // stock l'username utilisateur trouvé dans la requete
+            req.formatedGame.createur = value.username
 
             req.data.push({
-                name: "middleUser.getCreatorById",
+                name: "utilUser.getUserById",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -121,17 +121,18 @@ exports.formatAndFilterGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "middleUser.getCreatorById",
+                name: "utilUser.getUserById",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // filtre les erreur de la fonction middleUser.getCreatorById qui sont attendue à cause des donnée invalides
-    await utilCheck.dataValidityFilter(req, "middleUser.getCreatorById")
+    await utilCheck.dataValidityFilterListGame(req)
         .then(value => {
+
             req.data.push({
-                name: "utilCheck.dataValidityFilter",
+                name: "utilCheck.dataValidityFilterListGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -139,107 +140,13 @@ exports.formatAndFilterGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilCheck.dataValidityFilter",
+                name: "utilCheck.dataValidityFilterListGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // filtre les erreur de la fonction utilUser.getUserById qui sont attendue à cause des donnée invalides
-    await utilCheck.dataValidityFilter(req, "utilUser.getUserById")
-        .then(value => {
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // filtre les erreur de la fonction User.findOne qui sont attendue à cause des donnée invalides
-    await utilCheck.dataValidityFilter(req, "User.findOne")
-        .then(value => {
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // récupère l'username de l'objet createur contenu dans la requete
-    await middleGame.getCreateurUsername(req)
-        .then(value => {
-            // stoque cette username dans la requete
-            req.createurUsername = value
-
-            req.data.push({
-                name: "middleGame.getCreateurUsername",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "middleGame.getCreateurUsername",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // filtre les erreur de la fonction middleUser.getCreatorById qui sont attendue à cause des donnée invalides
-    await utilCheck.dataValidityFilter(req, "middleUser.getCreatorById")
-        .then(value => {
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityFilter",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // formate la partie contenu dans la requete
-    await middleGame.formatedGame(req)
-        .then(value => {
-            // stoque le jeux formaté dans la requete
-            req.formatedGame = value
-
-            req.data.push({
-                name: "middleGame.formatedGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "middleGame.formatedGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
+        req.formatedGame.game = req.game
 
     // retourne la variable traité pour la gestion d'erreur
     return req.formatedGame
@@ -289,7 +196,7 @@ exports.checkCreatorNotNull = async (createur, req) => {
 }
 
 // formate le message
-exports.formatedMessage = async (game, createurUsername, req) => {
+exports.formatedMessage = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: formatedMessage"
 
@@ -320,9 +227,8 @@ exports.formatedMessage = async (game, createurUsername, req) => {
 
     // formate le message
     var message = {
-        state: game.state,
-        createurUsername: createurUsername,
-        gameId: game._id
+        game: req.game,
+        createur: req.createur.username
     }
     // retourn le message
     return message

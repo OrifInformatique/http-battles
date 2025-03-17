@@ -427,7 +427,6 @@ exports.listLogs = async (req) => {
 
             // parcoure les donnée du log 
             for (const d of log.data) {
-
             
                 // si le client demande une information de tri spécifique pour ces données
                 if (req.body.data.name !== undefined || req.body.data.loc !== undefined || req.body.data.value !== undefined || req.body.data.error !== undefined) {
