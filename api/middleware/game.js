@@ -1060,50 +1060,26 @@ exports.updateGame = async (req, res, next) => {
     // initialise la variable update dans la requette
     req.update = {}
 
-    // test si la variable newState de la requette exist
-    if (typeof req.newState !== 'undefined') {
+
         // si oui update l'état de la partie
-        await utilGame.updateGameState(req, res)
+        await utilGame.updateGame(req)
             .then(value => {
                 // stoque le nouvel état de la partie dans la requette
                 req.update.state = value
 
                 req.data.push({
-                    name: "utilGame.updateGameState",
+                    name: "utilGame.updateGame",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "utilGame.updateGameState",
+                    name: "utilGame.updateGame",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })
             })
-    }
-
-    // test si la variable newChallenger de la requette exist
-    if (typeof req.newChallenger !== 'undefined') {
-        await utilGame.updateGameChallenger(req, res)
-            .then(value => {
-                // stoque le nouveaux challenger de la partie dans la requette
-                req.update.challenger = value
-
-                req.data.push({
-                    name: "utilGame.updateGameChallenger",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
-            })
-            .catch(error => {
-                req.data.push({
-                    name: "utilGame.updateGameChallenger",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
-            })
-    }
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {

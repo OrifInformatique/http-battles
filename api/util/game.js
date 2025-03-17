@@ -322,12 +322,12 @@ exports.startCoinFlip = async (req, res) => {
 
 
     // update la parite dans la base de donnée
-    await middleGame.updateGame(req, res)
+    await this.updateGame(req, res)
         .then(value => {
             req.newState = value.newState
 
             req.data.push({
-                name: "middleGame.updateGame",
+                name: "this.updateGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -335,7 +335,7 @@ exports.startCoinFlip = async (req, res) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "middleGame.updateGame",
+                name: "this.updateGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -815,15 +815,16 @@ exports.switchArrayX = async (requestRoad, req) => {
     }
 }
 
-// retourn l'objet du créateur de la partie en fonction de son id stocké dans la partie
-exports.getCreateur = async (req) => {
+// uodate la partie
+exports.updateGame = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getCreateur"
+    const LOC_LOC = "methode: updateGame"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
+
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -843,146 +844,21 @@ exports.getCreateur = async (req) => {
     if (req.utilCheck) {
         return null
     }
-
-    // récupère un utilisateur suivant son id
-    await utilUser.getUserById(req.game.createurId, req)
-        .then(value => {
-            // stoque cette utilisateur dans la requete en tant que createur
-            req.createur = value
-            console.log(value)
-            req.data.push({
-                name: "utilUser.getUserById",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilUser.getUserById",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // retourne la variable traité pour la gestion d'erreur
-    return req.createur
-}
-
-// Update le challenger de la partie dans la base de donnée
-exports.updateGameChallenger = async (req, res) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: updateGameChallenger"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
+    if (req.newState !== undefined) {
+        req.game.state = req.newState
     }
-
-    // update le challenger de la partie en fonction des informations contenu dans la requete
-    await Game.updateOne({ _id: req.body.gameId }, {
-        $set: {
-            challengerId: req.newChallenger
-        }
-    })
-        .then(value => {
-            req.data.push({
-                name: "Game.updateOne",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "Game.updateOne",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // recupère la partie après l'update et la stoque dans la requete
-    await middleGame.getGame(req, res)
-        .then(value => {
-            // stoque la partie dans la requete
-            req.game = value
-
-            req.data.push({
-                name: "middleGame.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "middleGame.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // retourne la variable traité pour la gestion d'erreur
-    return req.game
-}
-
-// update l'état de la partie
-exports.updateGameState = async (req, res) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: updateGameState"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
+    if (req.newChallenger !== undefined) {
+        req.game.challengerId = req.newChallenger
     }
 
     // update l'état de la partie
     await Game.updateOne({ _id: req.body.gameId }, {
         $set: {
-            state: req.newState
+            state: req.game.state,
+            challengerId: req.game.challengerId
         }
     })
         .then(value => {
-
             req.data.push({
                 name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -999,7 +875,7 @@ exports.updateGameState = async (req, res) => {
         })
 
     // retourne la partie après l'update
-    await middleGame.getGame(req, res)
+    await middleGame.getGame(req)
         .then(value => {
             // stoque la partie dans la requete
             req.game = value
@@ -1022,4 +898,3 @@ exports.updateGameState = async (req, res) => {
     // retourne la variable traité pour la gestion d'erreur
     return req.game
 }
-
