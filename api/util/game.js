@@ -1028,3 +1028,80 @@ exports.joinGame = async (req) => {
 
     return req.package
 }
+
+exports.startMessage = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: startMessage"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // stoque le message de départ dans la requette ainsi que l'id du plateux du client
+    req.startMessage = {
+        message: req.startMessageContent,
+        boardId: req.board._id
+    }
+
+    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
+    return req.startMessage
+}
+
+exports.joinSuccessMessage = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: joinSuccessMessage"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // stoque un message de success pour la partie rejointe qui contient le message, l'état de la partie, l'username du créateur, l'username du client
+    req.joinSuccessMessage = {
+        message: "Partie rejointe !",
+        state: req.game.state,
+        createurUsername: req.createur.username,
+        challengerUsername: req.user.username
+    }
+
+    return req.joinSuccessMessage
+}
