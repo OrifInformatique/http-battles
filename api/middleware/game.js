@@ -71,10 +71,10 @@ exports.getGame = async (req, res, next) => {
 
 // retourne toute les partie
 exports.getGames = async (req, res, next) => {
-    
+
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getGames"
- 
+
     // test de la validité des données
     await utilCheck.dataValidityTest(req, next)
         .then(value => {
@@ -330,14 +330,23 @@ exports.createGame = async (req, res, next) => {
         return null
     }
 
-    // cée un objet de partie avec l'id du client avec un status d'attente du challenger
-    var game = new Game({
-        state: "WAITING_PLAYER",
-        createurId: req.auth.userId
-    })
-
-    // stocke le jeux dans la requete
-    req.game = game
+    await utilGame.createGame(req)
+        .then(value => {
+            req.game = value
+            req.data.push({
+                name: "utilGame.createGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilGame.createGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -378,11 +387,10 @@ exports.saveGame = async (req, res, next) => {
     }
 
     // sauvegarde la partie dans la base de donées
-    await req.game.save()
+    await utilGame.saveGame(req)
         .then(value => {
             // stoque la partie sauvegardé dans la requete
-            req.game = value
-            console.log(req.game)
+            req.newGame = value
             req.data.push({
                 name: "req.game.save",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -404,7 +412,7 @@ exports.saveGame = async (req, res, next) => {
     }
 
     // retourn la variable traité pour la gestion d'erreur en dehors des middleware
-    return req.game
+    return req.newGame
 }
 
 // permet à un utilisateur de rejoindre une partie
@@ -436,17 +444,34 @@ exports.joinGame = async (req, res, next) => {
         return null
     }
 
-    // stock le nouelle état de la partie et le nouveaux challenger dans la requette
-    req.newState = "SETTINGS"
-    req.newChallenger = req.auth.userId
+    await utilGame.joinGame(req)
+        .then(value => {
+            req.newState = value.newState
+            req.newChallenger = value.newChallenger
 
+            req.package = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+        
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()
     }
 
     // retourn les variables traitées pour la gestion d'erreur en dehors des middleware
-    return "newState: " + req.newState + " newChallenger: " + req.newChallenger
+    return req.package
 }
 
 // construit le message de départ
@@ -554,7 +579,7 @@ exports.startMessageTest = async (req, res, next) => {
 exports.joinSuccessMessage = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: joinSuccessMessage"
-    
+
     // test de la validité des données
     await utilCheck.dataValidityTest(req, next)
         .then(value => {
@@ -578,7 +603,7 @@ exports.joinSuccessMessage = async (req, res, next) => {
     if (req.utilCheck) {
         return null
     }
-    
+
     // stoque un message de success pour la partie rejointe qui contient le message, l'état de la partie, l'username du créateur, l'username du client
     req.joinSuccessMessage = {
         message: "Partie rejointe !",
@@ -1061,25 +1086,25 @@ exports.updateGame = async (req, res, next) => {
     req.update = {}
 
 
-        // si oui update l'état de la partie
-        await utilGame.updateGame(req)
-            .then(value => {
-                // stoque le nouvel état de la partie dans la requette
-                req.update.state = value
+    // si oui update l'état de la partie
+    await utilGame.updateGame(req)
+        .then(value => {
+            // stoque le nouvel état de la partie dans la requette
+            req.update.state = value
 
-                req.data.push({
-                    name: "utilGame.updateGame",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
+            req.data.push({
+                name: "utilGame.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            .catch(error => {
-                req.data.push({
-                    name: "utilGame.updateGame",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilGame.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
             })
+        })
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -1140,7 +1165,7 @@ exports.switchTurn = async (req, res, next) => {
 
 // test qui est l'utilisateur qui commence
 exports.checkStartUserId = async (req, res, next) => {
-    
+
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: checkStartUserId"
 
@@ -1223,7 +1248,6 @@ exports.checkStartUserId = async (req, res, next) => {
 
 // test si la partie à déja commencé
 exports.checkStartStat = async (req, res, next) => {
-    
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: checkStartStat"
 
@@ -1271,7 +1295,7 @@ exports.checkStartStat = async (req, res, next) => {
                 error: error
             })
         })
-    
+
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()

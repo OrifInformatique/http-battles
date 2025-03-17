@@ -844,6 +844,7 @@ exports.updateGame = async (req) => {
     if (req.utilCheck) {
         return null
     }
+
     if (req.newState !== undefined) {
         req.game.state = req.newState
     }
@@ -897,4 +898,133 @@ exports.updateGame = async (req) => {
 
     // retourne la variable traité pour la gestion d'erreur
     return req.game
+}
+
+exports.createGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: createGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // cée un objet de partie avec l'id du client avec un status d'attente du challenger
+    req.newGame = new Game({
+        state: "WAITING_PLAYER",
+        createurId: req.auth.userId
+    })
+
+    return req.newGame
+}
+
+exports.saveGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: saveGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // sauvegarde la partie dans la base de donées
+    await req.game.save()
+        .then(value => {
+            // stoque la partie sauvegardé dans la requete
+            req.newGame = value
+            req.data.push({
+                name: "req.game.save",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "req.game.save",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.newGame
+}
+
+exports.joinGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: joinGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // stock le nouelle état de la partie et le nouveaux challenger dans la requette
+    req.newState = "SETTINGS"
+    req.newChallenger = req.auth.userId
+
+    req.package = {}
+    req.package.newState = "SETTINGS"
+    req.package.newChallenger = req.auth.userId
+
+    return req.package
 }
