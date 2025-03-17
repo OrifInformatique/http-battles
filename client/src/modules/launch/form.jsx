@@ -13,7 +13,7 @@ function LaunchPage() {
         ["Le","La","Un","Une","Mon"],
         ["chat","chien","enfant","oiseau","voisin"],
         ["mange","regarde","porte","attrape","entend"],
-        ["Le","La","Un","Une","Mon"],
+        ["le","la","un","une","mon"],
         ["croquette","ballon","livre","gâteau","arbre"]
     ]
 

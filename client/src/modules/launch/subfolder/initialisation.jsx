@@ -59,8 +59,8 @@ const [position, setPosition] = useState(1)
 const totalSlides = 5;
 let positionSet = "position-";
 let arrowd = null;
-let positiond = null;
-console.log(positionSet+position)
+let positiond = positionSet + position ;
+
 //   Enlever la flèche lorsque on est sur le 1er ou dernier élément.
     function handleChangeArrowLeft() {
         if (position > 1) { 
@@ -77,80 +77,63 @@ console.log(positionSet+position)
 switch ( position ){
     case 1:
      
-    arrowd = (<> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/freeright/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }/></>);
+    arrowd = (<> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }/></>);
     break;
 
     case 5:
-    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/freeright/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/></>)
+    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/></>)
     break;
 
     default:
-    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/freeright/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/freeright/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>)
+    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>)
     
 
 }
 
-switch ( position ) {
-    case 1: 
-        
-    break;
-    case 2: 
-    break;
-    case 3: 
-    break;
-    case 4: 
-    break;
-    case 5: 
-    break;
-    
-}
-
-
-
-/*
-if (position === 1)
-{
-    document.getElementById(positionSet+position).classList.add("active")
-}
-*/
     return(<> 
   
         <div className="initInitialisationContainer">
-            <h1 className="initTitle"style={{fontWeight:'bold', display:"flex",flexFlow:"column",alignItems:"center"}}> Initialisation de la phrase </h1>
+            <h1 className="initTitle"style={{fontWeight:'bold', display:"flex",flexFlow:"column",alignItems:"center",paddingBottom:"0px"}}> Initialisation de la phrase </h1>
             <div className="initPhraseLaunchContainer">
                 <div className="initElementContainer">
                     <div className="initFixPhrase">
-                        <h1 className="">Phrase choisie : </h1>
+                        <h1 className="initChoosenPhrase">Phrase choisie : </h1>
                     </div>
                 </div>
             </div>
                 
             <div className="initPhrase">
-                <div className="init5Word " id="position-0">
+                <div className={position === 1 ?"init5Word wordPosition-0" :"init5Word position-0 a"} id="position">
                 {phrase[0].word} 
-               {/* <img className="p" src="/assets/images/element/sword_1.png" alt="sword" style={{position:"absolute",width:"200px",height:"30px"}}/>*/}
-                <p className="p">_</p>
+               {/* <p className="p">_</p>*/}
+                <img src="assets/images/element/sword_1.png"/>
                 </div>
 
-                <div className="init5Word position-1">
+                <div className={position === 2 ?"init5Word wordPosition-1" :"init5Word position-1 a"} id="position">
                 {phrase[1].word} 
-                <p className="p">_</p>
-                </div>
+               {/* <p className="p">_</p>*/}
+               <img src="assets/images/element/sword_1.png"/>
+               </div>
 
-                <div className="init5Word position-2">
+                <div className={position === 3 ?"init5Word wordPosition-2" :"init5Word position-2 a"} id="position">
                 {phrase[2].word} 
-                <p className="p">_</p>
-                </div>
-
-                <div className="init5Word position-3">
+               {/* <p className="p">_</p>*/}
+               <img src="assets/images/element/sword_1.png"/>
+               </div>
+                
+                <div className={position === 4 ?"init5Word wordPosition-3" :"init5Word position-3 a"} id="position">
                 {phrase[3].word}  
-                <p className="p">_</p>
-                </div>
+               {/* <p className="p">_</p>*/}
+               <img src="assets/images/element/sword_1.png"/>
 
-                <div className="init5Word position-4">      
+               </div>
+
+                <div className={position === 5 ?"init5Word wordPosition-4" :"init5Word position-4 a"} id="position">      
                 {phrase[4].word} 
-                <p className="p">_</p>
-                </div>
+               {/* <p className="p">_</p>*/}
+               <img src="assets/images/element/sword_1.png"/>
+
+               </div>
             </div>
 
             {arrowd}
@@ -158,7 +141,7 @@ if (position === 1)
             <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>
 
                 <div className="initContainerVisible"> 
-                    <div className={"initContainerContent position-" + position} id="slider">
+                    <div className={ "initContainerContent position-" + position} id="slider">
                         <div className="initContainerContent1 initContainerContentX">
                             <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase[1]}/> 
                         </div >    
@@ -190,7 +173,10 @@ if (position === 1)
                 </div>  */}
 
             <div className="initButtonContainer">
-      
+                <div className="buttons">
+                    <img src="assets/images/element/CC0/dice.png" alt="Dés pour tirer aléatoirement" />
+                    <h1>Aléatoire</h1>
+                </div>
                 <Button form={"myForm"} className={"initbtn"} label={"Valider la phrase"}/>
             </div>
         </div>
