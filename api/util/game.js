@@ -146,7 +146,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
-        req.formatedGame.game = req.game
+    req.formatedGame.game = req.game
 
     // retourne la variable traité pour la gestion d'erreur
     return req.formatedGame
@@ -218,7 +218,6 @@ exports.formatedMessage = async (req) => {
                 error: error
             })
         })
-
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
@@ -301,14 +300,11 @@ exports.startCoinFlip = async (req, res) => {
         return null
     }
 
-    // sort aléatoirement un résultat true or false et le stock dans une constante
-    const coinFlip = Math.floor(Math.random() * 2) == 0
-
-    // retourn l'id de l'utilisateur en fonctions du resultat du test
-    await this.coinFlipStartUserId(coinFlip, req)
+    await this.coinFlipStartMode(req)
         .then(value => {
             // stoque cette id dans la requete
-            req.startUserId = value
+            req.startUserId = value.startUserId
+            req.newState = value.newState
             req.data.push({
                 name: "this.coinFlipStartUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -324,25 +320,6 @@ exports.startCoinFlip = async (req, res) => {
             })
         })
 
-    // retourn l'état de la partie en fonction du résultat du test
-    await this.coinFlipStartGameState(coinFlip, req)
-        .then(value => {
-            // stoque le nouvel étàt de la partie dans la requete
-            req.newState = value
-            req.data.push({
-                name: "this.coinFlipStartGameState",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.coinFlipStartGameState",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
 
     // update la parite dans la base de donnée
     await middleGame.updateGame(req, res)
@@ -365,6 +342,84 @@ exports.startCoinFlip = async (req, res) => {
         })
     // retourne la variable traité pour la gestion d'erreur
     return req.startUserId
+}
+
+exports.coinFlipStartMode = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: coinFlipStartMode"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    req.package = {}
+    // sort aléatoirement un résultat true or false et le stock dans une constante
+    req.coinFlip = Math.floor(Math.random() * 2) == 0
+
+    // retourn l'id de l'utilisateur en fonctions du resultat du test
+    await this.coinFlipStartUserId(req.coinFlip, req)
+        .then(value => {
+            // stoque cette id dans la requete
+            req.startUserId = value
+            req.package.startUserId = value
+
+            req.data.push({
+                name: "this.coinFlipStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.coinFlipStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // retourn l'état de la partie en fonction du résultat du test
+    await this.coinFlipStartGameState(req.coinFlip, req)
+        .then(value => {
+            // stoque le nouvel étàt de la partie dans la requete
+            req.newState = value
+            req.package.newState = value
+            req.data.push({
+                name: "this.coinFlipStartGameState",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.coinFlipStartGameState",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
 }
 
 // retourn l'id utilisateur qui commence
