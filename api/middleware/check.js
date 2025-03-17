@@ -26,9 +26,12 @@ exports.checkReqDataStartGame = async (req, res, next) => {
     // donne un nom informant sur la nature de l'erreur
     error.name = "Bad Request Data"
 
+    // test si la requete contient une phrase
     if (req.body.phrase === undefined) {
+        // ajoute un message informant de l'absence de la donnée à l'erreur
         error.message = "phrase not found"
 
+        // stoque l'erreur dans la requete
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -36,10 +39,12 @@ exports.checkReqDataStartGame = async (req, res, next) => {
         })
     }
     
-
+    // test si la requete contient l'id de la partie
     if (req.body.gameId === undefined) {
+        // ajoute un message informant de l'absence de la donnée à l'erreur
         error.message = "gameId not found"
 
+        // stoque l'erreur dans la requete
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -47,19 +52,30 @@ exports.checkReqDataStartGame = async (req, res, next) => {
         })
     }
     
-    next()
+    // test si la fonction next à été transmise
+    if (next !== undefined) {
+        // si oui passe au prochain middleWare
+        next()
+    }
 
 }
 
+// check si les données de la requete pour le teste de la phrase
 exports.checkReqDataTryPhrase = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataTryPhrase"
 
+    // crée une erreur
     var error = new Error()
+    // donne un nom informant sur la nature de l'erreur
     error.name = "Bad Request Data"
 
+    // test si la requete contient une phrase
     if (req.body.phrase === undefined) {
+        // ajoute un message informant de l'absence de la donnée à l'erreur
         error.message = "phrase not found"
+
+        // stoque l'erreur dans la requete
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -67,8 +83,12 @@ exports.checkReqDataTryPhrase = async (req, res, next) => {
         })
     }
 
+    // test si la requete contient l'id de la partie
     if (req.body.gameId === undefined) {
+        // ajoute un message informant de l'absence de la donnée à l'erreur
         error.message = "gameId not found"
+
+        // stoque l'erreur dans la requete
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -76,19 +96,30 @@ exports.checkReqDataTryPhrase = async (req, res, next) => {
         })
     }
 
-    next()
+    // test si la fonction next à été transmise
+    if (next !== undefined) {
+        // si oui passe au prochain middleWare
+        next()
+    }
 
 }
 
+// test les donnée pour la requete findGame
 exports.checkReqDataFindGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataFindGame"
     
+    // crée une erreur
     var error = new Error()
+    // donne un nom informant sur la nature de l'erreur
     error.name = "Bad Request Data"
 
+    // test si la requete contient l'id de la partie
     if (req.body.gameId === undefined) {
+        // ajoute un message informant de l'absence de la donnée à l'erreur
         error.message = "gameId not found"
+
+        // stoque l'erreur dans la requete
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -96,19 +127,30 @@ exports.checkReqDataFindGame = async (req, res, next) => {
         })
     }
 
-    next()
+    // test si la fonction next à été transmise
+    if (next !== undefined) {
+        // si oui passe au prochain middleWare
+        next()
+    }
 
 }
 
+// test les donnée pour la requette joinGame
 exports.checkReqDataJoinGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataJoinGame"
     
+    // crée une erreur
     var error = new Error()
+    // donne un nom informant sur la nature de l'erreur
     error.name = "Bad Request Data"
 
+    // test si la requete contient l'id de la partie
     if (req.body.gameId === undefined) {
+        // ajoute un message informant de l'absence de la donnée à l'erreur
         error.message = "gameId not found"
+
+        // stoque l'erreur dans la requete
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -116,19 +158,30 @@ exports.checkReqDataJoinGame = async (req, res, next) => {
         })
     }
 
-    next()
+    // test si la fonction next à été transmise
+    if (next !== undefined) {
+        // si oui passe au prochain middleWare
+        next()
+    }
 
 }
 
+// test les données pour la requette checkTurn
 exports.checkReqDataCheckTurn = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataCheckTurn"
     
+    // crée une erreur
     var error = new Error()
+    // donne un nom informant sur la nature de l'erreur
     error.name = "Bad Request Data"
 
+    // test si la requete contient l'id de la partie
     if (req.body.gameId === undefined) {
+        // ajoute un message informant de l'absence de la donnée à l'erreur
         error.message = "gameId not found"
+
+        // stoque l'erreur dans la requete
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -136,19 +189,30 @@ exports.checkReqDataCheckTurn = async (req, res, next) => {
         })
     }
 
-    next()
+    // test si la fonction next à été transmise
+    if (next !== undefined) {
+        // si oui passe au prochain middleWare
+        next()
+    }
 
 }
 
+// test les données pour la requete endGame
 exports.checkReqDataEndGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataEndGame"
     
+    // crée une erreur
     var error = new Error()
+    // donne un nom informant sur la nature de l'erreur
     error.name = "Bad Request Data"
 
+    // test si la requete contient l'id de la partie
     if (req.body.gameId === undefined) {
+        // ajoute un message informant de l'absence de la donnée à l'erreur
         error.message = "gameId not found"
+
+        // stoque l'erreur dans la requete
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -156,19 +220,30 @@ exports.checkReqDataEndGame = async (req, res, next) => {
         })
     }
 
-    next()
+    // test si la fonction next à été transmise
+    if (next !== undefined) {
+        // si oui passe au prochain middleWare
+        next()
+    }
 
 }
 
+// test les données pour la reqete tryCase
 exports.checkReqDataTryCase = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataTryCase"
     
+    // crée une erreur
     var error = new Error()
+    // donne un nom informant sur la nature de l'erreur
     error.name = "Bad Request Data"
 
+    // test si la requete contient l'id de la partie
     if (req.body.gameId === undefined) {
+        // ajoute un message informant de l'absence de la donnée à l'erreur
         error.error = "gameId not found"
+
+        // stoque l'erreur dans la requete
         req.data.push({
             name: "utilCheck.dataValidityTest",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -176,7 +251,11 @@ exports.checkReqDataTryCase = async (req, res, next) => {
         })
     }
 
-    next()
+    // test si la fonction next à été transmise
+    if (next !== undefined) {
+        // si oui passe au prochain middleWare
+        next()
+    }
 
 }
 
@@ -302,8 +381,10 @@ exports.logInit = async (req, res, next) => {
     // renseigne dans quel méthode les futur erreures sont
     const LOC_LOC = "methode: logInit"
 
+    // trouve les donnée utilisateur et de la partie pour le log si elle sont spécifié
     await utilLog.logInitFindUserAndGame(req)
         .then(value => {
+            // stoque ces données dans la requete
             req.package = value
 
             req.data.push({
@@ -320,9 +401,11 @@ exports.logInit = async (req, res, next) => {
                 error: error
             })
         })
-
+    
+    // récupère les données de date pour du log 
     await utilLog.logDate(req)
         .then(value => {
+            // stoque ces données dans la requete
             req.package = value
 
             req.data.push({
@@ -340,9 +423,9 @@ exports.logInit = async (req, res, next) => {
             })
         })
 
+    // construit le log avec lesdonnées fournit et le stoque dans la requete
     await utilLog.logConstructor(req)
         .then(() => {
-
             req.data.push({
                 name: "utilLog.logDate",
                 loc: LOC_GLOB + " " + LOC_LOC,
