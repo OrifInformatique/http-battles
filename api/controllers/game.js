@@ -26,8 +26,8 @@ const { util } = require('webpack')
 exports.createGame = async (req, res, next) => {
     utilRes.sendSuccess(200, {
         message: "Partie créé !",
-        state: req.newGame.state,
-        gameId: req.newGame._id
+        state: req.game.state,
+        gameId: req.game._id
     }, res)
 }
 

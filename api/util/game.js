@@ -979,12 +979,82 @@ exports.createGame = async (req) => {
     }
 
     // cée un objet de partie avec l'id du client avec un status d'attente du challenger
-    req.newGame = new Game({
+    req.game = new Game({
         state: "WAITING_PLAYER",
         createurId: req.auth.userId
     })
 
-    return req.newGame
+    return req.game
+}
+
+exports.createAndSaveGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: createAndSaveGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.createGame(req)
+        .then(value => {
+            req.game = value
+
+            req.data.push({
+                name: "this.createGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.createGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await this.saveGame(req)
+        .then(value => {
+            req.game = value
+
+            req.data.push({
+                name: "this.saveGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.saveGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+        
+    return req.game
 }
 
 exports.saveGame = async (req) => {
@@ -1020,7 +1090,7 @@ exports.saveGame = async (req) => {
     await req.game.save()
         .then(value => {
             // stoque la partie sauvegardé dans la requete
-            req.newGame = value
+            req.game = value
             req.data.push({
                 name: "req.game.save",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -1036,7 +1106,7 @@ exports.saveGame = async (req) => {
             })
         })
 
-    return req.newGame
+    return req.game
 }
 
 exports.joinGame = async (req) => {
