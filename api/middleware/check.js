@@ -9,6 +9,9 @@ const utilCheck = require('../util/check')
 // import fonctions util pour log
 const utilLog = require('../util/log')
 
+// import fonctions util pour game
+const utilGame= require('../util/game')
+
 // import fonctions contenu dans middleware/game
 const middleGame = require('./game')
 
@@ -291,7 +294,7 @@ exports.checkTurn = async (req, res, next) => {
     }
 
     // test si il s'agit du tour du client
-    await middleGame.testTurn(req, res)
+    await utilGame.testTurn(req, res)
         .then(value => {
             req.testTurnMessage = value
 

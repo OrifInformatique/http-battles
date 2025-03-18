@@ -2090,6 +2090,246 @@ exports.constructAndSaveStart = async (req) => {
     return req.package
 }
 
+exports.constructCheckTurn = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: constructCheckTurn"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.checkTurn(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value.game
+            req.game = value.game
+
+            // stocke le message de réponse dans la requete
+            req.package.testTurnMessage = value.testTurnMessage
+            req.testTurnMessage = value.testTurnMessage
+
+            // stoque l'id de l'opposant dans la requette
+            req.package.otherUserId = value.otherUserId
+            req.otherUserId = value.otherUserId
+
+            req.data.push({
+                name: "this.checkTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.checkTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await utilBoard.getBoardGameUserAndAdversaire(req)
+        .then(value => {
+            // stoque le plateau de l'utilisateur dans le message dans la requete pour le client
+            req.package.testTurnMessage.userBoard = value.testTurnMessage.userBoard
+            req.testTurnMessage.userBoard = value.testTurnMessage.userBoard
+
+            // stoque le plateau de l'adversaire dans le message dans la requete pour le client
+            req.package.testTurnMessage.adversaireBoard = value.testTurnMessage.adversaireBoard
+            req.testTurnMessage.adversaireBoard = value.testTurnMessage.adversaireBoard
+
+            req.data.push({
+                name: "utilBoard.getBoardGameUserAndAdversaire",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilBoard.getBoardGameUserAndAdversaire",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.checkTurn = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: checkTurn"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.findGameAndTestTurn(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value.game
+            req.game = value.game
+
+            // stocke le message de réponse dans la requete
+            req.package.testTurnMessage = value.testTurnMessage
+            req.testTurnMessage = value.testTurnMessage
+
+            req.data.push({
+                name: "this.findGameAndTestTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.findGameAndTestTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // récupère l'identifiant de l'opposant du client dans la partie en cours
+    await this.getOtherUserId(req)
+        .then(value => {
+            // stoque l'id de l'opposant dans la requette
+            req.package.otherUserId = value
+            req.otherUserId = value
+
+            req.data.push({
+                name: "this.getOtherUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getOtherUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.findGameAndTestTurn = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: findGameAndTestTurn"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    await this.getGame(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value
+            req.game = value
+
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // teste l'état de la partie
+    await this.testTurn(req)
+        .then(value => {
+            // stocke le message de réponse dans la requete
+            req.package.testTurnMessage = value
+            req.testTurnMessage = value
+
+            req.data.push({
+                name: "this.testTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "this.testTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
 exports.constructStart = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: constructStart"

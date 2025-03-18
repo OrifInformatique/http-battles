@@ -251,6 +251,79 @@ exports.createGame = async (req, res, next) => {
     return req.game
 }
 
+exports.checkTurn = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: checkTurn"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilGame.constructCheckTurn(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value.game
+            req.game = value.game
+
+            // stocke le message de réponse dans la requete
+            req.package.testTurnMessage = value.testTurnMessage
+            req.testTurnMessage = value.testTurnMessage
+
+            // stoque l'id de l'opposant dans la requette
+            req.package.otherUserId = value.otherUserId
+            req.otherUserId = value.otherUserId
+
+            // stoque le plateau de l'utilisateur dans le message dans la requete pour le client
+            req.package.testTurnMessage.userBoard = value.testTurnMessage.userBoard
+            req.testTurnMessage.userBoard = value.testTurnMessage.userBoard
+
+            // stoque le plateau de l'adversaire dans le message dans la requete pour le client
+            req.package.testTurnMessage.adversaireBoard = value.testTurnMessage.adversaireBoard
+            req.testTurnMessage.adversaireBoard = value.testTurnMessage.adversaireBoard
+
+            req.data.push({
+                name: "utilGame.constructCheckTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGame.constructCheckTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    return req.package
+}
+
 exports.startGame = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: startGame"
@@ -398,64 +471,6 @@ exports.joinGame = async (req, res, next) => {
 
     // retourn les variables traitées pour la gestion d'erreur en dehors des middleware
     return req.package
-}
-
-// test si c'est le tour de l'utilisateur ou de son adversaire
-exports.testTurn = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: testTurn"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log("error")
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // teste l'état de la partie
-    await utilGame.testTurn(req)
-        .then(value => {
-            // stocke le message de réponse dans la requete
-            req.testTurnMessage = value
-
-            req.data.push({
-                name: "utilGame.testTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            req.data.push({
-                name: "utilGame.testTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.testTurnMessage
 }
 
 // récupère l'identifiant de l'utilisateur opposant le client dans la partie 
