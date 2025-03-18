@@ -39,15 +39,13 @@ exports.getGame = async (req, res, next) => {
     if (req.utilCheck) {
         return null
     }
-
-    // recherche le jeux en fonction de son id dams la base de données
-    await Game.findOne({ _id: req.body.gameId })
+    await utilGame.getGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.game = value
 
             req.data.push({
-                name: "Game.findOne",
+                name: "utilGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -55,11 +53,12 @@ exports.getGame = async (req, res, next) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "Game.findOne",
+                name: "utilGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
+
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()

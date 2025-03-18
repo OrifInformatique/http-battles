@@ -7,14 +7,61 @@ const utilUser = require('../util/user')
 // import fonctions util pour check
 const utilCheck = require('../util/check')
 
-// import fonctions middleware pour game
-const middleGame = require('../middleware/game')
-
-// import fonctions middleware pour user
-const middleUser = require('../middleware/user')
-
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game"
+
+exports.getGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // recherche le jeux en fonction de son id dams la base de données
+    await Game.findOne({ _id: req.body.gameId })
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.game = value
+
+            req.data.push({
+                name: "Game.findOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "Game.findOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // retourne la variable traité pour la gestion d'erreur en dehors des middleware
+    return req.game
+}
 
 // formate et filtres une liste de jeux
 exports.formatAndFilterGames = async (req) => {
@@ -666,8 +713,6 @@ exports.testTurnUserId = async (req, res) => {
     } else {
         return null
     }
-
-
 }
 
 // test quel utilisateur commence
@@ -880,13 +925,13 @@ exports.updateGame = async (req) => {
         })
 
     // retourne la partie après l'update
-    await middleGame.getGame(req)
+    await this.getGame(req)
         .then(value => {
             // stoque la partie dans la requete
             req.game = value
 
             req.data.push({
-                name: "middleGame.getGame",
+                name: "this.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -894,7 +939,7 @@ exports.updateGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "middleGame.getGame",
+                name: "this.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
