@@ -1310,6 +1310,11 @@ exports.tryCase = async (req) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
     // si le test de la case est réussi
     if (req.check.result) {
 
@@ -1332,4 +1337,46 @@ exports.tryCase = async (req) => {
     // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
     return req.tryCaseMessage
 
+}
+
+exports.switchTurn = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: switchTurn"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // test l'état de la partie
+    if (req.game.state === "CREATEUR_TURN") {
+        // si c'est le tour du créateur, donne le tour du challenger comme état à appliquer
+        req.newState = "CHALLENGER_TURN"
+
+    } else if (req.game.state === "CHALLENGER_TURN") {
+        // si c'est le tour du challenger, donne le tour du créateur comme état à appliquer
+        req.newState = "CREATEUR_TURN"
+    }
+
+    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
+    return req.newState
 }

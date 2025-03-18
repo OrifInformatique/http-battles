@@ -1089,7 +1089,7 @@ exports.updateGame = async (req, res, next) => {
         .then(value => {
 
             // stoque le nouvel état de la partie dans la requette
-            req.update.state = value.state
+            req.game = value
 
             req.data.push({
                 name: "utilGame.updateGame",
@@ -1112,7 +1112,7 @@ exports.updateGame = async (req, res, next) => {
     }
 
     // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.update
+    return req.game
 }
 
 // change le toour 
@@ -1131,7 +1131,7 @@ exports.switchTurn = async (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log("error")
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -1144,15 +1144,23 @@ exports.switchTurn = async (req, res, next) => {
         return null
     }
 
-    // test l'état de la partie
-    if (req.game.state === "CREATEUR_TURN") {
-        // si c'est le tour du créateur, donne le tour du challenger comme état à appliquer
-        req.newState = "CHALLENGER_TURN"
-
-    } else if (req.game.state === "CHALLENGER_TURN") {
-        // si c'est le tour du challenger, donne le tour du créateur comme état à appliquer
-        req.newState = "CREATEUR_TURN"
-    }
+    await utilGame.switchTurn(req)
+        .then(value => {
+            req.newState = value
+            req.data.push({
+                name: "utilGame.switchTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGame.switchTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -1165,7 +1173,6 @@ exports.switchTurn = async (req, res, next) => {
 
 // test qui est l'utilisateur qui commence
 exports.checkStartUserId = async (req, res, next) => {
-
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: checkStartUserId"
 
