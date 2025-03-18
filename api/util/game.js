@@ -1,14 +1,19 @@
 // import le schema d'un utilisateur
 const Game = require("../models/Game")
 
-// import les fonction utiles pour utilisateur
-const utilUser = require('../util/user')
+
 
 // import fonctions util pour check
 const utilCheck = require('../util/check')
 
+// import les fonction utiles pour utilisateur
+const utilUser = require('../util/user')
+
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game"
+
+// import les fonction utiles pour board
+const utilBoard = require('../util/board')
 
 exports.getGame = async (req) => {
     // location local pour la gestion d'erreur
@@ -134,6 +139,246 @@ exports.formatJoin = async (req) => {
             console.log(error)
             req.data.push({
                 name: "this.joinSuccessMessage",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.checkStart = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: checkStart"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    // check si la partie a commencé (true = non, false = oui)
+    await this.checkStartStat(req)
+        .then(value => {
+            // stoque le resultat dans la requete
+            req.package.check = value
+            req.check = value
+
+            req.data.push({
+                name: "this.checkStartStat",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.checkStartStat",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await this.checkStartUserId(req)
+        .then(value => {
+            // stoque l'id du joueur qui commence
+            req.package.startUserId = value
+            req.startUserId = value
+
+            req.data.push({
+                name: "this.checkStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "this.checkStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
+    return req.package
+}
+exports.getGameCheckStartAddBoardAndPhrase = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getGameCheckStartAddBoardAndPhrase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.getGameAndCheckStart(req)
+        .then(value => {
+            req.package.game = value.game
+            req.game = value.game
+
+            req.package.check = value.check
+            req.check = value.check
+
+            req.data.push({
+                name: "this.getGameAndCheckStart",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getGameAndCheckStart",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await utilBoard.createBoardAndInsertPhrase(req)
+        .then(value => {
+            // insert la phrase (objet) dans le plateau (objet) del requete
+            req.package.board.phrase = value.board.phrase
+            req.board.phrase = value.board.phrase
+            // stoque le plateau (table) rempli dans le plateau (objet)
+            req.package.board.board = value.board.board
+            req.board.board = value.board.board
+
+            // stoque le plateu après update dans la requete
+            req.package.board = value.board
+            req.board = value.board
+
+            req.data.push({
+                name: "utilBoard.createBoardAndInsertPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilBoard.createBoardAndInsertPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.getGameAndCheckStart = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getGameAndCheckStartStat"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    await this.getGame(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value
+            req.game = value
+
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // check si la partie a commencé (true = non, false = oui)
+    await this.checkStart(req)
+        .then(value => {
+            // stoque le resultat dans la requete
+            req.package.check = value.check
+            req.check = value.check
+
+            req.package.startUserId = value.startUserId
+            req.startUserId = value.startUserId
+
+            req.data.push({
+                name: "this.checkStart",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.checkStart",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -737,7 +982,9 @@ exports.coinFlipStartMode = async (req) => {
         return null
     }
 
-    req.package = {}
+    if (req.package === undefined) {
+        req.package = {}
+    }
     // sort aléatoirement un résultat true or false et le stock dans une constante
     req.coinFlip = Math.floor(Math.random() * 2) == 0
 
@@ -997,7 +1244,7 @@ exports.testTurnUserId = async (req, res) => {
                 error: error
             })
         })
-    console.log(req.turn)
+
     // suivant le resultat du test
     if (req.turn.message === "Your turn") {
         // stoque l'id du clien dans la requet en tant que l'utilisateur qui commence
@@ -1749,9 +1996,269 @@ exports.joinGame = async (req) => {
     return req.package
 }
 
+exports.constructAndSaveStart = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: constructAndSaveStart"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.constructStart(req)
+        .then(value => {
+            req.package.game = value.game
+            req.game = value.game
+
+            req.package.check = value.check
+            req.check = value.check
+
+            // insert la phrase (objet) dans le plateau (objet) del requete
+            req.package.board.phrase = value.board.phrase
+            req.board.phrase = value.board.phrase
+            // stoque le plateau (table) rempli dans le plateau (objet)
+            req.package.board.board = value.board.board
+            req.board.board = value.board.board
+
+            // stoque le plateu après update dans la requete
+            req.package.board = value.board
+            req.board = value.board
+
+            // stoque le message addresser au client pour l'informer de qui commence la partie dans la requette
+            req.package.startMessageContent = value.startMessageContent
+            req.startMessageContent = value.startMessageContent
+
+            req.package.startMessage = value.startMessage
+            req.startMessage = value.startMessage
+
+            req.data.push({
+                name: "this.constructStart",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.constructStart",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // si oui update l'état de la partie
+    await this.updateGame(req)
+        .then(value => {
+            // stoque le nouvel état de la partie dans la requette
+            req.package.game = value
+            req.game = value
+
+            req.data.push({
+                name: "this.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.constructStart = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: constructStart"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.getGameCheckStartAddBoardAndPhrase(req)
+        .then(value => {
+            req.package.game = value.game
+            req.game = value.game
+
+            req.package.check = value.check
+            req.check = value.check
+
+            // insert la phrase (objet) dans le plateau (objet) del requete
+            req.package.board.phrase = value.board.phrase
+            req.board.phrase = value.board.phrase
+            // stoque le plateau (table) rempli dans le plateau (objet)
+            req.package.board.board = value.board.board
+            req.board.board = value.board.board
+
+            // stoque le plateu après update dans la requete
+            req.package.board = value.board
+            req.board = value.board
+
+            req.data.push({
+                name: "this.getGameCheckStartAddBoardAndPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getGameCheckStartAddBoardAndPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await this.startMessage(req)
+        .then(value => {
+            // stoque le message addresser au client pour l'informer de qui commence la partie dans la requette
+            req.package.startMessageContent = value.startMessageContent
+            req.startMessageContent = value.startMessageContent
+
+            req.package.startMessage = value.startMessage
+            req.startMessage = value.startMessage
+
+            req.data.push({
+                name: "this.startMessage",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.startMessage",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
 exports.startMessage = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: startMessage"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    // test si le client est l'utilisateur qui commence la partie
+    await this.startMessageTest(req)
+        .then(value => {
+            // stoque le message addresser au client pour l'informer de qui commence la partie dans la requette
+            req.package.startMessageContent = value
+            req.startMessageContent = value
+
+            req.data.push({
+                name: "this.startMessageTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.startMessageTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await this.startMessageCreation(req)
+        .then(value => {
+            req.package.startMessage = value
+            req.startMessage = value
+
+            req.data.push({
+                name: "this.startMessageCreation",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.startMessageCreation",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.startMessageCreation = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: startMessageCreation"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)

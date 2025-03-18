@@ -251,6 +251,83 @@ exports.createGame = async (req, res, next) => {
     return req.game
 }
 
+exports.startGame = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: startGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilGame.constructAndSaveStart(req)
+        .then(value => {
+            req.package.game = value.game
+            req.game = value.game
+
+            req.package.check = value.check
+            req.check = value.check
+
+            // insert la phrase (objet) dans le plateau (objet) del requete
+            req.package.board.phrase = value.board.phrase
+            req.board.phrase = value.board.phrase
+            // stoque le plateau (table) rempli dans le plateau (objet)
+            req.package.board.board = value.board.board
+            req.board.board = value.board.board
+
+            // stoque le plateu après update dans la requete
+            req.package.board = value.board
+            req.board = value.board
+
+            // stoque le message addresser au client pour l'informer de qui commence la partie dans la requette
+            req.package.startMessageContent = value.startMessageContent
+            req.startMessageContent = value.startMessageContent
+
+            req.package.startMessage = value.startMessage
+            req.startMessage = value.startMessage
+
+            req.data.push({
+                name: "utilGame.constructAndSaveStart",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGame.constructAndSaveStart",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    return req.package
+}
+
 // permet à un utilisateur de rejoindre une partie
 exports.joinGame = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -321,120 +398,6 @@ exports.joinGame = async (req, res, next) => {
 
     // retourn les variables traitées pour la gestion d'erreur en dehors des middleware
     return req.package
-}
-
-// construit le message de départ
-exports.startMessage = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: startMessage"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    await utilGame.startMessage(req)
-        .then(value => {
-            req.startMessage = value
-            req.data.push({
-                name: "utilGame.startMessage",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.startMessaget",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.startMessage
-}
-
-exports.startMessageTest = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: startMessageTest"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // test si le client est l'utilisateur qui commence la partie
-    await utilGame.startMessageTest(req)
-        .then(value => {
-            // stoque le message addresser au client pour l'informer de qui commence la partie dans la requette
-            req.startMessageContent = value
-
-            req.data.push({
-                name: "utilGame.startMessageTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.startMessageTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.startMessageContent
 }
 
 // test si c'est le tour de l'utilisateur ou de son adversaire
@@ -958,120 +921,4 @@ exports.switchTurn = async (req, res, next) => {
 
     // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
     return req.newState
-}
-
-// test qui est l'utilisateur qui commence
-exports.checkStartUserId = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: checkStartUserId"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log("error")
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    await utilGame.checkStartUserId(req)
-        .then(value => {
-            // stoque l'id du joueur qui commence
-            req.startUserId = value
-
-            req.data.push({
-                name: "utilGame.checkStartUserId",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            req.data.push({
-                name: "utilGame.checkStartUserId",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.startUserId
-}
-
-// test si la partie à déja commencé
-exports.checkStartStat = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: checkStartStat"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log("error")
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // check si la partie a commencé (true = non, false = oui)
-    await utilGame.checkStartStat(req)
-        .then(value => {
-            // stoque le resultat dans la requete
-            req.check = value
-
-            req.data.push({
-                name: "utilGame.checkStartStat",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.checkStartStat",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.check
 }

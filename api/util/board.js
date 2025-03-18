@@ -72,7 +72,7 @@ exports.createBoard = async (gameId, userId, req) => {
             })
         })
 
-    
+
     // retourne la variable traité pour la gestion d'erreur
     return req.newBoard
 }
@@ -237,6 +237,247 @@ exports.getBoardGameUser = async (gameId, userId, req) => {
 
     // retourne la variable traitéeF pour la gestion d'erreur
     return req.board
+}
+
+exports.createBoardAndInsertPhrase = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: createBoardAndInsertPhrase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if(req.package === undefined){
+        req.package = {}
+    }
+
+    // crée un plateau pour le client pour la partie dans la requete
+    await this.createBoard(req.body.gameId, req.auth.userId, req)
+        .then(value => {
+            //stoque le plateau dans la requete
+            req.package.board = value
+            req.board = value
+
+            req.data.push({
+                name: "this.createBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.createBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await this.insertAndSavePhrase(req)
+        .then(value => {
+            // insert la phrase (objet) dans le plateau (objet) del requete
+            req.package.board.phrase = value.board.phrase
+            req.board.phrase = value.board.phrase
+            // stoque le plateau (table) rempli dans le plateau (objet)
+            req.package.board.board = value.board.board
+            req.board.board = value.board.board
+
+            // stoque le plateu après update dans la requete
+            req.package.board = value.board
+            req.board = value.board
+
+            req.data.push({
+                name: "this.insertPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.insertPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.insertAndSavePhrase = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: insertAndSavePhrase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.insertPhrase(req)
+        .then(value => {
+            // insert la phrase (objet) dans le plateau (objet) del requete
+            req.package.board.phrase = value.board.phrase
+            req.board.phrase = value.board.phrase
+            // stoque le plateau (table) rempli dans le plateau (objet)
+            req.package.board.board = value.board.board
+            req.board.board = value.board.board
+
+            req.data.push({
+                name: "this.insertPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.insertPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // update le plateau dans la requete
+    await this.updateBoard(req)
+        .then(value => {
+            // stoque le plateu après update dans la requete
+            req.package.board = value
+            req.board = value
+
+            req.data.push({
+                name: "this.updateBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.updateBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.insertPhrase = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: insertPhrase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    // crée la phrase (objet)
+    await utilPhrase.createPhrase(req.body.phrase, req)
+        .then(value => {
+            // insert la phrase (objet) dans le plateau (objet) del requete
+            req.package.board.phrase = value
+            req.board.phrase = value
+
+            req.data.push({
+                name: "utilPhrase.createPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilPhrase.createPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // insert la phrase (suite de mots) dans le plateau (table)
+    await this.insertPhraseInBoard(req.board, req.board.phrase, req)
+        .then(value => {
+            // stoque le plateau (table) rempli dans le plateau (objet)
+            req.package.board.board = value
+            req.board.board = value
+
+            req.data.push({
+                name: "this.insertPhraseInBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.insertPhraseInBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
 }
 
 // crée et remplie le plateau avec les mot de la phrase
@@ -909,7 +1150,7 @@ exports.tryPhraseCheckAdv = async (advBoard, req) => {
         return null
     }
 
-    if (advBoard.phrase === undefined){
+    if (advBoard.phrase === undefined) {
         advBoard.phrase = {
             words: ["null", "null", "null", "null"]
         }
