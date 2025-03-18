@@ -50,6 +50,8 @@ exports.createBoard = async (gameId, userId, req) => {
         ]
     })
 
+
+
     // stoque le plateau dans la base donnée
     await this.saveBoard(board, req)
         .then(value => {
@@ -69,6 +71,8 @@ exports.createBoard = async (gameId, userId, req) => {
                 error: error
             })
         })
+
+    
     // retourne la variable traité pour la gestion d'erreur
     return req.newBoard
 }
@@ -903,6 +907,12 @@ exports.tryPhraseCheckAdv = async (advBoard, req) => {
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
+    }
+
+    if (advBoard.phrase === undefined){
+        advBoard.phrase = {
+            words: ["null", "null", "null", "null"]
+        }
     }
 
     // parcour la phrase du plateau adverse

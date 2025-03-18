@@ -5,9 +5,9 @@ const mongoose = require('mongoose')
 const gameSchema = mongoose.Schema({
     // text à propos de l'état de la partie
     state: { type: String, required: true },
-    // mail de l'utilisateur qui à créé la party
+    // id du créateur
     createurId: { type: String, required: true },
-    // nom d'ut'ilisateur du challenger
+    // id du challenger
     challengerId: { type: String, required: false }
 })
 

@@ -264,7 +264,7 @@ exports.checkStartStat = async (req) => {
     }
 
     // retourne true si la party est en mode settings
-    if (req.game.state === "SETTINGS") {
+    if (req.game.state === "SETTINGS" || req.game.state === "ENDED") {
         return true
     } else {
         return false
@@ -611,15 +611,15 @@ exports.testTurnUserId = async (req, res) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     // test quel utilisateur commence
-    await middleGame.testTurn(req, res)
+    await this.testTurn(req, res)
         .then(value => {
             // retourn le résultat et le stoque dans la requete
             req.turn = value
 
             req.data.push({
-                name: "middleGame.testTurn",
+                name: "this.testTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -627,12 +627,12 @@ exports.testTurnUserId = async (req, res) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "middleGame.testTurn",
+                name: "this.testTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
-
+        console.log(req.turn)
     // suivant le resultat du test
     if (req.turn.message === "Your turn") {
         // stoque l'id du clien dans la requet en tant que l'utilisateur qui commence
@@ -663,7 +663,10 @@ exports.testTurnUserId = async (req, res) => {
             })
         // retourne la variable traité pour la gestion d'erreur
         return req.startUserId
+    } else {
+        return null
     }
+    
 
 }
 
@@ -817,6 +820,7 @@ exports.switchArrayX = async (requestRoad, req) => {
 
 // uodate la partie
 exports.updateGame = async (req) => {
+
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: updateGame"
 
@@ -1104,4 +1108,181 @@ exports.joinSuccessMessage = async (req) => {
     }
 
     return req.joinSuccessMessage
+}
+
+exports.testTurn = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: testTurn"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // teste l'état de la partie
+    // si c'est le tour du créateur
+    if (req.game.state === "CREATEUR_TURN") {
+        // test si le client est le créateur et renvoit un message pour lui indiquer si c'est son tour
+        await this.testUserTurn(req.game.createurId, req.auth.userId, req)
+            .then(value => {
+                // stocke le message de réponse dans la requete
+                req.testTurnMessage = value
+
+                req.data.push({
+                    name: "this.testUserTurn - CREATEUR_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "this.testUserTurn - CREATEUR_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        // si c'est le tour du challenger
+    } else if (req.game.state === "CHALLENGER_TURN") {
+        // test si le client est le challenger et renvoit un message pour lui indiquer si c'est son tour
+        await this.testUserTurn(req.game.challengerId, req.auth.userId, req)
+            .then(value => {
+                req.testTurnMessage = value
+
+                req.data.push({
+                    name: "this.testUserTurn - CHALLENGER_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "this.testUserTurn - CHALLENGER_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        // si c'est le tour de personne
+    } else {
+        // renvoi un message pour informer que la partie est términer
+        req.testTurnMessage = { message: req.game.state }
+    }
+
+    return req.testTurnMessage
+}
+
+exports.tryPhraseResult = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: tryPhraseResult"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // si la phrase est juste
+    if (req.check) {
+        // termine la partie
+        await this.endGame(req, res)
+            .then(value => {
+                req.newState = value
+                req.data.push({
+                    name: "this.endGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "this.endGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        // stoque un message de success dans la requette
+        req.tryPhraseResultMessage = "Success!"
+
+    } else {
+        // si la phrase est fausse, stoque un message d'échèque dans la requette
+        req.tryPhraseResultMessage = "Wrong phrase!"
+
+    }
+
+    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
+    return req.tryPhraseResultMessage
+}
+
+exports.endGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: endGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // stoque le nouvelle état de lapartie dans la requete
+    req.newState = "ENDED"
+
+    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
+    return req.newState
 }

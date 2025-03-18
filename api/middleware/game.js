@@ -674,54 +674,24 @@ exports.testTurn = async (req, res, next) => {
     }
 
     // teste l'état de la partie
-    // si c'est le tour du créateur
-    if (req.game.state === "CREATEUR_TURN") {
-        // test si le client est le créateur et renvoit un message pour lui indiquer si c'est son tour
-        await utilGame.testUserTurn(req.game.createurId, req.auth.userId, req)
-            .then(value => {
-                // stocke le message de réponse dans la requete
-                req.testTurnMessage = value
+    await utilGame.testTurn(req)
+        .then(value => {
+            // stocke le message de réponse dans la requete
+            req.testTurnMessage = value
 
-                req.data.push({
-                    name: "utilGame.testUserTurn - CREATEUR_TURN",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
+            req.data.push({
+                name: "utilGame.testTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            .catch(error => {
-                req.data.push({
-                    name: "utilGame.testUserTurn - CREATEUR_TURN",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilGame.testTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
             })
-
-        // si c'est le tour du challenger
-    } else if (req.game.state === "CHALLENGER_TURN") {
-        // test si le client est le challenger et renvoit un message pour lui indiquer si c'est son tour
-        await utilGame.testUserTurn(req.game.challengerId, req.auth.userId, req)
-            .then(value => {
-                req.testTurnMessage = value
-
-                req.data.push({
-                    name: "utilGame.testUserTurn - CHALLENGER_TURN",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
-            })
-            .catch(error => {
-                req.data.push({
-                    name: "utilGame.testUserTurn - CHALLENGER_TURN",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
-            })
-
-        // si c'est le tour de personne
-    } else {
-        // renvoi un message pour informer que la partie est términer
-        req.testTurnMessage = { message: "Game Over" }
-    }
+        })
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -734,7 +704,6 @@ exports.testTurn = async (req, res, next) => {
 
 // récupère l'identifiant de l'utilisateur opposant le client dans la partie 
 exports.getOtherUserId = async (req, res, next) => {
-    console.log("test")
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getOtherUserId"
 
@@ -820,33 +789,23 @@ exports.tryPhraseResult = async (req, res, next) => {
         return null
     }
 
-    // si la phrase est juste
-    if (req.check) {
-        // termine la partie
-        await this.endGame(req, res)
-            .then(value => {
-                req.data.push({
-                    name: "this.endGame",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
+    await utilGame.tryPhraseResult(req)
+        .then(value => {
+            req.tryPhraseResultMessage = value
+            req.data.push({
+                name: "utilGame.tryPhraseResultt",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            .catch(error => {
-                req.data.push({
-                    name: "this.endGame",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
+        })
+        .catch(error => {
+            console.log("error")
+            req.data.push({
+                name: "utilGame.tryPhraseResult",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
             })
-
-        // stoque un message de success dans la requette
-        req.tryPhraseResultMessage = "Success!"
-
-    } else {
-        // si la phrase est fausse, stoque un message d'échèque dans la requette
-        req.tryPhraseResultMessage = "Wrong phrase!"
-
-    }
+        })
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -873,7 +832,7 @@ exports.endGame = async (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log("error")
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -886,6 +845,23 @@ exports.endGame = async (req, res, next) => {
         return null
     }
 
+    await utilGame.endGame(req)
+        .then(value => {
+            req.newState = value
+            req.data.push({
+                name: "utilGame.endGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGame.endGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
     // stoque le nouvelle état de lapartie dans la requete
     req.newState = "ENDED"
 
@@ -1112,8 +1088,9 @@ exports.updateGame = async (req, res, next) => {
     // si oui update l'état de la partie
     await utilGame.updateGame(req)
         .then(value => {
+
             // stoque le nouvel état de la partie dans la requette
-            req.update.state = value
+            req.update.state = value.state
 
             req.data.push({
                 name: "utilGame.updateGame",
@@ -1122,6 +1099,7 @@ exports.updateGame = async (req, res, next) => {
             })
         })
         .catch(error => {
+            console.log(error)
             req.data.push({
                 name: "utilGame.updateGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -1252,6 +1230,7 @@ exports.checkStartUserId = async (req, res, next) => {
                 })
             })
             .catch(error => {
+                console.log(error)
                 req.data.push({
                     name: "utilGame.testTurnUserId",
                     loc: LOC_GLOB + " " + LOC_LOC,
