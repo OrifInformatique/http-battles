@@ -57,9 +57,7 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
 const [position, setPosition] = useState(1)
 const totalSlides = 5;
-let positionSet = "position-";
 let arrowd = null;
-let positiond = positionSet + position ;
 
 //   Enlever la flèche lorsque on est sur le 1er ou dernier élément.
     function handleChangeArrowLeft() {
@@ -111,26 +109,22 @@ switch ( position ){
 
                 <div className={position === 2 ?"init5Word wordPosition-1" :"init5Word position-1 a"} id="position">
                 {phrase[1].word} 
-               {/* <p className="p">_</p>*/}
                <img src="assets/images/element/sword_1.png"/>
                </div>
 
                 <div className={position === 3 ?"init5Word wordPosition-2" :"init5Word position-2 a"} id="position">
                 {phrase[2].word} 
-               {/* <p className="p">_</p>*/}
                <img src="assets/images/element/sword_1.png"/>
                </div>
                 
                 <div className={position === 4 ?"init5Word wordPosition-3" :"init5Word position-3 a"} id="position">
                 {phrase[3].word}  
-               {/* <p className="p">_</p>*/}
                <img src="assets/images/element/sword_1.png"/>
 
                </div>
 
                 <div className={position === 5 ?"init5Word wordPosition-4" :"init5Word position-4 a"} id="position">      
                 {phrase[4].word} 
-               {/* <p className="p">_</p>*/}
                <img src="assets/images/element/sword_1.png"/>
 
                </div>
@@ -175,7 +169,7 @@ switch ( position ){
             <div className="initButtonContainer">
                 <div className="buttons">
                     <img src="assets/images/element/CC0/dice.png" alt="Dés pour tirer aléatoirement" />
-                    <h1>Aléatoire</h1>
+                    <button type="submit">Aléatoire</button>
                 </div>
                 <Button form={"myForm"} className={"initbtn"} label={"Valider la phrase"}/>
             </div>

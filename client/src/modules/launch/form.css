@@ -378,7 +378,6 @@
                
             }
             .initLi:hover {
-
                 background: white;
                 font-size: large;
                 cursor: pointer;
@@ -396,13 +395,12 @@
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
-                gap: 80%;
-
                 position: absolute;
+
+                gap: 80%;
                 top: 1000px;    
 
                 width: 800px;
-                
             }
 
             .buttons {
