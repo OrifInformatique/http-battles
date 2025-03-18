@@ -22,7 +22,7 @@ router.get('/games/createGame', auth, check.dataInit, middleGame.createGame, che
 // trouve une partie selon la clefs
 router.get('/games/findGame', auth, check.dataInit, check.checkReqDataFindGame, middleGame.findGame, check.logInit, check.dataValidity, gameCtrl.findGame)
 // liste toute les partie en attente
-router.get('/games/listGames', auth, check.dataInit, middleGame.getGames, middleGame.formatedGames, check.logInit, check.dataValidity, gameCtrl.listGames)
+router.get('/games/listGames', auth, check.dataInit, middleGame.listGames, check.logInit, check.dataValidity, gameCtrl.listGames)
 // permet à un utilisateur de rjoindre une partie
 router.post('/games/joinGame', auth, check.dataInit, check.checkReqDataJoinGame, middleGame.getGame, middleGame.joinGame, middleGame.updateGame, middleUser.getCreatorById, middleUser.getUserById, middleGame.joinSuccessMessage, check.logInit, check.dataValidity, gameCtrl.joinGame)
 // commence la partie

@@ -134,7 +134,7 @@ exports.findGame = async (req, res, next) => {
 }
 
 // retourne toute les partie
-exports.getGames = async (req, res, next) => {
+exports.listGames = async (req, res, next) => {
 
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getGames"
@@ -150,7 +150,7 @@ exports.getGames = async (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log("error")
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -163,14 +163,16 @@ exports.getGames = async (req, res, next) => {
         return null
     }
 
-    // recupère la liste de toutes les parties dans la base de données
-    await Game.find()
+    await utilGame.findFormatAndFilterGames(req)
         .then(value => {
             // stocke les jeux dans la requette
-            req.games = value
+            req.package.games = value.games
+            req.package.formatedGames = value.formatedGames
+            req.games = value.games
+            req.formatedGames = value.formatedGames
 
             req.data.push({
-                name: "Game.find",
+                name: "utilGame.findFormatAndFilterGames",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -178,63 +180,7 @@ exports.getGames = async (req, res, next) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "Game.find",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variable traité pour la gestion d'erreur en dehors des middleware
-    return req.games
-}
-
-exports.formatedGames = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: formatedGames"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // formate les jeux de la requette et filtre les erreurs attendues due aux données obsolettes et invalides
-    await utilGame.formatAndFilterGames(req)
-        .then(value => {
-            // stoque les jeux formatter pour le client dans la requette
-            req.formatedGames = value
-            req.data.push({
-                name: "utilGame.formatAndFilterGames",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.formatAndFilterGames",
+                name: "utilGame.findFormatAndFilterGames",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -246,124 +192,7 @@ exports.formatedGames = async (req, res, next) => {
     }
 
     // retourn la variable traité pour la gestion d'erreur en dehors des middleware
-    return req.formatedGames
-}
-
-// formate un jeux
-exports.formatedGame = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: formatedGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // formate le jeux pour le client
-    await utilGame.formatedMessage(req)
-        .then(value => {
-            // stoque le jeux formaté dans la requete
-            req.formatedGame = value
-
-            req.data.push({
-                name: "utilGame.formatedMessage",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.formatedMessage",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variable traité pour la gestion d'erreur en dehors des middleware
-    return req.formatedGame
-}
-
-exports.getCreateurUsername = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getCreateurUsername"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // check si le créateur exist et si il a un username atribué, si oui, retourn son nom d'utilisateur
-    await utilGame.checkCreatorNotNull(req.createur, req)
-        .then(value => {
-            // ajoute le nom d'utilisateur à la requete
-            req.createurUsername = value
-
-            req.data.push({
-                name: "utilGame.checkCreatorNotNull",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.checkCreatorNotNull",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variable traité pour la gestion d'erreur en dehors des middleware
-    return req.createurUsername
+    return req.package
 }
 
 // crée un objet jeux et le retourn

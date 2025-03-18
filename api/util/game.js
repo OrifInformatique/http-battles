@@ -1129,8 +1129,137 @@ exports.getFormatedGameAndCreator = async (req) => {
                 error: error
             })
         })
-        
+
     return req.package
+}
+
+exports.findFormatAndFilterGames = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: findFormatAndFilterGames"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    req.package = {}
+
+    await this.findGames(req)
+        .then(value => {
+            // stocke les jeux dans la requette
+            req.package.games = value
+            req.games = value
+
+            req.data.push({
+                name: "this.findGames",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.findGames",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // formate les jeux de la requette et filtre les erreurs attendues due aux données obsolettes et invalides
+    await this.formatAndFilterGames(req)
+        .then(value => {
+            // stoque les jeux formatter pour le client dans la requette
+            req.package.formatedGames = value
+            req.formatedGames = value
+            req.data.push({
+                name: "this.formatAndFilterGames",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.formatAndFilterGames",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+    
+    return req.package
+}
+
+exports.findGames = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: findGames"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // recupère la liste de toutes les parties dans la base de données
+    await Game.find()
+        .then(value => {
+            // stocke les jeux dans la requette
+            req.games = value
+
+            req.data.push({
+                name: "Game.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "Game.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.games
 }
 
 exports.getGameAndCreator = async (req) => {
