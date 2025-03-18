@@ -1200,50 +1200,24 @@ exports.checkStartUserId = async (req, res, next) => {
         return null
     }
 
-    // test si la partie a déjà commencé
-    if (req.check) {
-        // si non (true) décide aléatoirement quel joueur commence et retourn son id
-        await utilGame.startCoinFlip(req, res)
-            .then(value => {
-                // stoque l'id du joueur qui commence
-                req.startUserId = value
+    await utilGame.checkStartUserId(req)
+        .then(value => {
+            // stoque l'id du joueur qui commence
+            req.startUserId = value
 
-                req.data.push({
-                    name: "utilGame.startCoinFlip",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
+            req.data.push({
+                name: "utilGame.checkStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            .catch(error => {
-                req.data.push({
-                    name: "utilGame.startCoinFlip",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
+        })
+        .catch(error => {
+            req.data.push({
+                name: "utilGame.checkStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
             })
-
-    } else {
-        // si oui (false), test de quel joueur c'est le tour et retourn son id
-        await utilGame.testTurnUserId(req, res)
-            .then(value => {
-                // stoque l'id du joueur qui commence
-                req.startUserId = value
-
-                req.data.push({
-                    name: "utilGame.testTurnUserId",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
-            })
-            .catch(error => {
-                console.log(error)
-                req.data.push({
-                    name: "utilGame.testTurnUserId",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
-            })
-    }
+        })
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
