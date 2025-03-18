@@ -11,8 +11,6 @@ const routeParam = require('../middleware/routeParam')
 
 const check = require('../middleware/check')
 
-const middleUser = require('../middleware/user')
-
 const middleGame = require('../middleware/game')
 
 const middleBoard = require('../middleware/board')
@@ -24,7 +22,7 @@ router.get('/games/findGame', auth, check.dataInit, check.checkReqDataFindGame, 
 // liste toute les partie en attente
 router.get('/games/listGames', auth, check.dataInit, middleGame.listGames, check.logInit, check.dataValidity, gameCtrl.listGames)
 // permet à un utilisateur de rjoindre une partie
-router.post('/games/joinGame', auth, check.dataInit, check.checkReqDataJoinGame, middleGame.getGame, middleGame.joinGame, middleGame.updateGame, middleUser.getCreatorById, middleUser.getUserById, middleGame.joinSuccessMessage, check.logInit, check.dataValidity, gameCtrl.joinGame)
+router.post('/games/joinGame', auth, check.dataInit, check.checkReqDataJoinGame, middleGame.joinGame, check.logInit, check.dataValidity, gameCtrl.joinGame)
 // commence la partie
 router.post('/games/startGame', auth, check.dataInit, check.checkReqDataStartGame, middleGame.getGame, middleGame.checkStartStat, middleGame.checkStartUserId, middleBoard.createBoard, middleBoard.insertPhrase, middleBoard.insertPhraseInBoard, middleBoard.fillBoard, middleGame.startMessageTest, middleGame.startMessage, middleGame.updateGame, check.logInit, check.dataValidity, gameCtrl.startGame)
 // vérifie à qui est le tour

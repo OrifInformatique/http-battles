@@ -63,6 +63,324 @@ exports.getGame = async (req) => {
     return req.game
 }
 
+exports.formatJoin = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: formatJoin"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    await utilUser.getCreatorAndChallenger(req)
+        .then(value => {
+            req.package.createur = value.createur
+            req.createur = value.createur
+
+            req.package.user = value.user
+            req.user = value.user
+
+            req.data.push({
+                name: "utilUser.getCreatorAndChallenger",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilUser.getCreatorAndChallenger",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stoque un message de success pour la partie rejointe qui contient le message, l'état de la partie, l'username du créateur, l'username du client
+    await this.joinSuccessMessage(req)
+        .then(value => {
+            req.package.joinSuccessMessage = value
+            req.joinSuccessMessage = value
+
+            req.data.push({
+                name: "this.joinSuccessMessage",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.joinSuccessMessage",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.findUpdateFormateAndJoinGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: findUpdateFormateAndJoinGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.findUpdateAndJoinGame(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value.game
+            req.package.state = value.state
+            req.package.challenger = value.challenger
+            req.game = value.game
+            req.state = value.state
+            req.challenger = value.challenger
+
+            req.data.push({
+                name: "this.findUpdateAndJoinGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.findUpdateAndJoinGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await this.formatJoin(req)
+        .then(value => {
+            req.package.createur = value.createur
+            req.createur = value.createur
+
+            req.package.user = value.user
+            req.user = value.user
+
+            req.package.joinSuccessMessage = value.joinSuccessMessage
+            req.joinSuccessMessage = value.joinSuccessMessage
+
+            req.data.push({
+                name: "this.formatJoin",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.formatJoin",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.findUpdateAndJoinGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: findUpdateAndJoinGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.findAndJoinGame(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value.game
+            req.package.state = value.state
+            req.package.challenger = value.challenger
+            req.game = value.game
+            req.state = value.state
+            req.challenger = value.challenger
+
+            req.data.push({
+                name: "this.findAndJoinGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.findAndJoinGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // si oui update l'état de la partie
+    await this.updateGame(req)
+        .then(value => {
+            // stoque le nouvel état de la partie dans la requette
+            req.package.game = value
+            req.game = value
+
+            req.data.push({
+                name: "this.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.findAndJoinGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: findAndJoinGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    await this.getGame(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value
+            req.game = value
+
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await this.joinGame(req)
+        .then(value => {
+            req.package.state = value.state
+            req.package.challenger = value.challenger
+            req.state = value.state
+            req.challenger = value.challenger
+
+            req.data.push({
+                name: "this.joinGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.joinGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
+    return req.package
+}
+
 // formate et filtres une liste de jeux
 exports.formatAndFilterGames = async (req) => {
     // location local pour la gestion d'erreur
@@ -174,7 +492,7 @@ exports.formatAndFilterGame = async (req) => {
             })
         })
 
-    // filtre les erreur de la fonction middleUser.getCreatorById qui sont attendue à cause des donnée invalides
+    // filtre les erreur de la fonction utilUser.getCreatorById qui sont attendue à cause des donnée invalides
     await utilCheck.dataValidityFilterListGame(req)
         .then(value => {
 
@@ -369,7 +687,7 @@ exports.startCoinFlip = async (req, res) => {
 
 
     // update la parite dans la base de donnée
-    await this.updateGame(req, res)
+    await this.updateGame(req)
         .then(value => {
             req.newState = value.newState
 
@@ -895,10 +1213,10 @@ exports.updateGame = async (req) => {
     }
 
     if (req.newState !== undefined) {
-        req.game.state = req.newState
+        req.game.state = req.state
     }
     if (req.newChallenger !== undefined) {
-        req.game.challengerId = req.newChallenger
+        req.game.challengerId = req.challenger
     }
 
     // update l'état de la partie
@@ -1205,7 +1523,7 @@ exports.findFormatAndFilterGames = async (req) => {
                 error: error
             })
         })
-    
+
     return req.package
 }
 
@@ -1418,12 +1736,15 @@ exports.joinGame = async (req) => {
     }
 
     // stock le nouelle état de la partie et le nouveaux challenger dans la requette
-    req.newState = "SETTINGS"
-    req.newChallenger = req.auth.userId
+    req.state = "SETTINGS"
+    req.challenger = req.auth.userId
 
-    req.package = {}
-    req.package.newState = "SETTINGS"
-    req.package.newChallenger = req.auth.userId
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    req.package.state = "SETTINGS"
+    req.package.challenger = req.auth.userId
 
     return req.package
 }
