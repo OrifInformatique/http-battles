@@ -20,7 +20,7 @@ const middleBoard = require('../middleware/board')
 // créé une partie pour cette utilisateur
 router.get('/games/createGame', auth, check.dataInit, middleGame.createGame, check.logInit, check.dataValidity, gameCtrl.createGame)
 // trouve une partie selon la clefs
-router.get('/games/findGame', auth, check.dataInit, check.checkReqDataFindGame, middleGame.getGame, middleUser.getCreatorById, middleGame.formatedGame, check.logInit, check.dataValidity, gameCtrl.findGame)
+router.get('/games/findGame', auth, check.dataInit, check.checkReqDataFindGame, middleGame.findGame, check.logInit, check.dataValidity, gameCtrl.findGame)
 // liste toute les partie en attente
 router.get('/games/listGames', auth, check.dataInit, middleGame.getGames, middleGame.formatedGames, check.logInit, check.dataValidity, gameCtrl.listGames)
 // permet à un utilisateur de rjoindre une partie

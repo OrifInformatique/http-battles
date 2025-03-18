@@ -1053,8 +1053,159 @@ exports.createAndSaveGame = async (req) => {
                 error: error
             })
         })
-        
+
     return req.game
+}
+
+exports.getFormatedGameAndCreator = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getFormatedGameAndCreator"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await this.getGameAndCreator(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package = value
+            req.game = value.game
+            req.createur = value.createur
+
+            req.data.push({
+                name: "this.getGameAndCreator",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getGameAndCreator",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // formate le jeux pour le client
+    await this.formatedMessage(req)
+        .then(value => {
+            req.package.formatedGame = value
+            // stoque le jeux formaté dans la requete
+            req.formatedGame = value
+
+            req.data.push({
+                name: "this.formatedMessage",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.formatedMessage",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+        
+    return req.package
+}
+
+exports.getGameAndCreator = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getGameAndCreator"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    req.package = {}
+
+    await this.getGame(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value
+
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // récupère l'utilisateur en fonction de son id en parametre (ici l'id du créateur contenu dans le jeux)
+    await utilUser.getUserById(req.game.createurId, req)
+        .then(value => {
+            // stock l'objet utilisateur trouvé dans la requete
+            req.package.createur = value
+
+            req.data.push({
+                name: "utilUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
 }
 
 exports.saveGame = async (req) => {
