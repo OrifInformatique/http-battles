@@ -7,6 +7,8 @@ const utilBoard = require('../util/board')
 // import fonctions util pour game
 const utilGame = require('../util/game')
 
+
+
 // import fonctions util pour user
 const utilUser = require('../util/user')
 
@@ -180,9 +182,11 @@ exports.createGame = async (req, res, next) => {
         req.package = {}
     }
 
-    await utilGame.createAndSaveGame(req)
+    await utilGame.createGame(req)
         .then(value => {
-            req.game = value
+            req.package.game = value.game
+            req.game = value.game
+
             req.data.push({
                 name: "utilGame.createGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -204,7 +208,7 @@ exports.createGame = async (req, res, next) => {
     }
 
     // retourn la variable traité pour la gestion d'erreur en dehors des middleware
-    return req.game
+    return req.package
 }
 
 exports.checkTurn = async (req, res, next) => {

@@ -1,13 +1,19 @@
 // import le schema d'un utilisateur
 const Game = require("../models/Game")
 
-
-
 // import fonctions util pour check
 const utilCheck = require('../util/check')
 
 // import les fonction utiles pour utilisateur
 const utilUser = require('../util/user')
+
+// import les fonction utiles pour utilisateur
+const utilCreateGame = require('../util/depthOne/createGame')
+
+// import les fonction utiles pour utilisateur
+const utilFindGame = require('../util/depthOne/findGame')
+
+
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game"
@@ -2201,50 +2207,13 @@ exports.createGame = async (req) => {
         return null
     }
 
-    // cée un objet de partie avec l'id du client avec un status d'attente du challenger
-    req.game = new Game({
-        state: "WAITING_PLAYER",
-        createurId: req.auth.userId
-    })
-
-    return req.game
-}
-
-exports.createAndSaveGame = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: createAndSaveGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
+    await utilCreateGame.createGame(req)
         .then(value => {
-            req.utilCheck = value
-
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    await this.createGame(req)
-        .then(value => {
+            req.package.game = value
             req.game = value
 
             req.data.push({
-                name: "this.createGame",
+                name: "utilCreateAndSaveGame.createGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -2252,18 +2221,19 @@ exports.createAndSaveGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.createGame",
+                name: "utilCreateAndSaveGame.createGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    await this.saveGame(req)
+    await utilCreateGame.saveGame(req)
         .then(value => {
+            req.package.game = value
             req.game = value
 
             req.data.push({
-                name: "this.saveGame",
+                name: "utilCreateAndSaveGame.saveGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -2271,13 +2241,13 @@ exports.createAndSaveGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.saveGame",
+                name: "utilCreateAndSaveGame.saveGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    return req.game
+    return req.package
 }
 
 exports.getFormatedGameAndCreator = async (req) => {
@@ -2309,7 +2279,7 @@ exports.getFormatedGameAndCreator = async (req) => {
         return null
     }
 
-    await this.getGameAndCreator(req)
+    await utilFindGame.getGameAndCreator(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package = value
@@ -2317,7 +2287,7 @@ exports.getFormatedGameAndCreator = async (req) => {
             req.createur = value.createur
 
             req.data.push({
-                name: "this.getGameAndCreator",
+                name: "utilFindGame.getGameAndCreator",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -2325,7 +2295,7 @@ exports.getFormatedGameAndCreator = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.getGameAndCreator",
+                name: "utilFindGame.getGameAndCreator",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -2339,7 +2309,7 @@ exports.getFormatedGameAndCreator = async (req) => {
             req.formatedGame = value
 
             req.data.push({
-                name: "this.formatedMessage",
+                name: "utilFindGame.formatedMessage",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -2347,7 +2317,7 @@ exports.getFormatedGameAndCreator = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.formatedMessage",
+                name: "utilFindGame.formatedMessage",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -2558,58 +2528,6 @@ exports.getGameAndCreator = async (req) => {
         })
 
     return req.package
-}
-
-exports.saveGame = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: saveGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // sauvegarde la partie dans la base de donées
-    await req.game.save()
-        .then(value => {
-            // stoque la partie sauvegardé dans la requete
-            req.game = value
-            req.data.push({
-                name: "req.game.save",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "req.game.save",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    return req.game
 }
 
 exports.joinGame = async (req) => {

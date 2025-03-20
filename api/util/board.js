@@ -341,6 +341,7 @@ exports.createBoardAndInsertPhrase = async (req) => {
             })
         })
 
+
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
@@ -371,7 +372,7 @@ exports.createBoardAndInsertPhrase = async (req) => {
                 error: error
             })
         })
-        console.log(req.package)
+
     await this.insertAndSavePhrase(req)
         .then(value => {
             // insert la phrase (objet) dans le plateau (objet) del requete
