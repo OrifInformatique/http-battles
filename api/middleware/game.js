@@ -117,7 +117,7 @@ exports.listGames = async (req, res, next) => {
         req.package = {}
     }
 
-    await utilGame.findFormatAndFilterGames(req)
+    await utilGame.listGames(req)
         .then(value => {
             // stocke les jeux dans la requette
             req.package.games = value.games
@@ -126,7 +126,7 @@ exports.listGames = async (req, res, next) => {
             req.formatedGames = value.formatedGames
 
             req.data.push({
-                name: "utilGame.findFormatAndFilterGames",
+                name: "utilGame.listGames",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -134,7 +134,7 @@ exports.listGames = async (req, res, next) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.findFormatAndFilterGames",
+                name: "utilGame.listGames",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

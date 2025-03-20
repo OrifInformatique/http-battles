@@ -2329,9 +2329,9 @@ exports.findGame = async (req) => {
     return req.package
 }
 
-exports.findFormatAndFilterGames = async (req) => {
+exports.listGames = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: findFormatAndFilterGames"
+    const LOC_LOC = "methode: listGames"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
