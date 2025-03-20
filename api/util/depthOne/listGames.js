@@ -76,3 +76,56 @@ exports.formatAndFilterGames = async (req) => {
     // retourne la variable traité pour la gestion d'erreur
     return req.formatedGames
 }
+
+exports.findGames = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: findGames"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // recupère la liste de toutes les parties dans la base de données
+    await Game.find()
+        .then(value => {
+            // stocke les jeux dans la requette
+            req.games = value
+
+            req.data.push({
+                name: "Game.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "Game.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.games
+}

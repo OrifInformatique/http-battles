@@ -14,20 +14,27 @@ const utilGame = require('../../game')
 const utilUser = require('../../user')
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('../depthTwo/depthThree/getUserById')
+const utilGetGame = require('../depthTwo/depthThree/getGame')
+
+// import les fonction utiles pour utilisateur
+const utilJoinGame = require('../depthTwo/depthThree/joinGame')
+
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/depthTwo/listGames"
+const LOC_GLOB = "file: ../util/depthOne/depthTwo/updateGame"
 
-// formate une partie et filtre les erreures due au données invalide
-exports.formatAndFilterGame = async (req) => {
+
+// uodate la partie
+exports.updateGame = async (req) => {
+
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: formatAndFilterGame"
+    const LOC_LOC = "methode: updateGame"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
+
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -47,15 +54,24 @@ exports.formatAndFilterGame = async (req) => {
     if (req.utilCheck) {
         return null
     }
-    req.formatedGame = {}
-    // récupère l'utilisateur en fonction de son id en parametre (ici l'id du créateur contenu dans le jeux)
-    await utilGetUser.getUserById(req.game.createurId, req)
-        .then(value => {
-            // stock l'username utilisateur trouvé dans la requete
-            req.formatedGame.createur = value.username
 
+    if (req.state !== undefined) {
+        req.game.state = req.state
+    }
+    if (req.challenger !== undefined) {
+        req.game.challengerId = req.challenger
+    }
+
+    // update l'état de la partie
+    await Game.updateOne({ _id: req.body.gameId }, {
+        $set: {
+            state: req.game.state,
+            challengerId: req.game.challengerId
+        }
+    })
+        .then(value => {
             req.data.push({
-                name: "utilGetUser.getUserById",
+                name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -63,18 +79,20 @@ exports.formatAndFilterGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGetUser.getUserById",
+                name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // filtre les erreur de la fonction utilUser.getCreatorById qui sont attendue à cause des donnée invalides
-    await utilCheck.dataValidityFilterListGame(req)
+    // retourne la partie après l'update
+    await utilGetGame.getGame(req)
         .then(value => {
+            // stoque la partie dans la requete
+            req.game = value
 
             req.data.push({
-                name: "utilCheck.dataValidityFilterListGame",
+                name: "this.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -82,15 +100,12 @@ exports.formatAndFilterGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilCheck.dataValidityFilterListGame",
+                name: "this.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
-
-    req.formatedGame.game = req.game
 
     // retourne la variable traité pour la gestion d'erreur
-    return req.formatedGame
+    return req.game
 }
-

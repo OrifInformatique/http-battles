@@ -7,14 +7,16 @@ const utilCheck = require('../check')
 // import fonctions util pour game
 const utilGame = require('../game')
 
-// import les fonction utiles pour utilisateur
-const utilFindGame = require('./depthTwo/depthThree/getGame')
+
 
 // import les fonction utiles pour utilisateur
 const utilGetUser = require('../depthOne/depthTwo/depthThree/getUserById')
 
 // import les fonction utiles pour utilisateur
 const utilJoinGame = require('../depthOne/depthTwo/joinGame')
+
+// import les fonction utiles pour utilisateur
+const utilUpdategame = require('../depthOne/depthTwo/updategame')
 
 // import fonctions util pour user
 const utilUser = require('../user')
@@ -50,7 +52,7 @@ exports.findUpdateAndJoinGame = async (req) => {
         return null
     }
 
-    await utilGame.findAndJoinGame(req)
+    await utilJoinGame.findAndJoinGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package.game = value.game
@@ -61,7 +63,7 @@ exports.findUpdateAndJoinGame = async (req) => {
             req.challenger = value.challenger
 
             req.data.push({
-                name: "utilGame.findAndJoinGame",
+                name: "utilJoinGame.findAndJoinGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -69,14 +71,14 @@ exports.findUpdateAndJoinGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.findAndJoinGame",
+                name: "utilJoinGame.findAndJoinGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // si oui update l'état de la partie
-    await utilGame.updateGame(req)
+    await utilUpdategame.updateGame(req)
         .then(value => {
             // stoque le nouvel état de la partie dans la requette
             req.package.game = value

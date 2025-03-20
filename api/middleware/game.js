@@ -402,7 +402,7 @@ exports.joinGame = async (req, res, next) => {
         req.package = {}
     }
 
-    await utilGame.findUpdateFormateAndJoinGame(req)
+    await utilGame.joinGame(req)
         .then(value => {
             req.package.game = value.game
             req.package.state = value.state
