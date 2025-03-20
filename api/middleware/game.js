@@ -45,6 +45,10 @@ exports.findGame = async (req, res, next) => {
         return null
     }
 
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
     await utilGame.getFormatedGameAndCreator(req)
         .then(value => {
             // stock l'objet jeux dans la requette
@@ -105,6 +109,10 @@ exports.listGames = async (req, res, next) => {
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
     }
 
     await utilGame.findFormatAndFilterGames(req)
@@ -168,6 +176,10 @@ exports.createGame = async (req, res, next) => {
         return null
     }
 
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
     await utilGame.createAndSaveGame(req)
         .then(value => {
             req.game = value
@@ -221,6 +233,10 @@ exports.checkTurn = async (req, res, next) => {
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
     }
 
     await utilGame.constructCheckTurn(req)
@@ -294,6 +310,10 @@ exports.startGame = async (req, res, next) => {
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
     }
 
     await utilGame.constructAndSaveStart(req)
@@ -374,6 +394,10 @@ exports.joinGame = async (req, res, next) => {
         return null
     }
 
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
     await utilGame.findUpdateFormateAndJoinGame(req)
         .then(value => {
             req.package.game = value.game
@@ -417,64 +441,6 @@ exports.joinGame = async (req, res, next) => {
     return req.package
 }
 
-// récupère l'identifiant de l'utilisateur opposant le client dans la partie 
-exports.getOtherUserId = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getOtherUserId"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log("error")
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // récupère l'identifiant de l'opposant du client dans la partie en cours
-    await utilGame.getOtherUserId(req)
-        .then(value => {
-            // stoque l'id de l'opposant dans la requette
-            req.otherUserId = value
-
-            req.data.push({
-                name: "utilGame.getOtherUserId",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.getOtherUserId",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.otherUserId
-}
-
 exports.tryPhrase = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: tryPhrase"
@@ -501,6 +467,10 @@ exports.tryPhrase = async (req, res, next) => {
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
     }
 
     await utilGame.tryPhrase(req)
@@ -571,6 +541,10 @@ exports.endGame = async (req, res, next) => {
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
     }
 
     await utilGame.findUpdateAndEndGame(req)
