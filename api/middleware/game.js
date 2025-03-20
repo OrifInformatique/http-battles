@@ -531,10 +531,9 @@ exports.getOtherUserId = async (req, res, next) => {
     return req.otherUserId
 }
 
-// renvoit le message aproprier pour le resultat du test de phrase du client
-exports.tryPhraseResult = async (req, res, next) => {
+exports.tryPhrase = async (req, res, next) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: tryPhraseResult"
+    const LOC_LOC = "methode: tryPhrase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req, next)
@@ -547,7 +546,7 @@ exports.tryPhraseResult = async (req, res, next) => {
             })
         })
         .catch(error => {
-            console.log("error")
+            console.log(error)
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -560,19 +559,33 @@ exports.tryPhraseResult = async (req, res, next) => {
         return null
     }
 
-    await utilGame.tryPhraseResult(req)
+    await utilGame.tryPhrase(req)
         .then(value => {
-            req.tryPhraseResultMessage = value
+            // stock l'objet jeux dans la requette
+            req.package.game = value.game
+            req.game = value.game
+
+            // stoque l'id de l'opposant dans la requette
+            req.package.otherUserId = value.otherUserId
+            req.otherUserId = value.otherUserId
+
+            // stoque le resultat dans la requet
+            req.package.check = value.check
+            req.check = value.check
+
+            req.package.tryPhraseResultMessage = value.tryPhraseResultMessage
+            req.tryPhraseResultMessage = value.tryPhraseResultMessage
+
             req.data.push({
-                name: "utilGame.tryPhraseResultt",
+                name: "utilGame.tryPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
         })
         .catch(error => {
-            console.log("error")
+            console.log(error)
             req.data.push({
-                name: "utilGame.tryPhraseResult",
+                name: "utilGame.tryPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -583,8 +596,8 @@ exports.tryPhraseResult = async (req, res, next) => {
         next()
     }
 
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.tryPhraseResultMessage
+    return req.package
+
 }
 
 // fini la partie

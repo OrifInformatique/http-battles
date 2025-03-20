@@ -10,7 +10,7 @@ const utilCheck = require('../util/check')
 const utilLog = require('../util/log')
 
 // import fonctions util pour game
-const utilGame= require('../util/game')
+const utilGame = require('../util/game')
 
 // import fonctions contenu dans middleware/game
 const middleGame = require('./game')
@@ -40,7 +40,7 @@ exports.checkReqDataStartGame = async (req, res, next) => {
             error: error
         })
     }
-    
+
     // test si la requete contient l'id de la partie
     if (req.body.gameId === undefined) {
         // ajoute un message informant de l'absence de la donnée à l'erreur
@@ -53,7 +53,7 @@ exports.checkReqDataStartGame = async (req, res, next) => {
             error: error
         })
     }
-    
+
     // test si la fonction next à été transmise
     if (next !== undefined) {
         // si oui passe au prochain middleWare
@@ -110,7 +110,7 @@ exports.checkReqDataTryPhrase = async (req, res, next) => {
 exports.checkReqDataFindGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataFindGame"
-    
+
     // crée une erreur
     var error = new Error()
     // donne un nom informant sur la nature de l'erreur
@@ -141,7 +141,7 @@ exports.checkReqDataFindGame = async (req, res, next) => {
 exports.checkReqDataJoinGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataJoinGame"
-    
+
     // crée une erreur
     var error = new Error()
     // donne un nom informant sur la nature de l'erreur
@@ -172,7 +172,7 @@ exports.checkReqDataJoinGame = async (req, res, next) => {
 exports.checkReqDataCheckTurn = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataCheckTurn"
-    
+
     // crée une erreur
     var error = new Error()
     // donne un nom informant sur la nature de l'erreur
@@ -203,7 +203,7 @@ exports.checkReqDataCheckTurn = async (req, res, next) => {
 exports.checkReqDataEndGame = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataEndGame"
-    
+
     // crée une erreur
     var error = new Error()
     // donne un nom informant sur la nature de l'erreur
@@ -234,7 +234,7 @@ exports.checkReqDataEndGame = async (req, res, next) => {
 exports.checkReqDataTryCase = async (req, res, next) => {
     // constante local indiquant la methode pour le traitement des erreures
     const LOC_LOC = "methode: checkReqDataTryCase"
-    
+
     // crée une erreur
     var error = new Error()
     // donne un nom informant sur la nature de l'erreur
@@ -294,9 +294,10 @@ exports.checkTurn = async (req, res, next) => {
     }
 
     // test si il s'agit du tour du client
-    await utilGame.testTurn(req, res)
+    await utilGame.findGameAndTestTurn(req, res)
         .then(value => {
-            req.testTurnMessage = value
+
+            req.testTurnMessage = value.testTurnMessage
 
             // donnée ajouté ave la méthode utiliser, la méthode dans laquel elle est localiser, la page global et le résultat
             req.data.push({
@@ -402,7 +403,7 @@ exports.logInit = async (req, res, next) => {
                 error: error
             })
         })
-    
+
     // récupère les données de date pour du log 
     await utilLog.logDate(req)
         .then(value => {
