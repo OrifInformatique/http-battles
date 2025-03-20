@@ -616,13 +616,17 @@ exports.endGame = async (req, res, next) => {
         return null
     }
 
-    await utilGame.getGame(req)
+    await utilGame.findAndEndGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
-            req.game = value
+            req.package.game = value.game
+            req.game = value.game
+
+            req.package.state = value.state
+            req.state = value.state
 
             req.data.push({
-                name: "utilGame.getGame",
+                name: "utilGame.findAndEndGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -630,32 +634,11 @@ exports.endGame = async (req, res, next) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.getGame",
+                name: "utilGame.findAndEndGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
-
-    await utilGame.endGame(req)
-        .then(value => {
-            req.state = value
-            req.data.push({
-                name: "utilGame.endGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.endGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stoque le nouvelle état de lapartie dans la requete
-    req.state = "ENDED"
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -663,7 +646,7 @@ exports.endGame = async (req, res, next) => {
     }
 
     // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.newState
+    return req.package
 }
 
 // ecrit le message du test de la case à renvoyer au client

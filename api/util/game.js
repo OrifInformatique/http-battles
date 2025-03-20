@@ -68,6 +68,82 @@ exports.getGame = async (req) => {
     return req.game
 }
 
+exports.findAndEndGame = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: findAndEndGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    await this.getGame(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value
+            req.game = value
+
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await this.endGame(req)
+        .then(value => {
+            req.package.state = value
+            req.state = value
+
+            req.data.push({
+                name: "this.endGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.endGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
 exports.formatJoin = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: formatJoin"
@@ -910,7 +986,7 @@ exports.startCoinFlip = async (req, res) => {
         return null
     }
 
-    if(req.package === undefined){
+    if (req.package === undefined) {
         req.package = {}
     }
 
@@ -920,7 +996,7 @@ exports.startCoinFlip = async (req, res) => {
             req.package.startUserId = value.startUserId
             req.startUserId = value.startUserId
 
-            req.package.state = value.state
+            req.package.game.state = value.game.state
             req.data.push({
                 name: "this.coinFlipStartUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -939,9 +1015,9 @@ exports.startCoinFlip = async (req, res) => {
     // update la parite dans la base de donnée
     await this.updateGame(req)
         .then(value => {
-            req.package.state = value.package.state
-            req.state = value.package.state
-
+            req.package.game.state = value.state
+            req.game.state = value.state
+            
             req.data.push({
                 name: "this.updateGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -956,7 +1032,7 @@ exports.startCoinFlip = async (req, res) => {
                 error: error
             })
         })
-    console.log(req.package)
+
     // retourne la variable traité pour la gestion d'erreur
     return req.startUserId
 }
@@ -1021,7 +1097,7 @@ exports.coinFlipStartMode = async (req) => {
     await this.coinFlipStartGameState(req.coinFlip, req)
         .then(value => {
             // stoque le nouvel étàt de la partie dans la requete
-            req.state = value
+            req.game.state = value
             req.package.state = value
             req.data.push({
                 name: "this.coinFlipStartGameState",
@@ -1469,10 +1545,10 @@ exports.updateGame = async (req) => {
     if (req.state !== undefined) {
         req.game.state = req.state
     }
-    if (req.newChallenger !== undefined) {
+    if (req.challenger !== undefined) {
         req.game.challengerId = req.challenger
     }
-
+    
     // update l'état de la partie
     await Game.updateOne({ _id: req.body.gameId }, {
         $set: {
