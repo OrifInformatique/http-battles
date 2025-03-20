@@ -1,33 +1,38 @@
 // import le schema d'un utilisateur
-const Game = require("../../models/Game")
+const Game = require("../../../models/Game")
+
+// import le schema d'un utilisateur
+const User = require("../../../models/User")
 
 // import fonctions util pour check
-const utilCheck = require('../check')
+const utilCheck = require('../../check')
 
 // import fonctions util pour game
-const utilGame = require('../game')
-
-// import les fonction utiles pour utilisateur
-const utilGetGame = require('./depthTwo/depthThree/getGame')
-
-// import les fonction utiles pour utilisateur
-const utilGetUser = require('../depthOne/depthTwo/depthThree/getUserById')
+const utilGame = require('../../game')
 
 // import fonctions util pour user
-const utilUser = require('../user')
+const utilUser = require('../../user')
+
+// import les fonction utiles pour utilisateur
+const utilGetUser = require('../depthTwo/depthThree/getUserById')
+
+// import les fonction utiles pour utilisateur
+const utilJoinGame = require('../depthTwo/depthThree/joinGame')
+
+// import les fonction utiles pour utilisateur
+const utilGetGame = require('./depthThree/getGame')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/findGame"
+const LOC_GLOB = "file: ../util/depthOne/depthTwo/joinGame"
 
-exports.getGameAndCreator = async (req) => {
+exports.findAndJoinGame = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getGameAndCreator"
+    const LOC_LOC = "methode: findAndJoinGame"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
-
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -46,6 +51,10 @@ exports.getGameAndCreator = async (req) => {
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
     }
 
     await utilGetGame.getGame(req)
@@ -69,15 +78,15 @@ exports.getGameAndCreator = async (req) => {
             })
         })
 
-    // récupère l'utilisateur en fonction de son id en parametre (ici l'id du créateur contenu dans le jeux)
-    await utilGetUser.getUserById(req.game.createurId, req)
+    await utilJoinGame.joinGame(req)
         .then(value => {
-            // stock l'objet utilisateur trouvé dans la requete
-            req.package.createur = value
-            req.createur = value
+            req.package.state = value.state
+            req.package.challenger = value.challenger
+            req.state = value.state
+            req.challenger = value.challenger
 
             req.data.push({
-                name: "utilGetUser.getUserById",
+                name: "utilJoinGame.joinGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -85,49 +94,12 @@ exports.getGameAndCreator = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGetUser.getUserById",
+                name: "utilJoinGame.joinGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
+
 
     return req.package
-}
-
-// formate le message
-exports.formatedMessage = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: formatedMessage"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // formate le message
-    var message = {
-        game: req.game,
-        createur: req.createur.username
-    }
-    // retourn le message
-    return message
 }

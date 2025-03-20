@@ -16,6 +16,9 @@ const utilFindGame = require('../util/depthOne/findGame')
 // import les fonction utiles pour findGame
 const utilListGames = require('../util/depthOne/listGames')
 
+// import les fonction utiles pour findGame
+const utilJoinGame = require('../util/depthOne/joinGame')
+
 
 
 // location global pour la gestion d'erreur
@@ -1075,7 +1078,7 @@ exports.findUpdateFormateAndJoinGame = async (req) => {
         return null
     }
 
-    await this.findUpdateAndJoinGame(req)
+    await utilJoinGame.findUpdateAndJoinGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package.game = value.game
@@ -1086,7 +1089,7 @@ exports.findUpdateFormateAndJoinGame = async (req) => {
             req.challenger = value.challenger
 
             req.data.push({
-                name: "this.findUpdateAndJoinGame",
+                name: "utilJoinGame.findUpdateAndJoinGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -1094,13 +1097,13 @@ exports.findUpdateFormateAndJoinGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.findUpdateAndJoinGame",
+                name: "utilJoinGame.findUpdateAndJoinGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    await this.formatJoin(req)
+    await utilJoinGame.formatJoin(req)
         .then(value => {
             req.package.createur = value.createur
             req.createur = value.createur
@@ -1112,7 +1115,7 @@ exports.findUpdateFormateAndJoinGame = async (req) => {
             req.joinSuccessMessage = value.joinSuccessMessage
 
             req.data.push({
-                name: "this.formatJoin",
+                name: "utilJoinGame.formatJoin",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -1120,7 +1123,7 @@ exports.findUpdateFormateAndJoinGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.formatJoin",
+                name: "utilJoinGame.formatJoin",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

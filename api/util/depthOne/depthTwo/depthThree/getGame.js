@@ -1,20 +1,20 @@
 // import le schema d'un utilisateur
-const Game = require("../../../models/Game")
+const Game = require("../../../../models/Game")
 
 // import le schema d'un utilisateur
-const User = require("../../../models/User")
+const User = require("../../../../models/User")
 
 // import fonctions util pour check
-const utilCheck = require('../../check')
+const utilCheck = require('../../../check')
 
 // import fonctions util pour game
-const utilGame = require('../../game')
+const utilGame = require('../../../game')
 
 // import fonctions util pour user
-const utilUser = require('../../user')
+const utilUser = require('../../../user')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/depthTwo/findGame"
+const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/getGame"
 
 exports.getGame = async (req) => {
     // location local pour la gestion d'erreur
