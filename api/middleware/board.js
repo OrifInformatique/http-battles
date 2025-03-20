@@ -39,7 +39,7 @@ exports.checkBoard = async (req, res, next) => {
         return null
     }
 
-    // test une case du plateua
+    // test une case du plateau
     await utilBoard.checkBoard(req.arrayY, req.arrayX, req.body.gameId, req.otherUserId, req)
         .then(value => {
             // stoque le resultat (inclue le mot si réussi)

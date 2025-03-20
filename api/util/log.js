@@ -12,6 +12,9 @@ const utilCheck = require('../util/check')
 // import fonctions util pour user
 const utilUser = require('../util/user')
 
+// import fonctions util pour game
+const utilGame = require('../util/game')
+
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/log"
 
@@ -93,10 +96,11 @@ exports.logInitFindUserAndGame = async (req) => {
     // vérifie si la requete contient l'id d'une partie
     if (req.body.gameId !== undefined) {
         // récupère les données de la partie
-        await middleGame.getGame(req)
+        await utilGame.getGame(req)
             .then(value => {
                 // stoque la partie dans la requete
                 req.package.game = value
+                req.game = value
 
                 req.data.push({
                     name: "middleGame.getGame",
@@ -427,7 +431,7 @@ exports.listLogs = async (req) => {
 
             // parcoure les donnée du log 
             for (const d of log.data) {
-            
+
                 // si le client demande une information de tri spécifique pour ces données
                 if (req.body.data.name !== undefined || req.body.data.loc !== undefined || req.body.data.value !== undefined || req.body.data.error !== undefined) {
                     // si le client demande un une part de nom qui est inclut dans la donnée
@@ -442,7 +446,7 @@ exports.listLogs = async (req) => {
                     } else if (req.body.data.value !== undefined && d.value !== undefined && JSON.stringify(d.value).toUpperCase().replace("{", "").replace("}", "").replace(/"/g, "").includes(JSON.stringify(req.body.data.value).toUpperCase().replace("{", "").replace("}", "").replace(/"/g, ""))) {
                         // stoque la donnée
                         newLog[i].data[j] = d
-                        
+
                         // si le client demande une part d'erreur inclut dans la donnée
                     } else if (req.body.data.error !== undefined && d.error !== undefined && JSON.stringify(d.error).toUpperCase().replace("{", "").replace("}", "").replace(/"/g, "").includes(JSON.stringify(req.body.data.error).toUpperCase().replace("{", "").replace("}", "").replace(/"/g, ""))) {
                         // stoque la donnée

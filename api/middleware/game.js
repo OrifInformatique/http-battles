@@ -1,6 +1,9 @@
 // import le schema d'un utilisateur
 const Game = require("../models/Game")
 
+// import fonctions util pour board
+const utilBoard = require('../util/board')
+
 // import fonctions util pour game
 const utilGame = require('../util/game')
 
@@ -12,65 +15,6 @@ const utilCheck = require('../util/check')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../middleware/game"
-
-// retourne une partie selon sont id
-exports.getGame = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    await utilGame.getGame(req)
-        .then(value => {
-            // stock l'objet jeux dans la requette
-            req.game = value
-
-            req.data.push({
-                name: "utilGame.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourne la variable traité pour la gestion d'erreur en dehors des middleware
-    return req.game
-}
 
 exports.findGame = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -691,192 +635,40 @@ exports.tryCase = async (req, res, next) => {
         return null
     }
 
-    await utilGame.tryCase(req)
-        .then(value => {
-            req.tryCaseMessage = value
-            req.data.push({
-                name: "utilGame.tryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.tryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
+    if (req.package === undefined) {
+        req.package = {}
     }
 
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.tryCaseMessage
-}
-
-// retourne la position y de la case sur le plateaux en fonction de la méthode utilisée
-exports.switchArrayY = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: switchArrayY"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
+    await utilGame.constructTryCase(req)
         .then(value => {
-            req.utilCheck = value
+            // stoque l'id de l'opposant dans la requette
+            req.package.otherUserId = value.otherUserId
+            req.otherUserId = value.otherUserId
 
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // retourne la position y de la case sur le plateaux en fonction de la méthode utilisée
-    await utilGame.switchArrayY(req.method, req)
-        .then(value => {
-            // stoque la position Y du plateau dans la requette
-            req.arrayY = value
-
-            req.data.push({
-                name: "utilGame.switchArrayY",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.switchArrayY",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.arrayY
-}
-
-// retourne la position X de la case sur le plateaux en fonction de la route utilisée
-exports.switchArrayX = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: switchArrayX"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // retourne la position X de la case sur le plateaux en fonction de la route utilisée
-    await utilGame.switchArrayX(req.route, req)
-        .then(value => {
             // stoque la position X du plateau dans la requette
-            req.arrayX = value
+            req.package.arrayX = value.arrayX
+            req.arrayX = value.arrayX
 
-            req.data.push({
-                name: "utilGame.switchArrayX",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.switchArrayX",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
+            // stoque la position Y du plateau dans la requette
+            req.package.arrayY = value.arrayY
+            req.arrayY = value.arrayY
 
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
+            // stoque le resultat (inclue le mot si réussi)
+            req.check = value.check
+            req.package.check = value.check
 
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.arrayX
-}
+            req.tryCaseMessage = value.tryCaseMessage
+            req.package.tryCaseMessage = value.tryCaseMessage
 
-// met à jour la partie en fonction des variable de la requete
-exports.updateGame = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: updateGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log("error")
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // si oui update l'état de la partie
-    await utilGame.updateGame(req)
-        .then(value => {
+            req.package.state = value.state
+            req.state = value.state
 
             // stoque le nouvel état de la partie dans la requette
-            req.game = value
+            req.package.game = value.game
+            req.game = value.game
 
             req.data.push({
-                name: "utilGame.updateGame",
+                name: "utilGame.constructTryCase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -884,7 +676,7 @@ exports.updateGame = async (req, res, next) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.updateGame",
+                name: "utilGame.constructTryCase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -896,61 +688,6 @@ exports.updateGame = async (req, res, next) => {
     }
 
     // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.game
+    return req.package
 }
 
-// change le toour 
-exports.switchTurn = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: switchTurn"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    await utilGame.switchTurn(req)
-        .then(value => {
-            req.newState = value
-            req.data.push({
-                name: "utilGame.switchTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.switchTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.newState
-}

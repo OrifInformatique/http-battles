@@ -33,13 +33,13 @@ router.post('/games/endGame', auth, check.dataInit, check.checkReqDataEndGame, m
 router.get('/games/tryPhrase', auth, check.dataInit, check.checkReqDataTryPhrase, check.checkTurn, middleGame.tryPhrase, check.logInit, check.dataValidity, gameCtrl.tryPhrase)
 
 // routes pour le jeux
-router.all('/games/tryA', auth, check.dataInit, check.checkReqDataTryCase, middleGame.getGame, check.checkTurn, routeParam.a, middleGame.getOtherUserId, middleGame.switchArrayY, middleGame.switchArrayX, middleBoard.checkBoard, middleGame.tryCase, middleGame.switchTurn, middleGame.updateGame, check.logInit, check.dataValidity,  gameCtrl.tryCase)
+router.all('/games/tryA', auth, check.dataInit, check.checkReqDataTryCase, check.checkTurn, routeParam.a, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)
 
-router.all('/games/tryB', auth, check.dataInit, check.checkReqDataTryCase, middleGame.getGame, check.checkTurn, routeParam.b, middleGame.getOtherUserId, middleGame.switchArrayY, middleGame.switchArrayX, middleBoard.checkBoard, middleGame.tryCase, middleGame.switchTurn, middleGame.updateGame, check.logInit, check.dataValidity,  gameCtrl.tryCase)
+router.all('/games/tryB', auth, check.dataInit, check.checkReqDataTryCase, check.checkTurn, routeParam.b, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)
 
-router.all('/games/tryC', auth, check.dataInit, check.checkReqDataTryCase, middleGame.getGame, check.checkTurn, routeParam.c, middleGame.getOtherUserId, middleGame.switchArrayY, middleGame.switchArrayX, middleBoard.checkBoard, middleGame.tryCase, middleGame.switchTurn, middleGame.updateGame, check.logInit, check.dataValidity,  gameCtrl.tryCase)
+router.all('/games/tryC', auth, check.dataInit, check.checkReqDataTryCase, check.checkTurn, routeParam.c, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)
 
-router.all('/games/tryD', auth, check.dataInit, check.checkReqDataTryCase, middleGame.getGame, check.checkTurn, routeParam.d, middleGame.getOtherUserId, middleGame.switchArrayY, middleGame.switchArrayX, middleBoard.checkBoard, middleGame.tryCase, middleGame.switchTurn, middleGame.updateGame, check.logInit, check.dataValidity,  gameCtrl.tryCase)
+router.all('/games/tryD', auth, check.dataInit, check.checkReqDataTryCase, check.checkTurn, routeParam.d, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)
 
 
 // export le router
