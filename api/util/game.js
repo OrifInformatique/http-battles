@@ -7,11 +7,14 @@ const utilCheck = require('../util/check')
 // import les fonction utiles pour utilisateur
 const utilUser = require('../util/user')
 
-// import les fonction utiles pour utilisateur
+// import les fonction utiles pour createGame
 const utilCreateGame = require('../util/depthOne/createGame')
 
-// import les fonction utiles pour utilisateur
+// import les fonction utiles pour findGame
 const utilFindGame = require('../util/depthOne/findGame')
+
+// import les fonction utiles pour findGame
+const utilListGames = require('../util/depthOne/listGames')
 
 
 
@@ -2250,7 +2253,7 @@ exports.createGame = async (req) => {
     return req.package
 }
 
-exports.getFormatedGameAndCreator = async (req) => {
+exports.findGame = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getFormatedGameAndCreator"
 
@@ -2379,13 +2382,13 @@ exports.findFormatAndFilterGames = async (req) => {
         })
 
     // formate les jeux de la requette et filtre les erreurs attendues due aux données obsolettes et invalides
-    await this.formatAndFilterGames(req)
+    await utilListGames.formatAndFilterGames(req)
         .then(value => {
             // stoque les jeux formatter pour le client dans la requette
             req.package.formatedGames = value
             req.formatedGames = value
             req.data.push({
-                name: "this.formatAndFilterGames",
+                name: "utilListGames.formatAndFilterGames",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -2393,7 +2396,7 @@ exports.findFormatAndFilterGames = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.formatAndFilterGames",
+                name: "utilListGames.formatAndFilterGames",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

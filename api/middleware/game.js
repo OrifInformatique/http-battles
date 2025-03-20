@@ -51,7 +51,7 @@ exports.findGame = async (req, res, next) => {
         req.package = {}
     }
 
-    await utilGame.getFormatedGameAndCreator(req)
+    await utilGame.findGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package = value

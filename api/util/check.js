@@ -45,8 +45,8 @@ exports.dataValidityFilterListGame = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: dataValidityFilterListGameCreatorId"
 
-        // filtre les erreur de la fonction User.findOne qui sont attendue à cause des donnée invalides
-        await this.dataValidityFilter(req, "User.findOne")
+    // filtre les erreur de la fonction User.findOne qui sont attendue à cause des donnée invalides
+    await this.dataValidityFilter(req, "User.findOne")
         .then(value => {
 
             req.data.push({
@@ -84,6 +84,25 @@ exports.dataValidityFilterListGame = async (req) => {
 
     // filtre les erreur de la fonction User.findOne qui sont attendue à cause des donnée invalides
     await this.dataValidityFilter(req, "utilUser.getCreatorFiltered")
+        .then(value => {
+
+            req.data.push({
+                name: "this.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.dataValidityFilter",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // filtre les erreur de la fonction User.findOne qui sont attendue à cause des donnée invalides
+    await this.dataValidityFilter(req, "utilGetUser.getUserById")
         .then(value => {
 
             req.data.push({
