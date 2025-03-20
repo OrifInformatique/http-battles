@@ -910,11 +910,17 @@ exports.startCoinFlip = async (req, res) => {
         return null
     }
 
+    if(req.package === undefined){
+        req.package = {}
+    }
+
     await this.coinFlipStartMode(req)
         .then(value => {
             // stoque cette id dans la requete
+            req.package.startUserId = value.startUserId
             req.startUserId = value.startUserId
-            req.newState = value.newState
+
+            req.package.state = value.state
             req.data.push({
                 name: "this.coinFlipStartUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -929,12 +935,12 @@ exports.startCoinFlip = async (req, res) => {
                 error: error
             })
         })
-
 
     // update la parite dans la base de donnée
     await this.updateGame(req)
         .then(value => {
-            req.newState = value.newState
+            req.package.state = value.package.state
+            req.state = value.package.state
 
             req.data.push({
                 name: "this.updateGame",
@@ -950,6 +956,7 @@ exports.startCoinFlip = async (req, res) => {
                 error: error
             })
         })
+    console.log(req.package)
     // retourne la variable traité pour la gestion d'erreur
     return req.startUserId
 }
@@ -1014,8 +1021,8 @@ exports.coinFlipStartMode = async (req) => {
     await this.coinFlipStartGameState(req.coinFlip, req)
         .then(value => {
             // stoque le nouvel étàt de la partie dans la requete
-            req.newState = value
-            req.package.newState = value
+            req.state = value
+            req.package.state = value
             req.data.push({
                 name: "this.coinFlipStartGameState",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -1459,7 +1466,7 @@ exports.updateGame = async (req) => {
         return null
     }
 
-    if (req.newState !== undefined) {
+    if (req.state !== undefined) {
         req.game.state = req.state
     }
     if (req.newChallenger !== undefined) {
@@ -2687,7 +2694,7 @@ exports.tryPhraseResult = async (req) => {
         // termine la partie
         await this.endGame(req, res)
             .then(value => {
-                req.newState = value
+                req.state = value
                 req.data.push({
                     name: "this.endGame",
                     loc: LOC_GLOB + " " + LOC_LOC,
@@ -2744,10 +2751,10 @@ exports.endGame = async (req) => {
     }
 
     // stoque le nouvelle état de lapartie dans la requete
-    req.newState = "ENDED"
+    req.state = "ENDED"
 
     // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.newState
+    return req.state
 }
 
 exports.tryCase = async (req) => {
@@ -2833,15 +2840,15 @@ exports.switchTurn = async (req) => {
     // test l'état de la partie
     if (req.game.state === "CREATEUR_TURN") {
         // si c'est le tour du créateur, donne le tour du challenger comme état à appliquer
-        req.newState = "CHALLENGER_TURN"
+        req.state = "CHALLENGER_TURN"
 
     } else if (req.game.state === "CHALLENGER_TURN") {
         // si c'est le tour du challenger, donne le tour du créateur comme état à appliquer
-        req.newState = "CREATEUR_TURN"
+        req.state = "CREATEUR_TURN"
     }
 
     // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.newState
+    return req.state
 }
 
 exports.checkStartUserId = async (req) => {

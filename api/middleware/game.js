@@ -616,9 +616,29 @@ exports.endGame = async (req, res, next) => {
         return null
     }
 
+    await utilGame.getGame(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.game = value
+
+            req.data.push({
+                name: "utilGame.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGame.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     await utilGame.endGame(req)
         .then(value => {
-            req.newState = value
+            req.state = value
             req.data.push({
                 name: "utilGame.endGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -633,8 +653,9 @@ exports.endGame = async (req, res, next) => {
                 error: error
             })
         })
+
     // stoque le nouvelle état de lapartie dans la requete
-    req.newState = "ENDED"
+    req.state = "ENDED"
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {

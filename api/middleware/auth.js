@@ -9,20 +9,20 @@ module.exports = (req, res, next) => {
     // test le code contenu
     try {
         // extrait le token du header de la requete en utilisant la fonction split pour seulment récupérer le contenu après l'espace suivant le mot clef Bearer
-        const token = req.headers.authorization.split(' ')[1]
+        req.token = req.headers.authorization.split(' ')[1]
 
-        if (token !== process.env.DEV_TOKEN) {
+        if (req.token !== process.env.DEV_TOKEN) {
             // decode le token 
-            const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET')
+            const decodedToken = jwt.verify(req.token, 'RANDOM_TOKEN_SECRET')
             // récupère l'id utilisateur
             const userId = decodedToken.userId
-            
+
             if (userId !== req.body.userId) {
                 throw {
                     "message": "invalid token"
                 }
             }
-            
+
             // le rajoute à la requete
             req.auth = {
 

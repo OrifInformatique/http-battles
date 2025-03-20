@@ -371,7 +371,7 @@ exports.createBoardAndInsertPhrase = async (req) => {
                 error: error
             })
         })
-
+        console.log(req.package)
     await this.insertAndSavePhrase(req)
         .then(value => {
             // insert la phrase (objet) dans le plateau (objet) del requete
