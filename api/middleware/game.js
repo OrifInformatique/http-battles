@@ -616,7 +616,7 @@ exports.endGame = async (req, res, next) => {
         return null
     }
 
-    await utilGame.findAndEndGame(req)
+    await utilGame.findUpdateAndEndGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package.game = value.game
@@ -626,7 +626,7 @@ exports.endGame = async (req, res, next) => {
             req.state = value.state
 
             req.data.push({
-                name: "utilGame.findAndEndGame",
+                name: "utilGame.findUpdateAndEndGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -634,7 +634,7 @@ exports.endGame = async (req, res, next) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.findAndEndGame",
+                name: "utilGame.findUpdateAndEndGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
