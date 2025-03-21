@@ -1,33 +1,27 @@
 // import le schema d'un utilisateur
-const Game = require("../../../models/Game")
+const Game = require("../../../../../models/Game")
 
 // import le schema d'un utilisateur
-const User = require("../../../models/User")
+const User = require("../../../../../models/User")
 
 // import fonctions util pour check
-const utilCheck = require('../../check')
+const utilCheck = require('../../../../check')
 
 // import fonctions util pour game
-const utilGame = require('../../game')
+const utilGame = require('../../../../game')
 
 // import fonctions util pour user
-const utilUser = require('../../user')
+const utilUser = require('../../../../user')
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
-
-// import les fonction utiles pour utilisateur
-const utilJoinGame = require('../depthTwo/depthThree/joinGame')
-
-// import les fonction utiles pour utilisateur
-const utilGetGame = require('./depthThree/depthFour/getGame')
+const utilStartGame = require('./depthFive/startGame')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/depthTwo/joinGame"
+const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/depthFour/startGame"
 
-exports.findAndJoinGame = async (req) => {
+exports.checkStart = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: findAndJoinGame"
+    const LOC_LOC = "methode: checkStart"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -57,14 +51,15 @@ exports.findAndJoinGame = async (req) => {
         req.package = {}
     }
 
-    await utilGetGame.getGame(req)
+    // check si la partie a commencé (true = non, false = oui)
+    await utilStartGame.checkStartStat(req)
         .then(value => {
-            // stock l'objet jeux dans la requette
-            req.package.game = value
-            req.game = value
+            // stoque le resultat dans la requete
+            req.package.check = value
+            req.check = value
 
             req.data.push({
-                name: "utilGetGame.getGame",
+                name: "utilStartGame.checkStartStat",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -72,29 +67,27 @@ exports.findAndJoinGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGetGame.getGame",
+                name: "utilStartGame.checkStartStat",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    await utilJoinGame.joinGame(req)
+    await utilStartGame.checkStartUserId(req)
         .then(value => {
-            req.package.state = value.state
-            req.package.challenger = value.challenger
-            req.state = value.state
-            req.challenger = value.challenger
+            // stoque l'id du joueur qui commence
+            req.package.startUserId = value
+            req.startUserId = value
 
             req.data.push({
-                name: "utilJoinGame.joinGame",
+                name: "utilStartGame.checkStartUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
         })
         .catch(error => {
-            console.log(error)
             req.data.push({
-                name: "utilJoinGame.joinGame",
+                name: "utilStartGame.checkStartUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

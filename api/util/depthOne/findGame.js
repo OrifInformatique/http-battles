@@ -8,10 +8,10 @@ const utilCheck = require('../check')
 const utilGame = require('../game')
 
 // import les fonction utiles pour utilisateur
-const utilGetGame = require('./depthTwo/depthThree/getGame')
+const utilGetGame = require('./depthTwo/depthThree/depthFour/getGame')
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('../depthOne/depthTwo/depthThree/getUserById')
+const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
 
 // import fonctions util pour user
 const utilUser = require('../user')

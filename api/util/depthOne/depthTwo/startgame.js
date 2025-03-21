@@ -1,32 +1,36 @@
 // import le schema d'un utilisateur
-const Game = require("../../models/Game")
+const Game = require("../../../models/Game")
+
+// import le schema d'un utilisateur
+const User = require("../../../models/User")
 
 // import fonctions util pour check
-const utilCheck = require('../check')
+const utilCheck = require('../../check')
 
 // import fonctions util pour game
-const utilGame = require('../game')
-
-
-
-// import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
-
-// import les fonction utiles pour utilisateur
-const utilJoinGame = require('../depthOne/depthTwo/joinGame')
-
-// import les fonction utiles pour utilisateur
-const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
+const utilGame = require('../../game')
 
 // import fonctions util pour user
-const utilUser = require('../user')
+const utilUser = require('../../user')
+
+// import fonctions util pour user
+const utilBoard = require('../../board')
+
+// import les fonction utiles pour utilisateur
+const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
+
+// import les fonction utiles pour utilisateur
+const utilJoinGame = require('../depthTwo/depthThree/joinGame')
+
+// import les fonction utiles pour utilisateur
+const utilStartGame = require('.//depthThree/startGame')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/joinGame"
+const LOC_GLOB = "file: ../util/depthOne/depthTwo/startGame"
 
-exports.findUpdateAndJoinGame = async (req) => {
+exports.getGameCheckStartAddBoardAndPhrase = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: findUpdateAndJoinGame"
+    const LOC_LOC = "methode: getGameCheckStartAddBoardAndPhrase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -52,18 +56,16 @@ exports.findUpdateAndJoinGame = async (req) => {
         return null
     }
 
-    await utilJoinGame.findAndJoinGame(req)
+    await utilStartGame.getGameAndCheckStart(req)
         .then(value => {
-            // stock l'objet jeux dans la requette
             req.package.game = value.game
-            req.package.state = value.state
-            req.package.challenger = value.challenger
             req.game = value.game
-            req.state = value.state
-            req.challenger = value.challenger
+
+            req.package.check = value.check
+            req.check = value.check
 
             req.data.push({
-                name: "utilJoinGame.findAndJoinGame",
+                name: "utilStartGame.getGameAndCheckStart",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -71,21 +73,27 @@ exports.findUpdateAndJoinGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilJoinGame.findAndJoinGame",
+                name: "utilStartGame.getGameAndCheckStart",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // si oui update l'état de la partie
-    await utilUpdategame.updateGame(req)
+    await utilBoard.createBoardAndInsertPhrase(req)
         .then(value => {
-            // stoque le nouvel état de la partie dans la requette
-            req.package.game = value
-            req.game = value
+            // insert la phrase (objet) dans le plateau (objet) del requete
+            req.package.board.phrase = value.board.phrase
+            req.board.phrase = value.board.phrase
+            // stoque le plateau (table) rempli dans le plateau (objet)
+            req.package.board.board = value.board.board
+            req.board.board = value.board.board
+
+            // stoque le plateu après update dans la requete
+            req.package.board = value.board
+            req.board = value.board
 
             req.data.push({
-                name: "utilGame.updateGame",
+                name: "utilBoard.createBoardAndInsertPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -93,7 +101,7 @@ exports.findUpdateAndJoinGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.updateGame",
+                name: "utilBoard.createBoardAndInsertPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -102,9 +110,9 @@ exports.findUpdateAndJoinGame = async (req) => {
     return req.package
 }
 
-exports.formatJoin = async (req) => {
+exports.startMessage = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: formatJoin"
+    const LOC_LOC = "methode: startMessage"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -130,16 +138,19 @@ exports.formatJoin = async (req) => {
         return null
     }
 
-    await utilUser.getCreatorAndChallenger(req)
-        .then(value => {
-            req.package.createur = value.createur
-            req.createur = value.createur
+    if (req.package === undefined) {
+        req.package = {}
+    }
 
-            req.package.user = value.user
-            req.user = value.user
+    // test si le client est l'utilisateur qui commence la partie
+    await utilGame.startMessageTest(req)
+        .then(value => {
+            // stoque le message addresser au client pour l'informer de qui commence la partie dans la requette
+            req.package.startMessageContent = value
+            req.startMessageContent = value
 
             req.data.push({
-                name: "utilUser.getCreatorAndChallenger",
+                name: "utilGame.startMessageTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -147,20 +158,19 @@ exports.formatJoin = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilUser.getCreatorAndChallenger",
+                name: "utilGame.startMessageTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // stoque un message de success pour la partie rejointe qui contient le message, l'état de la partie, l'username du créateur, l'username du client
-    await utilGame.joinSuccessMessage(req)
+    await utilGame.startMessageCreation(req)
         .then(value => {
-            req.package.joinSuccessMessage = value
-            req.joinSuccessMessage = value
+            req.package.startMessage = value
+            req.startMessage = value
 
             req.data.push({
-                name: "utilGame.joinSuccessMessage",
+                name: "utilGame.startMessageCreation",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -168,7 +178,7 @@ exports.formatJoin = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.joinSuccessMessage",
+                name: "utilGame.startMessageCreation",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
