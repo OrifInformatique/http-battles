@@ -1,13 +1,15 @@
 
+
 // import fonctions util pour check
-const utilCheck = require('../../../check')
+const utilCheck = require('../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthTwo/endGame"
+const LOC_GLOB = "file: ../util/../depthFour/testUserTurn"
 
-exports.endGame = async (req) => {
+// test quel utilisateur commence
+exports.testUserTurn = async (gameUserId, reqId, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: endGame"
+    const LOC_LOC = "methode: testUserTurn"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -33,9 +35,18 @@ exports.endGame = async (req) => {
         return null
     }
 
-    // stoque le nouvelle état de lapartie dans la requete
-    req.state = "ENDED"
+    // test si le client est le créateur
+    // si oui
+    if (gameUserId === reqId) {
 
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.state
+        // renvoi un message pour informer que c'est le tour du client
+        return { message: "Your turn" }
+
+        // si non
+    } else {
+
+        // renvoi un message pour informer que ce n'est pas le tour du client
+        return { message: "Wait" }
+
+    }
 }

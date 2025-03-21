@@ -1,15 +1,13 @@
-const Word = require('../models/Word')
-
-// import fonctions util pour board
-const utilCheck = require('../util/check')
+// import fonctions util pour check
+const utilCheck = require('../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/word"
+const LOC_GLOB = "file: ../util/../depthFive/saveBoard"
 
-// crée un objet mot
-exports.createWord = async (word, req) => {
-    // test de la validité des données
-    const LOC_LOC = "methode: createWord"
+// stoque le plateua dans la requete
+exports.saveBoard = async (board, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: saveBoard"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -35,19 +33,13 @@ exports.createWord = async (word, req) => {
         return null
     }
 
-    // crée un nouvel objet mot avec les info en parametre
-    const newWord = new Word({
-        content: word.content,
-        position: word.position
-    })
-
-    // enregistre le mot dans la base deonnées
-    await newWord.save()
+    // sauvegarde le plateau dans la base donnée
+    await board.save()
         .then(value => {
-            // stoque le mot dans la requete
-            req.word = value
+            // stoque le plateau dans la requete
+            req.newBoard = value
             req.data.push({
-                name: "newWord.save()",
+                name: "board.save",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -55,13 +47,12 @@ exports.createWord = async (word, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "newWord.save()",
+                name: "board.save",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // retourne la variable traitée pour la gestion d'erreur
-    return req.word
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.newBoard
 }
-

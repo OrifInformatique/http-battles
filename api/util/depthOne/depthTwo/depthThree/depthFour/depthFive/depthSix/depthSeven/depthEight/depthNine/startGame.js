@@ -1,13 +1,13 @@
-
 // import fonctions util pour check
-const utilCheck = require('../../../check')
+const utilCheck = require('../../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthTwo/endGame"
+const LOC_GLOB = "file: ../util/../depthNine/startGame"
 
-exports.endGame = async (req) => {
+// insert les mot de la phrase dans les case du plateaux si leurs positions est égal
+exports.insertPhraseInBoardW = async (userPhrase, keyY, keyX, keyW, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: endGame"
+    const LOC_LOC = "methode: insertPhraseInBoardW"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -33,9 +33,12 @@ exports.endGame = async (req) => {
         return null
     }
 
-    // stoque le nouvelle état de lapartie dans la requete
-    req.state = "ENDED"
+    // test si la position de la case est égal à la postion du mot
+    if (userPhrase.words[keyW].position[0].toString() === keyY && userPhrase.words[keyW].position[1].toString() === keyX) {
+        // si oui, rempli la case avec le mot
+        req.newBoardFull[keyY].push(userPhrase.words[keyW])
+    }
 
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.state
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.newBoardFull
 }

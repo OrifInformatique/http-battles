@@ -1,14 +1,15 @@
-
+const Board = require('../../../../../../../../../../models/Board')
 // import fonctions util pour check
-const utilCheck = require('../../check')
+const utilCheck = require('../../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthTwo/getBoardGameUser"
+const LOC_GLOB = "file: ../util/../depthNine/getBoard"
 
-// retourn un plateau de jeux selon l'identifiant de son utilisateur et de la partie
-exports.getBoardGameUser = async (gameId, userId, req) => {
+
+// retourne le plateau selon son id
+exports.getBoard = async (req, boardId) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getBoardGameUser"
+    const LOC_LOC = "methode: getBoard"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -34,11 +35,8 @@ exports.getBoardGameUser = async (gameId, userId, req) => {
         return null
     }
 
-    // trouve le plateau en fonction de l'id de son utilisateur et de la partie
-    await Board.findOne({
-        gameId: gameId,
-        userId: userId
-    })
+    // récupère le plateau dans la base données selon son id
+    await Board.findOne({ _id: boardId })
         .then(value => {
             // stoque le plateau dans la requete
             req.board = value
@@ -60,3 +58,5 @@ exports.getBoardGameUser = async (gameId, userId, req) => {
     // retourne la variable traitéeF pour la gestion d'erreur
     return req.board
 }
+
+

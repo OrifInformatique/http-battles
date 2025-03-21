@@ -14,7 +14,7 @@ const utilGame = require('../../../game')
 const utilUser = require('../../../user')
 
 // import les fonction utiles pour utilisateur
-const utilGetGame = require('./depthFour/getGame')
+const utilTestUserTurn = require('./depthFour/testUserTurn')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/testTurn"
@@ -51,20 +51,20 @@ exports.testTurn = async (req) => {
     // si c'est le tour du créateur
     if (req.game.state === "CREATEUR_TURN") {
         // test si le client est le créateur et renvoit un message pour lui indiquer si c'est son tour
-        await utilGame.testUserTurn(req.game.createurId, req.auth.userId, req)
+        await utilTestUserTurn.testUserTurn(req.game.createurId, req.auth.userId, req)
             .then(value => {
                 // stocke le message de réponse dans la requete
                 req.testTurnMessage = value
 
                 req.data.push({
-                    name: "this.testUserTurn - CREATEUR_TURN",
+                    name: "utilTestUserTurn.testUserTurn - CREATEUR_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "this.testUserTurn - CREATEUR_TURN",
+                    name: "utilTestUserTurn.testUserTurn - CREATEUR_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })
@@ -73,19 +73,19 @@ exports.testTurn = async (req) => {
         // si c'est le tour du challenger
     } else if (req.game.state === "CHALLENGER_TURN") {
         // test si le client est le challenger et renvoit un message pour lui indiquer si c'est son tour
-        await utilGame.testUserTurn(req.game.challengerId, req.auth.userId, req)
+        await utilTestUserTurn.testUserTurn(req.game.challengerId, req.auth.userId, req)
             .then(value => {
                 req.testTurnMessage = value
 
                 req.data.push({
-                    name: "this.testUserTurn - CHALLENGER_TURN",
+                    name: "utilTestUserTurn.testUserTurn - CHALLENGER_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "this.testUserTurn - CHALLENGER_TURN",
+                    name: "utilTestUserTurn.testUserTurn - CHALLENGER_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })

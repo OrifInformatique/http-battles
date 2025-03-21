@@ -1,17 +1,6 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../../../../models/Game")
-
-// import le schema d'un utilisateur
-const User = require("../../../../../../../../models/User")
 
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../check')
-
-// import fonctions util pour game
-const utilGame = require('../../../../../../../game')
-
-// import fonctions util pour user
-const utilUser = require('../../../../../../../user')
 
 // import les fonction utiles pour startGame
 const utilStartGame = require('./depthEight/startGame')
@@ -183,9 +172,10 @@ exports.testTurn = async (req) => {
     return req.testTurnMessage
 }
 
-exports.getOtherUserId = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getOtherUserId"
+// crée et rempli un tableaux de la phrase avec des objet mot suivant la phrase de la requete
+exports.fillPhrase = async (userPhrase, req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: fillPhrase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -211,14 +201,90 @@ exports.getOtherUserId = async (req) => {
         return null
     }
 
-    // si le client est le créateur, retourn l'id du challenger
-    if (req.auth.userId === req.game.createurId) {
+    // initialise le tableaux de mot dans la requete
+    req.wordObjectsArray = []
 
-        return req.game.challengerId
-
-    } else {
-        // sinon retourn l'id du créateur créateur
-        return req.game.createurId
-
+    // parcoure les mot de la phrase de l'utilisateur
+    for (const mot of userPhrase) {
+        // crée un objet mot
+        await utilStartGame.createWord(mot.word, req)
+            .then(value => {
+                // stoque l'objet mot dans la requete
+                req.word = value
+                req.data.push({
+                    name: "utilStartGame.createWord",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "utilStartGame.createWord",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+        
+        // ajoute le mot au tableaux d'objet dans la requete
+        req.wordObjectsArray.push(req.word)
     }
+
+    // retourne la variable traitée pour la gestion d'erreur
+    return req.wordObjectsArray
+}
+
+// Crée et remplie les ligne du plateau
+exports.insertPhraseInBoardY = async (board, userPhrase, keyY, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: insertPhraseInBoardY"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // pousse une ligne dans le plateau
+    req.newBoardFull.push([])
+
+    // parcour les case de la ligne Y de l'ancient plateaux
+    for (const keyX in board.board[keyY]) {
+        // insert les case de la ligne du nouveaux plateaux et les remplie 
+        await utilStartGame.insertPhraseInBoardX(userPhrase, keyY, keyX, req)
+            .then(value => {
+                req.data.push({
+                    name: "utilBoard.insertPhraseInBoardX",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilBoard.insertPhraseInBoardX",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.newBoardFull
 }

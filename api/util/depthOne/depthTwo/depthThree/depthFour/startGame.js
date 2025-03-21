@@ -1,23 +1,18 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../models/Game")
 
-// import le schema d'un utilisateur
-const User = require("../../../../../models/User")
 
 // import fonctions util pour check
 const utilCheck = require('../../../../check')
 
-// import fonctions util pour game
-const utilGame = require('../../../../game')
-
-// import fonctions util pour user
-const utilUser = require('../../../../user')
-
 // import les fonction utiles pour utilisateur
 const utilStartGame = require('./depthFive/startGame')
 
+// import les fonction utiles pour utilisateur
+const utilUpdateBoard = require('./depthFive/depthSix/depthSeven/depthEight/updateBoard')
+
+
+
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/depthFour/startGame"
+const LOC_GLOB = "file: ../util/../depthFour/startGame"
 
 exports.checkStart = async (req) => {
     // location local pour la gestion d'erreur
@@ -96,3 +91,82 @@ exports.checkStart = async (req) => {
 
     return req.package
 }
+
+exports.insertAndSavePhrase = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: insertAndSavePhrase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilStartGame.insertPhrase(req)
+        .then(value => {
+            // insert la phrase (objet) dans le plateau (objet) del requete
+            req.package.board.phrase = value.board.phrase
+            req.board.phrase = value.board.phrase
+            // stoque le plateau (table) rempli dans le plateau (objet)
+            req.package.board.board = value.board.board
+            req.board.board = value.board.board
+
+            req.data.push({
+                name: "utilStartGame.insertPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilStartGame.insertPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // update le plateau dans la requete
+    await utilUpdateBoard.updateBoard(req)
+        .then(value => {
+            // stoque le plateu après update dans la requete
+            req.package.board = value
+            req.board = value
+
+            req.data.push({
+                name: "utilUpdateBoard.updateBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilUpdateBoard.updateBoard",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+

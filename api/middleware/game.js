@@ -1,16 +1,7 @@
-// import le schema d'un utilisateur
-const Game = require("../models/Game")
-
-// import fonctions util pour board
-const utilBoard = require('../util/board')
 
 // import fonctions util pour game
 const utilGame = require('../util/game')
 
-
-
-// import fonctions util pour user
-const utilUser = require('../util/user')
 
 // import fonctions util pour board
 const utilCheck = require('../util/check')
@@ -617,7 +608,7 @@ exports.tryCase = async (req, res, next) => {
         req.package = {}
     }
 
-    await utilGame.constructTryCase(req)
+    await utilGame.tryCase(req)
         .then(value => {
             // stoque l'id de l'opposant dans la requette
             req.package.otherUserId = value.otherUserId

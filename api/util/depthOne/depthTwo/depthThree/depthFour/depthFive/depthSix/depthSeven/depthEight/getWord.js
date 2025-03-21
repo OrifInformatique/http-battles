@@ -1,8 +1,3 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../../../../../models/Game")
-
-// import le schema d'un utilisateur
-const User = require("../../../../../../../../../models/User")
 
 // import le schema d'un Word
 const Word = require("../../../../../../../../../models/Word")
@@ -10,26 +5,8 @@ const Word = require("../../../../../../../../../models/Word")
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../../check')
 
-// import fonctions util pour game
-const utilGame = require('../../../../../../../../game')
-
-// import fonctions util pour user
-const utilUser = require('../../../../../../../../user')
-
-// import fonctions util pour board
-const utilBoard = require('../../../../../../../../board')
-
-// import fonctions util pour word
-const utilWord = require('../../../../../../../../word')
-
-// import les fonction utiles pour startGame
-const utilStartGame = require('./startGame')
-
-// import les fonction utiles pour testUserTurn
-const utilTestUserTurn = require('./testUserTurn')
-
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthSeven/getWord"
+const LOC_GLOB = "file: ../util/../depthEight/getWord"
 
 // récupère le mot suivant son id
 exports.getWord = async (wordId, req) => {

@@ -31,8 +31,18 @@ const utilEndGame = require('../util/depthOne/endGame')
 // import les fonction utiles pour endGame
 const utilTryPhrase = require('../util/depthOne/tryPhrase')
 
-// import les fonction utiles pour endGame
+// import les fonction utiles pour tryCase
 const utilTryCase = require('../util/depthOne/tryCase')
+
+// import les fonction utiles pour testTurn
+const utilTestTurn = require('../util/depthOne/depthTwo/depthThree/testTurn')
+
+// import les fonction utiles pour testUserTurn
+const utilTestUserTurn = require('../util/depthOne/depthTwo/depthThree/depthFour/testUserTurn')
+
+// import les fonction utiles pour getGame
+const utilGetGame = require('../util/depthOne/depthTwo/depthThree/depthFour/getGame')
+
 
 // import les fonction utiles pour updateGame
 const utilUpdateGame = require('./depthOne/depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
@@ -41,9 +51,6 @@ const utilUpdateGame = require('./depthOne/depthTwo/depthThree/depthFour/depthFi
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game"
-
-// import les fonction utiles pour board
-const utilBoard = require('../util/board')
 
 exports.getGame = async (req) => {
     // location local pour la gestion d'erreur
@@ -99,7 +106,7 @@ exports.getGame = async (req) => {
 }
 
 
-exports.constructTryCase = async (req) => {
+exports.tryCase = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: constructTryCase"
 
@@ -356,473 +363,6 @@ exports.joinGame = async (req) => {
     return req.package
 }
 
-exports.findAndJoinGame = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: findAndJoinGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    if (req.package === undefined) {
-        req.package = {}
-    }
-
-    await this.getGame(req)
-        .then(value => {
-            // stock l'objet jeux dans la requette
-            req.package.game = value
-            req.game = value
-
-            req.data.push({
-                name: "this.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    await this.joinGame(req)
-        .then(value => {
-            req.package.state = value.state
-            req.package.challenger = value.challenger
-            req.state = value.state
-            req.challenger = value.challenger
-
-            req.data.push({
-                name: "this.joinGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.joinGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-
-    return req.package
-}
-
-// formate et filtres une liste de jeux
-exports.formatAndFilterGames = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: formatAndFilterGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-    // initialise la liste de jeux formatté dans la requete
-    req.formatedGames = []
-
-    // parcoure la liste de jeux dans la requet
-    for (const game of req.games) {
-        // enregistre le jeux de chaque boucle dans la requet
-        req.game = game
-
-        // formate le jeu et filtre les erreurs due aux donnée invalide
-        await this.formatAndFilterGame(req)
-            .then(value => {
-                // stocke la partie formaté dans la list contenu dans la requet
-                req.formatedGames.push(value)
-
-                req.data.push({
-                    name: "this.formatAndFilterGame",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
-            })
-            .catch(error => {
-                req.data.push({
-                    name: "this.formatAndFilterGame",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
-            })
-    }
-
-    // retourne la variable traité pour la gestion d'erreur
-    return req.formatedGames
-}
-
-// formate une partie et filtre les erreures due au données invalide
-exports.formatAndFilterGame = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: formatAndFilterGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-    req.formatedGame = {}
-    // récupère l'utilisateur en fonction de son id en parametre (ici l'id du créateur contenu dans le jeux)
-    await utilUser.getUserById(req.game.createurId, req)
-        .then(value => {
-            // stock l'username utilisateur trouvé dans la requete
-            req.formatedGame.createur = value.username
-
-            req.data.push({
-                name: "utilUser.getUserById",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilUser.getUserById",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // filtre les erreur de la fonction utilUser.getCreatorById qui sont attendue à cause des donnée invalides
-    await utilCheck.dataValidityFilterListGame(req)
-        .then(value => {
-
-            req.data.push({
-                name: "utilCheck.dataValidityFilterListGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityFilterListGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    req.formatedGame.game = req.game
-
-    // retourne la variable traité pour la gestion d'erreur
-    return req.formatedGame
-}
-
-
-// test si le créateur exist et si il a un username, si non, retourn "unknown" 
-exports.checkCreatorNotNull = async (createur, req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: checkCreatorNotNull"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // test si le créateur exist et si il a un username, si non, retourn "unknown" 
-    if (createur === null || createur === undefined) {
-        var createurUsername = "unknown"
-    } else if (createur.username === undefined) {
-        var createurUsername = "unknown"
-    } else {
-        var createurUsername = createur.username
-    }
-    // retourne la variable 
-    return createurUsername
-}
-
-// formate le message
-exports.formatedMessage = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: formatedMessage"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // formate le message
-    var message = {
-        game: req.game,
-        createur: req.createur.username
-    }
-    // retourn le message
-    return message
-}
-
-// renvoie le message de départ décrivamt qui commence par rapport au client à l'origin de la requete
-exports.startMessageTest = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: startMessageTest"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // renvoit le message de dépar, si le client est l'utilisateur qui commence, l'informe de cela
-    if (req.auth.userId === req.startUserId) {
-        return "You start"
-    } else {
-        // sinon, communique que l'autre utilisateur commence
-        return "Your opponent start"
-    }
-}
-
-// test quel utilisateur commence
-exports.testUserTurn = async (gameUserId, reqId, req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: testUserTurn"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // test si le client est le créateur
-    // si oui
-    if (gameUserId === reqId) {
-
-        // renvoi un message pour informer que c'est le tour du client
-        return { message: "Your turn" }
-
-        // si non
-    } else {
-
-        // renvoi un message pour informer que ce n'est pas le tour du client
-        return { message: "Wait" }
-
-    }
-}
-
-
-
-// uodate la partie
-exports.updateGame = async (req) => {
-
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: updateGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    if (req.state !== undefined) {
-        req.game.state = req.state
-    }
-    if (req.challenger !== undefined) {
-        req.game.challengerId = req.challenger
-    }
-
-    // update l'état de la partie
-    await Game.updateOne({ _id: req.body.gameId }, {
-        $set: {
-            state: req.game.state,
-            challengerId: req.game.challengerId
-        }
-    })
-        .then(value => {
-            req.data.push({
-                name: "Game.updateOne",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "Game.updateOne",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // retourne la partie après l'update
-    await this.getGame(req)
-        .then(value => {
-            // stoque la partie dans la requete
-            req.game = value
-
-            req.data.push({
-                name: "this.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // retourne la variable traité pour la gestion d'erreur
-    return req.game
-}
-
 exports.createGame = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: createGame"
@@ -947,7 +487,7 @@ exports.findGame = async (req) => {
         })
 
     // formate le jeux pour le client
-    await this.formatedMessage(req)
+    await utilFindGame.formatedMessage(req)
         .then(value => {
             req.package.formatedGame = value
             // stoque le jeux formaté dans la requete
@@ -1050,7 +590,7 @@ exports.listGames = async (req) => {
 
 exports.startGame = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: constructAndSaveStart"
+    const LOC_LOC = "methode: startGame"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -1345,14 +885,14 @@ exports.findGameAndTestTurn = async (req) => {
         req.package = {}
     }
 
-    await this.getGame(req)
+    await utilGetGame.getGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package.game = value
             req.game = value
 
             req.data.push({
-                name: "this.getGame",
+                name: "utilGetGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -1360,73 +900,34 @@ exports.findGameAndTestTurn = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.getGame",
+                name: "utilGetGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // teste l'état de la partie
-    await this.testTurn(req)
+    await utilTestTurn.testTurn(req)
         .then(value => {
             // stocke le message de réponse dans la requete
             req.package.testTurnMessage = value
             req.testTurnMessage = value
 
             req.data.push({
-                name: "this.testTurn",
+                name: "utilTestTurn.testTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
         })
         .catch(error => {
             req.data.push({
-                name: "this.testTurn",
+                name: "utilTestTurn.testTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     return req.package
-}
-
-
-exports.startMessageCreation = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: startMessageCreation"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // stoque le message de départ dans la requette ainsi que l'id du plateux du client
-    req.startMessage = {
-        message: req.startMessageContent,
-        boardId: req.board._id
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.startMessage
 }
 
 exports.testTurn = async (req) => {
@@ -1461,20 +962,20 @@ exports.testTurn = async (req) => {
     // si c'est le tour du créateur
     if (req.game.state === "CREATEUR_TURN") {
         // test si le client est le créateur et renvoit un message pour lui indiquer si c'est son tour
-        await this.testUserTurn(req.game.createurId, req.auth.userId, req)
+        await utilTestUserTurn.testUserTurn(req.game.createurId, req.auth.userId, req)
             .then(value => {
                 // stocke le message de réponse dans la requete
                 req.testTurnMessage = value
 
                 req.data.push({
-                    name: "this.testUserTurn - CREATEUR_TURN",
+                    name: "utilTestUserTurn.testUserTurn - CREATEUR_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "this.testUserTurn - CREATEUR_TURN",
+                    name: "utilTestUserTurn.testUserTurn - CREATEUR_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })
@@ -1483,19 +984,19 @@ exports.testTurn = async (req) => {
         // si c'est le tour du challenger
     } else if (req.game.state === "CHALLENGER_TURN") {
         // test si le client est le challenger et renvoit un message pour lui indiquer si c'est son tour
-        await this.testUserTurn(req.game.challengerId, req.auth.userId, req)
+        await utilTestUserTurn.testUserTurn(req.game.challengerId, req.auth.userId, req)
             .then(value => {
                 req.testTurnMessage = value
 
                 req.data.push({
-                    name: "this.testUserTurn - CHALLENGER_TURN",
+                    name: "utilTestUserTurn.testUserTurn - CHALLENGER_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "this.testUserTurn - CHALLENGER_TURN",
+                    name: "utilTestUserTurn.testUserTurn - CHALLENGER_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })

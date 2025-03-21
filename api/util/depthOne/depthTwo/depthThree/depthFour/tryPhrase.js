@@ -1,8 +1,3 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../models/Game")
-
-// import le schema d'un utilisateur
-const User = require("../../../../../models/User")
 
 // import le schema d'un Board
 const Board = require("../../../../../models/Board")
@@ -10,20 +5,11 @@ const Board = require("../../../../../models/Board")
 // import fonctions util pour check
 const utilCheck = require('../../../../check')
 
-// import fonctions util pour game
-const utilGame = require('../../../../game')
-
-// import fonctions util pour board
-const utilBoard = require('../../../../board')
-
-// import fonctions util pour user
-const utilUser = require('../../../../user')
-
 // import les fonction utiles pour tryPhrase
 const utilTryPhrase = require('./depthFive/tryPhrase')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/depthFour/tryPhrase"
+const LOC_GLOB = "file: ../util/../depthFour/tryPhrase"
 
 // retourn un plateau de jeux selon l'identifiant de son utilisateur et de la partie
 exports.getBoardGameUser = async (gameId, userId, req) => {

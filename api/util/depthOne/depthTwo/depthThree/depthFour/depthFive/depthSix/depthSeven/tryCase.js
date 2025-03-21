@@ -1,35 +1,11 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../../../../models/Game")
-
-// import le schema d'un utilisateur
-const User = require("../../../../../../../../models/User")
-
-// import le schema d'un Board
-const Board = require("../../../../../../../../models/Board")
-
 // import le schema d'un Word
 const Word = require("../../../../../../../../models/Word")
 
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../check')
 
-// import fonctions util pour game
-const utilGame = require('../../../../../../../game')
-
-// import fonctions util pour user
-const utilUser = require('../../../../../../../user')
-
-// import fonctions util pour word
-const utilWord = require('../../../../../../../word')
-
-// import les fonction utiles pour startGame
-const utilUpdateBoard = require('./depthEight/updateBoard')
-
 // import les fonction utiles pour startGame
 const utilGetWord = require('./depthEight/getWord')
-
-// import les fonction utiles pour testUserTurn
-const utilTestUserTurn = require('./depthEight/testUserTurn')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthSeven/tryCase"

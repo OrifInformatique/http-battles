@@ -1,26 +1,12 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../../models/Game")
-
-// import le schema d'un utilisateur
-const User = require("../../../../../../models/User")
 
 // import fonctions util pour check
 const utilCheck = require('../../../../../check')
-
-// import fonctions util pour game
-const utilGame = require('../../../../../game')
-
-// import fonctions util pour user
-const utilUser = require('../../../../../user')
-
-// import fonctions util pour board
-const utilBoard = require('../../../../../board')
 
 // import les fonction utiles pour tryCase
 const utilTryCase = require('./depthSix/tryCase')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/depthFour/depthFive/tryCase"
+const LOC_GLOB = "file: ../util/../depthFive/tryCase"
 
 // retourn la position x sur le plateau en fonction de la route utilisée
 exports.switchArrayX = async (requestRoad, req) => {

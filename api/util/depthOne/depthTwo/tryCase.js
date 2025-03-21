@@ -1,32 +1,12 @@
-// import le schema d'un game
-const Game = require("../../../models/Game")
-// import le schema d'un board
-const Board = require("../../../models/Board")
+
 // import fonctions util pour check
 const utilCheck = require('../../check')
 
-// import fonctions util pour game
-const utilGame = require('../../game')
-// import fonctions util pour board
-const utilBoard = require('../../board')
-
 // import les fonction utiles pour getUser
-const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
-
-// import les fonction utiles pour getUser
-const utilGetOtherUserId = require('./depthThree/depthFour/getOtherUserId')
-
-// import les fonction utiles pour GetGame
-const utilGetGame = require('../depthTwo/depthThree/depthFour/getGame')
-
-// import les fonction utiles pour testTurn
-const utilTestTurn = require('./depthThree/testTurn')
+const utilGetOtherUserId = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/getOtherUserId')
 
 // import les fonction utiles pour endGame
 const utilTryCase = require('./depthThree/tryCase')
-
-// import fonctions util pour user
-const utilUser = require('../../user')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/depthTwo/tryCase"

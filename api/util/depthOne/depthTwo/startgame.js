@@ -1,26 +1,7 @@
-// import le schema d'un utilisateur
-const Game = require("../../../models/Game")
 
-// import le schema d'un utilisateur
-const User = require("../../../models/User")
 
 // import fonctions util pour check
 const utilCheck = require('../../check')
-
-// import fonctions util pour game
-const utilGame = require('../../game')
-
-// import fonctions util pour user
-const utilUser = require('../../user')
-
-// import fonctions util pour user
-const utilBoard = require('../../board')
-
-// import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
-
-// import les fonction utiles pour utilisateur
-const utilJoinGame = require('../depthTwo/depthThree/joinGame')
 
 // import les fonction utiles pour utilisateur
 const utilStartGame = require('.//depthThree/startGame')
@@ -79,7 +60,7 @@ exports.getGameCheckStartAddBoardAndPhrase = async (req) => {
             })
         })
 
-    await utilBoard.createBoardAndInsertPhrase(req)
+    await utilStartGame.createBoardAndInsertPhrase(req)
         .then(value => {
             // insert la phrase (objet) dans le plateau (objet) del requete
             req.package.board.phrase = value.board.phrase
@@ -93,7 +74,7 @@ exports.getGameCheckStartAddBoardAndPhrase = async (req) => {
             req.board = value.board
 
             req.data.push({
-                name: "utilBoard.createBoardAndInsertPhrase",
+                name: "utilStartGame.createBoardAndInsertPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -101,7 +82,7 @@ exports.getGameCheckStartAddBoardAndPhrase = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilBoard.createBoardAndInsertPhrase",
+                name: "utilStartGame.createBoardAndInsertPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -143,14 +124,14 @@ exports.startMessage = async (req) => {
     }
 
     // test si le client est l'utilisateur qui commence la partie
-    await utilGame.startMessageTest(req)
+    await utilStartGame.startMessageTest(req)
         .then(value => {
             // stoque le message addresser au client pour l'informer de qui commence la partie dans la requette
             req.package.startMessageContent = value
             req.startMessageContent = value
 
             req.data.push({
-                name: "utilGame.startMessageTest",
+                name: "utilStartGame.startMessageTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -158,19 +139,19 @@ exports.startMessage = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.startMessageTest",
+                name: "utilStartGame.startMessageTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    await utilGame.startMessageCreation(req)
+    await utilStartGame.startMessageCreation(req)
         .then(value => {
             req.package.startMessage = value
             req.startMessage = value
 
             req.data.push({
-                name: "utilGame.startMessageCreation",
+                name: "utilStartGame.startMessageCreation",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -178,7 +159,7 @@ exports.startMessage = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.startMessageCreation",
+                name: "utilStartGame.startMessageCreation",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

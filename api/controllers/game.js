@@ -1,22 +1,6 @@
-// import le fichier Thing.js qui contient la structure de l'objet Thing
-const Game = require('../models/Game')
+
 // import le package fs de node qui nous permet de modifier des fichiers
 const fs = require('fs')
-
-// import fonctions util pour utilisateur
-const utilUser = require('../util/user')
-
-// import fonctions util pour partie
-const utilGame = require('../util/game')
-
-// import fonctions util pour board
-const utilBoard = require('../util/board')
-
-// import fonctions util pour phrase
-const utilPhrase = require('../util/phrase')
-
-// import fonctions util pour word
-const utilWord = require('../util/word')
 
 // import fonctions util pour res
 const utilRes = require('../util/res')

@@ -1,38 +1,16 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../../../../../models/Game")
 
-// import le schema d'un utilisateur
-const User = require("../../../../../../../../../models/User")
 
 // import le schema d'un Board
 const Board = require("../../../../../../../../../models/Board")
 
-// import le schema d'un Word
-const Word = require("../../../../../../../../../models/Word")
-
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../../check')
 
-// import fonctions util pour game
-const utilGame = require('../../../../../../../../game')
-
-// import fonctions util pour user
-const utilUser = require('../../../../../../../../user')
-
 // import fonctions util pour board
-const utilBoard = require('../../../../../../../../board')
-
-// import fonctions util pour word
-const utilWord = require('../../../../../../../../word')
-
-// import les fonction utiles pour startGame
-const utilStartGame = require('./startGame')
-
-// import les fonction utiles pour testUserTurn
-const utilTestUserTurn = require('./testUserTurn')
+const utilGetBoard = require('./depthNine/getBoard')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthSeven/updateBoard"
+const LOC_GLOB = "file: ../util/../depthEight/updateBoard"
 
 // update le plateau
 exports.updateBoard = async (req) => {
@@ -89,13 +67,13 @@ exports.updateBoard = async (req) => {
         })
 
     // récupère le tableau après l'update
-    await utilBoard.getBoard(req, req.board._id)
+    await utilGetBoard.getBoard(req, req.board._id)
         .then(value => {
             // stoque le tableaux dans la requete
             req.board = value
 
             req.data.push({
-                name: "utilBoard.getBoard",
+                name: "utilGetBoard.getBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -103,7 +81,7 @@ exports.updateBoard = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilBoard.getBoard",
+                name: "utilGetBoard.getBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
