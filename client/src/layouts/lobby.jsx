@@ -63,6 +63,9 @@ const LobbyLayout = () => {
       <main className="w-full max-w-[960px] m-auto px-4">
         <Outlet />
       </main>
+      <div className="lobby-background">
+        <div className="bg-boat"></div>
+      </div>
     </ProtectedRoute>
   );
 };

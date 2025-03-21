@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://localhost:3000/api";
+export const API_BASE_URL = "http://192.168.40.112:3000/api"; /*utiliser localhost ou sinon l'adresse IP exacte de la machine locale pour qu'Enzo puisse s'y connecter*/
 
 // Auth Routes
 export const API_AUTH_BASE_ROUTE = "/auth";
