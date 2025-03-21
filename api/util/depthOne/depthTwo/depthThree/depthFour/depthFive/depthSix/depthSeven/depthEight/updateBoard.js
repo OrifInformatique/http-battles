@@ -7,7 +7,7 @@ const Board = require("../../../../../../../../../models/Board")
 const utilCheck = require('../../../../../../../../check')
 
 // import fonctions util pour board
-const utilGetBoard = require('./depthNine/getBoard')
+const utilGetBoard = require('./depthBottom/getBoard')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthEight/updateBoard"

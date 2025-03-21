@@ -1,6 +1,6 @@
-
 // import le schema d'un board
 const Board = require("../../../models/Board")
+
 // import fonctions util pour check
 const utilCheck = require('../../check')
 

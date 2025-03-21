@@ -14,7 +14,7 @@ const utilGame = require('../../game')
 const utilUser = require('../../user')
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
+const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/depthBottom/getUserById')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/depthOne/depthTwo/listGames"

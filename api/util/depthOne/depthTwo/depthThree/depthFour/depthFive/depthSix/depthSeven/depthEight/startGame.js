@@ -4,95 +4,17 @@ const Word = require("../../../../../../../../../models/Word")
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../../check')
 
-const utilStartGame = require('./depthNine/startGame')
+const utilTestCase = require('./testCase')
+
+const utilCreateWord = require('./depthBottom/createWord')
+
+const utilSaveWord = require('./depthBottom/saveWord')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthEight/startGame"
 
-// retourn l'id utilisateur qui commence
-exports.coinFlipStartUserId = async (coinFlip, req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: coinFlipStartUserId"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // retourn l'id utilisateur contenu dans la partie en fonction du test
-    if (coinFlip) {
-
-        return req.game.createurId
-
-    } else {
-
-        return req.game.challengerId
-
-    }
-}
-
-//  retourn l'état de la partie en fonction du resultat du test
-exports.coinFlipStartGameState = async (coinFlip, req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: coinFlipStartGameState"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    //  retourn l'état de la partie en fonction du résultat du test
-    if (coinFlip) {
-
-        return "CREATEUR_TURN"
-
-    } else {
-
-        return "CHALLENGER_TURN"
-
-    }
-}
-
 // crée un objet mot
-exports.createWord = async (word, req) => {
+exports.createXsaveWord = async (word, req) => {
     // test de la validité des données
     const LOC_LOC = "methode: createWord"
 
@@ -120,19 +42,12 @@ exports.createWord = async (word, req) => {
         return null
     }
 
-    // crée un nouvel objet mot avec les info en parametre
-    const newWord = new Word({
-        content: word.content,
-        position: word.position
-    })
-
-    // enregistre le mot dans la base deonnées
-    await newWord.save()
+    await utilCreateWord.createWord(word, req)
         .then(value => {
             // stoque le mot dans la requete
             req.word = value
             req.data.push({
-                name: "newWord.save()",
+                name: "utilCreateWord.createWord",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -140,7 +55,27 @@ exports.createWord = async (word, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "newWord.save()",
+                name: "utilCreateWord.createWord",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // enregistre le mot dans la base données
+    await utilSaveWord.saveWord(req.word, req)
+        .then(value => {
+            // stoque le mot dans la requete
+            req.word = value
+            req.data.push({
+                name: "req.word.save()",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "req.word.save()",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -182,7 +117,7 @@ exports.insertPhraseInBoardX = async (userPhrase, keyY, keyX, req) => {
     // parcour la phrase du plateaux
     for (const keyW in userPhrase.words) {
         // insert les mot de la phrase dans les case du plateaux si leurs positions est égal
-        await utilStartGame.insertPhraseInBoardW(userPhrase, keyY, keyX, keyW, req)
+        await utilTestCase.testCase(userPhrase, keyY, keyX, keyW, req)
             .then(value => {
                 req.data.push({
                     name: "this.insertPhraseInBoardW",

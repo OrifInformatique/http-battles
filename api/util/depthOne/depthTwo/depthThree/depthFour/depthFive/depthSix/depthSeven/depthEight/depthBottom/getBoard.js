@@ -1,31 +1,20 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../../../../../models/Game")
-
-// import le schema d'un utilisateur
-const User = require("../../../../../../../../../models/User")
-
+const Board = require('../../../../../../../../../../models/Board')
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
-
-// import fonctions util pour game
-const utilGame = require('../../../../../../../../game')
-
-// import fonctions util pour user
-const utilUser = require('../../../../../../../../user')
+const utilCheck = require('../../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/getUserById"
+const LOC_GLOB = "file: ../util/../depthBottom/getBoard"
 
-// récupère un utilisateur suivant sin id
-exports.getUserById = async (userId, req) => {
+
+// retourne le plateau selon son id
+exports.getBoard = async (req, boardId) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getUserById"
+    const LOC_LOC = "methode: getBoard"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
-
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -46,28 +35,28 @@ exports.getUserById = async (userId, req) => {
         return null
     }
 
-    // récupère un tulisateur suivant son id
-    await User.findOne({ _id: userId })
+    // récupère le plateau dans la base données selon son id
+    await Board.findOne({ _id: boardId })
         .then(value => {
-            // stoque l'utilisateur dans la requete
-            req.user = value
-
+            // stoque le plateau dans la requete
+            req.board = value
             req.data.push({
-                name: "User.findOne",
+                name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
-
         })
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "User.findOne",
+                name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // retourne la variable traité pour la gestion d'erreur
-    return req.user
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.board
 }
+
+

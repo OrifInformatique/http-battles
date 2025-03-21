@@ -1,17 +1,16 @@
-
 // import le schema d'un Word
-const Word = require("../../../../../../../../../models/Word")
+const Word = require("../../../../../../../../../../models/Word")
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthEight/getWord"
+const LOC_GLOB = "file: ../util/../depthBottom/createWord"
 
-// récupère le mot suivant son id
-exports.getWord = async (wordId, req) => {
+// crée un objet mot
+exports.createWord = async (word, req) => {
     // test de la validité des données
-    const LOC_LOC = "methode: getWord"
+    const LOC_LOC = "methode: createWord"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -37,25 +36,11 @@ exports.getWord = async (wordId, req) => {
         return null
     }
 
-    // retourn le mot dans la base donée suivant son id
-    await Word.findOne({ _id: wordId })
-        .then(value => {
-            // stoque le mot dans la requete
-            req.word = value
-            req.data.push({
-                name: "Word.findOne",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "Word.findOne",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
+    // crée un nouvel objet mot avec les info en parametre
+    req.word = new Word({
+        content: word.content,
+        position: word.position
+    })
 
     // retourne la variable traitée pour la gestion d'erreur
     return req.word

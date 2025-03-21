@@ -8,6 +8,10 @@ const utilStartGame = require('./depthEight/startGame')
 // import les fonction utiles pour testUserTurn
 const utilTestUserTurn = require('./depthEight/testUserTurn')
 
+const utilGetStartUserId = require('./depthEight/depthBottom/getStartUserId')
+
+const utilGetStartGameState = require('./depthEight/depthBottom/getStartGameState')
+
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthSeven/startGame"
 
@@ -46,14 +50,14 @@ exports.coinFlipStartMode = async (req) => {
     req.coinFlip = Math.floor(Math.random() * 2) == 0
 
     // retourn l'id de l'utilisateur en fonctions du resultat du test
-    await utilStartGame.coinFlipStartUserId(req.coinFlip, req)
+    await utilGetStartUserId.getStartUserId(req.coinFlip, req)
         .then(value => {
             // stoque cette id dans la requete
             req.startUserId = value
             req.package.startUserId = value
 
             req.data.push({
-                name: "utilStartGame.coinFlipStartUserId",
+                name: "utilGetStartUserId.getStartUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -61,20 +65,20 @@ exports.coinFlipStartMode = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilStartGame.coinFlipStartUserId",
+                name: "utilGetStartUserId.getStartUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // retourn l'état de la partie en fonction du résultat du test
-    await utilStartGame.coinFlipStartGameState(req.coinFlip, req)
+    await utilGetStartGameState.getStartGameState(req.coinFlip, req)
         .then(value => {
             // stoque le nouvel étàt de la partie dans la requete
             req.game.state = value
             req.package.state = value
             req.data.push({
-                name: "utilStartGame.coinFlipStartGameState",
+                name: "utilGetStartGameState.getStartGameState",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -82,7 +86,7 @@ exports.coinFlipStartMode = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilStartGame.coinFlipStartGameState",
+                name: "utilGetStartGameState.getStartGameState",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -207,19 +211,19 @@ exports.fillPhrase = async (userPhrase, req) => {
     // parcoure les mot de la phrase de l'utilisateur
     for (const mot of userPhrase) {
         // crée un objet mot
-        await utilStartGame.createWord(mot.word, req)
+        await utilStartGame.createXsaveWord(mot.word, req)
             .then(value => {
                 // stoque l'objet mot dans la requete
                 req.word = value
                 req.data.push({
-                    name: "utilStartGame.createWord",
+                    name: "utilStartGame.createXsaveWord",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "utilStartGame.createWord",
+                    name: "utilStartGame.createXsaveWord",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })

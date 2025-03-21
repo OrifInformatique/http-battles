@@ -1,19 +1,14 @@
-// import le schema d'un Word
-const Word = require("../../../../../../../../models/Word")
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../check')
-
-// import les fonction utiles pour startGame
-const utilGetWord = require('./depthEight/depthBottom/getWord')
+const utilCheck = require('../../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthSeven/tryCase"
+const LOC_GLOB = "file: ../util/../depthBottom/saveWord"
 
-// Reveal le mot
-exports.revealWord = async (word, req) => {
+// crée un objet mot
+exports.saveWord = async (word, req) => {
     // test de la validité des données
-    const LOC_LOC = "methode: revealWord"
+    const LOC_LOC = "methode: saveWord"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -39,35 +34,13 @@ exports.revealWord = async (word, req) => {
         return null
     }
 
-    // update le mot dans la base donnée 
-    await Word.updateOne({ _id: word._id }, {
-        $set: {
-            revealed: true
-        }
-    })
-        .then(value => {
-            req.data.push({
-                name: "Word.updateOne",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "Word.updateOne",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-    
-    // récupère le mot après l'update
-    await utilGetWord.getWord(word._id, req)
+    // enregistre le mot dans la base deonnées
+    await req.word.save()
         .then(value => {
             // stoque le mot dans la requete
             req.word = value
             req.data.push({
-                name: "utilWord.getWord",
+                name: "req.word.save()",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -75,7 +48,7 @@ exports.revealWord = async (word, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilWord.getWord",
+                name: "req.word.save()",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

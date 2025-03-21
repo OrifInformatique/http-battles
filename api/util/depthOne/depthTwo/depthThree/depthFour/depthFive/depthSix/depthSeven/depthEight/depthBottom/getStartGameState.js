@@ -1,13 +1,14 @@
+
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthNine/startGame"
+const LOC_GLOB = "file: ../util/../depthBottom/getStartGameState"
 
-// insert les mot de la phrase dans les case du plateaux si leurs positions est égal
-exports.insertPhraseInBoardW = async (userPhrase, keyY, keyX, keyW, req) => {
+//  retourn l'état de la partie en fonction du resultat du test
+exports.getStartGameState = async (coinFlip, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: insertPhraseInBoardW"
+    const LOC_LOC = "methode: coinFlipStartGameState"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -33,12 +34,14 @@ exports.insertPhraseInBoardW = async (userPhrase, keyY, keyX, keyW, req) => {
         return null
     }
 
-    // test si la position de la case est égal à la postion du mot
-    if (userPhrase.words[keyW].position[0].toString() === keyY && userPhrase.words[keyW].position[1].toString() === keyX) {
-        // si oui, rempli la case avec le mot
-        req.newBoardFull[keyY].push(userPhrase.words[keyW])
-    }
+    //  retourn l'état de la partie en fonction du résultat du test
+    if (coinFlip) {
 
-    // retourne la variable traitéeF pour la gestion d'erreur
-    return req.newBoardFull
+        return "CREATEUR_TURN"
+
+    } else {
+
+        return "CHALLENGER_TURN"
+
+    }
 }

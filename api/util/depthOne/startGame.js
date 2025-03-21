@@ -8,7 +8,7 @@ const utilCheck = require('../check')
 const utilGame = require('../game')
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
+const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/depthBottom/getUserById')
 
 // import les fonction utiles pour utilisateur
 const utilJoinGame = require('../depthOne/depthTwo/joinGame')
