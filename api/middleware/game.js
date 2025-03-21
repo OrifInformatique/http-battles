@@ -243,7 +243,7 @@ exports.checkTurn = async (req, res, next) => {
         req.package = {}
     }
 
-    await utilGame.constructCheckTurn(req)
+    await utilGame.checkTurn(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package.game = value.game

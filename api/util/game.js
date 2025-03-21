@@ -22,10 +22,13 @@ const utilJoinGame = require('../util/depthOne/joinGame')
 // import les fonction utiles pour startGame
 const utilStartGame = require('../util/depthOne/startGame')
 
-// import les fonction utiles pour startGame
+// import les fonction utiles pour checkTurn
 const utilCheckturn = require('../util/depthOne/checkTurn')
 
-// import les fonction utiles pour findGame
+// import les fonction utiles pour endGame
+const utilEndGame = require('../util/depthOne/endGame')
+
+// import les fonction utiles pour updateGame
 const utilUpdateGame = require('./depthOne/depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
 
 
@@ -614,7 +617,7 @@ exports.findUpdateAndEndGame = async (req) => {
         req.package = {}
     }
 
-    await this.findAndEndGame(req)
+    await utilEndGame.findAndEndGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package.game = value.game
@@ -624,7 +627,7 @@ exports.findUpdateAndEndGame = async (req) => {
             req.state = value.state
 
             req.data.push({
-                name: "this.findAndEndGame",
+                name: "utilEndGame.findAndEndGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -632,14 +635,14 @@ exports.findUpdateAndEndGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.findAndEndGame",
+                name: "utilEndGame.findAndEndGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // si oui update l'état de la partie
-    await this.updateGame(req)
+    await utilUpdateGame.updateGame(req)
         .then(value => {
 
             // stoque le nouvel état de la partie dans la requette
@@ -647,7 +650,7 @@ exports.findUpdateAndEndGame = async (req) => {
             req.game = value
 
             req.data.push({
-                name: "this.updateGame",
+                name: "utilUpdateGame.updateGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -655,7 +658,7 @@ exports.findUpdateAndEndGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.updateGame",
+                name: "utilUpdateGame.updateGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -1750,7 +1753,7 @@ exports.startGame = async (req) => {
     return req.package
 }
 
-exports.constructCheckTurn = async (req) => {
+exports.checkTurn = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: constructCheckTurn"
 
