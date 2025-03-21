@@ -445,6 +445,72 @@ exports.joinGame = async (req, res, next) => {
     return req.package
 }
 
+// fini la partie
+exports.endGame = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: endGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    await utilGame.endGame(req)
+        .then(value => {
+            // stock l'objet jeux dans la requette
+            req.package.game = value.game
+            req.game = value.game
+
+            req.package.state = value.state
+            req.state = value.state
+
+            req.data.push({
+                name: "utilGame.findUpdateAndEndGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGame.findUpdateAndEndGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
+    return req.package
+}
+
 exports.tryPhrase = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: tryPhrase"
@@ -516,72 +582,6 @@ exports.tryPhrase = async (req, res, next) => {
 
     return req.package
 
-}
-
-// fini la partie
-exports.endGame = async (req, res, next) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: endGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    if (req.package === undefined) {
-        req.package = {}
-    }
-
-    await utilGame.findUpdateAndEndGame(req)
-        .then(value => {
-            // stock l'objet jeux dans la requette
-            req.package.game = value.game
-            req.game = value.game
-
-            req.package.state = value.state
-            req.state = value.state
-
-            req.data.push({
-                name: "utilGame.findUpdateAndEndGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGame.findUpdateAndEndGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test si la fonction next à été transmise et passe au prochains middlware si oui
-    if (next !== undefined) {
-        next()
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.package
 }
 
 // ecrit le message du test de la case à renvoyer au client

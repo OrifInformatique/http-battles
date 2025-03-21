@@ -1,32 +1,33 @@
 // import le schema d'un utilisateur
-const Game = require("../../models/Game")
+const Game = require("../../../../../models/Game")
+
+// import le schema d'un utilisateur
+const User = require("../../../../../models/User")
+
+// import le schema d'un Board
+const Board = require("../../../../../models/Board")
 
 // import fonctions util pour check
-const utilCheck = require('../check')
+const utilCheck = require('../../../../check')
 
 // import fonctions util pour game
-const utilGame = require('../game')
+const utilGame = require('../../../../game')
 
-
-
-// import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
-
-// import les fonction utiles pour utilisateur
-const utilJoinGame = require('../depthOne/depthTwo/joinGame')
-
-// import les fonction utiles pour utilisateur
-const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
+// import fonctions util pour board
+const utilBoard = require('../../../../board')
 
 // import fonctions util pour user
-const utilUser = require('../user')
+const utilUser = require('../../../../user')
+
+// import les fonction utiles pour tryPhrase
+const utilTryCase = require('./depthFive/tryCase')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/joinGame"
+const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/depthFour/tryCase"
 
-exports.findUpdateAndJoinGame = async (req) => {
+exports.switchArrays = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: findUpdateAndJoinGame"
+    const LOC_LOC = "methode: switchArrays"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -52,18 +53,15 @@ exports.findUpdateAndJoinGame = async (req) => {
         return null
     }
 
-    await utilJoinGame.findAndJoinGame(req)
+    // retourne la position X de la case sur le plateaux en fonction de la route utilisée
+    await utilTryCase.switchArrayX(req.route, req)
         .then(value => {
-            // stock l'objet jeux dans la requette
-            req.package.game = value.game
-            req.package.state = value.state
-            req.package.challenger = value.challenger
-            req.game = value.game
-            req.state = value.state
-            req.challenger = value.challenger
+            // stoque la position X du plateau dans la requette
+            req.package.arrayX = value
+            req.arrayX = value
 
             req.data.push({
-                name: "utilJoinGame.findAndJoinGame",
+                name: "utilTryCase.switchArrayX",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -71,21 +69,21 @@ exports.findUpdateAndJoinGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilJoinGame.findAndJoinGame",
+                name: "utilTryCase.switchArrayX",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // si oui update l'état de la partie
-    await utilUpdategame.updateGame(req)
+    // retourne la position y de la case sur le plateaux en fonction de la méthode utilisée
+    await utilTryCase.switchArrayY(req.method, req)
         .then(value => {
-            // stoque le nouvel état de la partie dans la requette
-            req.package.game = value
-            req.game = value
+            // stoque la position Y du plateau dans la requette
+            req.package.arrayY = value
+            req.arrayY = value
 
             req.data.push({
-                name: "utilGame.updateGame",
+                name: "utilTryCase.switchArrayY",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -93,7 +91,7 @@ exports.findUpdateAndJoinGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.updateGame",
+                name: "utilTryCase.switchArrayY",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -102,9 +100,9 @@ exports.findUpdateAndJoinGame = async (req) => {
     return req.package
 }
 
-exports.formatJoin = async (req) => {
+exports.checkBoardAndTryCase = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: formatJoin"
+    const LOC_LOC = "methode: checkBoardAndTryCase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -130,16 +128,15 @@ exports.formatJoin = async (req) => {
         return null
     }
 
-    await utilJoinGame.getCreatorAndChallenger(req)
+    // test une case du plateau
+    await utilTryCase.checkBoard(req.arrayY, req.arrayX, req.body.gameId, req.otherUserId, req)
         .then(value => {
-            req.package.createur = value.createur
-            req.createur = value.createur
-
-            req.package.user = value.user
-            req.user = value.user
+            // stoque le resultat (inclue le mot si réussi)
+            req.check = value
+            req.package.check = value
 
             req.data.push({
-                name: "utilJoinGame.getCreatorAndChallenger",
+                name: "utilTryCase.checkBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -147,20 +144,19 @@ exports.formatJoin = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilJoinGame.getCreatorAndChallenger",
+                name: "utilTryCase.checkBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // stoque un message de success pour la partie rejointe qui contient le message, l'état de la partie, l'username du créateur, l'username du client
-    await utilJoinGame.joinSuccessMessage(req)
+    await utilTryCase.tryCase(req)
         .then(value => {
-            req.package.joinSuccessMessage = value
-            req.joinSuccessMessage = value
+            req.tryCaseMessage = value
+            req.package.tryCaseMessage = value
 
             req.data.push({
-                name: "utilJoinGame.joinSuccessMessage",
+                name: "utilTryCase.tryCase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -168,7 +164,7 @@ exports.formatJoin = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilJoinGame.joinSuccessMessage",
+                name: "utilTryCase.tryCase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

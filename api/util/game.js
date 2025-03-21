@@ -31,6 +31,9 @@ const utilEndGame = require('../util/depthOne/endGame')
 // import les fonction utiles pour endGame
 const utilTryPhrase = require('../util/depthOne/tryPhrase')
 
+// import les fonction utiles pour endGame
+const utilTryCase = require('../util/depthOne/tryCase')
+
 // import les fonction utiles pour updateGame
 const utilUpdateGame = require('./depthOne/depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
 
@@ -95,80 +98,6 @@ exports.getGame = async (req) => {
     return req.game
 }
 
-exports.switchArrays = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: switchArrays"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // retourne la position X de la case sur le plateaux en fonction de la route utilisée
-    await this.switchArrayX(req.route, req)
-        .then(value => {
-            // stoque la position X du plateau dans la requette
-            req.package.arrayX = value
-            req.arrayX = value
-
-            req.data.push({
-                name: "this.switchArrayX",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.switchArrayX",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // retourne la position y de la case sur le plateaux en fonction de la méthode utilisée
-    await this.switchArrayY(req.method, req)
-        .then(value => {
-            // stoque la position Y du plateau dans la requette
-            req.package.arrayY = value
-            req.arrayY = value
-
-            req.data.push({
-                name: "this.switchArrayY",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.switchArrayY",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    return req.package
-}
 
 exports.constructTryCase = async (req) => {
     // location local pour la gestion d'erreur
@@ -198,7 +127,7 @@ exports.constructTryCase = async (req) => {
         return null
     }
 
-    await this.tryCaseAndSwitchTurn(req)
+    await utilTryCase.tryCaseAndSwitchTurn(req)
         .then(value => {
             // stoque l'id de l'opposant dans la requette
             req.package.otherUserId = value.otherUserId
@@ -223,7 +152,7 @@ exports.constructTryCase = async (req) => {
             req.state = value.state
 
             req.data.push({
-                name: "this.tryCaseAndSwitchTurn",
+                name: "utilTryCase.tryCaseAndSwitchTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -231,14 +160,14 @@ exports.constructTryCase = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.tryCaseAndSwitchTurn",
+                name: "utilTryCase.tryCaseAndSwitchTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // si oui update l'état de la partie
-    await this.updateGame(req)
+    await utilUpdateGame.updateGame(req)
         .then(value => {
 
             // stoque le nouvel état de la partie dans la requette
@@ -263,332 +192,7 @@ exports.constructTryCase = async (req) => {
     return req.package
 }
 
-exports.tryCaseAndSwitchTurn = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: tryCaseAndSwitchTurn"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    await this.getOtherBoardAndTryCase(req)
-        .then(value => {
-            // stoque l'id de l'opposant dans la requette
-            req.package.otherUserId = value.otherUserId
-            req.otherUserId = value.otherUserId
-
-            // stoque la position X du plateau dans la requette
-            req.package.arrayX = value.arrayX
-            req.arrayX = value.arrayX
-
-            // stoque la position Y du plateau dans la requette
-            req.package.arrayY = value.arrayY
-            req.arrayY = value.arrayY
-
-            // stoque le resultat (inclue le mot si réussi)
-            req.check = value.check
-            req.package.check = value.check
-
-            req.tryCaseMessage = value.tryCaseMessage
-            req.package.tryCaseMessage = value.tryCaseMessage
-
-            req.data.push({
-                name: "this.getOtherBoardAndTryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.getOtherBoardAndTryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    await this.switchTurn(req)
-        .then(value => {
-            req.package.state = value
-            req.state = value
-
-            req.data.push({
-                name: "this.switchTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.switchTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    return req.package
-}
-
-exports.getOtherBoardAndTryCase = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getOtherBoardAndTryCase"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // récupère l'identifiant de l'opposant du client dans la partie en cours
-    await this.getOtherUserId(req)
-        .then(value => {
-            // stoque l'id de l'opposant dans la requette
-            req.package.otherUserId = value
-            req.otherUserId = value
-
-            req.data.push({
-                name: "this.getOtherUserId",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.getOtherUserId",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    await this.checkArrayBoardAndTryCase(req)
-        .then(value => {
-            // stoque la position X du plateau dans la requette
-            req.package.arrayX = value.arrayX
-            req.arrayX = value.arrayX
-
-            // stoque la position Y du plateau dans la requette
-            req.package.arrayY = value.arrayY
-            req.arrayY = value.arrayY
-
-            // stoque le resultat (inclue le mot si réussi)
-            req.check = value.check
-            req.package.check = value.check
-
-            req.tryCaseMessage = value.tryCaseMessage
-            req.package.tryCaseMessage = value.tryCaseMessage
-
-            req.data.push({
-                name: "this.checkArrayBoardAndTryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.checkArrayBoardAndTryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    return req.package
-}
-
-exports.checkArrayBoardAndTryCase = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: checkArrayBoardAndTryCase"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    await this.switchArrays(req)
-        .then(value => {
-            // stoque la position X du plateau dans la requette
-            req.package.arrayX = value.arrayX
-            req.arrayX = value.arrayX
-
-            // stoque la position Y du plateau dans la requette
-            req.package.arrayY = value.arrayY
-            req.arrayY = value.arrayY
-
-            req.data.push({
-                name: "this.switchArrays",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.switchArrays",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    await this.checkBoardAndTryCase(req)
-        .then(value => {
-            // stoque le resultat (inclue le mot si réussi)
-            req.check = value.check
-            req.package.check = value.check
-
-            req.tryCaseMessage = value.tryCaseMessage
-            req.package.tryCaseMessage = value.tryCaseMessage
-
-            req.data.push({
-                name: "this.checkBoardAndTryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.checkBoardAndTryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    return req.package
-}
-
-exports.checkBoardAndTryCase = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: checkBoardAndTryCase"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // test une case du plateau
-    await utilBoard.checkBoard(req.arrayY, req.arrayX, req.body.gameId, req.otherUserId, req)
-        .then(value => {
-            // stoque le resultat (inclue le mot si réussi)
-            req.check = value
-            req.package.check = value
-
-            req.data.push({
-                name: "utilBoard.checkBoard",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilBoard.checkBoard",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    await this.tryCase(req)
-        .then(value => {
-            req.tryCaseMessage = value
-            req.package.tryCaseMessage = value
-
-            req.data.push({
-                name: "this.tryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.tryCase",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    return req.package
-}
-
-exports.findUpdateAndEndGame = async (req) => {
+exports.endGame = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: findUpdateAndEndGame"
 
@@ -669,83 +273,6 @@ exports.findUpdateAndEndGame = async (req) => {
 
     return req.package
 }
-
-exports.findAndEndGame = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: findAndEndGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    if (req.package === undefined) {
-        req.package = {}
-    }
-
-    await this.getGame(req)
-        .then(value => {
-            // stock l'objet jeux dans la requette
-            req.package.game = value
-            req.game = value
-
-            req.data.push({
-                name: "this.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.getGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    await this.endGame(req)
-        .then(value => {
-            req.package.state = value
-            req.state = value
-
-            req.data.push({
-                name: "this.endGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.endGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    return req.package
-}
-
 
 exports.joinGame = async (req) => {
     // location local pour la gestion d'erreur
@@ -1125,46 +652,6 @@ exports.formatedMessage = async (req) => {
     return message
 }
 
-exports.getOtherUserId = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getOtherUserId"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // si le client est le créateur, retourn l'id du challenger
-    if (req.auth.userId === req.game.createurId) {
-
-        return req.game.challengerId
-
-    } else {
-        // sinon retourn l'id du créateur créateur
-        return req.game.createurId
-
-    }
-}
-
 // renvoie le message de départ décrivamt qui commence par rapport au client à l'origin de la requete
 exports.startMessageTest = async (req) => {
     // location local pour la gestion d'erreur
@@ -1248,108 +735,7 @@ exports.testUserTurn = async (gameUserId, reqId, req) => {
     }
 }
 
-// retourn la position y sur le plateau en fonction de la methode utilisée
-exports.switchArrayY = async (requestMode, req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: switchArrayY"
 
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // retourn la position y sur le plateau en fonction de la methode utilisée
-    switch (requestMode) {
-
-        case "GET":
-
-            return arrayY = 0
-
-        case "POST":
-
-            return arrayY = 1
-
-        case "PUT":
-
-            return arrayY = 2
-
-        case "DELETE":
-
-            return arrayY = 3
-
-    }
-}
-
-// retourn la position x sur le plateau en fonction de la route utilisée
-exports.switchArrayX = async (requestRoad, req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: switchArrayX"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // retourn la position x sur le plateau en fonction de la route utilisée
-    switch (requestRoad) {
-
-        case "A":
-
-            return arrayX = 0
-
-        case "B":
-
-            return arrayX = 1
-
-
-        case "C":
-
-            return arrayX = 2
-
-        case "D":
-
-            return arrayX = 3
-
-    }
-}
 
 // uodate la partie
 exports.updateGame = async (req) => {
@@ -2043,45 +1429,6 @@ exports.startMessageCreation = async (req) => {
     return req.startMessage
 }
 
-exports.joinSuccessMessage = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: joinSuccessMessage"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // stoque un message de success pour la partie rejointe qui contient le message, l'état de la partie, l'username du créateur, l'username du client
-    req.joinSuccessMessage = {
-        message: "Partie rejointe !",
-        state: req.game.state,
-        createurUsername: req.createur.username,
-        challengerUsername: req.user.username
-    }
-
-    return req.joinSuccessMessage
-}
-
 exports.testTurn = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: testTurn"
@@ -2161,133 +1508,4 @@ exports.testTurn = async (req) => {
     }
 
     return req.testTurnMessage
-}
-
-exports.endGame = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: endGame"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // stoque le nouvelle état de lapartie dans la requete
-    req.state = "ENDED"
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.state
-}
-
-exports.tryCase = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: tryCase"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // si le test de la case est réussi
-    if (req.check.result) {
-
-        // stoque  un message de success contenant le text, la case testé, le mot et sa position dans la requette
-        req.tryCaseMessage = {
-            case: req.method + " " + req.route,
-            result: "Touché!",
-            word: req.check.word.content,
-            position: req.check.word.position
-        }
-        // si le test est un echèque
-    } else {
-        // stoque un message d'échque avec la case testée
-        req.tryCaseMessage = {
-            case: req.method + " " + req.route,
-            result: "Manqué!"
-        }
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.tryCaseMessage
-
-}
-
-exports.switchTurn = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: switchTurn"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // test l'état de la partie
-    if (req.game.state === "CREATEUR_TURN") {
-        // si c'est le tour du créateur, donne le tour du challenger comme état à appliquer
-        req.state = "CHALLENGER_TURN"
-
-    } else if (req.game.state === "CHALLENGER_TURN") {
-        // si c'est le tour du challenger, donne le tour du créateur comme état à appliquer
-        req.state = "CREATEUR_TURN"
-    }
-
-    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.state
 }

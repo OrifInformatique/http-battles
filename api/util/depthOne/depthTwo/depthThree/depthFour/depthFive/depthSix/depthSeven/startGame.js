@@ -19,8 +19,6 @@ const utilStartGame = require('./depthEight/startGame')
 // import les fonction utiles pour testUserTurn
 const utilTestUserTurn = require('./depthEight/testUserTurn')
 
-
-
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthSeven/startGame"
 

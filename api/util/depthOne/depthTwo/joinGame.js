@@ -103,3 +103,122 @@ exports.findAndJoinGame = async (req) => {
 
     return req.package
 }
+
+exports.getCreatorAndChallenger = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getCreatorAndChallenger"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.package === undefined) {
+        req.package = {}
+    }
+
+    // récupère l'utilisateur en fonction de son id en parametre (ici l'id du créateur contenu dans le jeux)
+    await utilGetUser.getUserById(req.game.createurId, req)
+        .then(value => {
+            // stock l'objet utilisateur trouvé dans la requete
+            req.package.createur = value
+            req.createur = value
+
+            req.data.push({
+                name: "utilGetUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGetUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // récupère un objet utilisateur en fonction de son id
+    await utilGetUser.getUserById(req.auth.userId, req)
+        .then(value => {
+            // stock l'utilisateur dans la requette
+            req.package.user = value
+            req.user = value
+
+            req.data.push({
+                name: "utilGetUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGetUser.getUserById",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+exports.joinSuccessMessage = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: joinSuccessMessage"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // stoque un message de success pour la partie rejointe qui contient le message, l'état de la partie, l'username du créateur, l'username du client
+    req.joinSuccessMessage = {
+        message: "Partie rejointe !",
+        state: req.game.state,
+        createurUsername: req.createur.username,
+        challengerUsername: req.user.username
+    }
+
+    return req.joinSuccessMessage
+}
