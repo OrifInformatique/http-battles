@@ -23,7 +23,7 @@ function LaunchPage() {
 
 /*     Changements d'états    */
     const [phrase, setPhrase] = useState([
-                // Dimensions
+        // Dimensions
         { word: dynamicVal[0][0], route: staticVal1[0], method: staticVal2[0], position: 1},
         { word: dynamicVal[1][0], route: staticVal1[0], method: staticVal2[0], position: 2},
         { word: dynamicVal[2][0], route: staticVal1[0], method: staticVal2[0], position: 3},
@@ -44,7 +44,7 @@ function LaunchPage() {
                 [key]: [value],
             }}))
             console.log(phrase)
-    };
+        };
 
     switch(isSubmitted) { 
         case 1:

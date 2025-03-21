@@ -54,10 +54,30 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
     </>);
 }
 
+function Words({phrase, position, i}) {
+//console.log(phrase,"phrase")
+console.log(phrase[i], "i");
+
+console.log("phrase[i]:", phrase[i]);
+console.log("phrase[i].word:", phrase[i]?.word);
+console.log("phrase[i].word est un tableau ?: ", Array.isArray(phrase));
+
+        phrase.map((element, index) => {
+            return(
+                <div key={index} className={position === i ?"init5Word wordPosition-0" :"init5Word position-0 a"} id="position">
+                    {element} 
+                    <img src="assets/images/element/sword_1.png"/>
+                </div>
+            );
+        })};
+
+
+
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
 const [position, setPosition] = useState(1)
 const totalSlides = 5;
 let arrowd = null;
+let i = 1;
 
 //   Enlever la flèche lorsque on est sur le 1er ou dernier élément.
     function handleChangeArrowLeft() {
@@ -101,9 +121,11 @@ switch ( position ){
             </div>
                 
             <div className="initPhrase">
+                <Words phrase={phrase} i={i} position={position}/>
+
+
                 <div className={position === 1 ?"init5Word wordPosition-0" :"init5Word position-0 a"} id="position">
                 {phrase[0].word} 
-               {/* <p className="p">_</p>*/}
                 <img src="assets/images/element/sword_1.png"/>
                 </div>
 
@@ -120,7 +142,6 @@ switch ( position ){
                 <div className={position === 4 ?"init5Word wordPosition-3" :"init5Word position-3 a"} id="position">
                 {phrase[3].word}  
                <img src="assets/images/element/sword_1.png"/>
-
                </div>
 
                 <div className={position === 5 ?"init5Word wordPosition-4" :"init5Word position-4 a"} id="position">      
@@ -154,17 +175,7 @@ switch ( position ){
                     </div>
                 </div> 
             </form>
-            {/* <div className="initFirstListLaunchContainer"> 
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} phrase={phrase[1]}/>
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} phrase={phrase[2]}/>
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={3} phrase={phrase[3]}/>
-                    
-                </div>
 
-                <div className="initThirdListLaunchContainer">
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={4} phrase={phrase[4]}/>
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={5} phrase={phrase[5]}/>
-                </div>  */}
 
             <div className="initButtonContainer">
                 <div className="buttons">
