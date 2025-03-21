@@ -13,7 +13,6 @@ const check = require('../middleware/check')
 
 const middleGame = require('../middleware/game')
 
-const middleBoard = require('../middleware/board')
 
 // créé une partie pour cette utilisateur
 router.get('/games/createGame', auth, check.dataInit, middleGame.createGame, check.logInit, check.dataValidity, gameCtrl.createGame)

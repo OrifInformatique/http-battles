@@ -990,10 +990,10 @@ exports.updateBoard = async (req) => {
     return req.board
 }
 
-// test la phrase fourni par le client
-exports.tryPhrase = async (adversaireId, req) => {
+// retourn un plateau de jeux selon l'identifiant de son utilisateur et de la partie
+exports.getBoardGameUser = async (gameId, userId, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: tryPhrase"
+    const LOC_LOC = "methode: getBoardGameUser"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -1019,13 +1019,16 @@ exports.tryPhrase = async (adversaireId, req) => {
         return null
     }
 
-    // récupère le plateau en fonction d'un id utilisateur et d'un id de pertie
-    await this.getBoardGameUser(req.body.gameId, adversaireId, req)
+    // trouve le plateau en fonction de l'id de son utilisateur et de la partie
+    await Board.findOne({
+        gameId: gameId,
+        userId: userId
+    })
         .then(value => {
-            // retourne le plateau de l'adversaire du client et le stoque dans la requete
-            req.advBoard = value
+            // stoque le plateau dans la requete
+            req.board = value
             req.data.push({
-                name: "this.getBoardGameUser",
+                name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -1033,192 +1036,12 @@ exports.tryPhrase = async (adversaireId, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.getBoardGameUser",
+                name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
-
-    // intialise un compteur de mot de la phrase dans la requete
-    req.wordCounter = 0
-    // test si la phrase proposé par le client est la mème que celle de 'l'adversaire
-    await this.tryPhraseCheckAdv(req.advBoard, req)
-        .then(value => {
-            // retourn le nombre de mot juste
-            req.wordCounter = value
-            req.data.push({
-                name: "this.tryPhraseCheckAdv",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.tryPhraseCheckAdv",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-    // si le nombre de mot just est égale à la longueur en mots de la phrase, renvoie vrai sinon faux
-    if (req.wordCounter === req.advBoard.phrase.words.length) {
-        return true
-    } else {
-        return false
-    }
-}
-
-// test si la phrase proposé par le client est la mème que celle de 'l'adversaire
-exports.tryPhraseCheckAdv = async (advBoard, req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: tryPhraseCheckAdv"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    if (advBoard.phrase === undefined) {
-        advBoard.phrase = {
-            words: ["null", "null", "null", "null"]
-        }
-    }
-
-    // parcour la phrase du plateau adverse
-    for (const keyAdv in advBoard.phrase.words) {
-        // test si le mot est le même que celui de la requete et au même endroit
-        await this.tryPhraseCheckReq(advBoard, req, keyAdv)
-            .then(value => {
-                // retourn le nombre de mot juste
-                req.wordCounter = value
-                req.data.push({
-                    name: "this.tryPhraseCheckReq",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
-            })
-            .catch(error => {
-                req.data.push({
-                    name: "this.tryPhraseCheckReq",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
-            })
-    }
 
     // retourne la variable traitéeF pour la gestion d'erreur
-    return req.wordCounter
-}
-
-// test si le mot est le même que celui de la requete et au même endroit
-exports.tryPhraseCheckReq = async (advBoard, req, keyAdv) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: tryPhraseCheckReq"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // parcoure la phrase de la requete
-    for (const keyReq in req.body.phrase) {
-        // test si le mot est le même que celui contenu dans le plateau
-        await this.tryPhraseCheckAll(advBoard, req, keyAdv, keyReq)
-            .then(value => {
-                // retourn le nombre de mot just
-                req.wordCounter = value
-                req.data.push({
-                    name: "this.tryPhraseCheckAll",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
-            })
-            .catch(error => {
-                req.data.push({
-                    name: "this.tryPhraseCheckAll",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
-            })
-    }
-
-    // retourne la variable traitéeF pour la gestion d'erreu
-    return req.wordCounter
-}
-
-// test si le mot est le même que celui contenu dans le plateau
-exports.tryPhraseCheckAll = async (advBoard, req, keyAdv, keyReq) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: tryPhraseCheckAll"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    // test si le mot est le mem que celui contenu dans cette case du plateau et au meme endroit
-    if (advBoard.phrase.words[keyAdv].content === req.body.phrase[keyReq].word.content && keyAdv === keyReq) {
-        // si oui, incremente le compteur de mot juste
-        req.wordCounter = req.wordCounter + 1
-    }
-
-    // retourne la variable traitéeF pour la gestion d'erreu
-    return req.wordCounter
+    return req.board
 }

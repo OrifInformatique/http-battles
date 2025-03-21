@@ -19,7 +19,7 @@ const utilJoinGame = require('../depthOne/depthTwo/joinGame')
 const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
 
 // import les fonction utiles pour utilisateur
-const utilEndGame = require('./depthTwo/depthThree/endGame')
+const utilTryPhrase = require('./depthTwo/tryPhrase')
 
 // import les fonction utiles pour utilisateur
 const utilGetOtherUserId = require('./depthTwo/depthThree/depthFour/getOtherUserId')
@@ -28,11 +28,11 @@ const utilGetOtherUserId = require('./depthTwo/depthThree/depthFour/getOtherUser
 const utilUser = require('../user')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/endGame"
+const LOC_GLOB = "file: ../util/depthOne/tryPhrase"
 
-exports.findAndEndGame = async (req) => {
+exports.tryAndFormatePhrase = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: findAndEndGame"
+    const LOC_LOC = "methode: tryAndFormatePhrase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -58,14 +58,22 @@ exports.findAndEndGame = async (req) => {
         return null
     }
 
-    await utilGetGame.getGame(req)
+    await utilTryPhrase.findGameAndTryBoardPhrase(req)
         .then(value => {
             // stock l'objet jeux dans la requette
-            req.package.game = value
-            req.game = value
+            req.package.game = value.game
+            req.game = value.game
+
+            // stoque l'id de l'opposant dans la requette
+            req.package.otherUserId = value.otherUserId
+            req.otherUserId = value.otherUserId
+
+            // stoque le resultat dans la requet
+            req.package.check = value.check
+            req.check = value.check
 
             req.data.push({
-                name: "utilGetGame.getGame",
+                name: "utilTryPhrase.findGameAndTryBoardPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -73,19 +81,18 @@ exports.findAndEndGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGetGame.getGame",
+                name: "utilTryPhrase.findGameAndTryBoardPhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    await utilEndGame.endGame(req)
+    await utilTryPhrase.tryPhraseResult(req)
         .then(value => {
-            req.package.state = value
-            req.state = value
-
+            req.package.tryPhraseResultMessage = value
+            req.tryPhraseResultMessage = value
             req.data.push({
-                name: "utilEndGame.endGame",
+                name: "utilTryPhrase.tryPhraseResultt",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -93,7 +100,7 @@ exports.findAndEndGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilEndGame.endGame",
+                name: "utilTryPhrase.tryPhraseResult",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

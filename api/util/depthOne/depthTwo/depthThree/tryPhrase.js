@@ -1,41 +1,36 @@
 // import le schema d'un utilisateur
-const Game = require("../../models/Game")
+const Game = require("../../../../models/Game")
+
+// import le schema d'un utilisateur
+const User = require("../../../../models/User")
 
 // import fonctions util pour check
-const utilCheck = require('../check')
+const utilCheck = require('../../../check')
 
 // import fonctions util pour game
-const utilGame = require('../game')
+const utilGame = require('../../../game')
+
 // import fonctions util pour board
-const utilBoard = require('../board')
-
-// import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/getUserById')
-
-// import les fonction utiles pour utilisateur
-const utilJoinGame = require('../depthOne/depthTwo/joinGame')
-
-// import les fonction utiles pour utilisateur
-const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
-
-// import les fonction utiles pour utilisateur
-const utilCheckTurn = require('./depthTwo/checkTurn')
-
-// import les fonction utiles pour utilisateur
-const utilGetOtherUserId = require('./depthTwo/depthThree/depthFour/getOtherUserId')
-
-// import les fonction utiles pour utilisateur
-const utilGetBoardGameUser = require('./depthTwo/getBoardGameUser')
+const utilBoard = require('../../../board')
 
 // import fonctions util pour user
-const utilUser = require('../user')
+const utilUser = require('../../../user')
+
+// import les fonction utiles pour utilisateur
+const utilGetGame = require('./depthFour/getGame')
+
+// import les fonction utiles pour utilisateur
+const utilGetOtherUserId = require('./depthFour/getOtherUserId')
+
+// import les fonction utiles pour tryPhrase
+const utilTryPhrase = require('./depthFour/tryPhrase')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/checkTurn"
+const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/tryPhrase"
 
-exports.checkTurn = async (req) => {
+exports.findGameAndOtherUserId = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: checkTurn"
+    const LOC_LOC = "methode: findGameAndOtherUserId"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -61,18 +56,14 @@ exports.checkTurn = async (req) => {
         return null
     }
 
-    await utilCheckTurn.findGameAndTestTurn(req)
+    await utilGetGame.getGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
-            req.package.game = value.game
-            req.game = value.game
-
-            // stocke le message de réponse dans la requete
-            req.package.testTurnMessage = value.testTurnMessage
-            req.testTurnMessage = value.testTurnMessage
+            req.package.game = value
+            req.game = value
 
             req.data.push({
-                name: "utilCheckTurn.findGameAndTestTurn",
+                name: "utilGetGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -80,7 +71,7 @@ exports.checkTurn = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilCheckTurn.findGameAndTestTurn",
+                name: "utilGetGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -111,9 +102,10 @@ exports.checkTurn = async (req) => {
     return req.package
 }
 
-exports.getBoardGameUserAndAdversaire = async (req) => {
+// test la phrase fourni par le client
+exports.tryPhrase = async (adversaireId, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getBoardGameUserAndAdversaire"
+    const LOC_LOC = "methode: tryPhrase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -139,53 +131,51 @@ exports.getBoardGameUserAndAdversaire = async (req) => {
         return null
     }
 
-    if (req.package === undefined) {
-        req.package = {}
+    // récupère le plateau en fonction d'un id utilisateur et d'un id de pertie
+    await utilTryPhrase.getBoardGameUser(req.body.gameId, adversaireId, req)
+        .then(value => {
+            // retourne le plateau de l'adversaire du client et le stoque dans la requete
+            req.advBoard = value
+            req.data.push({
+                name: "utilTryPhrase.getBoardGameUser",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilTryPhrase.getBoardGameUser",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // intialise un compteur de mot de la phrase dans la requete
+    req.wordCounter = 0
+    // test si la phrase proposé par le client est la mème que celle de 'l'adversaire
+    await utilTryPhrase.tryPhraseCheckAdv(req.advBoard, req)
+        .then(value => {
+            // retourn le nombre de mot juste
+            req.wordCounter = value
+            req.data.push({
+                name: "utilTryPhrase.tryPhraseCheckAdv",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilTryPhrase.tryPhraseCheckAdv",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+    // si le nombre de mot just est égale à la longueur en mots de la phrase, renvoie vrai sinon faux
+    if (req.wordCounter === req.advBoard.phrase.words.length) {
+        return true
+    } else {
+        return false
     }
-
-    // retourn un plateau suivant l'id de l'utilisateur
-    await utilGetBoardGameUser.getBoardGameUser(req.body.gameId, req.auth.userId, req)
-        .then(value => {
-            // stoque le plateau de l'utilisateur dans le message dans la requete pour le client
-            req.package.testTurnMessage.userBoard = value.board
-            req.testTurnMessage.userBoard = value.board
-
-            req.data.push({
-                name: "utilGetBoardGameUser.getBoardGameUser",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGetBoardGameUser.getBoardGameUser",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // retourn un plateau suivant l'id de l'utilisateur
-    await utilGetBoardGameUser.getBoardGameUser(req.body.gameId, req.otherUserId, req)
-        .then(value => {
-            // stoque le plateau de l'adversaire dans le message dans la requete pour le client
-            req.package.testTurnMessage.adversaireBoard = value.board
-            req.testTurnMessage.adversaireBoard = value.board
-
-            req.data.push({
-                name: "utilGetBoardGameUser.getBoardGameUser",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGetBoardGameUser.getBoardGameUser",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    return req.package
 }

@@ -1,0 +1,79 @@
+// import le schema d'un utilisateur
+const Game = require("../../../../../../models/Game")
+
+// import le schema d'un utilisateur
+const User = require("../../../../../../models/User")
+
+// import fonctions util pour check
+const utilCheck = require('../../../../../check')
+
+// import fonctions util pour game
+const utilGame = require('../../../../../game')
+
+// import fonctions util pour user
+const utilUser = require('../../../../../user')
+
+// import fonctions util pour board
+const utilBoard = require('../../../../../board')
+
+// import les fonction utiles pour utilisateur
+const utilTryPhrase = require('./depthSix/tryPhrase')
+
+// location global pour la gestion d'erreur
+const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/depthFour/depthFive/tryPhrase"
+
+// test si le mot est le même que celui de la requete et au même endroit
+exports.tryPhraseCheckReq = async (advBoard, req, keyAdv) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: tryPhraseCheckReq"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // parcoure la phrase de la requete
+    for (const keyReq in req.body.phrase) {
+        // test si le mot est le même que celui contenu dans le plateau
+        await utilTryPhrase.tryPhraseCheckAll(advBoard, req, keyAdv, keyReq)
+            .then(value => {
+                // retourn le nombre de mot just
+                req.wordCounter = value
+                req.data.push({
+                    name: "utilTryPhrase.tryPhraseCheckAll",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilTryPhrase.tryPhraseCheckAll",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+
+    // retourne la variable traitéeF pour la gestion d'erreu
+    return req.wordCounter
+}
