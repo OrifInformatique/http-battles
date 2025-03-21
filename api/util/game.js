@@ -22,6 +22,9 @@ const utilJoinGame = require('../util/depthOne/joinGame')
 // import les fonction utiles pour startGame
 const utilStartGame = require('../util/depthOne/startGame')
 
+// import les fonction utiles pour startGame
+const utilCheckturn = require('../util/depthOne/checkTurn')
+
 // import les fonction utiles pour findGame
 const utilUpdateGame = require('./depthOne/depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
 
@@ -1653,7 +1656,7 @@ exports.listGames = async (req) => {
 }
 
 
-exports.constructAndSaveStart = async (req) => {
+exports.startGame = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: constructAndSaveStart"
 
@@ -1775,7 +1778,7 @@ exports.constructCheckTurn = async (req) => {
         return null
     }
 
-    await this.checkTurn(req)
+    await utilCheckturn.checkTurn(req)
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package.game = value.game
@@ -1790,7 +1793,7 @@ exports.constructCheckTurn = async (req) => {
             req.otherUserId = value.otherUserId
 
             req.data.push({
-                name: "this.checkTurn",
+                name: "utilCheckturn.checkTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -1798,13 +1801,13 @@ exports.constructCheckTurn = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.checkTurn",
+                name: "utilCheckturn.checkTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    await utilBoard.getBoardGameUserAndAdversaire(req)
+    await utilCheckturn.getBoardGameUserAndAdversaire(req)
         .then(value => {
             // stoque le plateau de l'utilisateur dans le message dans la requete pour le client
             req.package.testTurnMessage.userBoard = value.testTurnMessage.userBoard
@@ -1815,7 +1818,7 @@ exports.constructCheckTurn = async (req) => {
             req.testTurnMessage.adversaireBoard = value.testTurnMessage.adversaireBoard
 
             req.data.push({
-                name: "utilBoard.getBoardGameUserAndAdversaire",
+                name: "utilCheckturn.getBoardGameUserAndAdversaire",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -1823,85 +1826,7 @@ exports.constructCheckTurn = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilBoard.getBoardGameUserAndAdversaire",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    return req.package
-}
-
-exports.checkTurn = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: checkTurn"
-
-    // test de la validité des données
-    await utilCheck.dataValidityTest(req)
-        .then(value => {
-            req.utilCheck = value
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    await this.findGameAndTestTurn(req)
-        .then(value => {
-            // stock l'objet jeux dans la requette
-            req.package.game = value.game
-            req.game = value.game
-
-            // stocke le message de réponse dans la requete
-            req.package.testTurnMessage = value.testTurnMessage
-            req.testTurnMessage = value.testTurnMessage
-
-            req.data.push({
-                name: "this.findGameAndTestTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.findGameAndTestTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // récupère l'identifiant de l'opposant du client dans la partie en cours
-    await this.getOtherUserId(req)
-        .then(value => {
-            // stoque l'id de l'opposant dans la requette
-            req.package.otherUserId = value
-            req.otherUserId = value
-
-            req.data.push({
-                name: "this.getOtherUserId",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "this.getOtherUserId",
+                name: "utilCheckturn.getBoardGameUserAndAdversaire",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

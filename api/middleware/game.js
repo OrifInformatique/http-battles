@@ -320,7 +320,7 @@ exports.startGame = async (req, res, next) => {
         req.package = {}
     }
 
-    await utilGame.constructAndSaveStart(req)
+    await utilGame.startGame(req)
         .then(value => {
             req.package.game = value.game
             req.game = value.game
