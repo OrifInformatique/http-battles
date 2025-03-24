@@ -8,13 +8,13 @@ const utilCheck = require('../check')
 const utilGame = require('../game')
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/depthBottom/getUserById')
+const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthBottom/getUserById')
 
 // import les fonction utiles pour utilisateur
 const utilJoinGame = require('../depthOne/depthTwo/joinGame')
 
 // import les fonction utiles pour utilisateur
-const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
+const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateXgetGame')
 
 // import les fonction utiles pour utilisateur
 const utilStartGame = require('../depthOne/depthTwo/startGame')

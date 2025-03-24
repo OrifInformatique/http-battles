@@ -6,7 +6,7 @@ const Board = require("../../../../../../../models/Board")
 const utilCheck = require('../../../../../../check')
 
 // import les fonction utiles pour board
-const utilUpdateBoard = require('./depthSeven/depthEight/updateBoard')
+const utilUpdateBoardXgetBoard = require('./depthSeven/updateBoardXgetBoard')
 
 // import les fonction utiles pour tryCase
 const utilTryCase = require('./depthSeven/tryCase')
@@ -98,15 +98,16 @@ exports.checkBoardSuccess = async (y, x, req) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     // revèle le mot
-    await utilTryCase.revealWord(req.board.board[y][x], req)
+    await utilTryCase.revealXupdateWord(req.board.board[y][x], req)
         .then(value => {
             // stoque le mot dans la case du tableau du plateau dans la requete
-            req.board.board[y][x] = value
-
+            req.board.board[y][x] = value.word
+            req.package.board.board[y][x] = value.word
+            
             req.data.push({
-                name: "utilTryCase.revealWord",
+                name: "utilTryCase.revealXupdateWord",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -114,20 +115,21 @@ exports.checkBoardSuccess = async (y, x, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilTryCase.revealWord",
+                name: "utilTryCase.revealXupdateWord",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // updadet le plateau avec le nouveaux tableaux
-    await utilUpdateBoard.updateBoard(req)
+    await utilUpdateBoardXgetBoard.updateBoardXgetBoard(req)
         .then(value => {
             // stoque le nouveaux tableaux dans la requete
-            req.board = value
+            req.board = value.board
+            req.package.board = value.board
 
             req.data.push({
-                name: "utilUpdateBoard.updateBoard",
+                name: "utilUpdateBoardXgetBoard.updateBoardXgetBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -135,7 +137,7 @@ exports.checkBoardSuccess = async (y, x, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilUpdateBoard.updateBoard",
+                name: "utilUpdateBoardXgetBoard.updateBoardXgetBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

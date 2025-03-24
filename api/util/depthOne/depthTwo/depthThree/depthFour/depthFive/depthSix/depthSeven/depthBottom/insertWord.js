@@ -1,14 +1,14 @@
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../../check')
+const utilCheck = require('../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/getStartGameState"
+const LOC_GLOB = "file: ../util/../depthBottom/insertWord"
 
-//  retourn l'état de la partie en fonction du resultat du test
-exports.getStartGameState = async (coinFlip, req) => {
+// insert les mot de la phrase dans les case du plateaux si leurs positions est égal
+exports.insertWord = async (userPhrase, keyY, keyW, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: coinFlipStartGameState"
+    const LOC_LOC = "methode: insertWord"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -34,14 +34,11 @@ exports.getStartGameState = async (coinFlip, req) => {
         return null
     }
 
-    //  retourn l'état de la partie en fonction du résultat du test
-    if (coinFlip) {
+    // si oui, rempli la case avec le mot
+    req.newBoardFull[keyY].push(userPhrase.words[keyW])
+    req.package.newBoardFull[keyY].push(userPhrase.words[keyW])
 
-        return "CREATEUR_TURN"
 
-    } else {
-
-        return "CHALLENGER_TURN"
-
-    }
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.package
 }

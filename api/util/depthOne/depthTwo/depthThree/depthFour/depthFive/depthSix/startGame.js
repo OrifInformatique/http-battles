@@ -9,15 +9,45 @@ const utilCheck = require('../../../../../../check')
 const utilStartGame = require('./depthSeven/startGame')
 
 // import les fonction utiles pour utilisateur
-const utilGetOtherUserId = require('./depthSeven/getOtherUserId')
+const utilGetOtherUserId = require('./depthSeven/depthBottom/getOtherUserId')
 
 // import les fonction utiles pour utilisateur
-const utilUpdateGame = require('./depthSeven/updateGame')
+const utilUpdateXgetGame = require('./depthSeven/updateXgetGame')
 
+// import les fonction utiles pour testUserTurn
+const utilTestUserTurn = require('./depthSeven/depthBottom/testUserTurn')
+
+const utilGetStartUserId = require('./depthSeven/depthBottom/getStartUserId')
+
+const utilGetStartGameState = require('./depthSeven/depthBottom/getStartGameState')
+
+const utilCoinFlip = require('./depthSeven/depthBottom/coinFlip')
+
+const utilInsertWord = require('./depthSeven/depthBottom/insertWord')
+
+const utilInsertBlank = require('./depthSeven/depthBottom/insertBlank')
+
+const utilCreateWord = require('./depthSeven/depthBottom/createWord')
+
+const utilSaveWord = require('./depthSeven/depthBottom/saveWord')
+
+const utilCreatePhrase = require('./depthSeven/depthBottom/createPhrase')
+
+const utilSavePhrase = require('./depthSeven/depthBottom/savePhrase')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthSix/startGame"
 
+/*
+subFunctions
+    -this.coinFlipXGetStart
+        -this.getStartUserIdXGameState
+            -utilGetStartUserId.getStartUserId
+            -utilGetStartGameState.getStartGameState
+    -utilUpdateXgetGame.updateXgetGame
+        -utilUpdateGame.updateGame
+        -utilGetGame.getGame
+*/
 // choisit aléatoirement le premier utilisateur à commencer
 exports.startCoinFlip = async (req, res) => {
     // location local pour la gestion d'erreur
@@ -47,7 +77,7 @@ exports.startCoinFlip = async (req, res) => {
         return null
     }
 
-    await utilStartGame.coinFlipStartMode(req)
+    await this.coinFlipXGetStart(req)
         .then(value => {
             // stoque cette id dans la requete
             req.package.startUserId = value.startUserId
@@ -55,7 +85,7 @@ exports.startCoinFlip = async (req, res) => {
 
             req.package.game.state = value.game.state
             req.data.push({
-                name: "utilStartGame.coinFlipStartUserId",
+                name: "this.coinFlipXGetStart",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -63,20 +93,20 @@ exports.startCoinFlip = async (req, res) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilStartGame.coinFlipStartUserId",
+                name: "this.coinFlipXGetStart",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // update la parite dans la base de donnée
-    await utilUpdateGame.updateGame(req)
+    await utilUpdateXgetGame.updateXgetGame(req)
         .then(value => {
-            req.package.game.state = value.state
-            req.game.state = value.state
+            req.package.game.state = value.game.state
+            req.game.state = value.game.state
 
             req.data.push({
-                name: "utilUpdateGame.updateGame",
+                name: "utilUpdateXgetGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -84,7 +114,7 @@ exports.startCoinFlip = async (req, res) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilUpdateGame.updateGame",
+                name: "utilUpdateXgetGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -94,6 +124,179 @@ exports.startCoinFlip = async (req, res) => {
     return req.startUserId
 }
 
+/*
+subFunctions
+    -this.getStartUserIdXGameState
+        -utilGetStartUserId.getStartUserId
+        -this.getStartUserIdXGameState
+            -utilGetStartUserId.getStartUserId
+            -utilGetStartGameState.getStartGameState
+*/
+exports.coinFlipXGetStart = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: coinFlipXGetStart"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // sort aléatoirement un résultat true or false et le stock dans une constante
+    await utilCoinFlip.coinFlip(req)
+        .then(value => {
+            // stoque cette id dans la requete
+            req.coinFlip = value.coinFlip
+            req.package.coinFlip = value.coinFlip
+
+            req.data.push({
+                name: "utilCoinFlip.coinFlip",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCoinFlip.coinFlip",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // retourn l'id de l'utilisateur en fonctions du resultat du test
+    // retourn l'état de la partie en fonction du résultat du test
+    await this.getStartUserIdXGameState(req)
+        .then(value => {
+            // stoque cette id dans la requete
+            req.startUserId = value.startUserId
+            req.package.startUserId = value.startUserId
+
+            // stoque le nouvel étàt de la partie dans la requete
+            req.game.state = value.state
+            req.package.state = value.state
+
+            req.data.push({
+                name: "this.getStartUserIdXGameState",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.getStartUserIdXGameState",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+/*
+subFunctions
+    -utilGetStartUserId.getStartUserId
+    -utilGetStartGameState.getStartGameState
+*/
+exports.getStartUserIdXGameState = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getStartUserIdXGameState"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // retourn l'id de l'utilisateur en fonctions du resultat du test
+    await utilGetStartUserId.getStartUserId(req.coinFlip, req)
+        .then(value => {
+            // stoque cette id dans la requete
+            req.startUserId = value.startUserId
+            req.package.startUserId = value.startUserId
+
+            req.data.push({
+                name: "utilGetStartUserId.getStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGetStartUserId.getStartUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // retourn l'état de la partie en fonction du résultat du test
+    await utilGetStartGameState.getStartGameState(req.coinFlip, req)
+        .then(value => {
+            // stoque le nouvel étàt de la partie dans la requete
+            req.game.state = value.state
+            req.package.state = value.state
+            req.data.push({
+                name: "utilGetStartGameState.getStartGameState",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGetStartGameState.getStartGameState",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+/*
+subFunctions
+    -this.testGameStateAndUserTurn
+        -utilTestUserTurn.testUserTurn
+    -utilGetOtherUserId.getOtherUserId
+*/
 // test si il s'agit du tour du client et renvoie l'identifiant du client qui commence
 exports.testTurnUserId = async (req, res) => {
     // location local pour la gestion d'erreur
@@ -124,13 +327,14 @@ exports.testTurnUserId = async (req, res) => {
     }
 
     // test quel utilisateur commence
-    await utilStartGame.testTurn(req, res)
+    await this.testGameStateAndUserTurn(req, res)
         .then(value => {
             // retourn le résultat et le stoque dans la requete
-            req.turn = value
+            req.turn = value.testTurnMessage
+            req.package.turn = value.testTurnMessage
 
             req.data.push({
-                name: "utilStartGame.testTurn",
+                name: "this.testTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -138,26 +342,24 @@ exports.testTurnUserId = async (req, res) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilStartGame.testTurn",
+                name: "this.testTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // suivant le resultat du test
-    if (req.turn.message === "Your turn") {
+    if (req.turn.message === "CLIENT_TURN") {
         // stoque l'id du clien dans la requet en tant que l'utilisateur qui commence
         req.startUserId = req.auth.userId
-
-        // retourne la variable traité pour la gestion d'erreur
-        return req.auth.userId
-
-    } else if (req.turn.message === "Wait") {
+        req.package.startUserId = req.auth.userId
+    } else if (req.turn.message === "ADVERSAIRE_TURN") {
         // retourn l'id de l'adversaire du client
         await utilGetOtherUserId.getOtherUserId(req)
             .then(value => {
                 // stoque cette id dans la requete
-                req.startUserId = value
+                req.startUserId = value.otherUserId
+                req.package.startUserId = value.otherUserId
 
                 req.data.push({
                     name: "utilGetOtherUserId.getOtherUserId",
@@ -172,17 +374,116 @@ exports.testTurnUserId = async (req, res) => {
                     error: error
                 })
             })
-        // retourne la variable traité pour la gestion d'erreur
-        return req.startUserId
     } else {
-        return null
+        req.startUserId = null
+        req.package.startUserId = null
     }
+
+    return req.package
 }
 
-// crée une phrase et l'enregistre dans la base donnée
-exports.createPhrase = async (userPhrase, req) => {
+/*
+subFunctions
+    -utilTestUserTurn.testUserTurn
+*/
+exports.testGameStateAndUserTurn = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: testGameStateAndUserTurn"
+
     // test de la validité des données
-    const LOC_LOC = "methode: createPhrase"
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // teste l'état de la partie
+    // si c'est le tour du créateur
+    if (req.game.state === "CREATEUR_TURN") {
+        // test si le client est le créateur et renvoit un message pour lui indiquer si c'est son tour
+        await utilTestUserTurn.testUserTurn(req.game.createurId, req.auth.userId, req)
+            .then(value => {
+                // stocke le message de réponse dans la requete
+                req.turn = value.turn
+                req.package.turn = value.turn
+
+                req.data.push({
+                    name: "utilTestUserTurn.testUserTurn - CREATEUR_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "utilTestUserTurn.testUserTurn - CREATEUR_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        // si c'est le tour du challenger
+    } else if (req.game.state === "CHALLENGER_TURN") {
+        // test si le client est le challenger et renvoit un message pour lui indiquer si c'est son tour
+        await utilTestUserTurn.testUserTurn(req.game.challengerId, req.auth.userId, req)
+            .then(value => {
+                req.turn = value.turn
+                req.package.turn = value.turn
+
+                req.data.push({
+                    name: "utilTestUserTurn.testUserTurn - CHALLENGER_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "utilTestUserTurn.testUserTurn - CHALLENGER_TURN",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        // si c'est le tour de personne
+    } else {
+        // renvoi un message pour informer que la partie est términer
+        req.turn = { message: req.game.state }
+        req.package.turn = { message: req.game.state }
+    }
+
+    return req.package
+}
+
+/*
+subFunctions
+    -this.loopPhraseAndCreateWord
+        -this.createXsaveWord
+            -utilCreateWord.createWord
+            -utilSaveWord.saveWord
+    -this.createXsavePhrase
+        -utilCreatePhrase.createPhrase
+        -utilSavePhrase.savePhrase
+*/
+// crée une phrase et l'enregistre dans la base donnée
+exports.loopXcreatePhrase = async (userPhrase, req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: loopXcreatePhrase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -209,12 +510,10 @@ exports.createPhrase = async (userPhrase, req) => {
     }
 
     // crée et rempli un tableaux de la phrase avec des objet mot suivant la phrase de la requete
-    await utilStartGame.fillPhrase(userPhrase, req)
+    await this.loopPhraseAndCreateWord(userPhrase, req)
         .then(value => {
-            // retourn la phrase en tant que tableaux et la stoque dans la requete
-            req.wordObjectsArray = value
             req.data.push({
-                name: "utilStartGame.fillPhrase",
+                name: "this.loopPhraseAndCreateWord",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -222,24 +521,19 @@ exports.createPhrase = async (userPhrase, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilStartGame.fillPhrase",
+                name: "this.loopPhraseAndCreateWord",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // crée un objet phrase avec le tableaux
-    const phrase = new Phrase({
-        words: req.wordObjectsArray
-    })
-
-    // enregistre la phrase dans la base de donnée
-    await phrase.save()
+    // crée et rempli un tableaux de la phrase avec des objet mot suivant la phrase de la requete
+    await this.createXsavePhrase(req.wordObjectsArray, req)
         .then(value => {
-            // stoque la phrase dans la requete
-            req.phrase = value
+            req.phrase = value.phrase
+            req.package.phrase = value.phrase
             req.data.push({
-                name: "phrase.save",
+                name: "this.createXsavePhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -247,20 +541,255 @@ exports.createPhrase = async (userPhrase, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "phrase.save",
+                name: "this.createXsavePhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // retourne la variable traitée pour la gestion d'erreur
-    return req.phrase
+    return req.package
 }
 
+/*
+subFunctions
+    -this.createXsaveWord
+        -utilCreateWord.createWord
+        -utilSaveWord.saveWord
+*/
+// crée et rempli un tableaux de la phrase avec des objet mot suivant la phrase de la requete
+exports.loopPhraseAndCreateWord = async (userPhrase, req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: loopPhraseAndCreateWord"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // initialise le tableaux de mot dans la requete
+    req.wordObjectsArray = []
+    req.package.wordObjectsArray = []
+
+    // parcoure les mot de la phrase de l'utilisateur
+    for (const mot of userPhrase) {
+        // crée un objet mot
+        await this.createXsaveWord(mot.word, req)
+            .then(value => {
+                // stoque l'objet mot dans la requete
+                req.word = value.word
+                req.package.word = value.word
+                req.data.push({
+                    name: "this.createXsaveWord",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                req.data.push({
+                    name: "this.createXsaveWord",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        // ajoute le mot au tableaux d'objet dans la requete
+        req.wordObjectsArray.push(req.word)
+        req.package.wordObjectsArray.push(req.word)
+    }
+
+    // retourne la variable traitée pour la gestion d'erreur
+    return req.package
+}
+
+/*
+subFunctions
+    -utilCreateWord.createWord
+    -utilSaveWord.saveWord
+*/
+// crée un objet mot
+exports.createXsaveWord = async (word, req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: createXsaveWord"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // crée un mot
+    await utilCreateWord.createWord(word, req)
+        .then(value => {
+            // stoque le mot dans la requete
+            req.word = value.word
+            req.package.word = value.word
+
+            req.data.push({
+                name: "utilCreateWord.createWord",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCreateWord.createWord",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // enregistre le mot dans la base données
+    await utilSaveWord.saveWord(req)
+        .then(value => {
+            // stoque le mot dans la requete
+            req.word = value.word
+            req.package.word = value.word
+
+            req.data.push({
+                name: "req.word.save()",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "req.word.save()",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // retourne la variable traitée pour la gestion d'erreur
+    return req.package
+}
+
+/*
+subFunctions
+    -utilCreatePhrase.createPhrase
+    -utilSavePhrase.savePhrase
+*/
+// crée un objet phrase
+exports.createXsavePhrase = async (wordObjectsArray, req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: createXsavePhrase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // crée une phrase
+    await utilCreatePhrase.createPhrase(wordObjectsArray, req)
+        .then(value => {
+            // stoque la phrase dans la requete
+            req.phrase = value.phrase
+            req.package.phrase = value.phrase
+
+            req.data.push({
+                name: "utilCreatePhrase.createPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCreatePhrase.createPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // enregistre la phrase dans la base données
+    await utilSavePhrase.savePhrase(req)
+        .then(value => {
+            // stoque la phrase dans la requete
+            req.phrase = value.phrase
+            req.package.phrase = value.phrase
+
+            req.data.push({
+                name: "utilSavePhrase.savePhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilSavePhrase.savePhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // retourne la variable traitée pour la gestion d'erreur
+    return req.package
+}
+
+
 // insert les mot de la phrse dans le plateau selon leur position
-exports.insertPhraseInBoard = async (board, userPhrase, req) => {
+exports.columnLoopAndLineLoop = async (board, userPhrase, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: insertPhraseInBoard"
+    const LOC_LOC = "methode: columnLoopAndLineLoop"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -288,26 +817,27 @@ exports.insertPhraseInBoard = async (board, userPhrase, req) => {
 
     // initialise le nouveau plateau qui sera remplit
     req.newBoardFull = []
+    req.package.newBoardFull = []
 
     // parcoure l'ancien plateau dans le plateau de la requette
     for (const keyY in board.board) {
         // Crée et remplie les ligne du plateau
-        await utilStartGame.insertPhraseInBoardY(board, userPhrase, keyY, req)
+        await utilStartGame.lineLoopAndPhraseLoop(board, userPhrase, keyY, req)
             .then(value => {
                 req.data.push({
-                    name: "utilStartGame.insertPhraseInBoardY",
+                    name: "utilStartGame.lineLoopAndPhraseLoop",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "utilStartGame.insertPhraseInBoardY",
+                    name: "utilStartGame.lineLoopAndPhraseLoop",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })
             })
     }
     // retourne la variable traitéeF pour la gestion d'erreur
-    return req.newBoardFull
+    return req.package
 }

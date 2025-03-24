@@ -1,40 +1,34 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../../../../models/Game")
 
-// import le schema d'un utilisateur
-const User = require("../../../../../../../../models/User")
+
+// import le schema d'un Board
+const Board = require("../../../../../../../../models/Board")
 
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../check')
 
-// import fonctions util pour game
-const utilGame = require('../../../../../../../game')
+// import fonctions util pour board
+const utilGetBoard = require('./depthBottom/getBoard')
 
-// import fonctions util pour user
-const utilUser = require('../../../../../../../user')
-
-// import les fonction utiles pour utilisateur
-const utilGetGame = require('../../../getGame')
-
-// import les fonction utiles pour utilisateur
-const utilJoinGame = require('../../../../joinGame')
-
+// import fonctions util pour board
+const utilUpdateBoard = require('./depthBottom/updateBoard')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/depthOne/depthTwo/updateGame"
+const LOC_GLOB = "file: ../util/../depthEight/updateBoardXgetBoard"
 
-
-// uodate la partie
-exports.updateGame = async (req) => {
-
+/*
+subFunctions
+    -utilUpdateBoard.updateBoard
+    -utilGetBoard.getBoard
+*/
+// update le plateau
+exports.updateBoardXgetBoard = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: updateGame"
+    const LOC_LOC = "methode: updateBoard"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
-
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -55,23 +49,15 @@ exports.updateGame = async (req) => {
         return null
     }
 
-    if (req.state !== undefined) {
-        req.game.state = req.state
-    }
-    if (req.challenger !== undefined) {
-        req.game.challengerId = req.challenger
-    }
-
-    // update l'état de la partie
-    await Game.updateOne({ _id: req.body.gameId }, {
-        $set: {
-            state: req.game.state,
-            challengerId: req.game.challengerId
-        }
-    })
+    // update le tableau en fonction du contenu de la requete
+    await utilUpdateBoard.updateBoard(req)
         .then(value => {
+            // stoque le tableaux dans la requete
+            req.boardUpdate = value.boardUpdate
+            req.package.boardUpdate = value.boardUpdate
+
             req.data.push({
-                name: "Game.updateOne",
+                name: "utilUpdateBoard.updateBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -79,20 +65,21 @@ exports.updateGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "Game.updateOne",
+                name: "utilUpdateBoard.updateBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // retourne la partie après l'update
-    await utilGetGame.getGame(req)
+    // récupère le tableau après l'update
+    await utilGetBoard.getBoard(req, req.board._id)
         .then(value => {
-            // stoque la partie dans la requete
-            req.game = value
+            // stoque le tableaux dans la requete
+            req.board = value.board
+            req.package.board = value.board
 
             req.data.push({
-                name: "this.getGame",
+                name: "utilGetBoard.getBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -100,12 +87,12 @@ exports.updateGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.getGame",
+                name: "utilGetBoard.getBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // retourne la variable traité pour la gestion d'erreur
-    return req.game
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.package
 }

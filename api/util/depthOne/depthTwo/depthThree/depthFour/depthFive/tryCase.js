@@ -145,6 +145,8 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
         .then(value => {
             // stoque le plateau dans la requette
             req.board = value
+            req.package.board = value
+            
             req.data.push({
                 name: "utilTryCase.getBoardGameUser",
                 loc: LOC_GLOB + " " + LOC_LOC,

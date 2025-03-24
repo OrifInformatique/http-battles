@@ -7,7 +7,7 @@ const utilCheck = require('../../../check')
 const utilGetGame = require('./depthFour/getGame')
 
 // import les fonction utiles pour utilisateur
-const utilGetOtherUserId = require('./depthFour/depthFive/depthSix/depthSeven/getOtherUserId')
+const utilGetOtherUserId = require('./depthFour/depthFive/depthSix/depthSeven/depthBottom/getOtherUserId')
 
 // import les fonction utiles pour tryPhrase
 const utilTryPhrase = require('./depthFour/tryPhrase')
@@ -68,8 +68,8 @@ exports.findGameAndOtherUserId = async (req) => {
     await utilGetOtherUserId.getOtherUserId(req)
         .then(value => {
             // stoque l'id de l'opposant dans la requette
-            req.package.otherUserId = value
-            req.otherUserId = value
+            req.package.otherUserId = value.otherUserId
+            req.otherUserId = value.otherUserId
 
             req.data.push({
                 name: "utilGetOtherUserId.getOtherUserId",

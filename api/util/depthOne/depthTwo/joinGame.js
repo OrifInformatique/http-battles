@@ -14,7 +14,7 @@ const utilGame = require('../../game')
 const utilUser = require('../../user')
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/depthBottom/getUserById')
+const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthBottom/getUserById')
 
 // import les fonction utiles pour utilisateur
 const utilJoinGame = require('../depthTwo/depthThree/joinGame')
@@ -141,8 +141,8 @@ exports.getCreatorAndChallenger = async (req) => {
     await utilGetUser.getUserById(req.game.createurId, req)
         .then(value => {
             // stock l'objet utilisateur trouvé dans la requete
-            req.package.createur = value
-            req.createur = value
+            req.package.createur = value.user
+            req.createur = value.user
 
             req.data.push({
                 name: "utilGetUser.getUserById",
@@ -163,8 +163,8 @@ exports.getCreatorAndChallenger = async (req) => {
     await utilGetUser.getUserById(req.auth.userId, req)
         .then(value => {
             // stock l'utilisateur dans la requette
-            req.package.user = value
-            req.user = value
+            req.package.user = value.user
+            req.user = value.user
 
             req.data.push({
                 name: "utilGetUser.getUserById",

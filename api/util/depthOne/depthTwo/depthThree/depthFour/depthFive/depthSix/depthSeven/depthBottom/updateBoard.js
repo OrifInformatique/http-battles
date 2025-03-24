@@ -1,18 +1,12 @@
-
-
-// import le schema d'un Board
-const Board = require("../../../../../../../../../models/Board")
-
+const Board = require('../../../../../../../../../models/Board')
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../../check')
 
-// import fonctions util pour board
-const utilGetBoard = require('./depthBottom/getBoard')
-
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthEight/updateBoard"
+const LOC_GLOB = "file: ../util/../depthBottom/updateBoard"
 
-// update le plateau
+
+
 exports.updateBoard = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: updateBoard"
@@ -51,6 +45,9 @@ exports.updateBoard = async (req) => {
         }
     })
         .then(value => {
+            req.boardUpdate = value
+            req.package.boardUpdate = value
+
             req.data.push({
                 name: "Board.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -61,32 +58,13 @@ exports.updateBoard = async (req) => {
             console.log(error)
             req.data.push({
                 name: "Board.updateOne",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // récupère le tableau après l'update
-    await utilGetBoard.getBoard(req, req.board._id)
-        .then(value => {
-            // stoque le tableaux dans la requete
-            req.board = value
-
-            req.data.push({
-                name: "utilGetBoard.getBoard",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilGetBoard.getBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // retourne la variable traitéeF pour la gestion d'erreur
-    return req.board
+    return req.package
 }
+
+

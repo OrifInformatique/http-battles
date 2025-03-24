@@ -7,7 +7,7 @@ const utilCheck = require('../../../../check')
 const utilStartGame = require('./depthFive/startGame')
 
 // import les fonction utiles pour utilisateur
-const utilUpdateBoard = require('./depthFive/depthSix/depthSeven/depthEight/updateBoard')
+const utilUpdateBoardXgetBoard = require('./depthFive/depthSix/depthSeven/updateBoardXgetBoard')
 
 
 
@@ -145,14 +145,14 @@ exports.insertAndSavePhrase = async (req) => {
         })
 
     // update le plateau dans la requete
-    await utilUpdateBoard.updateBoard(req)
+    await utilUpdateBoardXgetBoard.updateBoardXgetBoard(req)
         .then(value => {
             // stoque le plateu après update dans la requete
-            req.package.board = value
-            req.board = value
+            req.package.board = value.board
+            req.board = value.board
 
             req.data.push({
-                name: "utilUpdateBoard.updateBoard",
+                name: "utilUpdateBoardXgetBoard.updateBoardXgetBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -160,7 +160,7 @@ exports.insertAndSavePhrase = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilUpdateBoard.updateBoard",
+                name: "utilUpdateBoardXgetBoard.updateBoardXgetBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

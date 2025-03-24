@@ -1,13 +1,14 @@
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../check')
+const utilCheck = require('../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthSeven/getOtherUserId"
+const LOC_GLOB = "file: ../util/../depthBottom/insertBlank"
 
-exports.getOtherUserId = async (req) => {
+// insert les mot de la phrase dans les case du plateaux si leurs positions est égal
+exports.insertBlank = async (keyY, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getOtherUserId"
+    const LOC_LOC = "methode: insertBlank"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -32,15 +33,11 @@ exports.getOtherUserId = async (req) => {
     if (req.utilCheck) {
         return null
     }
+    // insert une valeur null dans la ligne créant une case
+    req.newBoardFull[keyY].push(null)
+    req.package.newBoardFull[keyY].push(null)
 
-    // si le client est le créateur, retourn l'id du challenger
-    if (req.auth.userId === req.game.createurId) {
 
-        return req.game.challengerId
-
-    } else {
-        // sinon retourn l'id du créateur créateur
-        return req.game.createurId
-
-    }
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.package
 }

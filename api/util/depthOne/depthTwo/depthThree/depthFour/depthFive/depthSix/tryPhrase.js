@@ -14,7 +14,7 @@ const utilGame = require('../../../../../../game')
 const utilUser = require('../../../../../../user')
 
 // import les fonction utiles pour utilisateur
-const utilUpdateGame = require('./depthSeven/updateGame')
+const utilUpdateGame = require('./depthSeven/updateXgetGame')
 
 
 // location global pour la gestion d'erreur

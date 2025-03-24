@@ -45,7 +45,7 @@ const utilGetGame = require('../util/depthOne/depthTwo/depthThree/depthFour/getG
 
 
 // import les fonction utiles pour updateGame
-const utilUpdateGame = require('./depthOne/depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
+const utilUpdateGame = require('./depthOne/depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateXgetGame')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game"
@@ -172,15 +172,15 @@ exports.tryCase = async (req) => {
         })
 
     // si oui update l'état de la partie
-    await utilUpdateGame.updateGame(req)
+    await utilUpdateGame.updateXgetGame(req)
         .then(value => {
 
             // stoque le nouvel état de la partie dans la requette
-            req.package.game = value
-            req.game = value
+            req.package.game = value.game
+            req.game = value.game
 
             req.data.push({
-                name: "this.updateGame",
+                name: "this.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -188,7 +188,7 @@ exports.tryCase = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.updateGame",
+                name: "this.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -254,15 +254,15 @@ exports.endGame = async (req) => {
         })
 
     // si oui update l'état de la partie
-    await utilUpdateGame.updateGame(req)
+    await utilUpdateGame.updateXgetGame(req)
         .then(value => {
 
             // stoque le nouvel état de la partie dans la requette
-            req.package.game = value
-            req.game = value
+            req.package.game = value.game
+            req.game = value.game
 
             req.data.push({
-                name: "utilUpdateGame.updateGame",
+                name: "utilUpdateGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -270,7 +270,7 @@ exports.endGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilUpdateGame.updateGame",
+                name: "utilUpdateGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -613,7 +613,7 @@ exports.startGame = async (req) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     await utilStartGame.constructStart(req)
         .then(value => {
             req.package.game = value.game
@@ -656,14 +656,14 @@ exports.startGame = async (req) => {
         })
 
     // si oui update l'état de la partie
-    await utilUpdateGame.updateGame(req)
+    await utilUpdateGame.updateXgetGame(req)
         .then(value => {
             // stoque le nouvel état de la partie dans la requette
-            req.package.game = value
-            req.game = value
+            req.package.game = value.game
+            req.game = value.game
 
             req.data.push({
-                name: "this.updateGame",
+                name: "utilUpdateGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -671,7 +671,7 @@ exports.startGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.updateGame",
+                name: "utilUpdateGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -826,15 +826,15 @@ exports.tryPhrase = async (req) => {
         })
 
     // si oui update l'état de la partie
-    await utilUpdateGame.updateGame(req)
+    await utilUpdateGame.updateXgetGame(req)
         .then(value => {
 
             // stoque le nouvel état de la partie dans la requette
-            req.package.game = value
-            req.game = value
+            req.package.game = value.game
+            req.game = value.game
 
             req.data.push({
-                name: "this.updateGame",
+                name: "utilUpdateGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -842,7 +842,7 @@ exports.tryPhrase = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.updateGame",
+                name: "utilUpdateGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

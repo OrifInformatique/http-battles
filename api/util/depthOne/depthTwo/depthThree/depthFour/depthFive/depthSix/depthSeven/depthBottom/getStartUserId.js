@@ -1,16 +1,14 @@
-// import le schema d'un Word
-const Word = require("../../../../../../../../../../models/Word")
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../../check')
+const utilCheck = require('../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/createWord"
+const LOC_GLOB = "file: ../util/../depthBottom/getStartUserId"
 
-// crée un objet mot
-exports.createWord = async (word, req) => {
-    // test de la validité des données
-    const LOC_LOC = "methode: createWord"
+// retourn l'id utilisateur qui commence
+exports.getStartUserId = async (coinFlip, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: coinFlipStartUserId"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -36,12 +34,16 @@ exports.createWord = async (word, req) => {
         return null
     }
 
-    // crée un nouvel objet mot avec les info en parametre
-    req.word = new Word({
-        content: word.content,
-        position: word.position
-    })
+    // retourn l'id utilisateur contenu dans la partie en fonction du test
+    if (coinFlip) {
+        req.startUserId = req.game.createurId
+        req.package.startUserId = req.game.createurId
 
-    // retourne la variable traitée pour la gestion d'erreur
-    return req.word
+    } else {
+        req.startUserId = challengerId
+        req.package.startUserId = challengerId
+
+    }
+
+    return req.package
 }

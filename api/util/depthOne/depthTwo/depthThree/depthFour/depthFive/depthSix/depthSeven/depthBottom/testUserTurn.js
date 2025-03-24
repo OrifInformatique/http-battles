@@ -1,14 +1,13 @@
-
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../../check')
+const utilCheck = require('../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/insertWord"
+const LOC_GLOB = "file: ../util/../depthBottom/testUserTurn"
 
-// insert les mot de la phrase dans les case du plateaux si leurs positions est égal
-exports.insertWord = async (userPhrase, keyY, keyW, req) => {
+// test quel utilisateur commence
+exports.testUserTurn = async (gameUserId, reqId, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: insertWord"
+    const LOC_LOC = "methode: testUserTurn"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -34,10 +33,20 @@ exports.insertWord = async (userPhrase, keyY, keyW, req) => {
         return null
     }
 
-    // si oui, rempli la case avec le mot
-    req.newBoardFull[keyY].push(userPhrase.words[keyW])
+    // test si le client est le créateur
+    // si oui
+    if (gameUserId === reqId) {
 
+        // renvoi un message pour informer que c'est le tour du client
+        req.turn = { message: "CLIENT_TURN" }
+        req.package.testTurnMessage = { message: "CLIENT_TURN" }
 
-    // retourne la variable traitéeF pour la gestion d'erreur
-    return req.newBoardFull
+        // si non
+    } else {
+        // renvoi un message pour informer que ce n'est pas le tour du client
+        req.turn = { message: "ADVERSAIRE_TURN" }
+        req.package.turn = { message: "ADVERSAIRE_TURN" }
+    }
+
+    return req.package
 }

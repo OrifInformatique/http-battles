@@ -99,7 +99,7 @@ exports.checkStartUserId = async (req) => {
         await utilStartGame.testTurnUserId(req)
             .then(value => {
                 // stoque l'id du joueur qui commence
-                req.startUserId = value
+                req.startUserId = value.startUserId
 
                 req.data.push({
                     name: "utilStartGame.testTurnUserId",
@@ -154,14 +154,14 @@ exports.insertPhrase = async (req) => {
     }
 
     // crée la phrase (objet)
-    await utilStartGame.createPhrase(req.body.phrase, req)
+    await utilStartGame.loopXcreatePhrase(req.body.phrase, req)
         .then(value => {
             // insert la phrase (objet) dans le plateau (objet) del requete
-            req.package.board.phrase = value
-            req.board.phrase = value
+            req.package.board.phrase = value.phrase
+            req.board.phrase = value.phrase
 
             req.data.push({
-                name: "utilStartGame.createPhrase",
+                name: "utilStartGame.loopXcreatePhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -169,21 +169,21 @@ exports.insertPhrase = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilStartGame.createPhrase",
+                name: "utilStartGame.loopXcreatePhrase",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // insert la phrase (suite de mots) dans le plateau (table)
-    await utilStartGame.insertPhraseInBoard(req.board, req.board.phrase, req)
+    await utilStartGame.columnLoopAndLineLoop(req.board, req.board.phrase, req)
         .then(value => {
             // stoque le plateau (table) rempli dans le plateau (objet)
-            req.package.board.board = value
-            req.board.board = value
+            req.package.board.board = value.newBoardFull
+            req.board.board = value.newBoardFull
 
             req.data.push({
-                name: "utilBoard.insertPhraseInBoard",
+                name: "utilStartGame.columnLoopAndLineLoop",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -191,7 +191,7 @@ exports.insertPhrase = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilBoard.insertPhraseInBoard",
+                name: "utilStartGame.columnLoopAndLineLoop",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

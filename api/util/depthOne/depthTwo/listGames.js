@@ -14,7 +14,7 @@ const utilGame = require('../../game')
 const utilUser = require('../../user')
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/depthBottom/getUserById')
+const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthBottom/getUserById')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/depthOne/depthTwo/listGames"
@@ -48,11 +48,13 @@ exports.formatAndFilterGame = async (req) => {
         return null
     }
     req.formatedGame = {}
+    req.package.formatedGame = {}
     // récupère l'utilisateur en fonction de son id en parametre (ici l'id du créateur contenu dans le jeux)
     await utilGetUser.getUserById(req.game.createurId, req)
         .then(value => {
             // stock l'username utilisateur trouvé dans la requete
-            req.formatedGame.createur = value.username
+            req.formatedGame.createur = value.user.username
+            req.package.formatedGame.createur = value.user.username
 
             req.data.push({
                 name: "utilGetUser.getUserById",

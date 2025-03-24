@@ -43,10 +43,6 @@ exports.getGameAndCheckStart = async (req) => {
         return null
     }
 
-    if (req.package === undefined) {
-        req.package = {}
-    }
-
     await utilGetGame.getGame(req)
         .then(value => {
             // stock l'objet jeux dans la requette
@@ -127,10 +123,10 @@ exports.startMessageTest = async (req) => {
 
     // renvoit le message de dépar, si le client est l'utilisateur qui commence, l'informe de cela
     if (req.auth.userId === req.startUserId) {
-        return "You start"
+        return "CLIENT_TURN"
     } else {
         // sinon, communique que l'autre utilisateur commence
-        return "Your opponent start"
+        return "ADVERSAIRE_TURN"
     }
 }
 

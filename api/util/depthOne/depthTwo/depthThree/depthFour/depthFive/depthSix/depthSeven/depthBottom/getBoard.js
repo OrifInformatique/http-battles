@@ -1,14 +1,15 @@
-
+const Board = require('../../../../../../../../../models/Board')
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../../check')
+const utilCheck = require('../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/saveWord"
+const LOC_GLOB = "file: ../util/../depthBottom/getBoard"
 
-// crée un objet mot
-exports.saveWord = async (word, req) => {
-    // test de la validité des données
-    const LOC_LOC = "methode: saveWord"
+
+// retourne le plateau selon son id
+exports.getBoard = async (req, boardId) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getBoard"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -34,13 +35,14 @@ exports.saveWord = async (word, req) => {
         return null
     }
 
-    // enregistre le mot dans la base deonnées
-    await req.word.save()
+    // récupère le plateau dans la base données selon son id
+    await Board.findOne({ _id: boardId })
         .then(value => {
-            // stoque le mot dans la requete
-            req.word = value
+            // stoque le plateau dans la requete
+            req.board = value
+            req.package.board = value
             req.data.push({
-                name: "req.word.save()",
+                name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -48,12 +50,14 @@ exports.saveWord = async (word, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "req.word.save()",
+                name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // retourne la variable traitée pour la gestion d'erreur
-    return req.word
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.package
 }
+
+

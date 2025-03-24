@@ -10,13 +10,13 @@ const utilGame = require('../game')
 
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthEight/depthBottom/getUserById')
+const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthBottom/getUserById')
 
 // import les fonction utiles pour utilisateur
 const utilJoinGame = require('../depthOne/depthTwo/joinGame')
 
 // import les fonction utiles pour utilisateur
-const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateGame')
+const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateXgetGame')
 
 // import fonctions util pour user
 const utilUser = require('../user')
@@ -78,14 +78,14 @@ exports.findUpdateAndJoinGame = async (req) => {
         })
 
     // si oui update l'état de la partie
-    await utilUpdategame.updateGame(req)
+    await utilUpdategame.updateXgetGame(req)
         .then(value => {
             // stoque le nouvel état de la partie dans la requette
-            req.package.game = value
-            req.game = value
+            req.package.game = value.game
+            req.game = value.game
 
             req.data.push({
-                name: "utilGame.updateGame",
+                name: "utilGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -93,7 +93,7 @@ exports.findUpdateAndJoinGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.updateGame",
+                name: "utilGame.updateXgetGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

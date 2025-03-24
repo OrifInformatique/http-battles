@@ -1,23 +1,18 @@
-
-// import le schema d'un utilisateur
-const User = require("../../../../../../../../../../models/User")
-
+const Game = require('../../../../../../../../../models/Game')
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../../check')
+const utilCheck = require('../../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/getUserById"
+const LOC_GLOB = "file: ../util/../depthBottom/updateGame"
 
-// récupère un utilisateur suivant sin id
-exports.getUserById = async (userId, req) => {
+exports.updateGame = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getUserById"
+    const LOC_LOC = "methode: updateGame"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
             req.utilCheck = value
-
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -38,28 +33,33 @@ exports.getUserById = async (userId, req) => {
         return null
     }
 
-    // récupère un tulisateur suivant son id
-    await User.findOne({ _id: userId })
+    // update le tableau en fonction du contenu de la requete
+    await Game.updateOne({ _id: req.game._id }, {
+        $set: {
+            state: req.game.state,
+            createurId: req.game.createurId,
+            challengerId: req.game.challengerId
+        }
+    })
         .then(value => {
-            // stoque l'utilisateur dans la requete
-            req.user = value
+            req.gameUpdate = value
+            req.package.gameUpdate = value
 
             req.data.push({
-                name: "User.findOne",
+                name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
-
         })
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "User.findOne",
+                name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // retourne la variable traité pour la gestion d'erreur
-    return req.user
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.package
 }
