@@ -18,32 +18,65 @@ function LaunchPage() {
     ]
 
 /*     Tableaux statiques   */
+
     const staticVal1 = ["/alpha","/beta","/gamma","/delta"];
     const staticVal2 = ["GET","POST","PUT","DELETE"];
 
 /*     Changements d'états    */
+
     const [phrase, setPhrase] = useState([
-        // Dimensions
-        { word: dynamicVal[0][0], route: staticVal1[0], method: staticVal2[0], position: 1},
-        { word: dynamicVal[1][0], route: staticVal1[0], method: staticVal2[0], position: 2},
-        { word: dynamicVal[2][0], route: staticVal1[0], method: staticVal2[0], position: 3},
-        { word: dynamicVal[3][0], route: staticVal1[0], method: staticVal2[0], position: 4},
-        { word: dynamicVal[4][0], route: staticVal1[0], method: staticVal2[0], position: 5}
+        // Dimensions 
+        { 
+            id: "firstword",
+            word: dynamicVal[0][0],
+            route: staticVal1[0],
+            method: staticVal2[0],
+            position: 1
+        },
+        { 
+            id: "secondword",
+            word: dynamicVal[1][0], 
+            route: staticVal1[0], 
+            method: staticVal2[0], 
+            position: 2
+        },
+        { 
+            id: "thirdword",
+            word: dynamicVal[2][0], 
+            route: staticVal1[0], 
+            method: staticVal2[0], 
+            position: 3
+        },
+        { 
+            id: "fourthword",
+            word: dynamicVal[3][0], 
+            route: staticVal1[0], 
+            method: staticVal2[0], 
+            position: 4
+        },
+        { 
+            id: "fifthword",
+            word: dynamicVal[4][0], 
+            route: staticVal1[0], 
+            method: staticVal2[0], 
+            position: 5
+        }
     ]);
     
     const [isSubmitted, setIsSubmitted] = useState(1);
 
     const handleChange = (e) => {
-        const { name, value } = e.target
-        const [dimension, key] = name.split('.');
-        
-        setPhrase((prevPhrase) => ({
-            ...prevPhrase,
-            [dimension]: {
-                ...prevPhrase[dimension],
-                [key]: [value],
+        /*
+            const { name, value } = e.target
+            const [dimension, key] = name.split('.');
+            
+            setPhrase((prevPhrase) => ({
+                ...prevPhrase,
+                [dimension]: {
+                    ...prevPhrase[dimension],
+                    [key]: [value],
             }}))
-            console.log(phrase)
+        */
         };
 
     switch(isSubmitted) { 

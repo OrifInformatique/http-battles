@@ -54,28 +54,23 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
     </>);
 }
 
-function Words({phrase, position, i}) {
-//console.log(phrase,"phrase")
-console.log(phrase[i], "i");
-
-console.log("phrase[i]:", phrase[i]);
-console.log("phrase[i].word:", phrase[i]?.word);
-console.log("phrase[i].word est un tableau ?: ", Array.isArray(phrase));
-
-        phrase.map((element, index) => {
-            return(
-                <div key={index} className={position === i ?"init5Word wordPosition-0" :"init5Word position-0 a"} id="position">
-                    {element} 
-                    <img src="assets/images/element/sword_1.png"/>
-                </div>
-            );
-        })};
-
-
-
 export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
+
+
+/* const INITIAL_SELECTEDPHRASE = phrase.reduce((partialPhrase, aPart) => {
+return {
+    ...partialPhrase, [aPart.id]: aPart.word,
+    ...partialPhrase, [aPart.id]: aPart.route,
+    ...partialPhrase, [aPart.id]: aPart.method,
+}
+}, {});
+
+console.log("INITIAL",INITIAL_SELECTEDPHRASE)
+*/
+
+//  Flèches
 const [position, setPosition] = useState(1)
-const totalSlides = 5;
+const TOTAL_SLIDES = 5;
 let arrowd = null;
 let i = 1;
 
@@ -87,7 +82,7 @@ let i = 1;
     }
 
     function handleChangeArrowRight() {
-        if ( position < totalSlides) {
+        if ( position < TOTAL_SLIDES) {
             setPosition(position + 1)
         }
     }
@@ -111,6 +106,13 @@ switch ( position ){
     return(<> 
   
         <div className="initInitialisationContainer">
+
+            <p className="initLayoutText1">Hébergeur</p>
+            <img className="initLayout1" src="assets/images/element/CC0/layouts/blue_layout.png" alt="sword" />
+           
+            <p className="initLayoutText2">Adversaire</p>
+            <img className="initLayout2" src="assets/images/element/CC0/layouts/red_layout.png" alt="sword" />
+
             <h1 className="initTitle"style={{fontWeight:'bold', display:"flex",flexFlow:"column",alignItems:"center",paddingBottom:"0px"}}> Initialisation de la phrase </h1>
             <div className="initPhraseLaunchContainer">
                 <div className="initElementContainer">
@@ -121,34 +123,32 @@ switch ( position ){
             </div>
                 
             <div className="initPhrase">
-                <Words phrase={phrase} i={i} position={position}/>
-
 
                 <div className={position === 1 ?"init5Word wordPosition-0" :"init5Word position-0 a"} id="position">
                 {phrase[0].word} 
-                <img src="assets/images/element/sword_1.png"/>
+                <img src="assets/images/element/sword_1.png" alt="sword" />
                 </div>
 
                 <div className={position === 2 ?"init5Word wordPosition-1" :"init5Word position-1 a"} id="position">
                 {phrase[1].word} 
-               <img src="assets/images/element/sword_1.png"/>
-               </div>
+                <img src="assets/images/element/sword_1.png" alt="sword" />
+                 </div>
 
                 <div className={position === 3 ?"init5Word wordPosition-2" :"init5Word position-2 a"} id="position">
                 {phrase[2].word} 
-               <img src="assets/images/element/sword_1.png"/>
-               </div>
+                <img src="assets/images/element/sword_1.png" alt="sword" />
+                </div>
                 
                 <div className={position === 4 ?"init5Word wordPosition-3" :"init5Word position-3 a"} id="position">
                 {phrase[3].word}  
-               <img src="assets/images/element/sword_1.png"/>
-               </div>
+                <img src="assets/images/element/sword_1.png" alt="sword" />
+                </div>
 
                 <div className={position === 5 ?"init5Word wordPosition-4" :"init5Word position-4 a"} id="position">      
                 {phrase[4].word} 
-               <img src="assets/images/element/sword_1.png"/>
+                <img src="assets/images/element/sword_1.png" alt="sword" />
+                </div>
 
-               </div>
             </div>
 
             {arrowd}

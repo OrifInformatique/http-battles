@@ -58,7 +58,7 @@
                 background-size:cover;
 
                 min-height: 1400px;
-                min-width: 200px
+                min-width: 200px;
             }
             .initInitialisationContainer {
                 display: flex;
@@ -73,6 +73,41 @@
                 padding-top: 5%;
                 padding-bottom: 30px;
             }
+    /*
+            Layouts rouge et bleu 
+    */
+        
+        .initLayout1 {
+            position: absolute;
+            width:500px;
+            left: 0;
+            top: 20px;
+        }
+
+        .initLayout2 {
+            position: absolute;
+            width:450px;
+            right: 0;
+            top:200px;
+        }
+        .initLayoutText1 {
+            position: absolute;
+            left: 9%;
+            top: 45px;
+            z-index: 1;
+            font-size: xx-large;
+
+            
+        }
+        .initLayoutText2 {
+            position: absolute;
+            right: 8%;
+            top: 290px;
+            z-index: 1;
+            font-size: xx-large;
+
+
+        }
 
             /*     Containers des colonnes de la page    
                 /*     Container principal des titres + listes*/
