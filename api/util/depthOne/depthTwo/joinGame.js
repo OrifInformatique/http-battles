@@ -80,9 +80,9 @@ exports.findAndJoinGame = async (req) => {
 
     await utilJoinGame.joinGame(req)
         .then(value => {
-            req.package.state = value.state
+            req.package.game.state = value.state
             req.package.challenger = value.challenger
-            req.state = value.state
+            req.game.state = value.state
             req.challenger = value.challenger
 
             req.data.push({
@@ -136,7 +136,7 @@ exports.getCreatorAndChallenger = async (req) => {
     if (req.package === undefined) {
         req.package = {}
     }
-
+    console.log(req.game)
     // récupère l'utilisateur en fonction de son id en parametre (ici l'id du créateur contenu dans le jeux)
     await utilGetUser.getUserById(req.game.createurId, req)
         .then(value => {

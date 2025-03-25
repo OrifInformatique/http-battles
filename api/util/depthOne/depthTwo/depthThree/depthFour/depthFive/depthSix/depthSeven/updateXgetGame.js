@@ -49,7 +49,7 @@ exports.updateXgetGame = async (req) => {
         return null
     }
 
-
+    
     // update l'état de la partie
     await utilUpdateGame.updateGame(req)
     .then(value => {
@@ -71,16 +71,16 @@ exports.updateXgetGame = async (req) => {
             error: error
         })
     })
-
+    
     // retourne la partie après l'update
     await utilGetGame.getGame(req)
         .then(value => {
             // stoque la partie dans la requete
-            req.game = value.game
-            req.package.game = value.game
+            req.game = value
+            req.package.game = value
 
             req.data.push({
-                name: "this.getGame",
+                name: "utilGetGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -88,12 +88,12 @@ exports.updateXgetGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.getGame",
+                name: "utilGetGame.getGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
-
+        
     // retourne la variable traité pour la gestion d'erreur
     return req.package
 }

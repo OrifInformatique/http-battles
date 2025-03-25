@@ -123,7 +123,7 @@ exports.tryPhraseResult = async (req) => {
         // termine la partie
         await utilEndGame.endGame(req)
             .then(value => {
-                req.state = value
+                req.game.state = value
                 req.data.push({
                     name: "utilEndGame.endGame",
                     loc: LOC_GLOB + " " + LOC_LOC,

@@ -8,6 +8,10 @@ const utilTryPhrase = require('./depthSix/tryPhrase')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthFive/tryPhrase"
 
+/*
+subFunctions
+    -
+*/
 // test si le mot est le même que celui de la requete et au même endroit
 exports.tryPhraseCheckReq = async (advBoard, req, keyAdv) => {
     // location local pour la gestion d'erreur

@@ -175,8 +175,8 @@ exports.createGame = async (req, res, next) => {
 
     await utilGame.createGame(req)
         .then(value => {
-            req.package.game = value.game
-            req.game = value.game
+            req.package.gameCreated = value.game
+            req.gameCreated = value.game
 
             req.data.push({
                 name: "utilGame.createGame",
@@ -197,7 +197,7 @@ exports.createGame = async (req, res, next) => {
     if (next !== undefined) {
         next()
     }
-
+    
     // retourn la variable traité pour la gestion d'erreur en dehors des middleware
     return req.package
 }
@@ -310,7 +310,7 @@ exports.startGame = async (req, res, next) => {
     if (req.package === undefined) {
         req.package = {}
     }
-
+    
     await utilGame.startGame(req)
         .then(value => {
             req.package.game = value.game

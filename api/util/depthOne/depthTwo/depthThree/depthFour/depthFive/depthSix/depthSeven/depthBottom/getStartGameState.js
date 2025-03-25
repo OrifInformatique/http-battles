@@ -33,19 +33,19 @@ exports.getStartGameState = async (coinFlip, req) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     //  retourn l'état de la partie en fonction du résultat du test
     if (coinFlip) {
 
         req.game.state = "CREATEUR_TURN"
-        req.package.state = "CREATEUR_TURN"
+        req.package.game.state = "CREATEUR_TURN"
 
     } else {
 
         req.game.state = "CREATEUR_TURN"
-        req.package.state = "CREATEUR_TURN"
+        req.package.game.state = "CREATEUR_TURN"
 
     }
-
+    
     return req.package
 }

@@ -1,24 +1,13 @@
-// import le schema d'un utilisateur
-const Game = require("../../../../../../../models/Game")
 
-// import le schema d'un utilisateur
-const User = require("../../../../../../../models/User")
 
 // import fonctions util pour check
 const utilCheck = require('../../../../../../check')
 
-// import fonctions util pour game
-const utilGame = require('../../../../../../game')
-
-// import fonctions util pour user
-const utilUser = require('../../../../../../user')
-
-// import les fonction utiles pour utilisateur
-const utilUpdateGame = require('./depthSeven/updateXgetGame')
 
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthSix/tryPhrase"
+
 
 // test si le mot est le même que celui contenu dans le plateau
 exports.tryPhraseCheckAll = async (advBoard, req, keyAdv, keyReq) => {

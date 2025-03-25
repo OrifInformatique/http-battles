@@ -112,7 +112,7 @@ exports.switchArrayY = async (requestMode, req) => {
 }
 
 // check si la case du plateau testée est rempli avec un mot
-exports.checkBoard = async (y, x, gameId, userId, req) => {
+exports.checkBoard = async ( gameId, userId, req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: checkBoard"
 
@@ -141,14 +141,14 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
     }
 
     // récupère le plateau suivant son utilisateur et la partie
-    await utilTryCase.getBoardGameUser(gameId, userId, req)
+    await utilTryCase.getBoardByGameAndUser(gameId, userId, req)
         .then(value => {
             // stoque le plateau dans la requette
-            req.board = value
-            req.package.board = value
+            req.board = value.board
+            req.package.board = value.board
             
             req.data.push({
-                name: "utilTryCase.getBoardGameUser",
+                name: "utilTryCase.getBoardByGameAndUser",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -156,30 +156,30 @@ exports.checkBoard = async (y, x, gameId, userId, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilTryCase.getBoardGameUser",
+                name: "utilTryCase.getBoardByGameAndUser",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // test si la case du plateau n'est pas null
-    if (req.board.board[y][x] !== null) {
+    if (req.board.board[req.arrayY][req.arrayX] !== null) {
 
         // si elle n'est pas null revelle la cas et retourn le mot
-        await utilTryCase.checkBoardSuccess(y, x, req)
+        await utilTryCase.updateBoardXbuildResult(req)
             .then(value => {
                 // stoque le resultat dans la requette
-                req.result = value
+                req.result = value.result
 
                 req.data.push({
-                    name: "utilTryCase.checkBoardSuccess",
+                    name: "utilTryCase.updateBoardXbuildResult",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "utilTryCase.checkBoardSuccess",
+                    name: "utilTryCase.updateBoardXbuildResult",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })

@@ -40,8 +40,8 @@ exports.getStartUserId = async (coinFlip, req) => {
         req.package.startUserId = req.game.createurId
 
     } else {
-        req.startUserId = challengerId
-        req.package.startUserId = challengerId
+        req.startUserId = req.game.challengerId
+        req.package.startUserId = req.game.challengerId
 
     }
 

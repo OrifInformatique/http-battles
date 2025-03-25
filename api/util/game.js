@@ -314,7 +314,6 @@ exports.joinGame = async (req) => {
             req.package.state = value.state
             req.package.challenger = value.challenger
             req.game = value.game
-            req.state = value.state
             req.challenger = value.challenger
 
             req.data.push({
@@ -331,7 +330,7 @@ exports.joinGame = async (req) => {
                 error: error
             })
         })
-
+        
     await utilJoinGame.formatJoin(req)
         .then(value => {
             req.package.createur = value.createur
@@ -396,7 +395,7 @@ exports.createGame = async (req) => {
             req.game = value
 
             req.data.push({
-                name: "utilCreateAndSaveGame.createGame",
+                name: "utilCreateGame.createGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -404,7 +403,7 @@ exports.createGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilCreateAndSaveGame.createGame",
+                name: "utilCreateGame.createGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -416,7 +415,7 @@ exports.createGame = async (req) => {
             req.game = value
 
             req.data.push({
-                name: "utilCreateAndSaveGame.saveGame",
+                name: "utilCreateGame.saveGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -429,7 +428,7 @@ exports.createGame = async (req) => {
                 error: error
             })
         })
-
+        
     return req.package
 }
 
@@ -608,7 +607,7 @@ exports.startGame = async (req) => {
                 error: error
             })
         })
-
+        
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
@@ -654,7 +653,7 @@ exports.startGame = async (req) => {
                 error: error
             })
         })
-
+    
     // si oui update l'état de la partie
     await utilUpdateGame.updateXgetGame(req)
         .then(value => {
@@ -824,7 +823,7 @@ exports.tryPhrase = async (req) => {
                 error: error
             })
         })
-
+        
     // si oui update l'état de la partie
     await utilUpdateGame.updateXgetGame(req)
         .then(value => {

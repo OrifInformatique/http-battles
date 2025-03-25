@@ -6,9 +6,6 @@ const Phrase = require("../../../../../../../models/Phrase")
 const utilCheck = require('../../../../../../check')
 
 // import les fonction utiles pour utilisateur
-const utilStartGame = require('./depthSeven/startGame')
-
-// import les fonction utiles pour utilisateur
 const utilGetOtherUserId = require('./depthSeven/depthBottom/getOtherUserId')
 
 // import les fonction utiles pour utilisateur
@@ -98,7 +95,7 @@ exports.startCoinFlip = async (req, res) => {
                 error: error
             })
         })
-
+        
     // update la parite dans la base de donnée
     await utilUpdateXgetGame.updateXgetGame(req)
         .then(value => {
@@ -127,7 +124,7 @@ exports.startCoinFlip = async (req, res) => {
 /*
 subFunctions
     -this.getStartUserIdXGameState
-        -utilGetStartUserId.getStartUserId
+        -utilCoinFlip.coinFlip
         -this.getStartUserIdXGameState
             -utilGetStartUserId.getStartUserId
             -utilGetStartGameState.getStartGameState
@@ -181,7 +178,7 @@ exports.coinFlipXGetStart = async (req) => {
                 error: error
             })
         })
-
+        
     // retourn l'id de l'utilisateur en fonctions du resultat du test
     // retourn l'état de la partie en fonction du résultat du test
     await this.getStartUserIdXGameState(req)
@@ -191,8 +188,8 @@ exports.coinFlipXGetStart = async (req) => {
             req.package.startUserId = value.startUserId
 
             // stoque le nouvel étàt de la partie dans la requete
-            req.game.state = value.state
-            req.package.state = value.state
+            req.game.state = value.game.state
+            req.package.game.state = value.game.state
 
             req.data.push({
                 name: "this.getStartUserIdXGameState",
@@ -266,13 +263,13 @@ exports.getStartUserIdXGameState = async (req) => {
                 error: error
             })
         })
-
+        
     // retourn l'état de la partie en fonction du résultat du test
     await utilGetStartGameState.getStartGameState(req.coinFlip, req)
         .then(value => {
             // stoque le nouvel étàt de la partie dans la requete
-            req.game.state = value.state
-            req.package.state = value.state
+            req.game.state = value.game.state
+            req.package.game.state = value.game.state
             req.data.push({
                 name: "utilGetStartGameState.getStartGameState",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -287,7 +284,7 @@ exports.getStartUserIdXGameState = async (req) => {
                 error: error
             })
         })
-
+        
     return req.package
 }
 
@@ -298,7 +295,7 @@ subFunctions
     -utilGetOtherUserId.getOtherUserId
 */
 // test si il s'agit du tour du client et renvoie l'identifiant du client qui commence
-exports.testTurnUserId = async (req, res) => {
+exports.testTurnUserId = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: testTurnUserId"
 
@@ -327,11 +324,11 @@ exports.testTurnUserId = async (req, res) => {
     }
 
     // test quel utilisateur commence
-    await this.testGameStateAndUserTurn(req, res)
+    await this.testGameStateAndUserTurn(req)
         .then(value => {
             // retourn le résultat et le stoque dans la requete
-            req.turn = value.testTurnMessage
-            req.package.turn = value.testTurnMessage
+            req.turn = value.turn
+            req.package.turn = value.turn
 
             req.data.push({
                 name: "this.testTurn",
@@ -431,6 +428,7 @@ exports.testGameStateAndUserTurn = async (req) => {
                 })
             })
             .catch(error => {
+                console.log(error)
                 req.data.push({
                     name: "utilTestUserTurn.testUserTurn - CREATEUR_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
@@ -453,6 +451,7 @@ exports.testGameStateAndUserTurn = async (req) => {
                 })
             })
             .catch(error => {
+                console.log(error)
                 req.data.push({
                     name: "utilTestUserTurn.testUserTurn - CHALLENGER_TURN",
                     loc: LOC_GLOB + " " + LOC_LOC,
@@ -785,7 +784,15 @@ exports.createXsavePhrase = async (wordObjectsArray, req) => {
     return req.package
 }
 
-
+/*
+subFunctions
+    -this.lineLoopAndPhraseLoop
+        -this.phraseLoopAndTestCase
+            -this.testTableWord
+                -utilInsertWord.insertWord
+            -this.testTableVoid
+                -utilInsertBlank.insertBlank
+*/
 // insert les mot de la phrse dans le plateau selon leur position
 exports.columnLoopAndLineLoop = async (board, userPhrase, req) => {
     // location local pour la gestion d'erreur
@@ -822,22 +829,280 @@ exports.columnLoopAndLineLoop = async (board, userPhrase, req) => {
     // parcoure l'ancien plateau dans le plateau de la requette
     for (const keyY in board.board) {
         // Crée et remplie les ligne du plateau
-        await utilStartGame.lineLoopAndPhraseLoop(board, userPhrase, keyY, req)
+        await this.lineLoopAndPhraseLoop(board, userPhrase, keyY, req)
             .then(value => {
                 req.data.push({
-                    name: "utilStartGame.lineLoopAndPhraseLoop",
+                    name: "this.lineLoopAndPhraseLoop",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "utilStartGame.lineLoopAndPhraseLoop",
+                    name: "this.lineLoopAndPhraseLoop",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })
             })
     }
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.package
+}
+
+/*
+subFunctions
+    -this.phraseLoopAndTestCase
+        -this.testTableWord
+            -utilInsertWord.insertWord
+        -this.testTableVoid
+            -utilInsertBlank.insertBlank
+*/
+// Crée et remplie les ligne du plateau
+exports.lineLoopAndPhraseLoop = async (board, userPhrase, keyY, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: lineLoopAndPhraseLoop"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // pousse une ligne dans le plateau
+    req.newBoardFull.push([])
+    req.package.newBoardFull.push([])
+
+    // parcour les case de la ligne Y de l'ancient plateaux
+    for (const keyX in board.board[keyY]) {
+        // insert les case de la ligne du nouveaux plateaux et les remplie 
+        await this.phraseLoopAndTestCase(userPhrase, keyY, keyX, req)
+            .then(value => {
+                req.data.push({
+                    name: "this.phraseLoopAndTestCase",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "this.phraseLoopAndTestCase",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.package
+}
+
+/*
+subFunctions
+    -this.testTableWord
+        -utilInsertWord.insertWord
+    -this.testTableVoid
+        -utilInsertBlank.insertBlank
+*/
+// insert les case de la ligne du nouveaux plateaux et les remplie 
+exports.phraseLoopAndTestCase = async (userPhrase, keyY, keyX, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: phraseLoopAndTestCase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // parcour la phrase du plateaux
+    for (const keyW in userPhrase.words) {
+        // insert les mot de la phrase dans les case du plateaux si leurs positions est égal
+        await this.testTableWord(userPhrase, keyY, keyX, keyW, req)
+            .then(value => {
+                req.data.push({
+                    name: "this.testTableWord",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "this.testTableWord",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+
+    await this.testTableVoid(keyY, keyX, req)
+        .then(value => {
+            req.data.push({
+                name: "this.utilTestTableVoid",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.utilTestTableVoid",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // retourne la variable  pour la gestion d'erreur
+    return req.package
+}
+
+/*
+subFunctions
+    -utilInsertWord.insertWord
+*/
+// insert les mot de la phrase dans les case du plateaux si leurs positions est égal
+exports.testTableWord = async (userPhrase, keyY, keyX, keyW, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: testTableWord"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // test si la position de la case est égal à la postion du mot
+    if (userPhrase.words[keyW].position[0].toString() === keyY && userPhrase.words[keyW].position[1].toString() === keyX) {
+        // si oui, rempli la case avec le mot
+        await utilInsertWord.insertWord(userPhrase, keyY, keyW, req)
+            .then(value => {
+                req.data.push({
+                    name: "utilInsertWord.insertWord",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilInsertWord.insertWord",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.package
+}
+
+/*
+subFunctions
+    -utilInsertBlank.insertBlank
+*/
+// insert les cases vides
+exports.testTableVoid = async (keyY, keyX, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: testTableVoid"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    // si la case du tableau n'existe pas, la crée rempli d'une valeur null
+    if (req.newBoardFull[keyY][keyX] === undefined) {
+        await utilInsertBlank.insertBlank(keyY, req)
+            .then(value => {
+                req.data.push({
+                    name: "utilInsertBlank.insertBlank",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilInsertBlank.insertBlank",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+
     // retourne la variable traitéeF pour la gestion d'erreur
     return req.package
 }

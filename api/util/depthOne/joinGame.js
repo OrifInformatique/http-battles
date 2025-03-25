@@ -56,10 +56,8 @@ exports.findUpdateAndJoinGame = async (req) => {
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package.game = value.game
-            req.package.state = value.state
             req.package.challenger = value.challenger
             req.game = value.game
-            req.state = value.state
             req.challenger = value.challenger
 
             req.data.push({
@@ -76,7 +74,7 @@ exports.findUpdateAndJoinGame = async (req) => {
                 error: error
             })
         })
-
+        
     // si oui update l'état de la partie
     await utilUpdategame.updateXgetGame(req)
         .then(value => {
@@ -98,7 +96,7 @@ exports.findUpdateAndJoinGame = async (req) => {
                 error: error
             })
         })
-
+        
     return req.package
 }
 
@@ -129,7 +127,7 @@ exports.formatJoin = async (req) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     await utilJoinGame.getCreatorAndChallenger(req)
         .then(value => {
             req.package.createur = value.createur

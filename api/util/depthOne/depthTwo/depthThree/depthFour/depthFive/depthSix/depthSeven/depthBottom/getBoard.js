@@ -7,7 +7,7 @@ const LOC_GLOB = "file: ../util/../depthBottom/getBoard"
 
 
 // retourne le plateau selon son id
-exports.getBoard = async (req, boardId) => {
+exports.getBoard = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getBoard"
 
@@ -36,7 +36,7 @@ exports.getBoard = async (req, boardId) => {
     }
 
     // récupère le plateau dans la base données selon son id
-    await Board.findOne({ _id: boardId })
+    await Board.findOne(req.query)
         .then(value => {
             // stoque le plateau dans la requete
             req.board = value
