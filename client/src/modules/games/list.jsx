@@ -5,7 +5,7 @@ import { useGamesList } from "../../utils/games/use-list";
 
 import { GAMES_STATES } from "../../config/games";
 
-import './testListAnimation.css';
+//import './testListAnimation.css';
 import '../general.css';
 
 //import imageTest from '../../../public/assets/images/element/boussoleNulleTransp.png';
@@ -20,7 +20,7 @@ const GamesListItem = ({ game }) => {
 
   return (
     <div className="container">
-    <button className="btn" onClick={initAudio}>
+    <button className="text-white" onClick={initAudio}>
       Ceci est un bouton de test audio
     </button>
 
@@ -29,7 +29,7 @@ const GamesListItem = ({ game }) => {
       <source src="/assets/audio/audio pirate.mp3" type="audio/mpeg" />
     </audio>
     <article className="flex w-full py-4 justify-between items-center border-b border-gray-200">
-    <img src="/assets/images/element/boussoleNulleTransp.png" className="elementContainerSpecialDiv"></img>
+    {<img src="/assets/images/element/boussoleNulleTransp.png" className="elementContainerSpecialDiv"></img>}
       <h2>Partie avec {game.challenger?.username}</h2>
       <div className="flex">
 
@@ -69,7 +69,7 @@ const GamesList = () => {
 
   return (
     <>
-      <h1 className="py-8 text-3xl max-w-[660px]">
+      <h1 className="py-8 text-3xl text-white max-w-[660px]">
         Heureux de revoir moussaillon ! Votre équipage n'attend plus
         que vous afin de partir à la conquête du web.
       </h1>

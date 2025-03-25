@@ -3,6 +3,8 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 import { ProtectedRoute } from "../utils/protected-route";
 import { AuthContext } from "../contexts/auth";
 
+import './Background.css';
+
 const TopBarLink = ({ label, route }) => {
   const location = useLocation();
 
@@ -63,7 +65,7 @@ const LobbyLayout = () => {
       <main className="w-full max-w-[960px] m-auto px-4">
         <Outlet />
       </main>
-      <div className="lobby-background">
+      <div className="backgroundContainerSpecial">
         <div className="bg-boat"></div>
       </div>
     </ProtectedRoute>
