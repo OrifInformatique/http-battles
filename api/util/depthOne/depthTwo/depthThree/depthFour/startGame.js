@@ -7,6 +7,9 @@ const utilCheck = require('../../../../check')
 const utilStartGame = require('./depthFive/startGame')
 
 // import les fonction utiles pour utilisateur
+const utilCheckStartState = require('./depthFive/depthSix/depthBottom/checkStartState')
+
+// import les fonction utiles pour utilisateur
 const utilUpdateBoardXgetBoard = require('./depthFive/depthSix/crossRoad/updateBoardXgetBoard')
 
 
@@ -42,19 +45,15 @@ exports.checkStart = async (req) => {
         return null
     }
 
-    if (req.package === undefined) {
-        req.package = {}
-    }
-
     // check si la partie a commencé (true = non, false = oui)
-    await utilStartGame.checkStartStat(req)
+    await utilCheckStartState.checkStartState(req)
         .then(value => {
             // stoque le resultat dans la requete
-            req.package.check = value
-            req.check = value
+            req.package.check = value.check
+            req.check = value.check
 
             req.data.push({
-                name: "utilStartGame.checkStartStat",
+                name: "utilStartGame.checkStartState",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -62,7 +61,7 @@ exports.checkStart = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilStartGame.checkStartStat",
+                name: "utilStartGame.checkStartState",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
