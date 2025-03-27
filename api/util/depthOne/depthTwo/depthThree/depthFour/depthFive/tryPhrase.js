@@ -3,7 +3,7 @@
 const utilCheck = require('../../../../../check')
 
 // import les fonction utiles pour utilisateur
-const utilTryPhrase = require('./depthSix/tryPhrase')
+const utilTryPhrase = require('./depthSix/depthSeven/depthBottom/tryPhrase')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthFive/tryPhrase"

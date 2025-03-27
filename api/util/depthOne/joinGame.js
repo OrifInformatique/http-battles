@@ -56,9 +56,9 @@ exports.findUpdateAndJoinGame = async (req) => {
         .then(value => {
             // stock l'objet jeux dans la requette
             req.package.game = value.game
-            req.package.challenger = value.challenger
+            req.package.game.challengerId = value.game.challengerId
             req.game = value.game
-            req.challenger = value.challenger
+            req.game.challengerId = value.game.challengerId
 
             req.data.push({
                 name: "utilJoinGame.findAndJoinGame",
@@ -133,9 +133,9 @@ exports.formatJoin = async (req) => {
             req.package.createur = value.createur
             req.createur = value.createur
 
-            req.package.user = value.user
-            req.user = value.user
-
+            req.package.challenger = value.challenger
+            req.challenger = value.challenger
+            
             req.data.push({
                 name: "utilJoinGame.getCreatorAndChallenger",
                 loc: LOC_GLOB + " " + LOC_LOC,

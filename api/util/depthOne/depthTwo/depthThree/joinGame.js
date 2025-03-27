@@ -47,13 +47,6 @@ exports.joinGame = async (req) => {
     }
 
     // stock le nouelle état de la partie et le nouveaux challenger dans la requette
-    req.state = "SETTINGS"
-    req.challenger = req.auth.userId
-
-    if (req.package === undefined) {
-        req.package = {}
-    }
-
     req.package.state = "SETTINGS"
     req.package.challenger = req.auth.userId
 

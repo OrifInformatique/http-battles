@@ -150,7 +150,7 @@ exports.insertAndSavePhrase = async (req) => {
             // stoque le plateu après update dans la requete
             req.package.board = value.board
             req.board = value.board
-
+            
             req.data.push({
                 name: "utilUpdateBoardXgetBoard.updateBoardXgetBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,

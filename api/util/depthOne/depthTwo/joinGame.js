@@ -81,10 +81,10 @@ exports.findAndJoinGame = async (req) => {
     await utilJoinGame.joinGame(req)
         .then(value => {
             req.package.game.state = value.state
-            req.package.challenger = value.challenger
+            req.package.game.challengerId = value.challenger
             req.game.state = value.state
-            req.challenger = value.challenger
-
+            req.game.challengerId = value.challenger
+            
             req.data.push({
                 name: "utilJoinGame.joinGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -133,10 +133,6 @@ exports.getCreatorAndChallenger = async (req) => {
         return null
     }
 
-    if (req.package === undefined) {
-        req.package = {}
-    }
-    console.log(req.game)
     // récupère l'utilisateur en fonction de son id en parametre (ici l'id du créateur contenu dans le jeux)
     await utilGetUser.getUserById(req.game.createurId, req)
         .then(value => {
@@ -163,9 +159,9 @@ exports.getCreatorAndChallenger = async (req) => {
     await utilGetUser.getUserById(req.auth.userId, req)
         .then(value => {
             // stock l'utilisateur dans la requette
-            req.package.user = value.user
-            req.user = value.user
-
+            req.package.challenger = value.user
+            req.challenger = value.user
+            
             req.data.push({
                 name: "utilGetUser.getUserById",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -217,7 +213,7 @@ exports.joinSuccessMessage = async (req) => {
         message: "Partie rejointe !",
         state: req.game.state,
         createurUsername: req.createur.username,
-        challengerUsername: req.user.username
+        challengerUsername: req.challenger.username
     }
 
     return req.joinSuccessMessage

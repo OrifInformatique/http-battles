@@ -71,7 +71,7 @@ exports.checkStartUserId = async (req) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     // test si la partie a déjà commencé
     if (req.check) {
         // si non (true) décide aléatoirement quel joueur commence et retourn son id

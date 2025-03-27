@@ -331,7 +331,7 @@ exports.testTurnUserId = async (req) => {
             req.package.turn = value.turn
 
             req.data.push({
-                name: "this.testTurn",
+                name: "this.testGameStateAndUserTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -339,12 +339,12 @@ exports.testTurnUserId = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "this.testTurn",
+                name: "this.testGameStateAndUserTurn",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
-
+        
     // suivant le resultat du test
     if (req.turn.message === "CLIENT_TURN") {
         // stoque l'id du clien dans la requet en tant que l'utilisateur qui commence
@@ -465,7 +465,7 @@ exports.testGameStateAndUserTurn = async (req) => {
         req.turn = { message: req.game.state }
         req.package.turn = { message: req.game.state }
     }
-
+    
     return req.package
 }
 

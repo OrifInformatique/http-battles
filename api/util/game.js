@@ -336,12 +336,12 @@ exports.joinGame = async (req) => {
             req.package.createur = value.createur
             req.createur = value.createur
 
-            req.package.user = value.user
-            req.user = value.user
+            req.package.challenger = value.challenger
+            req.challenger = value.challenger
 
             req.package.joinSuccessMessage = value.joinSuccessMessage
             req.joinSuccessMessage = value.joinSuccessMessage
-
+            
             req.data.push({
                 name: "utilJoinGame.formatJoin",
                 loc: LOC_GLOB + " " + LOC_LOC,

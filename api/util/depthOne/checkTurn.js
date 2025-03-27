@@ -145,7 +145,7 @@ exports.getBoardGameUserAndAdversaire = async (req) => {
                 error: error
             })
         })
-
+        
     // retourn un plateau suivant l'id de l'utilisateur
     await utilGetBoardGameUser.getBoardGameUser(req.body.gameId, req.otherUserId, req)
         .then(value => {

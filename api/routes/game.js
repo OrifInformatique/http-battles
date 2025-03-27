@@ -29,7 +29,7 @@ router.get('/games/checkTurn', auth, check.dataInit, check.checkReqDataCheckTurn
 // términe la partie
 router.post('/games/endGame', auth, check.dataInit, check.checkReqDataEndGame, middleGame.endGame, check.logInit, check.dataValidity, gameCtrl.endGame)
 // vérifie à qui est le tour
-router.get('/games/tryPhrase', auth, check.dataInit, check.checkReqDataTryPhrase, check.checkTurn, middleGame.tryPhrase, check.logInit, check.dataValidity, gameCtrl.tryPhrase)
+router.get('/games/tryPhrase', auth, check.dataInit, check.checkReqDataTryPhrase, /*check.checkTurn,*/ middleGame.tryPhrase, check.logInit, check.dataValidity, gameCtrl.tryPhrase)
 
 // routes pour le jeux
 router.all('/games/tryA', auth, check.dataInit, check.checkReqDataTryCase, check.checkTurn, routeParam.a, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)

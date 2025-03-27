@@ -39,7 +39,7 @@ exports.testUserTurn = async (gameUserId, reqId, req) => {
 
         // renvoi un message pour informer que c'est le tour du client
         req.turn = { message: "CLIENT_TURN" }
-        req.package.testTurnMessage = { message: "CLIENT_TURN" }
+        req.package.turn = { message: "CLIENT_TURN" }
 
         // si non
     } else {
@@ -47,6 +47,6 @@ exports.testUserTurn = async (gameUserId, reqId, req) => {
         req.turn = { message: "ADVERSAIRE_TURN" }
         req.package.turn = { message: "ADVERSAIRE_TURN" }
     }
-
+    
     return req.package
 }

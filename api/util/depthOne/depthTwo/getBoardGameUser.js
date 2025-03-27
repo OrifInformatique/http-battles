@@ -44,6 +44,7 @@ exports.getBoardGameUser = async (gameId, userId, req) => {
         .then(value => {
             // stoque le plateau dans la requete
             req.board = value
+            console.log(value)
             req.data.push({
                 name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,

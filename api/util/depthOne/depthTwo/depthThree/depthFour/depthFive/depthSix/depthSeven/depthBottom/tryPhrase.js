@@ -1,12 +1,12 @@
 
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../check')
+const utilCheck = require('../../../../../../../../check')
 
 
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthSix/tryPhrase"
+const LOC_GLOB = "file: ../util/../depthBottom/tryPhrase"
 
 
 // test si le mot est le même que celui contenu dans le plateau
@@ -38,12 +38,12 @@ exports.tryPhraseCheckAll = async (advBoard, req, keyAdv, keyReq) => {
         return null
     }
 
-    // test si le mot est le mem que celui contenu dans cette case du plateau et au meme endroit
+    // test si le mot est le meme que celui contenu dans cette case du plateau et au meme endroit
     if (advBoard.phrase.words[keyAdv].content === req.body.phrase[keyReq].word.content && keyAdv === keyReq) {
         // si oui, incremente le compteur de mot juste
         req.wordCounter = req.wordCounter + 1
     }
 
-    // retourne la variable traitéeF pour la gestion d'erreu
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.wordCounter
 }
