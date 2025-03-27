@@ -1,14 +1,14 @@
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/savePhrase"
+const LOC_GLOB = "file: ../util/../depthBottom/builtCheckCaseResult"
 
 // crée un objet mot
-exports.savePhrase = async (req) => {
+exports.builtCheckCaseResult = async (req) => {
     // test de la validité des données
-    const LOC_LOC = "methode: savePhrase"
+    const LOC_LOC = "methode: builtCheckCaseResult"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -34,27 +34,13 @@ exports.savePhrase = async (req) => {
         return null
     }
 
-    // enregistre le mot dans la base deonnées
-    await req.phrase.save()
-        .then(value => {
-            // stoque le mot dans la requete
-            req.phrase = value
-            req.package.phrase = value
-            
-            req.data.push({
-                name: "req.phrase.save()",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "req.phrase.save()",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
+    // stoque le mot et le succes du check dans un objet résultat dans la requete
+    req.result = {
+        word: req.board.board[req.arrayY][req.arrayX],
+        result: true
+    }
+
+    req.package.result = req.result
 
     // retourne la variable traitée pour la gestion d'erreur
     return req.package

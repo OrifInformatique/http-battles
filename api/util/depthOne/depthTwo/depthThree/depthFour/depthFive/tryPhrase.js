@@ -3,7 +3,7 @@
 const utilCheck = require('../../../../../check')
 
 // import les fonction utiles pour utilisateur
-const utilTryPhrase = require('./depthSix/depthSeven/depthBottom/tryPhrase')
+const utilTryPhrase = require('./depthSix/depthBottom/checkWordPhrase')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthFive/tryPhrase"
@@ -44,12 +44,13 @@ exports.tryPhraseCheckReq = async (advBoard, req, keyAdv) => {
     // parcoure la phrase de la requete
     for (const keyReq in req.body.phrase) {
         // test si le mot est le même que celui contenu dans le plateau
-        await utilTryPhrase.tryPhraseCheckAll(advBoard, req, keyAdv, keyReq)
+        await utilTryPhrase.checkWordPhrase(advBoard, req, keyAdv, keyReq)
             .then(value => {
                 // retourn le nombre de mot just
-                req.wordCounter = value
+                req.wordCounter = value.wordCounter
+
                 req.data.push({
-                    name: "utilTryPhrase.tryPhraseCheckAll",
+                    name: "utilTryPhrase.checkWordPhrase",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
@@ -57,7 +58,7 @@ exports.tryPhraseCheckReq = async (advBoard, req, keyAdv) => {
             .catch(error => {
                 console.log(error)
                 req.data.push({
-                    name: "utilTryPhrase.tryPhraseCheckAll",
+                    name: "utilTryPhrase.checkWordPhrase",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })

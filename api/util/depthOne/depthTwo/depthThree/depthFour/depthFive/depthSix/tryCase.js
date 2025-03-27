@@ -6,22 +6,22 @@ const Board = require("../../../../../../../models/Board")
 const utilCheck = require('../../../../../../check')
 
 // import les fonction utiles pour board
-const utilUpdateBoardXgetBoard = require('./depthSeven/updateBoardXgetBoard')
+const utilUpdateBoardXgetBoard = require('./crossRoad/updateBoardXgetBoard')
 
 
 
-const utilQueryConstructXgetBoard = require('./depthSeven/queryConstructXgetboard')
+const utilQueryConstructXgetBoard = require('./crossRoad/queryConstructXgetboard')
 
-const utilBuiltCheckCaseResult = require('./depthSeven/depthBottom/builtCheckCaseResult')
+const utilBuiltCheckCaseResult = require('./depthBottom/builtCheckCaseResult')
 
 // import les fonction utiles pour getWord
-const utilGetWord = require('./depthSeven/depthBottom/getWord')
+const utilGetWord = require('./depthBottom/getWord')
 
 // import les fonction utiles pour updateWord
-const utilUpdateWord = require('./depthSeven/depthBottom/updateWord')
+const utilUpdateWord = require('./depthBottom/updateWord')
 
 // import les fonction utiles pour reavealWord
-const utilRevealWord = require('./depthSeven/depthBottom/reavealWord')
+const utilRevealWord = require('./depthBottom/reavealWord')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthSix/tryCase"
@@ -69,12 +69,12 @@ exports.getBoardByGameAndUser = async (gameId, userId, req) => {
 
     await utilQueryConstructXgetBoard.queryConstructXgetBoard(req)
         .then(value => {
-            // stoque le plateau dans la requete
+            // stoque le tableaux dans la requete
             req.board = value.board
             req.package.board = value.board
 
             req.data.push({
-                name: "utilQueryConstructXgetBoard.queryConstructXgetBoar",
+                name: "utilQueryConstructXgetBoard.queryConstructXgetBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -82,7 +82,7 @@ exports.getBoardByGameAndUser = async (gameId, userId, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilQueryConstructXgetBoard.queryConstructXgetBoar",
+                name: "utilQueryConstructXgetBoard.queryConstructXgetBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

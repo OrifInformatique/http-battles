@@ -1,15 +1,13 @@
-const Board = require('../../../../../../../../../models/Board')
+const Game = require('../../../../../../../../models/Game')
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/getBoard"
+const LOC_GLOB = "file: ../util/../depthBottom/updateGame"
 
-
-// retourne le plateau selon son id
-exports.getBoard = async (req) => {
+exports.updateGame = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getBoard"
+    const LOC_LOC = "methode: updateGame"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -35,14 +33,20 @@ exports.getBoard = async (req) => {
         return null
     }
 
-    // récupère le plateau dans la base données selon son id
-    await Board.findOne(req.query)
+    // update le tableau en fonction du contenu de la requete
+    await Game.updateOne({ _id: req.game._id }, {
+        $set: {
+            state: req.game.state,
+            createurId: req.game.createurId,
+            challengerId: req.game.challengerId
+        }
+    })
         .then(value => {
-            // stoque le plateau dans la requete
-            req.board = value
-            req.package.board = value
+            req.gameUpdate = value
+            req.package.gameUpdate = value
+
             req.data.push({
-                name: "Board.findOne",
+                name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -50,7 +54,7 @@ exports.getBoard = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "Board.findOne",
+                name: "Game.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -59,5 +63,3 @@ exports.getBoard = async (req) => {
     // retourne la variable traitéeF pour la gestion d'erreur
     return req.package
 }
-
-

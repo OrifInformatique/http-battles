@@ -1,15 +1,14 @@
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/revealWord"
+const LOC_GLOB = "file: ../util/../depthBottom/getOtherUserId"
 
-// Reveal le mot
-exports.revealWord = async (word, req) => {
-    // test de la validité des données
-    const LOC_LOC = "methode: revealWord"
-    
+exports.getOtherUserId = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getOtherUserId"
+
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
@@ -34,10 +33,18 @@ exports.revealWord = async (word, req) => {
         return null
     }
 
-    req.word = word
-    req.word.revealed = true
-    req.package.word = req.word
-    
-    // retourne la variable traitée pour la gestion d'erreur
+    // si le client est le créateur, retourn l'id du challenger
+    if (req.auth.userId === req.game.createurId) {
+
+        req.otherUserId = req.game.challengerId
+        req.package.otherUserId = req.game.challengerId
+
+    } else {
+        // sinon retourn l'id du créateur créateur
+        req.otherUserId = req.game.createurId
+        req.package.otherUserId = req.game.createurId
+
+    }
+
     return req.package
 }

@@ -10,13 +10,13 @@ const utilGame = require('../game')
 
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/depthBottom/getUserById')
+const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthBottom/getUserById')
 
 // import les fonction utiles pour utilisateur
 const utilJoinGame = require('../depthOne/depthTwo/joinGame')
 
 // import les fonction utiles pour utilisateur
-const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthSeven/updateXgetGame')
+const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/crossRoad/updateXgetGame')
 
 // import fonctions util pour user
 const utilUser = require('../user')

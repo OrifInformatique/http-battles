@@ -1,15 +1,14 @@
 
-
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/coinFlip"
+const LOC_GLOB = "file: ../util/../depthBottom/saveWord"
 
 // crée un objet mot
-exports.coinFlip = async (req) => {
+exports.saveWord = async (req) => {
     // test de la validité des données
-    const LOC_LOC = "methode: coinFlip"
+    const LOC_LOC = "methode: saveWord"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -35,10 +34,27 @@ exports.coinFlip = async (req) => {
         return null
     }
 
-    // sort aléatoirement un résultat true or false et le stock dans la requette
-    req.coinFlip = Math.floor(Math.random() * 2) == 0
-    req.package.coinFlip = req.coinFlip
-    
+    // enregistre le mot dans la base deonnées
+    await req.word.save()
+        .then(value => {
+            // stoque le mot dans la requete
+            req.word = value
+            req.package.word = value
+            req.data.push({
+                name: "req.word.save()",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "req.word.save()",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     // retourne la variable traitée pour la gestion d'erreur
     return req.package
 }

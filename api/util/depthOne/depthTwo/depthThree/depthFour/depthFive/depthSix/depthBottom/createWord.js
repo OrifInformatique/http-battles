@@ -1,14 +1,16 @@
+// import le schema d'un Word
+const Word = require("../../../../../../../../models/Word")
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/insertWord"
+const LOC_GLOB = "file: ../util/../depthBottom/createWord"
 
-// insert les mot de la phrase dans les case du plateaux si leurs positions est égal
-exports.insertWord = async (userPhrase, keyY, keyW, req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: insertWord"
+// crée un objet mot
+exports.createWord = async (word, req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: createWord"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -34,11 +36,14 @@ exports.insertWord = async (userPhrase, keyY, keyW, req) => {
         return null
     }
 
-    // si oui, rempli la case avec le mot
-    req.newBoardFull[keyY].push(userPhrase.words[keyW])
-    req.package.newBoardFull[keyY].push(userPhrase.words[keyW])
+    // crée un nouvel objet mot avec les info en parametre
+    req.word = new Word({
+        content: word.content,
+        position: word.position
+    })
 
+    req.package.word = req.word
 
-    // retourne la variable traitéeF pour la gestion d'erreur
+    // retourne la variable traitée pour la gestion d'erreur
     return req.package
 }

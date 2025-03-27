@@ -1,15 +1,15 @@
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/getStartUserId"
+const LOC_GLOB = "file: ../util/../depthBottom/revealWord"
 
-// retourn l'id utilisateur qui commence
-exports.getStartUserId = async (coinFlip, req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: coinFlipStartUserId"
-
+// Reveal le mot
+exports.revealWord = async (word, req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: revealWord"
+    
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
         .then(value => {
@@ -34,16 +34,10 @@ exports.getStartUserId = async (coinFlip, req) => {
         return null
     }
 
-    // retourn l'id utilisateur contenu dans la partie en fonction du test
-    if (coinFlip) {
-        req.startUserId = req.game.createurId
-        req.package.startUserId = req.game.createurId
-
-    } else {
-        req.startUserId = req.game.challengerId
-        req.package.startUserId = req.game.challengerId
-
-    }
-
+    req.word = word
+    req.word.revealed = true
+    req.package.word = req.word
+    
+    // retourne la variable traitée pour la gestion d'erreur
     return req.package
 }

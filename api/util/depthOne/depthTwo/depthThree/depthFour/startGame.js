@@ -7,7 +7,7 @@ const utilCheck = require('../../../../check')
 const utilStartGame = require('./depthFive/startGame')
 
 // import les fonction utiles pour utilisateur
-const utilUpdateBoardXgetBoard = require('./depthFive/depthSix/depthSeven/updateBoardXgetBoard')
+const utilUpdateBoardXgetBoard = require('./depthFive/depthSix/crossRoad/updateBoardXgetBoard')
 
 
 

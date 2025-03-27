@@ -7,7 +7,7 @@ const utilCheck = require('../../../check')
 const utilGetGame = require('./depthFour/getGame')
 
 // import les fonction utiles pour utilisateur
-const utilGetOtherUserId = require('./depthFour/depthFive/depthSix/depthSeven/depthBottom/getOtherUserId')
+const utilGetOtherUserId = require('./depthFour/depthFive/depthSix/depthBottom/getOtherUserId')
 
 // import les fonction utiles pour tryPhrase
 const utilTryPhrase = require('./depthFour/tryPhrase')
@@ -138,8 +138,7 @@ exports.tryPhrase = async (adversaireId, req) => {
             })
         })
 
-    // intialise un compteur de mot de la phrase dans la requete
-    req.wordCounter = 0
+
     // test si la phrase proposé par le client est la mème que celle de 'l'adversaire
     await utilTryPhrase.tryPhraseCheckAdv(req.advBoard, req)
         .then(value => {

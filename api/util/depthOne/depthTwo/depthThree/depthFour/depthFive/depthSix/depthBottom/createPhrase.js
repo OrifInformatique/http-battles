@@ -1,16 +1,16 @@
-// import le schema d'un Word
-const Word = require("../../../../../../../../../models/Word")
+// import le schema d'un Phrase
+const Phrase = require("../../../../../../../../models/Phrase")
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/createWord"
+const LOC_GLOB = "file: ../util/../depthBottom/createPhrase"
 
 // crée un objet mot
-exports.createWord = async (word, req) => {
+exports.createPhrase = async (wordObjectsArray, req) => {
     // test de la validité des données
-    const LOC_LOC = "methode: createWord"
+    const LOC_LOC = "methode: createPhrase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -37,12 +37,12 @@ exports.createWord = async (word, req) => {
     }
 
     // crée un nouvel objet mot avec les info en parametre
-    req.word = new Word({
-        content: word.content,
-        position: word.position
+    // crée un objet phrase avec le tableaux
+    req.phrase = new Phrase({
+        words: wordObjectsArray
     })
 
-    req.package.word = req.word
+    req.package.phrase = req.phrase
 
     // retourne la variable traitée pour la gestion d'erreur
     return req.package

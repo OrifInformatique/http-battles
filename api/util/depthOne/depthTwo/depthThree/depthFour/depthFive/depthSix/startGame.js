@@ -6,31 +6,31 @@ const Phrase = require("../../../../../../../models/Phrase")
 const utilCheck = require('../../../../../../check')
 
 // import les fonction utiles pour utilisateur
-const utilGetOtherUserId = require('./depthSeven/depthBottom/getOtherUserId')
+const utilGetOtherUserId = require('./depthBottom/getOtherUserId')
 
 // import les fonction utiles pour utilisateur
-const utilUpdateXgetGame = require('./depthSeven/updateXgetGame')
+const utilUpdateXgetGame = require('./crossRoad/updateXgetGame')
 
 // import les fonction utiles pour testUserTurn
-const utilTestUserTurn = require('./depthSeven/depthBottom/testUserTurn')
+const utilTestUserTurn = require('./depthBottom/testUserTurn')
 
-const utilGetStartUserId = require('./depthSeven/depthBottom/getStartUserId')
+const utilGetStartUserId = require('./depthBottom/getStartUserId')
 
-const utilGetStartGameState = require('./depthSeven/depthBottom/getStartGameState')
+const utilGetStartGameState = require('./depthBottom/getStartGameState')
 
-const utilCoinFlip = require('./depthSeven/depthBottom/coinFlip')
+const utilCoinFlip = require('./depthBottom/coinFlip')
 
-const utilInsertWord = require('./depthSeven/depthBottom/insertWord')
+const utilInsertWord = require('./depthBottom/insertWord')
 
-const utilInsertBlank = require('./depthSeven/depthBottom/insertBlank')
+const utilInsertBlank = require('./depthBottom/insertBlank')
 
-const utilCreateWord = require('./depthSeven/depthBottom/createWord')
+const utilCreateWord = require('./depthBottom/createWord')
 
-const utilSaveWord = require('./depthSeven/depthBottom/saveWord')
+const utilSaveWord = require('./depthBottom/saveWord')
 
-const utilCreatePhrase = require('./depthSeven/depthBottom/createPhrase')
+const utilCreatePhrase = require('./depthBottom/createPhrase')
 
-const utilSavePhrase = require('./depthSeven/depthBottom/savePhrase')
+const utilSavePhrase = require('./depthBottom/savePhrase')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthSix/startGame"

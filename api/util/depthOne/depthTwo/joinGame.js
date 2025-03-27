@@ -14,7 +14,7 @@ const utilGame = require('../../game')
 const utilUser = require('../../user')
 
 // import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthSeven/depthBottom/getUserById')
+const utilGetUser = require('./depthThree/depthFour/depthFive/depthSix/depthBottom/getUserById')
 
 // import les fonction utiles pour utilisateur
 const utilJoinGame = require('../depthTwo/depthThree/joinGame')

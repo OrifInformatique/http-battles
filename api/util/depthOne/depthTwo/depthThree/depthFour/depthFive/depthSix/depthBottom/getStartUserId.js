@@ -1,16 +1,14 @@
-// import le schema d'un Phrase
-const Phrase = require("../../../../../../../../../models/Phrase")
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/createPhrase"
+const LOC_GLOB = "file: ../util/../depthBottom/getStartUserId"
 
-// crée un objet mot
-exports.createPhrase = async (wordObjectsArray, req) => {
-    // test de la validité des données
-    const LOC_LOC = "methode: createPhrase"
+// retourn l'id utilisateur qui commence
+exports.getStartUserId = async (coinFlip, req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: coinFlipStartUserId"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -36,14 +34,16 @@ exports.createPhrase = async (wordObjectsArray, req) => {
         return null
     }
 
-    // crée un nouvel objet mot avec les info en parametre
-    // crée un objet phrase avec le tableaux
-    req.phrase = new Phrase({
-        words: wordObjectsArray
-    })
+    // retourn l'id utilisateur contenu dans la partie en fonction du test
+    if (coinFlip) {
+        req.startUserId = req.game.createurId
+        req.package.startUserId = req.game.createurId
 
-    req.package.phrase = req.phrase
+    } else {
+        req.startUserId = req.game.challengerId
+        req.package.startUserId = req.game.challengerId
 
-    // retourne la variable traitée pour la gestion d'erreur
+    }
+
     return req.package
 }

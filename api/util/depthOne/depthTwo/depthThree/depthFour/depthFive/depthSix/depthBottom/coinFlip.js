@@ -1,14 +1,15 @@
 
+
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/builtCheckCaseResult"
+const LOC_GLOB = "file: ../util/../depthBottom/coinFlip"
 
 // crée un objet mot
-exports.builtCheckCaseResult = async (req) => {
+exports.coinFlip = async (req) => {
     // test de la validité des données
-    const LOC_LOC = "methode: builtCheckCaseResult"
+    const LOC_LOC = "methode: coinFlip"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -34,14 +35,10 @@ exports.builtCheckCaseResult = async (req) => {
         return null
     }
 
-    // stoque le mot et le succes du check dans un objet résultat dans la requete
-    req.result = {
-        word: req.board.board[req.arrayY][req.arrayX],
-        result: true
-    }
-
-    req.package.result = req.result
-
+    // sort aléatoirement un résultat true or false et le stock dans la requette
+    req.coinFlip = Math.floor(Math.random() * 2) == 0
+    req.package.coinFlip = req.coinFlip
+    
     // retourne la variable traitée pour la gestion d'erreur
     return req.package
 }

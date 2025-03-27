@@ -1,5 +1,5 @@
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthBottom/testUserTurn"

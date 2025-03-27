@@ -1,13 +1,14 @@
-const Game = require('../../../../../../../../../models/Game')
+
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/updateGame"
+const LOC_GLOB = "file: ../util/../depthBottom/savePhrase"
 
-exports.updateGame = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: updateGame"
+// crée un objet mot
+exports.savePhrase = async (req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: savePhrase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -33,20 +34,15 @@ exports.updateGame = async (req) => {
         return null
     }
 
-    // update le tableau en fonction du contenu de la requete
-    await Game.updateOne({ _id: req.game._id }, {
-        $set: {
-            state: req.game.state,
-            createurId: req.game.createurId,
-            challengerId: req.game.challengerId
-        }
-    })
+    // enregistre le mot dans la base deonnées
+    await req.phrase.save()
         .then(value => {
-            req.gameUpdate = value
-            req.package.gameUpdate = value
-
+            // stoque le mot dans la requete
+            req.phrase = value
+            req.package.phrase = value
+            
             req.data.push({
-                name: "Game.updateOne",
+                name: "req.phrase.save()",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -54,12 +50,12 @@ exports.updateGame = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "Game.updateOne",
+                name: "req.phrase.save()",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // retourne la variable traitéeF pour la gestion d'erreur
+    // retourne la variable traitée pour la gestion d'erreur
     return req.package
 }

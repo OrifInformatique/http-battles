@@ -1,7 +1,7 @@
 // importe le package Mongoose qui facilittent les interactions avec la base donnée Mongodb
 const mongoose = require('mongoose');
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthBottom/queryConstructor"

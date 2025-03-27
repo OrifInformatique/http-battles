@@ -1,15 +1,17 @@
-const Word = require('../../../../../../../../../models/Word')
+
+// import le schema d'un Word
+const Word = require("../../../../../../../../models/Word")
+
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/updateWord"
+const LOC_GLOB = "file: ../util/../depthBottom/getWord"
 
-
-
-exports.updateWord = async (req) => {
-    // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: updateWord"
+// récupère le mot suivant son id
+exports.getWord = async (wordId, req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: getWord"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -35,21 +37,14 @@ exports.updateWord = async (req) => {
         return null
     }
 
-
-
-    // update le tableau en fonction du contenu de la requete
-    await Word.updateOne({ _id: req.word._id }, {
-        $set: {
-            content: req.word.content,
-            position: req.word.position,
-            revealed: req.word.revealed
-        }
-    })
+    // retourn le mot dans la base donée suivant son id
+    await Word.findOne({ _id: wordId })
         .then(value => {
-            req.wordUpdate = value
-            req.package.wordUpdate = value
+            // stoque le mot dans la requete
+            req.word = value
+            req.package.word = value
             req.data.push({
-                name: "Word.updateOne",
+                name: "Word.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -57,7 +52,7 @@ exports.updateWord = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "Word.updateOne",
+                name: "Word.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -66,5 +61,3 @@ exports.updateWord = async (req) => {
     // retourne la variable traitée pour la gestion d'erreur
     return req.package
 }
-
-

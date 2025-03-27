@@ -1,33 +1,24 @@
-
-
 // import le schema d'un Board
 const Board = require("../../../../../../../../models/Board")
 
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../check')
 
-// import fonctions util pour board
-const utilGetBoard = require('./depthBottom/getBoard')
+const utilQueryConstructor = require('../depthBottom/queryConstructor')
 
-// import fonctions util pour board
-const utilUpdateBoard = require('./depthBottom/updateBoard')
-
-const utilQueryConstructXgetBoard = require('./queryConstructXgetboard')
+const utilGetBoard = require('../depthBottom/getBoard')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthEight/updateBoardXgetBoard"
+const LOC_GLOB = "file: ../util/../crossRoad/queryConstructXgetBoard"
 
 /*
 subFunctions
-    -utilUpdateBoard.updateBoard
-    -utilQueryConstructXgetBoard.queryConstructXgetBoard
-        -utilQueryConstructor.queryConstructor
-        -utilGetBoard.getBoard
+    -utilQueryConstructor.queryConstructor
+    -utilGetBoard.getBoard
 */
-// update le plateau
-exports.updateBoardXgetBoard = async (req) => {
+exports.queryConstructXgetBoard = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: updateBoard"
+    const LOC_LOC = "methode: queryConstructXgetBoard"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -53,15 +44,13 @@ exports.updateBoardXgetBoard = async (req) => {
         return null
     }
 
-    // update le tableau en fonction du contenu de la requete
-    await utilUpdateBoard.updateBoard(req)
+    await utilQueryConstructor.queryConstructor(req)
         .then(value => {
-            // stoque le tableaux dans la requete
-            req.boardUpdate = value.boardUpdate
-            req.package.boardUpdate = value.boardUpdate
+            req.query = value.query
+            req.package.query = value.query
 
             req.data.push({
-                name: "utilUpdateBoard.updateBoard",
+                name: "utilQueryConstructor.queryConstructor",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -69,23 +58,19 @@ exports.updateBoardXgetBoard = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilUpdateBoard.updateBoard",
+                name: "utilQueryConstructor.queryConstructor",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    req.boardIdQuery = req.board._id
-
-    // récupère le tableau après l'update
-    await utilQueryConstructXgetBoard.queryConstructXgetBoard(req)
+    await utilGetBoard.getBoard(req)
         .then(value => {
-            // stoque le tableaux dans la requete
             req.board = value.board
             req.package.board = value.board
 
             req.data.push({
-                name: "utilQueryConstructXgetBoard.queryConstructXgetBoard",
+                name: "utilGetBoard.getBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -93,12 +78,12 @@ exports.updateBoardXgetBoard = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilQueryConstructXgetBoard.queryConstructXgetBoard",
+                name: "utilGetBoard.getBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
-        
-    // retourne la variable traitéeF pour la gestion d'erreur
+
     return req.package
+
 }

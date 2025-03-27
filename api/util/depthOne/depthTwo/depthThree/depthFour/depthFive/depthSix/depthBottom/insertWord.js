@@ -1,13 +1,14 @@
 
 // import fonctions util pour check
-const utilCheck = require('../../../../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/getOtherUserId"
+const LOC_GLOB = "file: ../util/../depthBottom/insertWord"
 
-exports.getOtherUserId = async (req) => {
+// insert les mot de la phrase dans les case du plateaux si leurs positions est égal
+exports.insertWord = async (userPhrase, keyY, keyW, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getOtherUserId"
+    const LOC_LOC = "methode: insertWord"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -33,18 +34,11 @@ exports.getOtherUserId = async (req) => {
         return null
     }
 
-    // si le client est le créateur, retourn l'id du challenger
-    if (req.auth.userId === req.game.createurId) {
+    // si oui, rempli la case avec le mot
+    req.newBoardFull[keyY].push(userPhrase.words[keyW])
+    req.package.newBoardFull[keyY].push(userPhrase.words[keyW])
 
-        req.otherUserId = req.game.challengerId
-        req.package.otherUserId = req.game.challengerId
 
-    } else {
-        // sinon retourn l'id du créateur créateur
-        req.otherUserId = req.game.createurId
-        req.package.otherUserId = req.game.createurId
-
-    }
-
+    // retourne la variable traitéeF pour la gestion d'erreur
     return req.package
 }

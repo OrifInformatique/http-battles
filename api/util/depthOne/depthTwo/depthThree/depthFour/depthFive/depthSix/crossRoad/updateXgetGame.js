@@ -8,7 +8,7 @@ const utilCheck = require('../../../../../../../check')
 const utilGetGame = require('../../../getGame')
 
 // import fonctions util pour board
-const utilUpdateGame = require('./depthBottom/updateGame')
+const utilUpdateGame = require('../depthBottom/updateGame')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/depthOne/depthTwo/updateXgetGame"
