@@ -3,10 +3,19 @@
 const utilCheck = require('../../../../check')
 
 // import les fonction utiles pour tryPhrase
-const utilTryCase = require('./depthFive/tryCase')
+const utilTryCaseOld = require('./depthFive/tryCase')
+
+// import les fonction utiles pour tryPhrase
+const utilTryCase = require('./depthFive/depthSix/depthBottom/trycase')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthFour/tryCase"
+
+// import les fonction utiles pour switchArrayX
+const utilSwitchArrayX = require('./depthFive/depthSix/depthBottom/switchArrayX')
+
+// import les fonction utiles pour switchArrayY
+const utilSwitchArrayY = require('./depthFive/depthSix/depthBottom/switchArrayY')
 
 exports.switchArrays = async (req) => {
     // location local pour la gestion d'erreur
@@ -37,14 +46,14 @@ exports.switchArrays = async (req) => {
     }
 
     // retourne la position X de la case sur le plateaux en fonction de la route utilisée
-    await utilTryCase.switchArrayX(req.route, req)
+    await utilSwitchArrayX.switchArrayX(req.route, req)
         .then(value => {
             // stoque la position X du plateau dans la requette
             req.package.arrayX = value
             req.arrayX = value
 
             req.data.push({
-                name: "utilTryCase.switchArrayX",
+                name: "utilSwitchArrayX.switchArrayX",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -52,21 +61,21 @@ exports.switchArrays = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilTryCase.switchArrayX",
+                name: "utilSwitchArrayX.switchArrayX",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
     // retourne la position y de la case sur le plateaux en fonction de la méthode utilisée
-    await utilTryCase.switchArrayY(req.method, req)
+    await utilSwitchArrayY.switchArrayY(req.method, req)
         .then(value => {
             // stoque la position Y du plateau dans la requette
             req.package.arrayY = value
             req.arrayY = value
 
             req.data.push({
-                name: "utilTryCase.switchArrayY",
+                name: "utilSwitchArrayY.switchArrayY",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -74,7 +83,7 @@ exports.switchArrays = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilTryCase.switchArrayY",
+                name: "utilSwitchArrayY.switchArrayY",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -112,7 +121,7 @@ exports.checkBoardAndTryCase = async (req) => {
     }
 
     // test une case du plateau
-    await utilTryCase.checkBoard(req.body.gameId, req.otherUserId, req)
+    await utilTryCaseOld.checkBoard(req.body.gameId, req.otherUserId, req)
         .then(value => {
             // stoque le resultat (inclue le mot si réussi)
             req.check = value

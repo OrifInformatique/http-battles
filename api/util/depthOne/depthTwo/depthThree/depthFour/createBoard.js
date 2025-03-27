@@ -4,7 +4,7 @@ const Board = require("../../../../../models/Board")
 // import fonctions util pour check
 const utilCheck = require('../../../../check')
 
-const utilSaveBoard = require('./depthFive/saveBoard')
+const utilSaveBoard = require('./depthFive/depthSix/depthBottom/saveBoard')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthFour/createBoard"

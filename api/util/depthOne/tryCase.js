@@ -35,7 +35,7 @@ exports.tryCaseAndSwitchTurn = async (req) => {
     if (req.utilCheck) {
         return null
     }
-
+    
     await utilTryCase.getOtherBoardAndTryCase(req)
         .then(value => {
             // stoque l'id de l'opposant dans la requette

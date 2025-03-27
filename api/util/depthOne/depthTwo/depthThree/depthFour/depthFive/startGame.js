@@ -34,7 +34,7 @@ const LOC_GLOB = "file: ../util/depthOne/depthTwo/depthThree/depthFour/depthFive
 
 /*
 subFunctions
-    -this.startCoinFlip
+    -this.coinFlipXupdateGame
         -this.coinFlipXGetStart
             -this.getStartUserIdXGameState
                 -utilGetStartUserId.getStartUserId
@@ -42,14 +42,15 @@ subFunctions
         -utilUpdateXgetGame.updateXgetGame
             -utilUpdateGame.updateGame
             -utilGetGame.getGame
-    -this.testTurnUserId
+    -this.testGameStateXclientTurn
         -this.testGameStateAndUserTurn
             -utilTestUserTurn.testUserTurn
-        -utilGetOtherUserId.getOtherUserId
+        -this.testClientOrAdvTurn
+            -utilGetOtherUserId.getOtherUserId
 */
-exports.checkStartUserId = async (req) => {
+exports.testStartUserChoiceMethode = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: checkStartUserId"
+    const LOC_LOC = "methode: testStartUserChoiceMethode"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -78,20 +79,20 @@ exports.checkStartUserId = async (req) => {
     // test si la partie a déjà commencé
     if (req.check) {
         // si non (true) décide aléatoirement quel joueur commence et retourn son id
-        await this.startCoinFlip(req)
+        await this.coinFlipXupdateGame(req)
             .then(value => {
                 // stoque l'id du joueur qui commence
                 req.startUserId = value
 
                 req.data.push({
-                    name: "this.startCoinFlip",
+                    name: "this.coinFlipXupdateGame",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
             })
             .catch(error => {
                 req.data.push({
-                    name: "this.startCoinFlip",
+                    name: "this.coinFlipXupdateGame",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })
@@ -99,13 +100,13 @@ exports.checkStartUserId = async (req) => {
 
     } else {
         // si oui (false), test de quel joueur c'est le tour et retourn son id
-        await this.testTurnUserId(req)
+        await this.testGameStateXclientTurn(req)
             .then(value => {
                 // stoque l'id du joueur qui commence
                 req.startUserId = value.startUserId
 
                 req.data.push({
-                    name: "this.testTurnUserId",
+                    name: "this.testGameStateXclientTurn",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
@@ -113,7 +114,7 @@ exports.checkStartUserId = async (req) => {
             .catch(error => {
                 console.log(error)
                 req.data.push({
-                    name: "this.testTurnUserId",
+                    name: "this.testGameStateXclientTurn",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })
@@ -135,9 +136,9 @@ subFunctions
         -utilGetGame.getGame
 */
 // choisit aléatoirement le premier utilisateur à commencer
-exports.startCoinFlip = async (req, res) => {
+exports.coinFlipXupdateGame = async (req, res) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: startCoinFlip"
+    const LOC_LOC = "methode: coinFlipXupdateGame"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -379,12 +380,13 @@ exports.getStartUserIdXGameState = async (req) => {
 subFunctions
     -this.testGameStateAndUserTurn
         -utilTestUserTurn.testUserTurn
-    -utilGetOtherUserId.getOtherUserId
+    -this.testClientOrAdvTurn
+        -utilGetOtherUserId.getOtherUserId
 */
 // test si il s'agit du tour du client et renvoie l'identifiant du client qui commence
-exports.testTurnUserId = async (req) => {
+exports.testGameStateXclientTurn = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: testTurnUserId"
+    const LOC_LOC = "methode: testGameStateXclientTurn"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -431,6 +433,61 @@ exports.testTurnUserId = async (req) => {
                 error: error
             })
         })
+
+    await this.testClientOrAdvTurn(req)
+        .then(value => {
+            req.startUserId = value.startUserId
+                req.package.startUserId = value.startUserId
+
+            req.data.push({
+                name: "this.testClientOrAdvTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.testClientOrAdvTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    return req.package
+}
+
+/*
+subFunctions
+    -utilGetOtherUserId.getOtherUserId
+*/
+exports.testClientOrAdvTurn = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: testTurnUserId"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
 
     // suivant le resultat du test
     if (req.turn.message === "CLIENT_TURN") {
@@ -574,9 +631,9 @@ subFunctions
                 -this.testTableVoid
                     -utilInsertBlank.insertBlank
 */
-exports.insertPhrase = async (req) => {
+exports.createPhraseXloopTable = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: insertPhrase"
+    const LOC_LOC = "methode: createPhraseXloopTable"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)

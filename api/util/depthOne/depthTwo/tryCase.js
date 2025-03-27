@@ -5,6 +5,9 @@ const utilCheck = require('../../check')
 // import les fonction utiles pour getUser
 const utilGetOtherUserId = require('./depthThree/depthFour/depthFive/depthSix/depthBottom/getOtherUserId')
 
+// import les fonction utiles pour getUser
+const utilGetGame = require('./depthThree/depthFour/getGame')
+
 // import les fonction utiles pour endGame
 const utilTryCase = require('./depthThree/tryCase')
 
@@ -39,15 +42,19 @@ exports.getOtherBoardAndTryCase = async (req) => {
         return null
     }
 
-    // récupère l'identifiant de l'opposant du client dans la partie en cours
-    await utilGetOtherUserId.getOtherUserId(req)
+    await this.getGameXgetOtherUserId(req)
         .then(value => {
+            // stoque l'id de l'opposant dans la requette
+            req.package.game = value.game
+            req.game = value.game
+
             // stoque l'id de l'opposant dans la requette
             req.package.otherUserId = value.otherUserId
             req.otherUserId = value.otherUserId
 
+
             req.data.push({
-                name: "utilGetOtherUserId.getOtherUserId",
+                name: "this.getGameXgetOtherUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -55,11 +62,12 @@ exports.getOtherBoardAndTryCase = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGetOtherUserId.getOtherUserId",
+                name: "this.getGameXgetOtherUserId",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
+        
 
     await utilTryCase.checkArrayBoardAndTryCase(req)
         .then(value => {
@@ -138,3 +146,76 @@ exports.switchTurn = async (req) => {
     return req.state
 }
 
+exports.getGameXgetOtherUserId = async (req) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: getGameXgetOtherUserId"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilGetGame.getGame(req)
+        .then(value => {
+            // stoque l'id de l'opposant dans la requette
+            req.package.game = value
+            req.game = value
+
+            req.data.push({
+                name: "utilGetGame.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGetGame.getGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+        
+    // récupère l'identifiant de l'opposant du client dans la partie en cours
+    await utilGetOtherUserId.getOtherUserId(req)
+        .then(value => {
+            // stoque l'id de l'opposant dans la requette
+            req.package.otherUserId = value.otherUserId
+            req.otherUserId = value.otherUserId
+
+            req.data.push({
+                name: "utilGetOtherUserId.getOtherUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGetOtherUserId.getOtherUserId",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+        return req.package
+}

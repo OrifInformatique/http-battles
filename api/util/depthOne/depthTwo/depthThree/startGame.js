@@ -15,6 +15,7 @@ const utilCreateBoard = require('./depthFour/createBoard')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/depthOne/../depthThree/startGame"
 
+
 exports.getGameAndCheckStart = async (req) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: getGameAndCheckStartStat"

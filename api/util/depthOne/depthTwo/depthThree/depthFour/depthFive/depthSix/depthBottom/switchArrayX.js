@@ -1,13 +1,13 @@
-
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/getOtherUserId"
+const LOC_GLOB = "file: ../util/../depthBottom/switxhArrayX"
 
-exports.getOtherUserId = async (req) => {
+// retourn la position x sur le plateau en fonction de la route utilisée
+exports.switchArrayX = async (requestRoad, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getOtherUserId"
+    const LOC_LOC = "methode: switchArrayX"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -32,19 +32,26 @@ exports.getOtherUserId = async (req) => {
     if (req.utilCheck) {
         return null
     }
-    
-    // si le client est le créateur, retourn l'id du challenger
-    if (req.auth.userId === req.game.createurId) {
 
-        req.otherUserId = req.game.challengerId
-        req.package.otherUserId = req.game.challengerId
+    // retourn la position x sur le plateau en fonction de la route utilisée
+    switch (requestRoad) {
 
-    } else {
-        // sinon retourn l'id du créateur créateur
-        req.otherUserId = req.game.createurId
-        req.package.otherUserId = req.game.createurId
+        case "A":
+
+            return arrayX = 0
+
+        case "B":
+
+            return arrayX = 1
+
+
+        case "C":
+
+            return arrayX = 2
+
+        case "D":
+
+            return arrayX = 3
 
     }
-
-    return req.package
 }

@@ -1,8 +1,8 @@
 // import fonctions util pour check
-const utilCheck = require('../../../../../check')
+const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthFive/saveBoard"
+const LOC_GLOB = "file: ../util/../depthBottom/saveBoard"
 
 // stoque le plateua dans la requete
 exports.saveBoard = async (board, req) => {

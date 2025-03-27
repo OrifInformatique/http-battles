@@ -1,13 +1,12 @@
-
 // import fonctions util pour check
 const utilCheck = require('../../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/getOtherUserId"
+const LOC_GLOB = "file: ../util/../depthBottom/tryCase"
 
-exports.getOtherUserId = async (req) => {
+exports.tryCase = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getOtherUserId"
+    const LOC_LOC = "methode: tryCase"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -32,19 +31,26 @@ exports.getOtherUserId = async (req) => {
     if (req.utilCheck) {
         return null
     }
-    
-    // si le client est le créateur, retourn l'id du challenger
-    if (req.auth.userId === req.game.createurId) {
 
-        req.otherUserId = req.game.challengerId
-        req.package.otherUserId = req.game.challengerId
+    // si le test de la case est réussi
+    if (req.check.result) {
 
+        // stoque  un message de success contenant le text, la case testé, le mot et sa position dans la requette
+        req.tryCaseMessage = {
+            case: req.method + " " + req.route,
+            result: "Touché!",
+            word: req.check.word.content,
+            position: req.check.word.position
+        }
+        // si le test est un echèque
     } else {
-        // sinon retourn l'id du créateur créateur
-        req.otherUserId = req.game.createurId
-        req.package.otherUserId = req.game.createurId
-
+        // stoque un message d'échque avec la case testée
+        req.tryCaseMessage = {
+            case: req.method + " " + req.route,
+            result: "Manqué!"
+        }
     }
 
-    return req.package
+    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
+    return req.tryCaseMessage
 }

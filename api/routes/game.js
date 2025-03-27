@@ -32,7 +32,7 @@ router.post('/games/endGame', auth, check.dataInit, check.checkReqDataEndGame, m
 router.get('/games/tryPhrase', auth, check.dataInit, check.checkReqDataTryPhrase, /*check.checkTurn,*/ middleGame.tryPhrase, check.logInit, check.dataValidity, gameCtrl.tryPhrase)
 
 // routes pour le jeux
-router.all('/games/tryA', auth, check.dataInit, check.checkReqDataTryCase, check.checkTurn, routeParam.a, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)
+router.all('/games/tryA', auth, check.dataInit, check.checkReqDataTryCase, /*check.checkTurn,*/ routeParam.a, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)
 
 router.all('/games/tryB', auth, check.dataInit, check.checkReqDataTryCase, check.checkTurn, routeParam.b, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)
 
