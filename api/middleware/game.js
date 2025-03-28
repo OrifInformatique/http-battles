@@ -14,6 +14,9 @@ const utilUpdateGameV2 = require('../util/game/update')
 // import fonctions util pour game
 const utilCreatePlayerV2 = require('../util/player/create')
 
+// import fonctions util pour game
+const utilFindPlayerV2 = require('../util/player/find')
+
 // import fonctions util pour board
 const utilCheck = require('../util/check')
 
@@ -130,6 +133,47 @@ exports.findGamesV2 = async (req, res, next) => {
                 error: error
             })
         })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+    req.body.gamesPlayers = []
+    
+    for (const game in req.body.games) {
+        req.body.playerId = undefined
+        req.body.gameIdV2 = req.body.games[game]._id
+        req.body.userId = undefined
+        req.body.playerStatus = undefined
+
+        await utilFindPlayerV2.findPlayer(req)
+            .then(value => {
+                req.data.push({
+                    name: "utilFindPlayerV2.findPlayer",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilFindPlayerV2.findPlayer",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+
+        
+        req.body.gamesPlayers.push({
+            game: req.body.games[game],
+            players: req.body.players
+        })
+
+        // stop la méthode en cas d'échèque du test
+        if (req.utilCheck) {
+            return null
+        }
+    }
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -338,6 +382,59 @@ exports.createGameV2 = async (req, res, next) => {
                 error: error
             })
         })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    req.body.gameStatus = "WAITING_CHALLENGER"
+
+    await utilUpdateGameV2.updateGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilCreatePlayerV2.createPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCreatePlayerV2.createPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilFindGameV2.findGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    req.body.game = req.body.games[0]
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
