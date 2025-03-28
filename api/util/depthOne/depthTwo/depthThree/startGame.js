@@ -66,7 +66,7 @@ exports.getGameAndCheckStart = async (req) => {
         })
 
     // check si la partie a commencé (true = non, false = oui)
-    await utilStartGame.checkStart(req)
+    await utilStartGame.checkStartStateXtestStartUser(req)
         .then(value => {
             // stoque le resultat dans la requete
             req.package.check = value.check
@@ -76,7 +76,7 @@ exports.getGameAndCheckStart = async (req) => {
             req.startUserId = value.startUserId
 
             req.data.push({
-                name: "utilGame.checkStart",
+                name: "utilGame.checkStartStateXtestStartUser",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -84,7 +84,7 @@ exports.getGameAndCheckStart = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilGame.checkStart",
+                name: "utilGame.checkStartStateXtestStartUser",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -224,7 +224,7 @@ exports.createBoardAndInsertPhrase = async (req) => {
             })
         })
 
-    await utilStartGame.insertAndSavePhrase(req)
+    await utilStartGame.createPhraseXupdateBoard(req)
         .then(value => {
             // insert la phrase (objet) dans le plateau (objet) del requete
             req.package.board.phrase = value.board.phrase
@@ -238,7 +238,7 @@ exports.createBoardAndInsertPhrase = async (req) => {
             req.board = value.board
 
             req.data.push({
-                name: "utilStartGame.insertPhrase",
+                name: "utilStartGame.createPhraseXupdateBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -246,7 +246,7 @@ exports.createBoardAndInsertPhrase = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilStartGame.insertPhrase",
+                name: "utilStartGame.createPhraseXupdateBoard",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

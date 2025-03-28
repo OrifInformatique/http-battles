@@ -4,37 +4,37 @@
 const utilCheck = require('../../../../check')
 
 // import les fonction utiles pour utilisateur
-const utilCheckStartState = require('./depthFive/depthSix/depthBottom/checkStartState')
+const utilCheckStartState = require('./depthFive/depthBottom/checkStartState')
 
 // import les fonction utiles pour utilisateur
-const utilUpdateBoardXgetBoard = require('./depthFive/depthSix/crossRoad/updateBoardXgetBoard')
+const utilUpdateBoardXgetBoard = require('./depthFive/crossRoad/updateBoardXgetBoard')
 
 // import les fonction utiles pour utilisateur
-const utilGetOtherUserId = require('./depthFive/depthSix/depthBottom/getOtherUserId')
+const utilGetOtherUserId = require('./depthFive/depthBottom/getOtherUserId')
 
 // import les fonction utiles pour utilisateur
-const utilUpdateXgetGame = require('./depthFive/depthSix/crossRoad/updateXgetGame')
+const utilUpdateXgetGame = require('./depthFive/crossRoad/updateXgetGame')
 
 // import les fonction utiles pour testUserTurn
-const utilTestUserTurn = require('./depthFive/depthSix/depthBottom/testUserTurn')
+const utilTestUserTurn = require('./depthFive/depthBottom/testUserTurn')
 
-const utilGetStartUserId = require('./depthFive/depthSix/depthBottom/getStartUserId')
+const utilGetStartUserId = require('./depthFive/depthBottom/getStartUserId')
 
-const utilGetStartGameState = require('./depthFive/depthSix/depthBottom/getStartGameState')
+const utilGetStartGameState = require('./depthFive/depthBottom/getStartGameState')
 
-const utilCoinFlip = require('./depthFive/depthSix/depthBottom/coinFlip')
+const utilCoinFlip = require('./depthFive/depthBottom/coinFlip')
 
-const utilInsertWord = require('./depthFive/depthSix/depthBottom/insertWord')
+const utilInsertWord = require('./depthFive/depthBottom/insertWord')
 
-const utilInsertBlank = require('./depthFive/depthSix/depthBottom/insertBlank')
+const utilInsertBlank = require('./depthFive/depthBottom/insertBlank')
 
-const utilCreateWord = require('./depthFive/depthSix/depthBottom/createWord')
+const utilCreateWord = require('./depthFive/depthBottom/createWord')
 
-const utilSaveWord = require('./depthFive/depthSix/depthBottom/saveWord')
+const utilSaveWord = require('./depthFive/depthBottom/saveWord')
 
-const utilCreatePhrase = require('./depthFive/depthSix/depthBottom/createPhrase')
+const utilCreatePhrase = require('./depthFive/depthBottom/createPhrase')
 
-const utilSavePhrase = require('./depthFive/depthSix/depthBottom/savePhrase')
+const utilSavePhrase = require('./depthFive/depthBottom/savePhrase')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/../depthFour/startGame"
@@ -58,9 +58,9 @@ subFunctions
             -this.testClientOrAdvTurn
                 -utilGetOtherUserId.getOtherUserId
 */
-exports.checkStart = async (req) => {
+exports.checkStartStateXtestStartUser = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: checkStart"
+    const LOC_LOC = "methode: checkStartStateXtestStartUser"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -797,11 +797,26 @@ exports.testClientOrAdvTurn = async (req) => {
 /*
 subFunctions
     -this.createPhraseXloopTable
+        -this.loopXcreatePhrase
+            -this.loopPhraseAndCreateWord
+                -this.createXsaveWord
+                    -utilCreateWord.createWord
+                    -utilSaveWord.saveWord
+            -this.createXsavePhrase
+                -utilCreatePhrase.createPhrase
+                -utilSavePhrase.savePhrase
+        -this.columnLoopAndLineLoop
+            -this.lineLoopAndPhraseLoop
+                -this.phraseLoopAndTestCase
+                    -this.testTableWord
+                        -utilInsertWord.insertWord
+                    -this.testTableVoid
+                        -utilInsertBlank.insertBlank
     -utilUpdateBoardXgetBoard.updateBoardXgetBoard
 */
-exports.insertAndSavePhrase = async (req) => {
+exports.createPhraseXupdateBoard = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: insertAndSavePhrase"
+    const LOC_LOC = "methode: createPhraseXupdateBoard"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)

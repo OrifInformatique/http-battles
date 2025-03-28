@@ -1,26 +1,9 @@
-// import le schema d'un utilisateur
-const Game = require("../../models/Game")
 
 // import fonctions util pour check
 const utilCheck = require('../check')
 
-// import fonctions util pour game
-const utilGame = require('../game')
-
-// import les fonction utiles pour utilisateur
-const utilGetUser = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/depthBottom/getUserById')
-
-// import les fonction utiles pour utilisateur
-const utilJoinGame = require('../depthOne/depthTwo/joinGame')
-
-// import les fonction utiles pour utilisateur
-const utilUpdategame = require('./depthTwo/depthThree/depthFour/depthFive/depthSix/crossRoad/updateXgetGame')
-
 // import les fonction utiles pour utilisateur
 const utilStartGame = require('../depthOne/depthTwo/startGame')
-
-// import fonctions util pour user
-const utilUser = require('../user')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/depthOne/startGame"

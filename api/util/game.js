@@ -45,7 +45,7 @@ const utilGetGame = require('../util/depthOne/depthTwo/depthThree/depthFour/getG
 
 
 // import les fonction utiles pour updateGame
-const utilUpdateGame = require('./depthOne/depthTwo/depthThree/depthFour/depthFive/depthSix/crossRoad/updateXgetGame')
+const utilUpdateGame = require('./depthOne/depthTwo/depthThree/depthFour/depthFive/crossRoad/updateXgetGame')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game"

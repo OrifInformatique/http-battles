@@ -1,18 +1,15 @@
-// import le schema d'un Board
-const Board = require("../../../../../models/Board")
-
+const Word = require('../../../../../../../models/Word')
 // import fonctions util pour check
-const utilCheck = require('../../../../check')
-
-const utilSaveBoard = require('./depthFive/depthBottom/saveBoard')
+const utilCheck = require('../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthFour/createBoard"
+const LOC_GLOB = "file: ../util/../depthBottom/updateWord"
 
-// crée un plateau de jeux
-exports.createBoard = async (gameId, userId, req) => {
+
+
+exports.updateWord = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: createBoard"
+    const LOC_LOC = "methode: updateWord"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -38,27 +35,21 @@ exports.createBoard = async (gameId, userId, req) => {
         return null
     }
 
-    // crée un nouveaux plateau de jeux
-    const board = new Board({
-        gameId: gameId,
-        userId: userId,
-        board: [
-            [null, null, null, null],
-            [null, null, null, null],
-            [null, null, null, null],
-            [null, null, null, null]
-        ]
+
+
+    // update le tableau en fonction du contenu de la requete
+    await Word.updateOne({ _id: req.word._id }, {
+        $set: {
+            content: req.word.content,
+            position: req.word.position,
+            revealed: req.word.revealed
+        }
     })
-
-
-
-    // stoque le plateau dans la base donnée
-    await utilSaveBoard.saveBoard(board, req)
         .then(value => {
-            // retourne le plateau sauvegarder et le stoque dans la requete
-            req.newBoard = value
+            req.wordUpdate = value
+            req.package.wordUpdate = value
             req.data.push({
-                name: "utilSaveBoard.saveBoard",
+                name: "Word.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -66,13 +57,14 @@ exports.createBoard = async (gameId, userId, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilSaveBoard.saveBoard",
+                name: "Word.updateOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-
-    // retourne la variable traité pour la gestion d'erreur
-    return req.newBoard
+    // retourne la variable traitée pour la gestion d'erreur
+    return req.package
 }
+
+

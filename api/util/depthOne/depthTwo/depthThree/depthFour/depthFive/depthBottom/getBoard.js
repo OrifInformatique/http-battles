@@ -1,18 +1,15 @@
-// import le schema d'un Board
-const Board = require("../../../../../models/Board")
-
+const Board = require('../../../../../../../models/Board')
 // import fonctions util pour check
-const utilCheck = require('../../../../check')
-
-const utilSaveBoard = require('./depthFive/depthBottom/saveBoard')
+const utilCheck = require('../../../../../../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthFour/createBoard"
+const LOC_GLOB = "file: ../util/../depthBottom/getBoard"
 
-// crée un plateau de jeux
-exports.createBoard = async (gameId, userId, req) => {
+
+// retourne le plateau selon son id
+exports.getBoard = async (req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: createBoard"
+    const LOC_LOC = "methode: getBoard"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -38,27 +35,14 @@ exports.createBoard = async (gameId, userId, req) => {
         return null
     }
 
-    // crée un nouveaux plateau de jeux
-    const board = new Board({
-        gameId: gameId,
-        userId: userId,
-        board: [
-            [null, null, null, null],
-            [null, null, null, null],
-            [null, null, null, null],
-            [null, null, null, null]
-        ]
-    })
-
-
-
-    // stoque le plateau dans la base donnée
-    await utilSaveBoard.saveBoard(board, req)
+    // récupère le plateau dans la base données selon son id
+    await Board.findOne(req.query)
         .then(value => {
-            // retourne le plateau sauvegarder et le stoque dans la requete
-            req.newBoard = value
+            // stoque le plateau dans la requete
+            req.board = value
+            req.package.board = value
             req.data.push({
-                name: "utilSaveBoard.saveBoard",
+                name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -66,13 +50,14 @@ exports.createBoard = async (gameId, userId, req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilSaveBoard.saveBoard",
+                name: "Board.findOne",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-
-    // retourne la variable traité pour la gestion d'erreur
-    return req.newBoard
+    // retourne la variable traitéeF pour la gestion d'erreur
+    return req.package
 }
+
+
