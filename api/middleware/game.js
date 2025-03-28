@@ -2,6 +2,17 @@
 // import fonctions util pour game
 const utilGame = require('../util/game')
 
+// import fonctions util pour game
+const utilCreateGameV2 = require('../util/game/create')
+
+// import fonctions util pour game
+const utilFindGameV2 = require('../util/game/find')
+
+// import fonctions util pour game
+const utilUpdateGameV2 = require('../util/game/update')
+
+// import fonctions util pour game
+const utilCreatePlayerV2 = require('../util/player/create')
 
 // import fonctions util pour board
 const utilCheck = require('../util/check')
@@ -72,6 +83,61 @@ exports.findGame = async (req, res, next) => {
 
     // retourne la variable traité pour la gestion d'erreur en dehors des middleware
     return req.package
+}
+
+exports.findGamesV2 = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: findGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilFindGameV2.findGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    // retourne la variable traité pour la gestion d'erreur en dehors des middleware
+    return req.body
 }
 
 // retourne toute les partie
@@ -197,9 +263,89 @@ exports.createGame = async (req, res, next) => {
     if (next !== undefined) {
         next()
     }
-    
+
     // retourn la variable traité pour la gestion d'erreur en dehors des middleware
     return req.package
+}
+
+// crée un objet jeux et le retourn
+exports.createGameV2 = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: createGameV2"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilCreateGameV2.createGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilCreateGameV2.createGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCreateGameV2.createGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    req.body.gameIdV2 = req.body.game._id
+    req.body.userId = req.body.game.creatorId
+
+    await utilCreatePlayerV2.createPlayer(req)
+        .then(value => {
+            req.data.push({
+                name: "utilCreatePlayerV2.createPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCreatePlayerV2.createPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    // retourn la variable traité pour la gestion d'erreur en dehors des middleware
+    return req.body
 }
 
 exports.checkTurn = async (req, res, next) => {
@@ -310,7 +456,7 @@ exports.startGame = async (req, res, next) => {
     if (req.package === undefined) {
         req.package = {}
     }
-    
+
     await utilGame.startGame(req)
         .then(value => {
             req.package.game = value.game

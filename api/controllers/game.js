@@ -15,10 +15,25 @@ exports.createGame = async (req, res, next) => {
     }, res)
 }
 
+// crée une partie
+exports.createGameV2 = async (req, res, next) => {
+    utilRes.sendSuccess(200, {
+        game: req.body.game,
+        player: req.body.player
+    }, res)
+}
+
 // trouve une partie 
 exports.findGame = async (req, res, next) => {
 
     utilRes.sendSuccess(200, req.formatedGame, res)
+}
+
+// trouve une partie 
+exports.findGamesV2 = async (req, res, next) => {
+    utilRes.sendSuccess(200, {
+        games: req.body.games
+    }, res)
 }
 
 // liste les parties

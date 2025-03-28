@@ -16,10 +16,19 @@ const middleGame = require('../middleware/game')
 
 // créé une partie pour cette utilisateur
 router.get('/games/createGame', auth, check.dataInit, middleGame.createGame, check.logInit, check.dataValidity, gameCtrl.createGame)
+
+// créé une partie pour cette utilisateur
+router.post('/games/createGameV2', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)
+
 // trouve une partie selon la clefs
 router.get('/games/findGame', auth, check.dataInit, check.checkReqDataFindGame, middleGame.findGame, check.logInit, check.dataValidity, gameCtrl.findGame)
+
+// trouve une partie selon la clefs
+router.get('/games/findGamesV2', auth, check.dataInit, middleGame.findGamesV2, check.logInit, check.dataValidity, gameCtrl.findGamesV2)
+
 // liste toute les partie en attente
 router.get('/games/listGames', auth, check.dataInit, middleGame.listGames, check.logInit, check.dataValidity, gameCtrl.listGames)
+
 // permet à un utilisateur de rjoindre une partie
 router.post('/games/joinGame', auth, check.dataInit, check.checkReqDataJoinGame, middleGame.joinGame, check.logInit, check.dataValidity, gameCtrl.joinGame)
 // commence la partie
