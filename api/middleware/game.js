@@ -88,6 +88,13 @@ exports.findGame = async (req, res, next) => {
     return req.package
 }
 
+/**
+ * 
+ * @param {*} optional  req.body.gameIdV2
+ * @param {*} optional  req.body.creatorId
+ * @param {*} optional  req.body.gameStatus
+ * @returns             req.body.gamesPlayers
+ */
 exports.findGamesV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: findGame"
@@ -143,8 +150,10 @@ exports.findGamesV2 = async (req, res, next) => {
     req.body.gamesPlayers = []
 
     for (const game in req.body.games) {
-        req.body.playerId = undefined
+
         req.body.gameIdV2 = req.body.games[game]._id
+
+        req.body.playerId = undefined
         req.body.userId = undefined
         req.body.playerStatus = undefined
 
@@ -315,6 +324,12 @@ exports.createGame = async (req, res, next) => {
     return req.package
 }
 
+/**
+ * 
+ * @param {*}   obligatory: req.auth.userId
+ * @returns                 req.body.game
+ * @returns                 req.body.player
+ */
 // crée un objet jeux et le retourn
 exports.createGameV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -343,6 +358,8 @@ exports.createGameV2 = async (req, res, next) => {
     if (req.utilCheck) {
         return null
     }
+
+    req.body.gameStatus = "WAITING_CHALLENGER"
 
     await utilCreateGameV2.createGame(req)
         .then(value => {
@@ -382,54 +399,6 @@ exports.createGameV2 = async (req, res, next) => {
             console.log(error)
             req.data.push({
                 name: "utilCreatePlayerV2.createPlayer",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        next()
-        return null
-    }
-
-    req.body.gameStatus = "WAITING_CHALLENGER"
-
-    await utilUpdateGameV2.updateGame(req)
-        .then(value => {
-            req.data.push({
-                name: "utilUpdateGameV2.updateGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilUpdateGameV2.updateGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        next()
-        return null
-    }
-
-    await utilFindGameV2.findGame(req)
-        .then(value => {
-            req.data.push({
-                name: "utilFindGameV2.findGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilFindGameV2.findGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -678,6 +647,13 @@ exports.joinGame = async (req, res, next) => {
     return req.package
 }
 
+/**
+ * 
+ * @param {*} obligatory    req.body.gameIdV2
+ * @param {*} optional      req.body.creatorId
+ * @param {*} optional      req.body.gameStatus
+ * @returns                 req.body.gamesPlayers
+ */
 // permet à un utilisateur de rejoindre une partie
 exports.joinGameV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -706,6 +682,9 @@ exports.joinGameV2 = async (req, res, next) => {
     if (req.utilCheck) {
         return null
     }
+
+    req.body.creatorId = undefined
+    req.body.gameStatus = undefined
 
     await utilFindGameV2.findGame(req)
         .then(value => {
@@ -787,30 +766,6 @@ exports.joinGameV2 = async (req, res, next) => {
         next()
         return null
     }
-
-    await utilFindGameV2.findGame(req)
-        .then(value => {
-            req.data.push({
-                name: "utilFindGameV2.findGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilFindGameV2.findGame",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        next()
-        return null
-    }
-
-    req.body.game = req.body.games[0]
 
     req.body.playerId = undefined
     req.body.gameIdV2 = req.body.game._id

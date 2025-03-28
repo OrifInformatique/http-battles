@@ -10,6 +10,13 @@ const utilCheck = require('../check')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game/update"
 
+
+/**
+ * @param {*} optional  req.body.creatorId
+ * @param {*} optional  req.body.gameStatus
+
+ * @returns             req.body.game
+ */
 // crée un objet Game
 exports.updateGame = async (req) => {
     // test de la validité des données
@@ -56,7 +63,6 @@ exports.updateGame = async (req) => {
         Object.assign(query, gameStatus)
     }
 
-
     await GameV2.updateOne({ _id: req.body.game._id }, {
         $set: query
     })
@@ -72,6 +78,25 @@ exports.updateGame = async (req) => {
             console.log(error)
             req.data.push({
                 name: "Game.updateOne",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    await GameV2.find({_id: req.body.game._id})
+        .then(value => {
+            // stoque le Game dans la requete
+            req.body.game = value[0]
+            req.data.push({
+                name: "Game.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "Game.find",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

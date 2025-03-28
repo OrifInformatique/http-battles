@@ -7,6 +7,12 @@ const utilCheck = require('../check')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/game/create"
 
+
+/**
+ * @param {*}   obligatory: req.auth.userId
+ * @param {*}   optional:   req.body.gameStatus
+ * @returns                 req.body.game
+ */
 // crée un objet Game
 exports.createGame = async (req) => {
     // test de la validité des données
