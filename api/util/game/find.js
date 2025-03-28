@@ -62,8 +62,8 @@ exports.findGame = async (req) => {
         }
         Object.assign(query, gameStatus)
     }
-    console.log(query)
-
+    
+    
     // sauvegarde le Game dans la base donnée
     await GameV2.find(query)
         .then(value => {

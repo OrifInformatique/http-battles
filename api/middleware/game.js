@@ -136,10 +136,12 @@ exports.findGamesV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        next()
         return null
     }
+
     req.body.gamesPlayers = []
-    
+
     for (const game in req.body.games) {
         req.body.playerId = undefined
         req.body.gameIdV2 = req.body.games[game]._id
@@ -163,7 +165,7 @@ exports.findGamesV2 = async (req, res, next) => {
                 })
             })
 
-        
+
         req.body.gamesPlayers.push({
             game: req.body.games[game],
             players: req.body.players
@@ -171,6 +173,7 @@ exports.findGamesV2 = async (req, res, next) => {
 
         // stop la méthode en cas d'échèque du test
         if (req.utilCheck) {
+            next()
             return null
         }
     }
@@ -360,6 +363,7 @@ exports.createGameV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        next()
         return null
     }
 
@@ -385,6 +389,7 @@ exports.createGameV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        next()
         return null
     }
 
@@ -393,7 +398,7 @@ exports.createGameV2 = async (req, res, next) => {
     await utilUpdateGameV2.updateGame(req)
         .then(value => {
             req.data.push({
-                name: "utilCreatePlayerV2.createPlayer",
+                name: "utilUpdateGameV2.updateGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -401,7 +406,7 @@ exports.createGameV2 = async (req, res, next) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilCreatePlayerV2.createPlayer",
+                name: "utilUpdateGameV2.updateGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -409,6 +414,7 @@ exports.createGameV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        next()
         return null
     }
 
@@ -428,13 +434,6 @@ exports.createGameV2 = async (req, res, next) => {
                 error: error
             })
         })
-
-    // stop la méthode en cas d'échèque du test
-    if (req.utilCheck) {
-        return null
-    }
-
-    req.body.game = req.body.games[0]
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -678,6 +677,172 @@ exports.joinGame = async (req, res, next) => {
     // retourn les variables traitées pour la gestion d'erreur en dehors des middleware
     return req.package
 }
+
+// permet à un utilisateur de rejoindre une partie
+exports.joinGameV2 = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: joinGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilFindGameV2.findGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.game = req.body.games[0]
+
+    // stop la méthode en cas d'échèque du test
+    if (req.body.game.status !== "WAITING_CHALLENGER") {
+        next()
+        return null
+    }
+
+    req.body.gameIdV2 = req.body.game._id
+    req.body.userId = req.body.game.creatorId
+
+    await utilCreatePlayerV2.createPlayer(req)
+        .then(value => {
+            req.data.push({
+                name: "utilCreatePlayerV2.createPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCreatePlayerV2.createPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.gameStatus = "SETTINGS"
+
+    await utilUpdateGameV2.updateGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilUpdateGameV2.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilUpdateGameV2.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilFindGameV2.findGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.game = req.body.games[0]
+
+    req.body.playerId = undefined
+    req.body.gameIdV2 = req.body.game._id
+    req.body.userId = undefined
+    req.body.playerStatus = undefined
+
+    await utilFindPlayerV2.findPlayer(req)
+        .then(value => {
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    // retourn les variables traitées pour la gestion d'erreur en dehors des middleware
+    return req.body
+}
+
 
 // fini la partie
 exports.endGame = async (req, res, next) => {

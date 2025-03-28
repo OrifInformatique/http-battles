@@ -47,6 +47,16 @@ exports.joinGame = async (req, res, next) => {
 
 }
 
+// permet au client de rejoindre une party dont il a entré la clef
+exports.joinGameV2 = async (req, res, next) => {
+
+    utilRes.sendSuccess(200, {
+        game: req.body.game,
+        players: req.body.players
+    }, res)
+
+}
+
 // commence la partie
 exports.startGame = async (req, res, next) => {
 

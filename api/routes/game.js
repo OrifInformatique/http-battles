@@ -29,8 +29,13 @@ router.get('/games/findGamesV2', auth, check.dataInit, middleGame.findGamesV2, c
 // liste toute les partie en attente
 router.get('/games/listGames', auth, check.dataInit, middleGame.listGames, check.logInit, check.dataValidity, gameCtrl.listGames)
 
-// permet à un utilisateur de rjoindre une partie
+// permet à un utilisateur de rejoindre une partie
 router.post('/games/joinGame', auth, check.dataInit, check.checkReqDataJoinGame, middleGame.joinGame, check.logInit, check.dataValidity, gameCtrl.joinGame)
+
+// permet à un utilisateur de rejoindre une partie
+router.put('/games/joinGameV2', auth, check.dataInit, middleGame.joinGameV2, check.logInit, check.dataValidity, gameCtrl.joinGameV2)
+
+
 // commence la partie
 router.post('/games/startGame', auth, check.dataInit, check.checkReqDataStartGame, middleGame.startGame, check.logInit, check.dataValidity, gameCtrl.startGame)
 // vérifie à qui est le tour
