@@ -84,7 +84,6 @@ exports.findWord = async (req) => {
     }
 
 
-    // sauvegarde le Word dans la base donnée
     await WordV2.find(query)
         .then(value => {
             // stoque le Word dans la requete

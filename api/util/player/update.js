@@ -82,6 +82,25 @@ exports.updatePlayer = async (req) => {
             })
         })
 
+    await PlayerV2.find({ _id: req.body.player._id })
+        .then(value => {
+            // stoque le Player dans la requete
+            req.body.player = value[0]
+            req.data.push({
+                name: "Player.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "Player.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     // retourne la variable traitée pour la gestion d'erreur
     return req.body
 }

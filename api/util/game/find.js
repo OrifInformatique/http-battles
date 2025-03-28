@@ -15,6 +15,7 @@ const LOC_GLOB = "file: ../util/game/create"
  * @param {*} optional  req.body.gameIdV2
  * @param {*} optional  req.body.creatorId
  * @param {*} optional  req.body.gameStatus
+ * 
  * @returns             req.body.games
  */
 // crée un objet Game

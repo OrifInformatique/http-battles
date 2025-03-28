@@ -15,6 +15,7 @@ const LOC_GLOB = "file: ../util/player/create"
  * @param {*} optional  req.body.gameIdV2
  * @param {*} optional  req.body.userId
  * @param {*} optional  req.body.playerStatus
+ * 
  * @returns             req.body.players
  */
 // crée un objet Player
@@ -77,8 +78,6 @@ exports.findPlayer = async (req) => {
         Object.assign(query, playerStatus)
     }
 
-
-    // sauvegarde le Player dans la base donnée
     await PlayerV2.find(query)
         .then(value => {
             // stoque le Player dans la requete

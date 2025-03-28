@@ -7,6 +7,14 @@ const utilCheck = require('../check')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/word/create"
 
+/**
+ * @param {*}   obligatory: req.body.content
+ * @param {*}   obligatory: req.body.playerId
+ * @param {*}   obligatory: req.body.phrasePosition
+ * @param {*}   obligatory: req.body.boardPosition
+ * 
+ * @returns                 req.body.word
+ */
 // crée un objet Game
 exports.createPhrase = async (req) => {
     // test de la validité des données
@@ -37,13 +45,6 @@ exports.createPhrase = async (req) => {
     }
 
     const query = {}
-
-    if (req.body.wordId !== undefined) {
-        var wordId = {
-            "_id": mongoose.Types.ObjectId(req.body.wordId)
-        }
-        Object.assign(query, wordId)
-    }
 
     if (req.body.content !== undefined) {
         var content = {

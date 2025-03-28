@@ -96,6 +96,25 @@ exports.updateWord = async (req) => {
             })
         })
 
+    await WordV2.find({ _id: req.body.word._id })
+        .then(value => {
+            // stoque le Word dans la requete
+            req.body.word = value[0]
+            req.data.push({
+                name: "Word.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "Word.find",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     // retourne la variable traitée pour la gestion d'erreur
     return req.body
 }
