@@ -164,6 +164,12 @@ exports.findGamesV2 = async (req, res, next) => {
         return null
     }
 
+    if(req.body.targetUserId === undefined){
+        req.body.userId = undefined
+    }
+
+    req.body.userId = req.body.targetUserId
+
     await utilGeneralV2.findPlayerForGame(req)
         .then(value => {
             req.data.push({
@@ -218,8 +224,9 @@ exports.findGamesV2 = async (req, res, next) => {
                         error: error
                     })
                 })
-
+                
             req.body.all[game].players[player].words.push(req.body.words)
+            console.log(req.body.gamesPlayers[0])
         }
     }
 
@@ -981,7 +988,6 @@ exports.joinGameV2 = async (req, res, next) => {
     }
 
     req.body.gameIdV2 = req.body.game._id
-    req.body.userId = req.body.game.creatorId
 
     await utilCreatePlayerV2.createPlayer(req)
         .then(value => {
