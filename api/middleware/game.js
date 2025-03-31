@@ -1414,6 +1414,8 @@ exports.tryCaseV2 = async (req, res, next) => {
                         error: error
                     })
                 })
+
+            req.body.words[word] = req.body.word
         }
     }
 
@@ -1453,11 +1455,11 @@ exports.tryCaseV2 = async (req, res, next) => {
     var test = 0
 
     for (const player in req.body.players) {
-        
+
         if (req.body.players[player].status === "PLAYER_TURN") {
             req.body.player = req.body.players[player]
             req.body.playerStatus = "WAIT"
-            
+
             await utilUpdatePlayerV2.updatePlayer(req)
                 .then(value => {
                     req.data.push({
@@ -1479,10 +1481,10 @@ exports.tryCaseV2 = async (req, res, next) => {
         } else if (test === 1) {
 
             test = 2
-            
+
             req.body.player = req.body.players[player]
             req.body.playerStatus = "PLAYER_TURN"
-            
+
             await utilUpdatePlayerV2.updatePlayer(req)
                 .then(value => {
                     req.data.push({
@@ -1502,7 +1504,6 @@ exports.tryCaseV2 = async (req, res, next) => {
 
         }
     }
-    
 
     if (test === 1) {
         req.body.player = req.body.players[0]
@@ -1524,14 +1525,14 @@ exports.tryCaseV2 = async (req, res, next) => {
                     error: error
                 })
             })
-}
+    }
 
-// test si la fonction next à été transmise et passe au prochains middlware si oui
-if (next !== undefined) {
-    next()
-}
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
 
-// retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-return req.package
+    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
+    return req.package
 }
 
