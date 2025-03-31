@@ -14,7 +14,7 @@ const LOC_GLOB = "file: ../util/player/update"
  * @param {*} obligatory    req.body.player._id 
  * @param {*} optional      req.body.gameIdV2
  * @param {*} optional      req.body.userId
- * @param {*} optional      req.body.player
+ * @param {*} optional      req.body.playerStatus
  * 
  * @returns                 req.body.player
  */

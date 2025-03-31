@@ -80,6 +80,12 @@ exports.tryPhrase = async (req, res, next) => {
     utilRes.sendSuccess(200, { message: req.tryPhraseResultMessage }, res)
 }
 
+exports.tryPhraseV2 = async (req, res, next) => {
+
+    utilRes.sendSuccess(200, { message: req.body }, res)
+}
+
+
 // termine la partie
 exports.endGame = async (req, res, next) => {
 

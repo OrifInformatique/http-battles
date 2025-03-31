@@ -738,12 +738,12 @@ exports.startGameV2 = async (req, res, next) => {
 
     if (req.body.player.userId === req.body.userId && req.body.player._id.toString() === req.body.playerId) {
 
-        for (const word in req.body.words) {
+        for (const word in req.body.phrase) {
 
-            req.body.content = req.body.words[word].content
+            req.body.content = req.body.phrase[word].content
             req.body.playerId = req.body.player._id
-            req.body.phrasePosition = req.body.words[word].phrasePosition
-            req.body.boardPosition = req.body.words[word].boardPosition
+            req.body.phrasePosition = req.body.phrase[word].phrasePosition
+            req.body.boardPosition = req.body.phrase[word].boardPosition
             console.log(req.body)
             await utilCreateWordV2.createWord(req)
                 .then(value => {
@@ -1204,6 +1204,207 @@ exports.tryPhrase = async (req, res, next) => {
 
 }
 
+exports.tryPhraseV2 = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: tryPhrase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    await utilFindGameV2.findGame(req)
+        .then(value => {
+            req.body.game = req.body.games[0]
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.clientId = req.body.playerId
+
+    req.body.playerId = req.body.targetPlayerId
+
+    await utilFindPlayerV2.findPlayer(req)
+        .then(value => {
+            req.body.player = req.body.players[0]
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilFindWordV2.findWord(req)
+        .then(value => {
+            req.data.push({
+                name: "utilFindWordV2.findWord",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindWordV2.findWord",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    var wordCount = 0
+    var wordFound = 0
+
+    for (const wordFind in req.body.words) {
+
+        wordCount = wordCount + 1
+
+        for (const wordTest in req.body.phrase)
+
+            if (req.body.phrase[wordTest].content === req.body.words[wordFind].content && req.body.phrase[wordTest].phrasePosition === req.body.words[wordFind].phrasePosition) {
+
+                wordFound = wordFound + 1
+
+            }
+    }
+
+    if (wordCount === wordFound && wordFound !== 0) {
+
+        req.body.gameStatus = "WON"
+
+        await utilUpdateGameV2.updateGame(req)
+            .then(value => {
+                req.data.push({
+                    name: "utilUpdateGameV2.updateGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilUpdateGameV2.updateGame",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.playerId = req.body.clientId
+
+    await utilFindPlayerV2.findPlayer(req)
+        .then(value => {
+            req.body.player = req.body.players[0]
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.playerStatus = "WINNER"
+    await utilUpdatePlayerV2.updatePlayer(req)
+        .then(value => {
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    return req.body
+
+}
+
 // ecrit le message du test de la case à renvoyer au client
 exports.tryCase = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -1345,6 +1546,7 @@ exports.tryCaseV2 = async (req, res, next) => {
         return null
     }
 
+    req.body.userId = undefined
 
     await utilFindPlayerV2.findPlayer(req)
         .then(value => {
