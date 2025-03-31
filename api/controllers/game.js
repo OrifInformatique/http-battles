@@ -31,7 +31,7 @@ exports.findGame = async (req, res, next) => {
 
 // trouve une partie 
 exports.findGamesV2 = async (req, res, next) => {
-    utilRes.sendSuccess(200, req.body, res)
+    utilRes.sendSuccess(200, req.body.all, res)
 }
 
 // liste les parties

@@ -106,7 +106,8 @@ exports.findGame = async (req, res, next) => {
  * @param {*} optional  req.body.gameIdV2
  * @param {*} optional  req.body.creatorId
  * @param {*} optional  req.body.gameStatus
- * @returns             req.body.gamesPlayers
+ * 
+ * @returns             req.body
  */
 exports.findGamesV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -183,11 +184,18 @@ exports.findGamesV2 = async (req, res, next) => {
         return null
     }
 
-    req.body.gamesPlayersWords = []
+    req.body.all = []
 
     for (const game in req.body.gamesPlayers) {
+        req.body.all.push({
+            game: req.body.gamesPlayers[game].game,
+            players: []
+        })
         for (const player in req.body.gamesPlayers[game].players) {
-
+            req.body.all[game].players.push({
+                player: req.body.gamesPlayers[game].players[player],
+                words: []
+            })
             req.body.playerId = req.body.gamesPlayers[game].players[player]._id
 
             await utilFindWordV2.findWord(req)
@@ -208,11 +216,7 @@ exports.findGamesV2 = async (req, res, next) => {
                     })
                 })
 
-            req.body.gamesPlayers.push({
-                game: req.body.gamesPlayers[game],
-                players: req.body.gamesPlayers[game].players[player],
-                words: req.body.words
-            })
+                req.body.all[game].players[player].words.push(req.body.words)
         }
     }
 
@@ -601,6 +605,15 @@ exports.startGame = async (req, res, next) => {
     return req.package
 }
 
+
+/**
+ * 
+ * @param {*} obligatory    req.body.gameIdV2
+ * @param {*} obligatory    req.body.userId
+ * @param {*} optional      req.body.playerId
+ * 
+ * @returns                 req.body
+ */
 exports.startGameV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: startGameV2"
@@ -706,8 +719,21 @@ exports.startGameV2 = async (req, res, next) => {
         return null
     }
 
+    if (req.body.player.status === "PLAYER_TURN" || req.body.player.status === "WAIT") {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "Player already started"
+        req.data.push({
+            name: "req.body.player.status !== PLAYER_TURN && req.body.player.status !== WAIT",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
 
-    if (req.body.player.userId === req.body.userId && req.body.player._id.toString() === req.body.playerId && (req.body.player.status !== "PLAYER_TURN" && req.body.player.status !== "WAIT")) {
+
+    if (req.body.player.userId === req.body.userId && req.body.player._id.toString() === req.body.playerId) {
 
         for (const word in req.body.words) {
 
@@ -715,7 +741,7 @@ exports.startGameV2 = async (req, res, next) => {
             req.body.playerId = req.body.player._id
             req.body.phrasePosition = req.body.words[word].phrasePosition
             req.body.boardPosition = req.body.words[word].boardPosition
-
+            console.log(req.body)
             await utilCreateWordV2.createWord(req)
                 .then(value => {
                     req.data.push({
