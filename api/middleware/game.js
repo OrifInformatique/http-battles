@@ -27,6 +27,9 @@ const utilCreateWordV2 = require('../util/word/create')
 const utilFindWordV2 = require('../util/word/find')
 
 // import fonctions util 
+const utilUpdateWordV2 = require('../util/word/update')
+
+// import fonctions util 
 const utilGeneralV2 = require('../util/general/general')
 
 // import fonctions util pour board
@@ -216,7 +219,7 @@ exports.findGamesV2 = async (req, res, next) => {
                     })
                 })
 
-                req.body.all[game].players[player].words.push(req.body.words)
+            req.body.all[game].players[player].words.push(req.body.words)
         }
     }
 
@@ -1284,5 +1287,251 @@ exports.tryCase = async (req, res, next) => {
 
     // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
     return req.package
+}
+
+// ecrit le message du test de la case à renvoyer au client
+exports.tryCaseV2 = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: tryCase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    console.log(req.method)
+    console.log(req.route)
+
+    await utilFindGameV2.findGame(req)
+        .then(value => {
+            req.body.game = req.body.games[0]
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+
+    await utilFindPlayerV2.findPlayer(req)
+        .then(value => {
+            req.body.player = req.body.players[0]
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilFindWordV2.findWord(req)
+        .then(value => {
+            req.data.push({
+                name: "utilFindWordV2.findWord",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindWordV2.findWord",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    for (const word in req.body.words) {
+        if (req.body.words[word].boardPosition.toUpperCase() === (req.method + " " + req.route).toUpperCase()) {
+            req.body.word = req.body.words[word]
+            req.body.wordStatus = "FOUND"
+
+            await utilUpdateWordV2.updateWord(req)
+                .then(value => {
+                    req.data.push({
+                        name: "utilUpdateWordV2.updateWord",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        value: value
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    req.data.push({
+                        name: "utilUpdateWordV2.updateWord",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        error: error
+                    })
+                })
+        }
+    }
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.playerId = undefined
+    req.body.userId = undefined
+    req.body.playerStatus = undefined
+
+    await utilFindPlayerV2.findPlayer(req)
+        .then(value => {
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    var test = 0
+
+    for (const player in req.body.players) {
+        
+        if (req.body.players[player].status === "PLAYER_TURN") {
+            req.body.player = req.body.players[player]
+            req.body.playerStatus = "WAIT"
+            
+            await utilUpdatePlayerV2.updatePlayer(req)
+                .then(value => {
+                    req.data.push({
+                        name: "utilUpdatePlayerV2.updatePlayer",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        value: value
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    req.data.push({
+                        name: "utilUpdatePlayerV2.updatePlayer",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        error: error
+                    })
+                })
+            test = 1
+
+        } else if (test === 1) {
+
+            test = 2
+            
+            req.body.player = req.body.players[player]
+            req.body.playerStatus = "PLAYER_TURN"
+            
+            await utilUpdatePlayerV2.updatePlayer(req)
+                .then(value => {
+                    req.data.push({
+                        name: "utilUpdatePlayerV2.updatePlayer",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        value: value
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    req.data.push({
+                        name: "utilUpdatePlayerV2.updatePlayer",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        error: error
+                    })
+                })
+
+        }
+    }
+    
+
+    if (test === 1) {
+        req.body.player = req.body.players[0]
+        req.body.playerStatus = "PLAYER_TURN"
+
+        await utilUpdatePlayerV2.updatePlayer(req)
+            .then(value => {
+                req.data.push({
+                    name: "utilUpdatePlayerV2.updatePlayer",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilUpdatePlayerV2.updatePlayer",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+}
+
+// test si la fonction next à été transmise et passe au prochains middlware si oui
+if (next !== undefined) {
+    next()
+}
+
+// retourn la variables traitée pour la gestion d'erreur en dehors des middleware
+return req.package
 }
 

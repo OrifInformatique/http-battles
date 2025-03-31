@@ -10,6 +10,17 @@ const utilCheck = require('../check')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/word/update"
 
+
+/**
+ * @param {*} obligatory    req.body.word._id 
+ * @param {*} optional      req.body.playerId
+ * @param {*} optional      req.body.content
+ * @param {*} optional      req.body.phrasePosition
+ * @param {*} optional      req.body.boardPosition
+ * @param {*} optional      req.body.wordStatus
+ * 
+ * @returns                 req.body.word
+ */
 // crée un objet Word
 exports.updateWord = async (req) => {
     // test de la validité des données

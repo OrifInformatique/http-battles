@@ -98,3 +98,14 @@ exports.tryCase = async (req, res, next) => {
 
 }
 
+/**
+ * série de fonctions pour les case du jeux
+ */
+
+exports.tryCaseV2 = async (req, res, next) => {
+
+    utilRes.sendSuccess(200, req.body, res)
+
+}
+
+

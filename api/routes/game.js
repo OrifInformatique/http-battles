@@ -54,6 +54,8 @@ router.get('/games/tryPhrase', auth, check.dataInit, check.checkReqDataTryPhrase
 // routes pour le jeux
 router.all('/games/tryA', auth, check.dataInit, check.checkReqDataTryCase, /*check.checkTurn,*/ routeParam.a, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)
 
+router.all('/games/tryAV2', auth, check.dataInit, routeParam.a, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
+
 router.all('/games/tryB', auth, check.dataInit, check.checkReqDataTryCase, check.checkTurn, routeParam.b, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)
 
 router.all('/games/tryC', auth, check.dataInit, check.checkReqDataTryCase, check.checkTurn, routeParam.c, middleGame.tryCase, check.logInit, check.dataValidity,  gameCtrl.tryCase)

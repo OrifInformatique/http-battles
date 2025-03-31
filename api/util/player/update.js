@@ -16,7 +16,7 @@ const LOC_GLOB = "file: ../util/player/update"
  * @param {*} optional      req.body.userId
  * @param {*} optional      req.body.player
  * 
- * @returns                 req.body.game
+ * @returns                 req.body.player
  */
 // crée un objet Player
 exports.updatePlayer = async (req) => {
@@ -69,7 +69,7 @@ exports.updatePlayer = async (req) => {
         }
         Object.assign(query, playerStatus)
     }
-
+    
     await PlayerV2.updateOne({ _id: req.body.player._id }, {
         $set: query
     })
