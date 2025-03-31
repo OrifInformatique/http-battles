@@ -10,6 +10,16 @@ const utilCheck = require('../check')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/word/create"
 
+/**
+ * @param {*} optional  req.body.wordId
+ * @param {*} optional  req.body.content
+ * @param {*} optional  req.body.playerId
+ * @param {*} optional  req.body.phrasePosition
+ * @param {*} optional  req.body.boardPosition
+ * @param {*} optional  req.body.wordStatus
+ * 
+ * @returns             req.body.words
+ */
 // crée un objet Word
 exports.findWord = async (req) => {
     // test de la validité des données

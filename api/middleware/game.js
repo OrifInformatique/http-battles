@@ -2,23 +2,36 @@
 // import fonctions util pour game
 const utilGame = require('../util/game')
 
-// import fonctions util pour game
+// import fonctions util 
 const utilCreateGameV2 = require('../util/game/create')
 
-// import fonctions util pour game
+// import fonctions util 
 const utilFindGameV2 = require('../util/game/find')
 
-// import fonctions util pour game
+// import fonctions util 
 const utilUpdateGameV2 = require('../util/game/update')
 
-// import fonctions util pour game
+// import fonctions util 
 const utilCreatePlayerV2 = require('../util/player/create')
 
-// import fonctions util pour game
+// import fonctions util 
 const utilFindPlayerV2 = require('../util/player/find')
+
+// import fonctions util 
+const utilUpdatePlayerV2 = require('../util/player/update')
+
+// import fonctions util 
+const utilCreateWordV2 = require('../util/word/create')
+
+// import fonctions util 
+const utilFindWordV2 = require('../util/word/find')
+
+// import fonctions util 
+const utilGeneralV2 = require('../util/general/general')
 
 // import fonctions util pour board
 const utilCheck = require('../util/check')
+const { util } = require('webpack')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../middleware/game"
@@ -147,43 +160,59 @@ exports.findGamesV2 = async (req, res, next) => {
         return null
     }
 
-    req.body.gamesPlayers = []
-
-    for (const game in req.body.games) {
-
-        req.body.gameIdV2 = req.body.games[game]._id
-
-        req.body.playerId = undefined
-        req.body.userId = undefined
-        req.body.playerStatus = undefined
-
-        await utilFindPlayerV2.findPlayer(req)
-            .then(value => {
-                req.data.push({
-                    name: "utilFindPlayerV2.findPlayer",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
+    await utilGeneralV2.findPlayerForGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.findPlayerForGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            .catch(error => {
-                console.log(error)
-                req.data.push({
-                    name: "utilFindPlayerV2.findPlayer",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.findPlayerForGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
             })
-
-
-        req.body.gamesPlayers.push({
-            game: req.body.games[game],
-            players: req.body.players
         })
 
-        // stop la méthode en cas d'échèque du test
-        if (req.utilCheck) {
-            next()
-            return null
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.gamesPlayersWords = []
+
+    for (const game in req.body.gamesPlayers) {
+        for (const player in req.body.gamesPlayers[game].players) {
+
+            req.body.playerId = req.body.gamesPlayers[game].players[player]._id
+
+            await utilFindWordV2.findWord(req)
+                .then(value => {
+
+                    req.data.push({
+                        name: "utilFindWordV2.findWord",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        value: value
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    req.data.push({
+                        name: "utilFindWordV2.findWord",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        error: error
+                    })
+                })
+
+            req.body.gamesPlayers.push({
+                game: req.body.gamesPlayers[game],
+                players: req.body.gamesPlayers[game].players[player],
+                words: req.body.words
+            })
         }
     }
 
@@ -191,6 +220,7 @@ exports.findGamesV2 = async (req, res, next) => {
     if (next !== undefined) {
         next()
     }
+
 
     // retourne la variable traité pour la gestion d'erreur en dehors des middleware
     return req.body
@@ -571,6 +601,203 @@ exports.startGame = async (req, res, next) => {
     return req.package
 }
 
+exports.startGameV2 = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: startGameV2"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+
+
+    if (req.body.gameIdV2 === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No GameId"
+        req.data.push({
+            name: "req.body.gameIdV2 === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    await utilFindGameV2.findGame(req)
+        .then(value => {
+            req.body.game = req.body.games[0]
+
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindGameV2.findGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    if (req.body.game.status !== "SETTINGS" && req.body.game.status !== "PLAYING") {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "Can't start this game"
+        req.data.push({
+            name: "req.body.game.status !== SETTINGS || req.body.game.status !== PLAYING",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    await utilFindPlayerV2.findPlayer(req)
+        .then(value => {
+            req.body.player = req.body.players[0]
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+
+    if (req.body.player.userId === req.body.userId && req.body.player._id.toString() === req.body.playerId && (req.body.player.status !== "PLAYER_TURN" && req.body.player.status !== "WAIT")) {
+
+        for (const word in req.body.words) {
+
+            req.body.content = req.body.words[word].content
+            req.body.playerId = req.body.player._id
+            req.body.phrasePosition = req.body.words[word].phrasePosition
+            req.body.boardPosition = req.body.words[word].boardPosition
+
+            await utilCreateWordV2.createWord(req)
+                .then(value => {
+                    req.data.push({
+                        name: "utilCreateWordV2.createWord" + word,
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        value: value
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    req.data.push({
+                        name: "utilCreateWordV2.createWord" + word,
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        error: error
+                    })
+                })
+        }
+    }
+
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    if (req.body.player.userId !== req.body.userId) {
+        req.body.playerStatus = "PLAYER_TURN"
+    } else {
+        req.body.playerStatus = "WAIT"
+    }
+
+    await utilUpdatePlayerV2.updatePlayer(req)
+        .then(value => {
+            req.data.push({
+                name: "utilUpdatePlayerV2.updatePlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilUpdatePlayerV2.updatePlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.gameStatus = "PLAYING"
+
+    await utilUpdateGameV2.updateGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilUpdateGameV2.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilUpdateGameV2.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    return req.package
+}
+
 // permet à un utilisateur de rejoindre une partie
 exports.joinGame = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -712,6 +939,14 @@ exports.joinGameV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.body.game.status !== "WAITING_CHALLENGER") {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "The game cannot be joined"
+        req.data.push({
+            name: "req.body.game.status !== WAITING_CHALLENGER",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
         next()
         return null
     }
@@ -772,10 +1007,12 @@ exports.joinGameV2 = async (req, res, next) => {
     req.body.userId = undefined
     req.body.playerStatus = undefined
 
-    await utilFindPlayerV2.findPlayer(req)
+    await utilGeneralV2.findPlayerForGame(req)
         .then(value => {
+            req.body.game = req.body.gamesPlayers[0].game
+            req.body.players = req.body.gamesPlayers[0].players
             req.data.push({
-                name: "utilFindPlayerV2.findPlayer",
+                name: "utilGeneralV2.findPlayerForGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -783,7 +1020,7 @@ exports.joinGameV2 = async (req, res, next) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "utilFindPlayerV2.findPlayer",
+                name: "utilGeneralV2.findPlayerForGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

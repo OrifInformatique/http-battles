@@ -10,6 +10,14 @@ const utilCheck = require('../check')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/player/update"
 
+/**
+ * @param {*} obligatory    req.body.player._id 
+ * @param {*} optional      req.body.gameIdV2
+ * @param {*} optional      req.body.userId
+ * @param {*} optional      req.body.player
+ * 
+ * @returns                 req.body.game
+ */
 // crée un objet Player
 exports.updatePlayer = async (req) => {
     // test de la validité des données

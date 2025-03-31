@@ -38,6 +38,11 @@ router.put('/games/joinGameV2', auth, check.dataInit, middleGame.joinGameV2, che
 
 // commence la partie
 router.post('/games/startGame', auth, check.dataInit, check.checkReqDataStartGame, middleGame.startGame, check.logInit, check.dataValidity, gameCtrl.startGame)
+
+// commence la partie
+router.post('/games/startGameV2', auth, check.dataInit, middleGame.startGameV2, check.logInit, check.dataValidity, gameCtrl.startGameV2)
+
+
 // vérifie à qui est le tour
 router.get('/games/checkTurn', auth, check.dataInit, check.checkReqDataCheckTurn, middleGame.checkTurn, check.logInit, check.dataValidity, gameCtrl.checkTurn)
 // términe la partie

@@ -31,7 +31,7 @@ exports.findGame = async (req, res, next) => {
 
 // trouve une partie 
 exports.findGamesV2 = async (req, res, next) => {
-    utilRes.sendSuccess(200, req.body.gamesPlayers, res)
+    utilRes.sendSuccess(200, req.body, res)
 }
 
 // liste les parties
@@ -61,6 +61,12 @@ exports.joinGameV2 = async (req, res, next) => {
 exports.startGame = async (req, res, next) => {
 
     utilRes.sendSuccess(200, req.startMessage, res)
+}
+
+// commence la partie
+exports.startGameV2 = async (req, res, next) => {
+
+    utilRes.sendSuccess(200, req.body, res)
 }
 
 // vérifie si c'est le tour de l'utilisateur

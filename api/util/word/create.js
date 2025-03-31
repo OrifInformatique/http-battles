@@ -16,9 +16,9 @@ const LOC_GLOB = "file: ../util/word/create"
  * @returns                 req.body.word
  */
 // crée un objet Game
-exports.createPhrase = async (req) => {
+exports.createWord = async (req) => {
     // test de la validité des données
-    const LOC_LOC = "methode: createPhrase"
+    const LOC_LOC = "methode: createWord"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)

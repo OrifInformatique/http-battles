@@ -12,10 +12,11 @@ const LOC_GLOB = "file: ../util/game/update"
 
 
 /**
- * @param {*} optional  req.body.creatorId
- * @param {*} optional  req.body.gameStatus
+ * @param {*} obligatory    req.body.game._id 
+ * @param {*} optional      req.body.creatorId
+ * @param {*} optional      req.body.gameStatus
 
- * @returns             req.body.game
+ * @returns                 req.body.game
  */
 // crée un objet Game
 exports.updateGame = async (req) => {

@@ -78,7 +78,7 @@ exports.findPlayer = async (req) => {
         Object.assign(query, playerStatus)
     }
 
-    await PlayerV2.find(query)
+    await PlayerV2.find(query).sort("_id")
         .then(value => {
             // stoque le Player dans la requete
             req.body.players = value
