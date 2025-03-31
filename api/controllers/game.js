@@ -94,6 +94,12 @@ exports.endGame = async (req, res, next) => {
     }, res)
 }
 
+// termine la partie
+exports.endGameV2 = async (req, res, next) => {
+
+    utilRes.sendSuccess(200, req.body, res)
+}
+
 /**
  * série de fonctions pour les case du jeux
  */

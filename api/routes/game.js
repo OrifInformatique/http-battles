@@ -49,6 +49,9 @@ router.get('/games/checkTurn', auth, check.dataInit, check.checkReqDataCheckTurn
 // términe la partie
 router.post('/games/endGame', auth, check.dataInit, check.checkReqDataEndGame, middleGame.endGame, check.logInit, check.dataValidity, gameCtrl.endGame)
 
+// términe la partie
+router.post('/games/endGameV2', auth, check.dataInit, middleGame.endGameV2, check.logInit, check.dataValidity, gameCtrl.endGameV2)
+
 // vérifie à qui est le tour
 router.get('/games/tryPhrase', auth, check.dataInit, check.checkReqDataTryPhrase, /*check.checkTurn,*/ middleGame.tryPhrase, check.logInit, check.dataValidity, gameCtrl.tryPhrase)
 
