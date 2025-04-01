@@ -18,7 +18,6 @@ const LOC_GLOB = "file: ../util/general/general"
  * 
  * @returns                 req.body.gamesPlayers
  */
-// crée un objet Game
 exports.findPlayerForGame = async (req) => {
     // test de la validité des données
     const LOC_LOC = "methode: findPlayerForGame"
@@ -91,13 +90,12 @@ exports.findPlayerForGame = async (req) => {
 }
 
 /**
- * Trouver les mots des joueurs d'une liste de parties
+ * Trouve les mots des joueurs d'une liste de parties
  * 
  * @param {*}   obligatory: req.body.gamesPlayers
  * 
  * @returns                 req.body.all
  */
-// crée un objet Game
 exports.findWordsForPlayersForGames = async (req) => {
     // test de la validité des données
     const LOC_LOC = "methode: findWordsForPlayersForGames"
@@ -172,6 +170,13 @@ exports.findWordsForPlayersForGames = async (req) => {
     return req.body
 }
 
+/**
+ * Trouve une partie, ses joueur et leurs mots après avoir filtrer la requete de toute variable parasite
+ * 
+ * @param {*}   obligatory: req.body.gameId
+ * 
+ * @returns                 req.body.all
+ */
 exports.filteredFindGame = async (req) => {
     // test de la validité des données
     const LOC_LOC = "methode: filteredFindGame"
