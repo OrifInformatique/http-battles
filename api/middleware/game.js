@@ -677,12 +677,12 @@ exports.startGameV2 = async (req, res, next) => {
         return null
     }
 
-    if (req.body.gameIdV2 === undefined) {
+    if (req.body.gameIdV2 === undefined && req.body.gameId === undefined) {
         var error = new Error()
         error.name = "Bad Request"
         error.message = "No GameId"
         req.data.push({
-            name: "req.body.gameIdV2 === undefined",
+            name: "req.body.gameIdV2 === undefined && req.body.gameId === undefined",
             loc: LOC_GLOB + " " + LOC_LOC,
             error: error
         })
