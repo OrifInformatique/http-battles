@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // import le schema d'un Word
-const WordV2 = require("../../modelTest/WordV2")
+const WordV2 = require("../../modelV2/WordV2")
 
 // import fonctions util pour check
 const utilCheck = require('../check')

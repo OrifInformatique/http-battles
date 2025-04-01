@@ -1,5 +1,5 @@
 // import le schema d'un Player
-const PlayerV2 = require("../../modelTest/PlayerV2")
+const PlayerV2 = require("../../modelV2/PlayerV2")
 
 // import fonctions util pour check
 const utilCheck = require('../check')
