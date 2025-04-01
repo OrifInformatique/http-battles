@@ -1,7 +1,3 @@
-
-// import fonctions util pour game
-const utilGame = require('../util/game')
-
 // import fonctions util 
 const utilCreateGameV2 = require('../util/game/create')
 

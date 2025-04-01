@@ -1,13 +1,15 @@
 
+
 // import fonctions util pour check
-const utilCheck = require('../../../../../../check')
+const utilCheck = require('../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/getOtherUserId"
+const LOC_GLOB = "file: ../util/../depthFour/testUserTurn"
 
-exports.getOtherUserId = async (req) => {
+// test quel utilisateur commence
+exports.testUserTurn = async (gameUserId, reqId, req) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getOtherUserId"
+    const LOC_LOC = "methode: testUserTurn"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -32,19 +34,19 @@ exports.getOtherUserId = async (req) => {
     if (req.utilCheck) {
         return null
     }
-    
-    // si le client est le créateur, retourn l'id du challenger
-    if (req.auth.userId === req.game.createurId) {
 
-        req.otherUserId = req.game.challengerId
-        req.package.otherUserId = req.game.challengerId
+    // test si le client est le créateur
+    // si oui
+    if (gameUserId === reqId) {
 
+        // renvoi un message pour informer que c'est le tour du client
+        return { message: "Your turn" }
+
+        // si non
     } else {
-        // sinon retourn l'id du créateur créateur
-        req.otherUserId = req.game.createurId
-        req.package.otherUserId = req.game.createurId
+
+        // renvoi un message pour informer que ce n'est pas le tour du client
+        return { message: "Wait" }
 
     }
-
-    return req.package
 }
