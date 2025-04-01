@@ -17,10 +17,7 @@ exports.createGame = async (req, res, next) => {
 
 // crée une partie
 exports.createGameV2 = async (req, res, next) => {
-    utilRes.sendSuccess(200, {
-        game: req.body.game,
-        player: req.body.player
-    }, res)
+    utilRes.sendSuccess(200, req.body.all, res)
 }
 
 // trouve une partie 
@@ -50,10 +47,7 @@ exports.joinGame = async (req, res, next) => {
 // permet au client de rejoindre une party dont il a entré la clef
 exports.joinGameV2 = async (req, res, next) => {
 
-    utilRes.sendSuccess(200, {
-        game: req.body.game,
-        players: req.body.players
-    }, res)
+    utilRes.sendSuccess(200, req.body.all, res)
 
 }
 
@@ -66,7 +60,7 @@ exports.startGame = async (req, res, next) => {
 // commence la partie
 exports.startGameV2 = async (req, res, next) => {
 
-    utilRes.sendSuccess(200, req.body, res)
+    utilRes.sendSuccess(200, req.body.all, res)
 }
 
 // vérifie si c'est le tour de l'utilisateur
@@ -82,7 +76,7 @@ exports.tryPhrase = async (req, res, next) => {
 
 exports.tryPhraseV2 = async (req, res, next) => {
 
-    utilRes.sendSuccess(200, { message: req.body }, res)
+    utilRes.sendSuccess(200, req.body.all, res)
 }
 
 
@@ -97,7 +91,7 @@ exports.endGame = async (req, res, next) => {
 // termine la partie
 exports.endGameV2 = async (req, res, next) => {
 
-    utilRes.sendSuccess(200, req.body, res)
+    utilRes.sendSuccess(200, req.body.all, res)
 }
 
 /**
@@ -116,7 +110,7 @@ exports.tryCase = async (req, res, next) => {
 
 exports.tryCaseV2 = async (req, res, next) => {
 
-    utilRes.sendSuccess(200, req.body, res)
+    utilRes.sendSuccess(200, req.body.all, res)
 
 }
 

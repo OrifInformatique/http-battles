@@ -1,4 +1,5 @@
 const utilFindPlayerV2 = require('../player/find')
+const middleFindGameV2 = require('../../middleware/game')
 
 // import fonctions util pour check
 const utilCheck = require('../check')
@@ -43,7 +44,7 @@ exports.findPlayerForGame = async (req) => {
 
     req.body.gamesPlayers = []
 
-    if(req.body.game !== undefined){
+    if (req.body.game !== undefined) {
         req.body.games = [req.body.game]
     }
 
@@ -80,6 +81,79 @@ exports.findPlayerForGame = async (req) => {
             return null
         }
     }
+
+    // retourne la variable traitée pour la gestion d'erreur
+    return req.body
+}
+
+exports.filteredFindGame = async (req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: filteredFindGame"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.body.gameIdV2 === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No GameId"
+        req.data.push({
+            name: "req.body.gameIdV2 === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    req.body.creatorId = undefined
+    req.body.gameStatus = undefined
+    req.body.playerId = undefined
+    req.body.userId = undefined
+    req.body.playerStatus = undefined
+    req.body.wordId = undefined
+    req.body.content = undefined
+    req.body.playerId = undefined
+    req.body.phrasePosition = undefined
+    req.body.boardPosition = undefined
+    req.body.wordStatus = undefined
+
+    await middleFindGameV2.findGamesV2(req)
+        .then(value => {
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
     // retourne la variable traitée pour la gestion d'erreur
     return req.body

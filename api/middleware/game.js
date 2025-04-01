@@ -448,10 +448,34 @@ exports.createGameV2 = async (req, res, next) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilGeneralV2.filteredFindGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGamer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()
     }
+
 
     // retourn la variable traité pour la gestion d'erreur en dehors des middleware
     return req.body
@@ -830,7 +854,7 @@ exports.startGameV2 = async (req, res, next) => {
             req.body.player = req.body.players[player]
 
 
-            
+
             console.log("player._id: " + req.body.player._id)
             console.log("players[player]._id: " + req.body.players[player]._id)
             console.log("players[0]._id: " + req.body.players[0]._id)
@@ -880,6 +904,29 @@ exports.startGameV2 = async (req, res, next) => {
             console.log(error)
             req.data.push({
                 name: "utilUpdateGameV2.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilGeneralV2.filteredFindGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGamer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -1117,6 +1164,29 @@ exports.joinGameV2 = async (req, res, next) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilGeneralV2.filteredFindGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGamer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()
@@ -1260,6 +1330,29 @@ exports.endGameV2 = async (req, res, next) => {
             console.log(error)
             req.data.push({
                 name: "utilUpdateGameV2.updateGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilGeneralV2.filteredFindGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGamer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
@@ -1536,6 +1629,29 @@ exports.tryPhraseV2 = async (req, res, next) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilGeneralV2.filteredFindGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGamer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
@@ -1686,7 +1802,7 @@ exports.tryCaseV2 = async (req, res, next) => {
 
     req.body.userId = undefined
     req.body.playerId = req.body.clientId
-    
+
     await utilFindPlayerV2.findPlayer(req)
         .then(value => {
             req.body.player = req.body.players[0]
@@ -1907,6 +2023,30 @@ exports.tryCaseV2 = async (req, res, next) => {
                 })
             })
     }
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilGeneralV2.filteredFindGame(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGamer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.filteredFindGame",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
