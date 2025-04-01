@@ -36,6 +36,10 @@ const { util } = require('webpack')
 const LOC_GLOB = "file: ../middleware/game"
 
 
+/**
+ * @returns             req.body
+ * @returns             req.body.success
+ */
 exports.testAll = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: testAll"
@@ -351,12 +355,13 @@ exports.testAll = async (req, res, next) => {
 }
 
 /**
- * 
- * @param {*} optional  req.body.gameIdV2
+ * @param {*} optional  req.body.gameIdV2/gameId
  * @param {*} optional  req.body.creatorId
  * @param {*} optional  req.body.gameStatus
  * 
- * @returns             req.body
+ * @returns             req.body.games
+ * @returns             req.body.game.players
+ * @returns             req.body.game.player.words
  */
 exports.findGamesV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -487,8 +492,8 @@ exports.findGamesV2 = async (req, res, next) => {
 }
 
 /**
+ * @param {*} obligatory    req.body.userId
  * 
- * @param {*}   obligatory: req.auth.userId
  * @returns                 req.body.game
  * @returns                 req.body.player
  */
@@ -600,12 +605,12 @@ exports.createGameV2 = async (req, res, next) => {
 }
 
 /**
+ * @param {*} obligatory    req.body.gameIdV2/gameId
+ * @param {*} obligatory    req.body.clientId
+ * @param {*} obligatory    req.body.Phrase
  * 
- * @param {*} obligatory    req.body.gameIdV2
- * @param {*} obligatory    req.body.userId
- * @param {*} optional      req.body.playerId
- * 
- * @returns                 req.body
+ * @returns                 req.body.game.players
+ * @returns                 req.body.game.player.words
  */
 exports.startGameV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -889,11 +894,10 @@ exports.startGameV2 = async (req, res, next) => {
 
 
 /**
+ * @param {*} obligatory    req.body.gameIdV2/gameId
+ * @param {*} obligatory    req.body.req.body.userId
  * 
- * @param {*} obligatory    req.body.gameIdV2
- * @param {*} obligatory    req.body.userId
- * 
- * @returns                 req.body
+ * @returns                 req.body.game.players
  */
 // permet à un utilisateur de rejoindre une partie
 exports.joinGameV2 = async (req, res, next) => {
@@ -1068,6 +1072,11 @@ exports.joinGameV2 = async (req, res, next) => {
     return req.body
 }
 
+/**
+ * @param {*} obligatory    req.body.gameIdV2/gameId
+ * 
+ * @returns                 req.body.game
+ */
 // fini la partie
 exports.endGameV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -1172,6 +1181,15 @@ exports.endGameV2 = async (req, res, next) => {
     return req.body
 }
 
+/**
+ * @param {*} obligatory    req.body.gameIdV2/gameId
+ * @param {*} obligatory    req.body.clientId
+ * @param {*} obligatory    req.body.targetId
+ * @param {*} obligatory    req.body.Phrase
+ * 
+ * @returns                 req.body.game.players
+ * @returns                 req.body.game.player.words
+ */
 exports.tryPhraseV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: tryPhrase"
@@ -1394,6 +1412,14 @@ exports.tryPhraseV2 = async (req, res, next) => {
 
 }
 
+/**
+ * @param {*} obligatory    req.body.gameIdV2/gameId
+ * @param {*} obligatory    req.body.clientId
+ * @param {*} obligatory    req.body.targetId
+ * 
+ * @returns                 req.body.game.players
+ * @returns                 req.body.game.player.words
+ */
 // ecrit le message du test de la case à renvoyer au client
 exports.tryCaseV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
