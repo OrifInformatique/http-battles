@@ -704,6 +704,7 @@ exports.startGameV2 = async (req, res, next) => {
     }
 
     req.body.userId = undefined
+    req.body.playerId = req.body.clientId
 
     await utilFindPlayerV2.findPlayer(req)
         .then(value => {
@@ -737,7 +738,7 @@ exports.startGameV2 = async (req, res, next) => {
     if (req.body.player === undefined) {
         var error = new Error()
         error.name = "Bad Request"
-        error.message = "Bad playerId"
+        error.message = "Bad clientId"
         req.data.push({
             name: "req.body.player.status === undefined",
             loc: LOC_GLOB + " " + LOC_LOC,
@@ -1398,9 +1399,7 @@ exports.tryPhraseV2 = async (req, res, next) => {
         return null
     }
 
-    req.body.clientId = req.body.playerId
-
-    req.body.playerId = req.body.targetPlayerId
+    req.body.playerId = req.body.targetId
 
     await utilFindPlayerV2.findPlayer(req)
         .then(value => {
@@ -1661,9 +1660,6 @@ exports.tryCaseV2 = async (req, res, next) => {
         return null
     }
 
-    console.log(req.method)
-    console.log(req.route)
-
     await utilFindGameV2.findGame(req)
         .then(value => {
             req.body.game = req.body.games[0]
@@ -1689,6 +1685,47 @@ exports.tryCaseV2 = async (req, res, next) => {
     }
 
     req.body.userId = undefined
+    req.body.playerId = req.body.clientId
+    
+    await utilFindPlayerV2.findPlayer(req)
+        .then(value => {
+            req.body.player = req.body.players[0]
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilFindPlayerV2.findPlayer",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    // stop la méthode en cas d'échèque du test
+    if (req.body.player.status === "WAIT") {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "It isn't this player turn"
+        req.data.push({
+            name: "req.body.player.status === WAIT",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    req.body.playerId = req.body.targetId
 
     await utilFindPlayerV2.findPlayer(req)
         .then(value => {
