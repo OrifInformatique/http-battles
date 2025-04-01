@@ -49,7 +49,10 @@ exports.findGame = async (req) => {
 
     const query = {}
 
-    
+    if(req.body.gameId !== undefined){
+        req.body.gameIdV2 = req.body.gameId 
+    }
+
     if (req.body.gameIdV2 !== undefined) {
         var gameId = {
             "_id": mongoose.Types.ObjectId(req.body.gameIdV2)

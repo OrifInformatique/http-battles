@@ -15,6 +15,9 @@ const utilUser = require('../util/user')
 // import fonctions util pour game
 const utilGame = require('../util/game')
 
+// import fonctions util pour game
+const utilGameV2 = require('../util/game/find')
+
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/log"
 
@@ -93,15 +96,19 @@ exports.logInitFindUserAndGame = async (req) => {
             })
     }
 
+    if (req.body.gameIdV2 !== undefined){
+        req.body.gameId = req.body.gameIdV2
+    }
+
     // vérifie si la requete contient l'id d'une partie
     if (req.body.gameId !== undefined) {
         // récupère les données de la partie
-        await utilGame.getGame(req)
+        await utilGameV2.findGame(req)
             .then(value => {
                 // stoque la partie dans la requete
-                req.package.game = value
-                req.game = value
-
+                req.package.game = req.body.games[0]
+                req.game = req.body.games[0]
+                console.log(req.game)
                 req.data.push({
                     name: "middleGame.getGame",
                     loc: LOC_GLOB + " " + LOC_LOC,
@@ -136,8 +143,8 @@ exports.logDate = async (req) => {
     req.package.year = req.package.date.getFullYear()
     req.package.month = req.package.date.getMonth() + 1
     req.package.day = req.package.date.getDate()
-    req.package.hour = req.package.date.getHours() + 1
-    req.package.minute = req.package.date.getMinutes() + 1
+    req.package.hour = req.package.date.getHours() 
+    req.package.minute = req.package.date.getMinutes() 
 
     // retourn le package
     return req.package
@@ -290,33 +297,23 @@ exports.listLogs = async (req) => {
     }
 
     // test si le client veut les log pour une partie ave un état particulier
-    if (req.body.state !== undefined) {
+    if (req.body.status !== undefined) {
         // stoque la requete pour la base de donnée dans un objet
-        game.state = {
-            "game.state": req.body.state
+        game.status = {
+            "game.status": req.body.status
         }
         // stoque le contenu de l'objet dans le query
-        Object.assign(query, game.state)
+        Object.assign(query, game.status)
     }
 
     // test si le client veut les log pour une partie avec un créateur particulier par le bias de son id
-    if (req.body.createurId !== undefined) {
+    if (req.body.creatorId !== undefined) {
         // stoque la requete pour la base de donnée dans un objet
-        game.createurId = {
-            "game.createurId": req.body.createurId
+        game.creatorId = {
+            "game.creatorId": req.body.creatorId
         }
         // stoque le contenu de l'objet dans le query
-        Object.assign(query, game.createurId)
-    }
-
-    // test si le client veut les log pour une partie avec un challenger particulier par le bias de son id
-    if (req.body.challengerId !== undefined) {
-        // stoque la requete pour la base de donnée dans un objet
-        game.challengerId = {
-            "game.challengerId": req.body.challengerId
-        }
-        // stoque le contenu de l'objet dans le query
-        Object.assign(query, game.challengerId)
+        Object.assign(query, game.creatorId)
     }
 
     // test si le client veut les log d'une année particulière
@@ -387,9 +384,8 @@ exports.listLogs = async (req) => {
         if (log.game === undefined || log.game === null) {
             log.game = {}
             log.game._id = "none"
-            log.game.state = "none"
-            log.game.createurId = "none"
-            log.game.challengerId = "none"
+            log.game.status = "none"
+            log.game.creatorId = "none"
         }
 
         // test si un utilisateur est associé au log, si non, crée un utilisateur et le remplie d'information vide
@@ -417,9 +413,8 @@ exports.listLogs = async (req) => {
                 userFirstname: log.user.firstname,
                 userLastname: log.user.lastname,
                 gameId: log.game._id,
-                gameState: log.game.state,
-                gameCreateurId: log.game.createurId,
-                gameChallengerId: log.game.challengerId,
+                gameCreatorId: log.game.creatorId,
+                gameStatus: log.game.status,
                 logYear: log.year,
                 logMonth: log.month,
                 logDay: log.day,
@@ -472,9 +467,8 @@ exports.listLogs = async (req) => {
                 userFirstname: log.user.firstname,
                 userLastname: log.user.lastname,
                 gameId: log.game._id,
-                gameState: log.game.state,
-                gameCreateurId: log.game.createurId,
-                gameChallengerId: log.game.challengerId,
+                gameCreatorId: log.game.creatorId,
+                gameStatus: log.game.status,
                 logYear: log.year,
                 logMonth: log.month,
                 logDay: log.day,

@@ -141,6 +141,7 @@ exports.findGamesV2 = async (req, res, next) => {
         return null
     }
 
+    
     await utilFindGameV2.findGame(req)
         .then(value => {
             req.data.push({
