@@ -16,7 +16,7 @@ const LOC_GLOB = "file: ../util/player/create"
 // crée un objet Game
 exports.createPlayer = async (req) => {
     // test de la validité des données
-    const LOC_LOC = "methode: createGame"
+    const LOC_LOC = "methode: createPlayer"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)

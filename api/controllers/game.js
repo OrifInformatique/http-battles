@@ -6,6 +6,10 @@ const fs = require('fs')
 const utilRes = require('../util/res')
 const { util } = require('webpack')
 
+exports.testAll = async (req, res, next) => {
+    utilRes.sendSuccess(200, req.body, res)
+}
+
 // crée une partie
 exports.createGame = async (req, res, next) => {
     utilRes.sendSuccess(200, {

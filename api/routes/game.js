@@ -13,6 +13,7 @@ const check = require('../middleware/check')
 
 const middleGame = require('../middleware/game')
 
+router.post('/games/testAll', auth, check.dataInit, middleGame.testAll, check.logInit, check.dataValidity, gameCtrl.testAll)
 
 // créé une partie pour cette utilisateur
 router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)

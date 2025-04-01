@@ -39,6 +39,321 @@ const { util } = require('webpack')
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../middleware/game"
 
+
+exports.testAll = async (req, res, next) => {
+    // location local pour la gestion d'erreur
+    const LOC_LOC = "methode: testAll"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req, next)
+        .then(value => {
+            req.utilCheck = value
+
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    req.auth.userId = "67a4c9208dbb3ff2526fed16"
+    req.body.save = {
+        success: {}
+    }
+    req.body.save.userId = "67a4c9208dbb3ff2526fed16"
+
+    req.body.userId = req.body.save.userId
+
+    await this.findGamesV2(req)
+        .then(value => {
+            req.body.save.success.findGamesV2 = "Success"
+            req.data.push({
+                name: "this.findGamesV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.findGamesV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.userId = req.body.save.userId
+
+    await this.createGameV2(req)
+        .then(value => {
+            req.body.save.success.createGameV2 = "Success"
+            req.data.push({
+                name: "this.createGameV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.createGameV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.save.gameId = req.body.game._id
+    req.body.save.firstPlayerId = req.body.players[0]._id
+
+    req.body.userId = req.body.save.userId
+    req.body.gameId = req.body.save.gameId
+    req.body.clientId = req.body.save.firstPlayerId
+
+    await this.joinGameV2(req)
+        .then(value => {
+            req.body.save.success.joinGame = "Success"
+            req.data.push({
+                name: "this.joinGameV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.joinGameV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.save.firstPlayerId = req.body.players[0]._id
+    req.body.save.seconPlayerId = req.body.players[1]._id
+    req.body.save.phrase = [
+        {
+            "content": "test",
+            "phrasePosition": "1",
+            "boardPosition": "Get A"
+        },
+        {
+            "content": "test2",
+            "phrasePosition": "2",
+            "boardPosition": "Get B"
+        }
+    ]
+
+    req.body.userId = req.body.save.userId
+    req.body.gameId = req.body.save.gameId
+    req.body.clientId = req.body.save.firstPlayerId
+    req.body.phrase = req.body.save.phrase
+
+    await this.startGameV2(req)
+        .then(value => {
+            req.body.save.success.startGameV21 = "Success"
+            req.data.push({
+                name: "this.startGameV2-1",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.startGameV2-1",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.player = undefined
+
+    req.body.userId = req.body.save.userId
+    req.body.gameId = req.body.save.gameId
+    req.body.clientId = req.body.save.seconPlayerId
+    req.body.phrase = req.body.save.phrase
+
+    await this.startGameV2(req)
+        .then(value => {
+            req.body.save.success.startGameV22 = "Success"
+            req.data.push({
+                name: "this.startGameV2-2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.startGameV2-2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.userId = req.body.save.userId
+    req.body.gameId = req.body.save.gameId
+    req.body.clientId = req.body.save.firstPlayerId
+    req.body.targetId = req.body.save.seconPlayerId
+    req.body.phrase = req.body.save.phrase
+    req.method = "GET"
+    req.route = "a"
+
+    await this.tryCaseV2(req)
+        .then(value => {
+            req.body.save.success.tryCaseV21 = "Success"
+            req.data.push({
+                name: "this.tryCaseV2-1",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.tryCaseV2-1",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.userId = req.body.save.userId
+    req.body.gameId = req.body.save.gameId
+    req.body.clientId = req.body.save.seconPlayerId
+    req.body.targetId = req.body.save.firstPlayerId
+    req.body.phrase = req.body.save.phrase
+    req.method = "GET"
+    req.route = "b"
+
+    await this.tryCaseV2(req)
+        .then(value => {
+            req.body.save.success.tryCaseV22 = "Success"
+            req.data.push({
+                name: "this.tryCaseV2-2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.tryCaseV2-2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    req.body.userId = req.body.save.userId
+    req.body.gameId = req.body.save.gameId
+    req.body.clientId = req.body.save.firstPlayerId
+    req.body.targetId = req.body.save.seconPlayerId
+    req.body.phrase = req.body.save.phrase
+
+    await this.tryPhraseV2(req)
+        .then(value => {
+            req.body.save.success.tryPhraseV2 = "Success"
+            req.data.push({
+                name: "this.tryPhraseV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.tryPhraseV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await this.endGameV2(req)
+        .then(value => {
+            req.body.save.success.endGameV2 = "Success"
+            req.data.push({
+                name: "this.endGameV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "this.endGameV2",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    // retourne la variable traité pour la gestion d'erreur en dehors des middleware
+    return req.body
+}
+
 exports.findGame = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: findGame"
@@ -141,7 +456,7 @@ exports.findGamesV2 = async (req, res, next) => {
         return null
     }
 
-    
+
     await utilFindGameV2.findGame(req)
         .then(value => {
             req.data.push({
@@ -227,7 +542,6 @@ exports.findGamesV2 = async (req, res, next) => {
                 })
 
             req.body.all[game].players[player].words.push(req.body.words)
-            console.log(req.body.gamesPlayers[0])
         }
     }
 
@@ -749,7 +1063,7 @@ exports.startGameV2 = async (req, res, next) => {
         })
 
     for (const player in req.body.players) {
-        if (req.body.players[player]._id.toString() === req.body.playerId) {
+        if (req.body.players[player]._id.toString() === req.body.playerId.toString()) {
             req.body.player = req.body.players[player]
         }
     }
@@ -785,8 +1099,6 @@ exports.startGameV2 = async (req, res, next) => {
         next()
         return null
     }
-
-
 
     for (const word in req.body.phrase) {
 
@@ -846,19 +1158,9 @@ exports.startGameV2 = async (req, res, next) => {
         return null
     }
 
-    console.log("req.body.players[0]._id.toString(): " + req.body.players[0]._id.toString())
-    console.log("req.body.players[1]._id.toString(): " + req.body.players[1]._id.toString())
-    console.log("clientPlayerId: " + clientPlayerId.toString())
-
     for (const player in req.body.players) {
         if (req.body.players[player]._id.toString() === clientPlayerId.toString()) {
             req.body.player = req.body.players[player]
-
-
-
-            console.log("player._id: " + req.body.player._id)
-            console.log("players[player]._id: " + req.body.players[player]._id)
-            console.log("players[0]._id: " + req.body.players[0]._id)
 
             if (req.body.player._id === req.body.players[0]._id) {
                 req.body.playerStatus = "PLAYER_TURN"
@@ -938,7 +1240,7 @@ exports.startGameV2 = async (req, res, next) => {
         next()
     }
 
-    return req.package
+    return req.body
 }
 
 // permet à un utilisateur de rejoindre une partie
@@ -2055,6 +2357,6 @@ exports.tryCaseV2 = async (req, res, next) => {
     }
 
     // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
-    return req.package
+    return req.body
 }
 
