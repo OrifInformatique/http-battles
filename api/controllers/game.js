@@ -11,42 +11,17 @@ exports.testAll = async (req, res, next) => {
 }
 
 // crée une partie
-exports.createGame = async (req, res, next) => {
-    utilRes.sendSuccess(200, {
-        message: "Partie créé !",
-        state: req.gameCreated.state,
-        gameId: req.gameCreated._id
-    }, res)
-}
-
-// crée une partie
 exports.createGameV2 = async (req, res, next) => {
     utilRes.sendSuccess(200, req.body.all, res)
 }
 
-// trouve une partie 
-exports.findGame = async (req, res, next) => {
-
-    utilRes.sendSuccess(200, req.formatedGame, res)
-}
 
 // trouve une partie 
 exports.findGamesV2 = async (req, res, next) => {
     utilRes.sendSuccess(200, req.body.all, res)
 }
 
-// liste les parties
-exports.listGames = async (req, res, next) => {
 
-    utilRes.sendSuccess(200, req.formatedGames, res)
-}
-
-// permet au client de rejoindre une party dont il a entré la clef
-exports.joinGame = async (req, res, next) => {
-
-    utilRes.sendSuccess(200, req.joinSuccessMessage, res)
-
-}
 
 // permet au client de rejoindre une party dont il a entré la clef
 exports.joinGameV2 = async (req, res, next) => {
@@ -55,11 +30,7 @@ exports.joinGameV2 = async (req, res, next) => {
 
 }
 
-// commence la partie
-exports.startGame = async (req, res, next) => {
 
-    utilRes.sendSuccess(200, req.startMessage, res)
-}
 
 // commence la partie
 exports.startGameV2 = async (req, res, next) => {
@@ -67,16 +38,7 @@ exports.startGameV2 = async (req, res, next) => {
     utilRes.sendSuccess(200, req.body.all, res)
 }
 
-// vérifie si c'est le tour de l'utilisateur
-exports.checkTurn = async (req, res, next) => {
 
-    utilRes.sendSuccess(200, req.testTurnMessage, res)
-}
-
-exports.tryPhrase = async (req, res, next) => {
-
-    utilRes.sendSuccess(200, { message: req.tryPhraseResultMessage }, res)
-}
 
 exports.tryPhraseV2 = async (req, res, next) => {
 
@@ -84,13 +46,6 @@ exports.tryPhraseV2 = async (req, res, next) => {
 }
 
 
-// termine la partie
-exports.endGame = async (req, res, next) => {
-
-    utilRes.sendSuccess(200, {
-        message: "Game Over"
-    }, res)
-}
 
 // termine la partie
 exports.endGameV2 = async (req, res, next) => {
@@ -98,15 +53,7 @@ exports.endGameV2 = async (req, res, next) => {
     utilRes.sendSuccess(200, req.body.all, res)
 }
 
-/**
- * série de fonctions pour les case du jeux
- */
 
-exports.tryCase = async (req, res, next) => {
-
-    utilRes.sendSuccess(200, req.tryCaseMessage, res)
-
-}
 
 /**
  * série de fonctions pour les case du jeux
