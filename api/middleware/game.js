@@ -449,41 +449,22 @@ exports.findGamesV2 = async (req, res, next) => {
         return null
     }
 
-    req.body.all = []
-
-    for (const game in req.body.gamesPlayers) {
-        req.body.all.push({
-            game: req.body.gamesPlayers[game].game,
-            players: []
-        })
-        for (const player in req.body.gamesPlayers[game].players) {
-            req.body.all[game].players.push({
-                player: req.body.gamesPlayers[game].players[player],
-                words: []
+    await utilGeneralV2.findWordsForPlayersForGames(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.findWordsForPlayersForGames",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            req.body.playerId = req.body.gamesPlayers[game].players[player]._id
-
-            await utilFindWordV2.findWord(req)
-                .then(value => {
-
-                    req.data.push({
-                        name: "utilFindWordV2.findWord",
-                        loc: LOC_GLOB + " " + LOC_LOC,
-                        value: value
-                    })
-                })
-                .catch(error => {
-                    console.log(error)
-                    req.data.push({
-                        name: "utilFindWordV2.findWord",
-                        loc: LOC_GLOB + " " + LOC_LOC,
-                        error: error
-                    })
-                })
-
-            req.body.all[game].players[player].words.push(req.body.words)
-        }
-    }
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.findWordsForPlayersForGames",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
