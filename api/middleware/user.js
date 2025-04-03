@@ -1,23 +1,27 @@
+// import fonctions util 
+const utilFindUser = require('../util/user/find')
 
-// import le schema d'un utilisateur
-const User = require("../../models/User")
-
-// import fonctions util pour check
-const utilCheck = require('../check')
+// import fonctions util 
+const utilCheck = require('../util/check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/../depthBottom/getUserById"
+const LOC_GLOB = "file: ../middleware/user"
 
-// récupère un utilisateur suivant sin id
-exports.getUserById = async (userId, req) => {
+/**
+ * Met fin à la partie
+ * 
+ * @param {*} obligatory    req.body.gameIdV2/gameId
+ * 
+ * @returns                 req.body.game
+ */
+exports.findUser = async (req, res, next) => {
     // location local pour la gestion d'erreur
-    const LOC_LOC = "methode: getUserById"
+    const LOC_LOC = "methode: endGame"
 
     // test de la validité des données
-    await utilCheck.dataValidityTest(req)
+    await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value
-
             req.data.push({
                 name: "utilCheck.dataValidityTest",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -38,28 +42,28 @@ exports.getUserById = async (userId, req) => {
         return null
     }
 
-    // récupère un tulisateur suivant son id
-    await User.findOne({ _id: userId })
+    await utilFindUser.findUser(req)
         .then(value => {
-            // stoque l'utilisateur dans la requete
-            req.user = value
-            req.package.user = value
             req.data.push({
-                name: "User.findOne",
+                name: "utilFindUser.findUser",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
-
         })
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "User.findOne",
+                name: "utilFindUser.findUser",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })
         })
 
-    // retourne la variable traité pour la gestion d'erreur
-    return req.package
+    // test si la fonction next à été transmise et passe au prochains middlware si oui
+    if (next !== undefined) {
+        next()
+    }
+
+    // retourn la variables traitée pour la gestion d'erreur en dehors des middleware
+    return req.body
 }

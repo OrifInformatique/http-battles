@@ -30,6 +30,7 @@ const utilGeneralV2 = require('../util/general/general')
 
 // import fonctions util pour board
 const utilCheck = require('../util/check')
+
 const { util } = require('webpack')
 
 // location global pour la gestion d'erreur

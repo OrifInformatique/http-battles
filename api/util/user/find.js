@@ -2,26 +2,27 @@
 const mongoose = require('mongoose');
 
 // import le schema d'un Player
-const PlayerV2 = require("../../modelV2/PlayerV2")
+const User = require("../../models/User")
 
 // import fonctions util pour check
 const utilCheck = require('../check')
 
 // location global pour la gestion d'erreur
-const LOC_GLOB = "file: ../util/player/find"
+const LOC_GLOB = "file: ../util/user/find"
 
 /**
- * @param {*} optional  req.body.playerId
- * @param {*} optional  req.body.gameIdV2
  * @param {*} optional  req.body.userId
- * @param {*} optional  req.body.playerStatus
+ * @param {*} optional  req.body.email
+ * @param {*} optional  req.body.password
+ * @param {*} optional  req.body.firstname
+ * @param {*} optional  req.body.lastname
  * 
- * @returns             req.body.players
+ * @returns             req.body.users
  */
 // crée un objet Player
-exports.findPlayer = async (req) => {
+exports.findUser = async (req) => {
     // test de la validité des données
-    const LOC_LOC = "methode: findPlayer"
+    const LOC_LOC = "methode: findUser"
 
     // test de la validité des données
     await utilCheck.dataValidityTest(req)
@@ -50,40 +51,47 @@ exports.findPlayer = async (req) => {
     const query = {}
 
     
-    if (req.body.playerId !== undefined) {
-        var playerId = {
-            "_id": mongoose.Types.ObjectId(req.body.playerId)
-        }
-        Object.assign(query, playerId)
-    }
-
-    if (req.body.gameIdV2 !== undefined) {
-        var gameId = {
-            "gameId": req.body.gameIdV2
-        }
-        Object.assign(query, gameId)
-    }
-
     if (req.body.userId !== undefined) {
         var userId = {
-            "userId": req.body.userId
+            "_id": mongoose.Types.ObjectId(req.body.userId)
         }
         Object.assign(query, userId)
     }
 
-    if (req.body.playerStatus !== undefined) {
-        var playerStatus = {
-            "status": req.body.playerStatus
+    if (req.body.email !== undefined) {
+        var email = {
+            "email": req.body.email
         }
-        Object.assign(query, playerStatus)
+        Object.assign(query, email)
     }
 
-    await PlayerV2.find(query).sort("_id")
+    if (req.body.password !== undefined) {
+        var password = {
+            "password": req.body.password
+        }
+        Object.assign(query, password)
+    }
+
+    if (req.body.username !== undefined) {
+        var username = {
+            "username": req.body.username
+        }
+        Object.assign(query, username)
+    }
+
+    if (req.body.lastname !== undefined) {
+        var lastname = {
+            "lastname": req.body.lastname
+        }
+        Object.assign(query, lastname)
+    }
+
+    await User.find(query)
         .then(value => {
             // stoque le Player dans la requete
-            req.body.players = value
+            req.body.users = value
             req.data.push({
-                name: "Player.find",
+                name: "User.find",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 value: value
             })
@@ -91,7 +99,7 @@ exports.findPlayer = async (req) => {
         .catch(error => {
             console.log(error)
             req.data.push({
-                name: "Player.find",
+                name: "User.find",
                 loc: LOC_GLOB + " " + LOC_LOC,
                 error: error
             })

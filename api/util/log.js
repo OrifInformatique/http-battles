@@ -13,9 +13,6 @@ const utilCheck = require('../util/check')
 const utilUser = require('../util/user')
 
 // import fonctions util pour game
-const utilGame = require('../util/game')
-
-// import fonctions util pour game
 const utilGameV2 = require('../util/game/find')
 
 // location global pour la gestion d'erreur

@@ -5,6 +5,9 @@ const User = require("../models/User");
 // import jsonwebtoken pour fabriquer des token
 const jwt = require("jsonwebtoken");
 
+// import fonctions util pour res
+const utilRes = require('../util/res')
+
 // exporte la fonctionalité de création d'un utilisateur
 exports.signup = (req, res, next) => {
   // encrypte le mot de passe contenu dans la requete
@@ -84,3 +87,8 @@ exports.login = (req, res, next) => {
     // en cas d'erreure renvoit l'erreur
     .catch((error) => res.status(500).json({ error }));
 };
+
+
+exports.findUser = async (req, res, next) => {
+    utilRes.sendSuccess(200, req.body.users, res)
+}

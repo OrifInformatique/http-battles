@@ -9,8 +9,6 @@ const utilCheck = require('../util/check')
 // import fonctions util pour log
 const utilLog = require('../util/log')
 
-// import fonctions util pour game
-const utilGame = require('../util/game')
 
 // import fonctions contenu dans middleware/game
 const middleGame = require('./game')
@@ -257,75 +255,6 @@ exports.checkReqDataTryCase = async (req, res, next) => {
     if (next !== undefined) {
         // si oui passe au prochain middleWare
         next()
-    }
-
-}
-
-// vérify si il s'agit du tour du client
-exports.checkTurn = async (req, res, next) => {
-    // constante local indiquant la methode pour le traitement des erreures
-    const LOC_LOC = "methode: checkTurn"
-
-    // test de validité des données de la requète passant la methode en cas de problème
-    await utilCheck.dataValidityTest(req, next)
-        .then(value => {
-            // stocke la donnée avec le résultat de la méthode dans la requète
-            req.utilCheck = value
-
-            // donnée ajouté ave la méthode utiliser, la méthode dans laquel elle est localiser, la page global et le résultat
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            // donnée ajouté ave la méthode utiliser, la méthode dans laquel elle est localiser, la page global et l'erreur'
-            req.data.push({
-                name: "utilCheck.dataValidityTest",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // test pour sortir de la méthodes et empecher son execution si les donées ne sont pas validé   
-    if (req.utilCheck) {
-        return null
-    }
-
-    // test si il s'agit du tour du client
-    await utilGame.findGameAndTestTurn(req, res)
-        .then(value => {
-
-            req.testTurnMessage = value.testTurnMessage
-
-            // donnée ajouté ave la méthode utiliser, la méthode dans laquel elle est localiser, la page global et le résultat
-            req.data.push({
-                name: " middleGame.testTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
-            })
-        })
-        .catch(error => {
-            // donnée ajouté ave la méthode utiliser, la méthode dans laquel elle est localiser, la page global et l'erreur'
-            req.data.push({
-                name: " middleGame.testTurn",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
-            })
-        })
-
-    // verifie le résultat du test pour voir si il s'agit du tour du client
-    if (req.testTurnMessage.message !== "Your turn") {
-        // si ce n'est pas son tour renvoi un message pour l'en informer et arrète les opérations
-        await utilRes.sendSuccess(200, { message: req.testTurnMessage.message }, res)
-
-    } else {
-        // sinon test si la méthode doit passer la main au prochain middleware
-        if (next !== undefined) {
-            // passe au prochain middleware
-            next()
-        }
     }
 
 }
