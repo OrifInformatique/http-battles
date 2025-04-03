@@ -2,6 +2,8 @@ const utilFindPlayerV2 = require('../player/find')
 
 const utilFindWordV2 = require('../word/find')
 
+const utilCreateWordV2 = require('../word/create')
+
 const utilFindUsers = require('../user/find')
 
 const middleFindGameV2 = require('../../middleware/game')
@@ -93,7 +95,7 @@ exports.findPlayerForGame = async (req) => {
             return null
         }
     }
-    
+
     // retourne la variable traitée pour la gestion d'erreur
     return req.body
 }
@@ -136,7 +138,7 @@ exports.findWordsForPlayersForGames = async (req) => {
     for (const game in req.body.all) {
 
         for (const player in req.body.all[game].players) {
-            
+
             req.body.playerId = req.body.all[game].players[player].player._id
             req.body.all[game].players[player].words = []
 
@@ -158,11 +160,11 @@ exports.findWordsForPlayersForGames = async (req) => {
                     })
                 })
 
-                for (const word in req.body.words) {
-                    req.body.all[game].players[player].words.push({
-                        word: req.body.words[word]
-                    })
-                }
+            for (const word in req.body.words) {
+                req.body.all[game].players[player].words.push({
+                    word: req.body.words[word]
+                })
+            }
         }
     }
 
@@ -214,7 +216,7 @@ exports.findUsersForPlayersForGames = async (req) => {
     for (const game in req.body.all) {
 
         for (const player in req.body.all[game].players) {
-            
+
             req.body.userId = req.body.all[game].players[player].player.userId
             req.body.all[game].players[player].user = []
 
@@ -235,9 +237,9 @@ exports.findUsersForPlayersForGames = async (req) => {
                     })
                 })
 
-                for (const user in req.body.users) {
-                    req.body.all[game].players[player].user.push(req.body.users[user].username)
-                }
+            for (const user in req.body.users) {
+                req.body.all[game].players[player].user.push(req.body.users[user].username)
+            }
         }
     }
 
@@ -327,6 +329,147 @@ exports.filteredFindGame = async (req) => {
                 error: error
             })
         })
+
+    // retourne la variable traitée pour la gestion d'erreur
+    return req.body
+}
+
+/**
+ * crée une list de mot à partir d'une phrase
+ * 
+ * @param {*}   obligatory: req.body.phrase
+ * @param {*}   obligatory: req.body.phrase[word]
+ * @param {*}   obligatory: req.body.phrase[word].content
+ * @param {*}   obligatory: req.body.phrase[word].phrasePosition
+ * @param {*}   obligatory: req.body.phrasephrase[word].boardPosition
+ * @param {*}   obligatory: req.body.player
+ * 
+ * @returns                 req.body
+ */
+exports.createPhrase = async (req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: createPhrase"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.body.phrase === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No phrase"
+        req.data.push({
+            name: "req.body.phrase === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    if (req.body.player === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No player"
+        req.data.push({
+            name: "req.body.player === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    for (const word in req.body.phrase) {
+
+        if (req.body.phrase[word] === undefined) {
+            var error = new Error()
+            error.name = "Bad Request"
+            error.message = "No phrase[word]"
+            req.data.push({
+                name: "req.body.phrase[word] === undefined",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+            return null
+        }
+
+        if (req.body.phrase[word].content === undefined) {
+            var error = new Error()
+            error.name = "Bad Request"
+            error.message = "No phrase[word].content"
+            req.data.push({
+                name: "req.body.phrase[word].content === undefined",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+            return null
+        }
+
+        if (req.body.phrase[word].phrasePosition === undefined) {
+            var error = new Error()
+            error.name = "Bad Request"
+            error.message = "No phrase[word].phrasePosition"
+            req.data.push({
+                name: "req.body.phrase[word].phrasePosition === undefined",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+            return null
+        }
+
+        if (req.body.phrase[word].boardPosition === undefined) {
+            var error = new Error()
+            error.name = "Bad Request"
+            error.message = "No phrase[word].boardPosition"
+            req.data.push({
+                name: "req.body.phrase[word].boardPosition === undefined",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+            return null
+        }
+
+        req.body.content = req.body.phrase[word].content
+        req.body.playerId = req.body.player._id
+        req.body.phrasePosition = req.body.phrase[word].phrasePosition
+        req.body.boardPosition = req.body.phrase[word].boardPosition
+
+        await utilCreateWordV2.createWord(req)
+            .then(value => {
+                req.data.push({
+                    name: "utilCreateWordV2.createWord" + word,
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
+            })
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilCreateWordV2.createWord" + word,
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
+            })
+    }
 
     // retourne la variable traitée pour la gestion d'erreur
     return req.body

@@ -787,36 +787,29 @@ exports.startGameV2 = async (req, res, next) => {
         return null
     }
 
-    for (const word in req.body.phrase) {
-
-        req.body.content = req.body.phrase[word].content
-        req.body.playerId = req.body.player._id
-        req.body.phrasePosition = req.body.phrase[word].phrasePosition
-        req.body.boardPosition = req.body.phrase[word].boardPosition
-
-        await utilCreateWordV2.createWord(req)
-            .then(value => {
-                req.data.push({
-                    name: "utilCreateWordV2.createWord" + word,
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
+    await utilGeneralV2.createPhrase(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.createPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            .catch(error => {
-                console.log(error)
-                req.data.push({
-                    name: "utilCreateWordV2.createWord" + word,
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.createPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
             })
-    }
+        })
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         next()
         return null
     }
+
     const clientPlayerId = req.body.playerId
     req.body.playerId = undefined
 

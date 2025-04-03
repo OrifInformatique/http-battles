@@ -3,9 +3,6 @@ const mongoose = require('mongoose');
 // import le schema d'un utilisateur
 const Log = require("../models/Log")
 
-// import fonctions contenu dans middleware/game
-const middleGame = require('../middleware/game')
-
 // import fonctions util pour board
 const utilCheck = require('../util/check')
 
@@ -105,7 +102,7 @@ exports.logInitFindUserAndGame = async (req) => {
                 // stoque la partie dans la requete
                 req.package.game = req.body.games[0]
                 req.game = req.body.games[0]
-                
+
                 req.data.push({
                     name: "middleGame.getGame",
                     loc: LOC_GLOB + " " + LOC_LOC,
