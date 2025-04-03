@@ -7,7 +7,10 @@ const utilRes = require('../util/res')
 const { util } = require('webpack')
 
 exports.testAll = async (req, res, next) => {
-    utilRes.sendSuccess(200, req.body.save.success, res)
+    utilRes.sendSuccess(200, {
+        success: req.body.save.success,
+        all: req.body.all
+    }, res)
 }
 
 // crée une partie

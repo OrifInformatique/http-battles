@@ -105,7 +105,7 @@ exports.logInitFindUserAndGame = async (req) => {
                 // stoque la partie dans la requete
                 req.package.game = req.body.games[0]
                 req.game = req.body.games[0]
-                console.log(req.game)
+                
                 req.data.push({
                     name: "middleGame.getGame",
                     loc: LOC_GLOB + " " + LOC_LOC,

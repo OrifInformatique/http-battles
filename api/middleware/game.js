@@ -72,11 +72,11 @@ exports.testAll = async (req, res, next) => {
         return null
     }
 
-    req.auth.userId = "67a4c9208dbb3ff2526fed16"
+    req.auth.userId = "67b45c6cdeba6490aa0deb12"
     req.body.save = {
         success: {}
     }
-    req.body.save.userId = "67a4c9208dbb3ff2526fed16"
+    req.body.save.userId = "67b45c6cdeba6490aa0deb12"
 
     req.body.userId = req.body.save.userId
 
