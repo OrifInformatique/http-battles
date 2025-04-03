@@ -11,6 +11,7 @@ const utilCheck = require('../check')
 const LOC_GLOB = "file: ../util/player/update"
 
 /**
+ * @param {*} obligatory    req.body.player
  * @param {*} obligatory    req.body.player._id 
  * @param {*} optional      req.body.gameIdV2
  * @param {*} optional      req.body.userId
@@ -47,8 +48,35 @@ exports.updatePlayer = async (req) => {
         return null
     }
 
+    // test les données. Retourne une erreur et met fin à la fonction si la elle n'existe pas
+    if (req.body.player === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No player"
+        req.data.push({
+            name: "req.body.player === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    if (req.body.player._id === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No player._id "
+        req.data.push({
+            name: "req.body.player._id  === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    // initialise l'objet query qui sera la requete pour la base de donnée
     const query = {}
 
+    // ajout les variables de la requete entrante au query si elle peuvent être utilisées
     if (req.body.gameIdV2 !== undefined) {
         var gameId = {
             "gameId": req.body.gameIdV2
@@ -69,11 +97,13 @@ exports.updatePlayer = async (req) => {
         }
         Object.assign(query, playerStatus)
     }
-    
+
+    // Update le Player dont l'id est donné en paramètre
     await PlayerV2.updateOne({ _id: req.body.player._id }, {
         $set: query
     })
         .then(value => {
+            // stoque l'information du résultat de l'update (pas le Player)
             req.body.playerUpdate = value
             req.data.push({
                 name: "Player.updateOne",
@@ -90,6 +120,7 @@ exports.updatePlayer = async (req) => {
             })
         })
 
+    // trouve le Player dont l'id est donné en paramètre
     await PlayerV2.find({ _id: req.body.player._id })
         .then(value => {
             // stoque le Player dans la requete

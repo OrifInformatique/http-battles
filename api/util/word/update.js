@@ -12,6 +12,7 @@ const LOC_GLOB = "file: ../util/word/update"
 
 
 /**
+ * @param {*} obligatory    req.body.word
  * @param {*} obligatory    req.body.word._id 
  * @param {*} optional      req.body.playerId
  * @param {*} optional      req.body.content
@@ -50,8 +51,35 @@ exports.updateWord = async (req) => {
         return null
     }
 
+    // test les données. Retourne une erreur et met fin à la fonction si la elle n'existe pas
+    if (req.body.word === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No word"
+        req.data.push({
+            name: "req.body.word === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    if (req.body.word._id === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No word._id "
+        req.data.push({
+            name: "req.body.word._id  === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    // initialise l'objet query qui sera la requete pour la base de donnée
     const query = {}
 
+    // ajout les variables de la requete entrante au query si elle peuvent être utilisées
     if (req.body.playerId !== undefined) {
         var playerId = {
             "playerId": req.body.playerId
@@ -87,10 +115,12 @@ exports.updateWord = async (req) => {
         Object.assign(query, wordStatus)
     }
 
+    // Update le Word dont l'id est donné en paramètre
     await WordV2.updateOne({ _id: req.body.word._id }, {
         $set: query
     })
         .then(value => {
+            // stoque l'information du résultat de l'update (pas le Word)
             req.body.wordUpdate = value
             req.data.push({
                 name: "Word.updateOne",
@@ -107,6 +137,7 @@ exports.updateWord = async (req) => {
             })
         })
 
+    // trouve le Word dont l'id est donné en paramètre
     await WordV2.find({ _id: req.body.word._id })
         .then(value => {
             // stoque le Word dans la requete
