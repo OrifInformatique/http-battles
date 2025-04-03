@@ -47,9 +47,10 @@ exports.findPlayer = async (req) => {
         return null
     }
 
+    // initialise l'objet query qui sera la requete pour la base de donnée
     const query = {}
-
     
+    // ajout les variables de la requete entrante au query si elle peuvent être utilisées
     if (req.body.playerId !== undefined) {
         var playerId = {
             "_id": mongoose.Types.ObjectId(req.body.playerId)
@@ -78,9 +79,10 @@ exports.findPlayer = async (req) => {
         Object.assign(query, playerStatus)
     }
 
+    // recherche les Player correspondant au query
     await PlayerV2.find(query).sort("_id")
         .then(value => {
-            // stoque le Player dans la requete
+            // stoque les Player dans la requete
             req.body.players = value
             req.data.push({
                 name: "Player.find",

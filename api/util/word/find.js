@@ -49,8 +49,10 @@ exports.findWord = async (req) => {
         return null
     }
 
+    // initialise l'objet query qui sera la requete pour la base de donnée
     const query = {}
     
+    // ajout les variables de la requete entrante au query si elle peuvent être utilisées
     if (req.body.wordId !== undefined) {
         var wordId = {
             "_id": mongoose.Types.ObjectId(req.body.wordId)
@@ -93,10 +95,10 @@ exports.findWord = async (req) => {
         Object.assign(query, wordStatus)
     }
 
-
+    // recherche les Word correspondant au query
     await WordV2.find(query)
         .then(value => {
-            // stoque le Word dans la requete
+            // stoque les Word dans la requete
             req.body.words = value
             req.data.push({
                 name: "Word.find",

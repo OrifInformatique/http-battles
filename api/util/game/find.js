@@ -47,19 +47,22 @@ exports.findGame = async (req) => {
         return null
     }
 
-    const query = {}
-
-    if(req.body.gameId !== undefined){
-        req.body.gameIdV2 = req.body.gameId 
+    // adapte les données gameId/gameIdV2 pour les faire correspondre
+    if (req.body.gameId !== undefined) {
+        req.body.gameIdV2 = req.body.gameId
     }
 
+    // initialise l'objet query qui sera la requete pour la base de donnée
+    const query = {}
+
+    // ajout les variables de la requete entrante au query si elle peuvent être utilisées
     if (req.body.gameIdV2 !== undefined) {
         var gameId = {
             "_id": mongoose.Types.ObjectId(req.body.gameIdV2)
         }
         Object.assign(query, gameId)
     }
-    
+
     if (req.body.creatorId !== undefined) {
         var creatorId = {
             "creatorId": req.body.creatorId
@@ -73,11 +76,11 @@ exports.findGame = async (req) => {
         }
         Object.assign(query, gameStatus)
     }
-    
-    
+
+    // recherche les Game correspondant au query
     await GameV2.find(query)
         .then(value => {
-            // stoque le Game dans la requete
+            // stoque les Game dans la requete
             req.body.games = value
             req.data.push({
                 name: "Game.find",
