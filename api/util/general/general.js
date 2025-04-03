@@ -1,5 +1,7 @@
 const utilFindPlayerV2 = require('../player/find')
 
+const utilUpdatePlayerV2 = require('../player/update')
+
 const utilFindWordV2 = require('../word/find')
 
 const utilCreateWordV2 = require('../word/create')
@@ -469,6 +471,126 @@ exports.createPhrase = async (req) => {
                     error: error
                 })
             })
+    }
+
+    // retourne la variable traitée pour la gestion d'erreur
+    return req.body
+}
+
+/**
+ * ATribue un status de début de partit au client
+ * 
+ * @param {*}   obligatory: req.body.clientId
+ * @param {*}   obligatory: req.body.players
+ * @param {*}   obligatory: req.body.players[player]
+ * @param {*}   obligatory: req.body.players[player]._id
+ * 
+ * @returns                 req.body.player
+ */
+exports.startTurnAtribution = async (req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: startTurnAtribution"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    if (req.body.clientId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No clientId"
+        req.data.push({
+            name: "req.body.clientId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    for (const player in req.body.players) {
+
+        if (req.body.players === undefined) {
+            var error = new Error()
+            error.name = "Bad Request"
+            error.message = "No players"
+            req.data.push({
+                name: "req.body.players === undefined",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+            return null
+        }
+
+        if (req.body.players[player] === undefined) {
+            var error = new Error()
+            error.name = "Bad Request"
+            error.message = "No players[player]"
+            req.data.push({
+                name: "req.body.players[player] === undefined",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+            return null
+        }
+
+        if (req.body.players[player]._id === undefined) {
+            var error = new Error()
+            error.name = "Bad Request"
+            error.message = "No players[player]._id"
+            req.data.push({
+                name: "req.body.players[player]._id === undefined",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+            return null
+        }
+
+        if (req.body.players[player]._id.toString() === req.body.clientId.toString()) {
+            req.body.player = req.body.players[player]
+
+            if (req.body.player._id === req.body.players[0]._id) {
+                req.body.playerStatus = "PLAYER_TURN"
+            } else {
+                req.body.playerStatus = "WAIT"
+            }
+
+            await utilUpdatePlayerV2.updatePlayer(req)
+                .then(value => {
+                    req.data.push({
+                        name: "utilUpdatePlayerV2.updatePlayer",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        value: value
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    req.data.push({
+                        name: "utilUpdatePlayerV2.updatePlayer",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        error: error
+                    })
+                })
+        }
     }
 
     // retourne la variable traitée pour la gestion d'erreur

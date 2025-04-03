@@ -810,7 +810,6 @@ exports.startGameV2 = async (req, res, next) => {
         return null
     }
 
-    const clientPlayerId = req.body.playerId
     req.body.playerId = undefined
 
     await utilFindPlayerV2.findPlayer(req)
@@ -836,34 +835,22 @@ exports.startGameV2 = async (req, res, next) => {
         return null
     }
 
-    for (const player in req.body.players) {
-        if (req.body.players[player]._id.toString() === clientPlayerId.toString()) {
-            req.body.player = req.body.players[player]
-
-            if (req.body.player._id === req.body.players[0]._id) {
-                req.body.playerStatus = "PLAYER_TURN"
-            } else {
-                req.body.playerStatus = "WAIT"
-            }
-
-            await utilUpdatePlayerV2.updatePlayer(req)
-                .then(value => {
-                    req.data.push({
-                        name: "utilUpdatePlayerV2.updatePlayer",
-                        loc: LOC_GLOB + " " + LOC_LOC,
-                        value: value
-                    })
-                })
-                .catch(error => {
-                    console.log(error)
-                    req.data.push({
-                        name: "utilUpdatePlayerV2.updatePlayer",
-                        loc: LOC_GLOB + " " + LOC_LOC,
-                        error: error
-                    })
-                })
-        }
-    }
+    await utilGeneralV2.startTurnAtribution(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.startTurnAtribution",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.startTurnAtribution",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
