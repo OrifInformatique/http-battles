@@ -19,8 +19,9 @@ const logSchema = mongoose.Schema({
     // minute de la requete
     minute: { type: Number, required: false },
     // minute de la requete
-    data: { type: Object, required: false }
-})
+    data: { type: Object, required: false },
+    
+}, { capped: { size: 400000000, max: 1000, autoIndexId: true }})
 
 
 module.exports = mongoose.model('Log', logSchema)
