@@ -11,12 +11,15 @@ const check = require('../middleware/check')
 
 const auth = require('../middleware/auth')
 
+// importe les fonctionalité d'authorisation moderateur
+const modAut = require('../middleware/modAut')
+
 // redirige la requette post de création utilisateur
 router.post('/user/signup', userCtrl.signup)
 // redirige la requet post de connexion utilisateur
 router.post('/user/login', userCtrl.login)
 
-router.get('/user/find', auth, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
+router.get('/user/find', modAut, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
 
 // export le router
 module.exports = router

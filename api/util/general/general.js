@@ -54,21 +54,40 @@ exports.findPlayerForGame = async (req) => {
         return null
     }
 
+    // test de la donnée et retourne une erreur et met fin à la fonction si la elle n'existe pas
+    if (req.body.games === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No games"
+        req.data.push({
+            name: "req.body.games === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    // initialise la variable all dans la quel l'on va stoquer les données Games et les données connectéé
     req.body.all = []
 
+    // ajoute la partie de la requete à la liste de parties de la requete si la list est vide
     if (req.body.game !== undefined) {
         req.body.games = [req.body.game]
     }
 
+    // parcoure la list de game de la requete
     for (const game in req.body.games) {
 
+        // stoque l'id de la partie de cette boucle dans la requete
         req.body.gameIdV2 = req.body.games[game]._id
 
+        // push un object contenant la partie de cette boucle et une liste de player vide
         req.body.all.push({
             game: req.body.games[game],
             players: []
         })
 
+        // cherche les player correspondant à l'id de cette partie
         await utilFindPlayerV2.findPlayer(req)
             .then(value => {
                 req.data.push({
@@ -86,8 +105,7 @@ exports.findPlayerForGame = async (req) => {
                 })
             })
 
-
-
+        // parcour les player trouver et les ajoute à la liste de player de cette partie
         for (const player in req.body.players) {
             req.body.all[game].players.push({
                 player: req.body.players[player]
