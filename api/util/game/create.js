@@ -45,6 +45,7 @@ exports.createGame = async (req) => {
         return null
     }
 
+    // test de la donnée et retourne une erreur et met fin à la fonction si la elle n'existe pas
     if (req.auth.userId === undefined) {
         var error = new Error()
         error.name = "Bad Request"
@@ -57,9 +58,10 @@ exports.createGame = async (req) => {
         return null
     }
 
+    // initialise l'objet query qui sera la requete pour la base de donnée
     const query = {}
 
-
+    // ajout les variables de la requete entrante au query si elle peuvent être utilisées
     if (req.auth.userId !== undefined) {
         var creatorId = {
             "creatorId": req.auth.userId

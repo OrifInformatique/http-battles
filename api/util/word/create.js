@@ -44,8 +44,59 @@ exports.createWord = async (req) => {
         return null
     }
 
+    // test les données. Retourne une erreur et met fin à la fonction si la elle n'existe pas
+    if (req.body.content === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No content"
+        req.data.push({
+            name: "req.body.content === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    if (req.body.playerId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No playerId"
+        req.data.push({
+            name: "req.body.playerId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    if (req.body.phrasePosition === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No phrasePosition"
+        req.data.push({
+            name: "req.body.phrasePosition === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    if (req.body.boardPosition === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No boardPosition"
+        req.data.push({
+            name: "req.body.boardPosition === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    // initialise l'objet query qui sera la requete pour la base de donnée
     const query = {}
 
+    // ajout les variables de la requete entrante au query si elle peuvent être utilisées
     if (req.body.content !== undefined) {
         var content = {
             "content": req.body.content

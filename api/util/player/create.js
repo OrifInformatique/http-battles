@@ -43,10 +43,14 @@ exports.createPlayer = async (req) => {
         return null
     }
 
+    // adapte les données gameId/gameIdV2 pour les faire correspondre
     if(req.body.gameIdV2 !== undefined){
         req.body.gameId = req.body.gameIdV2
+    } else if(req.body.gameId !== undefined){
+        req.body.gameIdV2 = req.body.gameId
     }
 
+    // test les données. Retourne une erreur et met fin à la fonction si la elle n'existe pas
     if (req.body.gameId === undefined) {
         var error = new Error()
         error.name = "Bad Request"
@@ -71,12 +75,10 @@ exports.createPlayer = async (req) => {
         return null
     }
 
-    if(req.body.gameId !== undefined){
-        req.body.gameIdV2 = req.body.gameId
-    }
-
+    // initialise l'objet query qui sera la requete pour la base de donnée
     const query = {}
 
+    // ajout les variables de la requete entrante au query si elle peuvent être utilisées
     if (req.body.gameIdV2 !== undefined) {
         var gameId = {
             "gameId": req.body.gameIdV2

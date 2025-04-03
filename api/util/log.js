@@ -73,7 +73,6 @@ exports.logInitFindUserAndGame = async (req) => {
         // récupère les donnée utilisateur du client
         await utilUserV2.findUser(req)
             .then(value => {
-                console.log(value.users)
                 // stoque le client dans la requete
                 req.package.user = value.users[0]
                 req.user = value.users[0]
