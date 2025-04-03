@@ -364,10 +364,10 @@ exports.testAll = async (req, res, next) => {
  * @param {*} optional  req.body.creatorId
  * @param {*} optional  req.body.gameStatus
  * 
- * @returns             req.body.games
- * @returns             req.body.game.players
- * @returns             req.body.game.player.words
- * @returns             req.body.game.player.user
+ * @returns             req.body.all
+ * @returns             req.body.all[game].players
+ * @returns             req.body.all[game].players[player].words
+ * @returns             req.body.all[game].players[player].user
  */
 exports.findGamesV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -505,8 +505,10 @@ exports.findGamesV2 = async (req, res, next) => {
  * 
  * @param {*} obligatory    req.body.userId
  * 
- * @returns                 req.body.game
- * @returns                 req.body.player
+ * @returns                 req.body.all[game]
+ * @returns                 req.body.all[game].players
+ * @returns                 req.body.all[game].players[player].words
+ * @returns                 req.body.all[game].players[player].user
  */
 exports.createGameV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -634,8 +636,10 @@ exports.createGameV2 = async (req, res, next) => {
  * @param {*} obligatory    req.body.clientId
  * @param {*} obligatory    req.body.Phrase
  * 
- * @returns                 req.body.game.players
- * @returns                 req.body.game.player.words
+ * @returns                 req.body.all[game]
+ * @returns                 req.body.all[game].players
+ * @returns                 req.body.all[game].players[player].words
+ * @returns                 req.body.all[game].players[player].user
  */
 exports.startGameV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -915,7 +919,10 @@ exports.startGameV2 = async (req, res, next) => {
  * @param {*} obligatory    req.body.gameIdV2/gameId
  * @param {*} obligatory    req.body.userId
  * 
- * @returns                 req.body.game.players
+ * @returns                 req.body.all[game]
+ * @returns                 req.body.all[game].players
+ * @returns                 req.body.all[game].players[player].words
+ * @returns                 req.body.all[game].players[player].user
  */
 exports.joinGameV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -1120,7 +1127,10 @@ exports.joinGameV2 = async (req, res, next) => {
  * 
  * @param {*} obligatory    req.body.gameIdV2/gameId
  * 
- * @returns                 req.body.game
+ * @returns                 req.body.all[game]
+ * @returns                 req.body.all[game].players
+ * @returns                 req.body.all[game].players[player].words
+ * @returns                 req.body.all[game].players[player].user
  */
 exports.endGameV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -1246,8 +1256,10 @@ exports.endGameV2 = async (req, res, next) => {
  * @param {*} obligatory    req.body.targetId
  * @param {*} obligatory    req.body.phrase
  * 
- * @returns                 req.body.game.players
- * @returns                 req.body.game.player.words
+ * @returns                 req.body.all[game]
+ * @returns                 req.body.all[game].players
+ * @returns                 req.body.all[game].players[player].words
+ * @returns                 req.body.all[game].players[player].user
  */
 exports.tryPhraseV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -1402,43 +1414,22 @@ exports.tryPhraseV2 = async (req, res, next) => {
         return null
     }
 
-    var wordCount = 0
-    var wordFound = 0
-
-    for (const wordFind in req.body.words) {
-
-        wordCount = wordCount + 1
-
-        for (const wordTest in req.body.phrase)
-
-            if (req.body.phrase[wordTest].content === req.body.words[wordFind].content && req.body.phrase[wordTest].phrasePosition === req.body.words[wordFind].phrasePosition) {
-
-                wordFound = wordFound + 1
-
-            }
-    }
-
-    if (wordCount === wordFound && wordFound !== 0) {
-
-        req.body.gameStatus = "WON"
-
-        await utilUpdateGameV2.updateGame(req)
-            .then(value => {
-                req.data.push({
-                    name: "utilUpdateGameV2.updateGame",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
+    await utilGeneralV2.testPhrase(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.testPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            .catch(error => {
-                console.log(error)
-                req.data.push({
-                    name: "utilUpdateGameV2.updateGame",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.testPhrase",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
             })
-    }
+        })
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
@@ -1472,23 +1463,27 @@ exports.tryPhraseV2 = async (req, res, next) => {
         return null
     }
 
-    req.body.playerStatus = "WINNER"
-    await utilUpdatePlayerV2.updatePlayer(req)
-        .then(value => {
-            req.data.push({
-                name: "utilFindPlayerV2.findPlayer",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                value: value
+    if (req.body.game.status === "WON") {
+        req.body.playerStatus = "WINNER"
+        await utilUpdatePlayerV2.updatePlayer(req)
+            .then(value => {
+                req.data.push({
+                    name: "utilFindPlayerV2.findPlayer",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    value: value
+                })
             })
-        })
-        .catch(error => {
-            console.log(error)
-            req.data.push({
-                name: "utilFindPlayerV2.findPlayer",
-                loc: LOC_GLOB + " " + LOC_LOC,
-                error: error
+            .catch(error => {
+                console.log(error)
+                req.data.push({
+                    name: "utilFindPlayerV2.findPlayer",
+                    loc: LOC_GLOB + " " + LOC_LOC,
+                    error: error
+                })
             })
-        })
+    }
+
+
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
@@ -1530,8 +1525,10 @@ exports.tryPhraseV2 = async (req, res, next) => {
  * @param {*} obligatory    req.body.clientId
  * @param {*} obligatory    req.body.targetId
  * 
- * @returns                 req.body.game.players
- * @returns                 req.body.game.player.words
+ * @returns                 req.body.all[game]
+ * @returns                 req.body.all[game].players
+ * @returns                 req.body.all[game].players[player].words
+ * @returns                 req.body.all[game].players[player].user
  */
 exports.tryCaseV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -1773,80 +1770,22 @@ exports.tryCaseV2 = async (req, res, next) => {
         return null
     }
 
-    var test = 0
-
-    for (const player in req.body.players) {
-
-        if (req.body.players[player].status === "PLAYER_TURN") {
-            req.body.player = req.body.players[player]
-            req.body.playerStatus = "WAIT"
-
-            await utilUpdatePlayerV2.updatePlayer(req)
-                .then(value => {
-                    req.data.push({
-                        name: "utilUpdatePlayerV2.updatePlayer",
-                        loc: LOC_GLOB + " " + LOC_LOC,
-                        value: value
-                    })
-                })
-                .catch(error => {
-                    console.log(error)
-                    req.data.push({
-                        name: "utilUpdatePlayerV2.updatePlayer",
-                        loc: LOC_GLOB + " " + LOC_LOC,
-                        error: error
-                    })
-                })
-            test = 1
-
-        } else if (test === 1) {
-
-            test = 2
-
-            req.body.player = req.body.players[player]
-            req.body.playerStatus = "PLAYER_TURN"
-
-            await utilUpdatePlayerV2.updatePlayer(req)
-                .then(value => {
-                    req.data.push({
-                        name: "utilUpdatePlayerV2.updatePlayer",
-                        loc: LOC_GLOB + " " + LOC_LOC,
-                        value: value
-                    })
-                })
-                .catch(error => {
-                    console.log(error)
-                    req.data.push({
-                        name: "utilUpdatePlayerV2.updatePlayer",
-                        loc: LOC_GLOB + " " + LOC_LOC,
-                        error: error
-                    })
-                })
-
-        }
-    }
-
-    if (test === 1) {
-        req.body.player = req.body.players[0]
-        req.body.playerStatus = "PLAYER_TURN"
-
-        await utilUpdatePlayerV2.updatePlayer(req)
-            .then(value => {
-                req.data.push({
-                    name: "utilUpdatePlayerV2.updatePlayer",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    value: value
-                })
+    await utilGeneralV2.switchTurn(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.switchTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
             })
-            .catch(error => {
-                console.log(error)
-                req.data.push({
-                    name: "utilUpdatePlayerV2.updatePlayer",
-                    loc: LOC_GLOB + " " + LOC_LOC,
-                    error: error
-                })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.switchTurn",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
             })
-    }
+        })
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
