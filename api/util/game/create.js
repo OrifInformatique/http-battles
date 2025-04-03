@@ -9,8 +9,11 @@ const LOC_GLOB = "file: ../util/game/create"
 
 
 /**
+ * Crée et sauvegarde un jeux
+ * 
  * @param {*}   obligatory: req.auth.userId
  * @param {*}   optional:   req.body.gameStatus
+ * 
  * @returns                 req.body.game
  */
 // crée un objet Game
@@ -39,6 +42,18 @@ exports.createGame = async (req) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        return null
+    }
+
+    if (req.auth.userId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No auth.userId"
+        req.data.push({
+            name: "req.auth.userId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
         return null
     }
 

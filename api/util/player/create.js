@@ -8,9 +8,10 @@ const utilCheck = require('../check')
 const LOC_GLOB = "file: ../util/player/create"
 
 /**
- * @param {*}   obligatory: req.body.gameIdV2
+ * @param {*}   obligatory: req.body.gameId
  * @param {*}   obligatory: req.body.userId
  * @param {*}   optional:   req.body.playerStatus
+ * 
  * @returns                 req.body.player
  */
 // crée un objet Game
@@ -40,6 +41,38 @@ exports.createPlayer = async (req) => {
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         return null
+    }
+
+    if(req.body.gameIdV2 !== undefined){
+        req.body.gameId = req.body.gameIdV2
+    }
+
+    if (req.body.gameId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No gameId"
+        req.data.push({
+            name: "req.body.gameId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    if (req.body.userId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No userId"
+        req.data.push({
+            name: "req.body.userId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        return null
+    }
+
+    if(req.body.gameId !== undefined){
+        req.body.gameIdV2 = req.body.gameId
     }
 
     const query = {}

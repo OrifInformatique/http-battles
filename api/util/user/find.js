@@ -85,7 +85,7 @@ exports.findUser = async (req) => {
         }
         Object.assign(query, lastname)
     }
-
+    
     await User.find(query)
         .then(value => {
             // stoque le Player dans la requete
@@ -104,7 +104,7 @@ exports.findUser = async (req) => {
                 error: error
             })
         })
-
+        
     // retourne la variable traitée pour la gestion d'erreur
     return req.body
 }
