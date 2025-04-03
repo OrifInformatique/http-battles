@@ -6,11 +6,11 @@ const Log = require("../models/Log")
 // import fonctions util pour board
 const utilCheck = require('../util/check')
 
-// import fonctions util pour user
-const utilUser = require('../util/user')
-
 // import fonctions util pour game
 const utilGameV2 = require('../util/game/find')
+
+// import fonctions util pour game
+const utilUserV2 = require('../util/user/find')
 
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../util/log"
@@ -68,14 +68,16 @@ exports.logInitFindUserAndGame = async (req) => {
 
     // vérifie si la requete à un utilisateur
     if (req.auth.userId !== undefined) {
+        req.body.userId = req.auth.userId
         // récupère les donnée utilisateur du client
-        await utilUser.getUserById(req.auth.userId, req)
+        await utilUserV2.findUser(req)
             .then(value => {
                 // stoque le client dans la requete
-                req.package.user = value
+                req.package.user = value.users[0]
+                req.user = value.users[0]
 
                 req.data.push({
-                    name: "utilUser.getUserById",
+                    name: "utilUserV2.findUser",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     value: value
                 })
@@ -83,7 +85,7 @@ exports.logInitFindUserAndGame = async (req) => {
             .catch(error => {
                 console.log(error)
                 req.data.push({
-                    name: "utilUser.getUserById",
+                    name: "utilUserV2.findUser",
                     loc: LOC_GLOB + " " + LOC_LOC,
                     error: error
                 })
