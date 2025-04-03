@@ -7,13 +7,16 @@ const gameCtrl = require('../controllers/game')
 // importe les fonctionalité d'authorisation utilisateur
 const auth = require('../middleware/auth')
 
+// importe les fonctionalité d'authorisation moderateur
+const modAut = require('../middleware/modAut')
+
 const routeParam = require('../middleware/routeParam')
 
 const check = require('../middleware/check')
 
 const middleGame = require('../middleware/game')
 
-router.post('/games/testAll', auth, check.dataInit, middleGame.testAll, check.logInit, check.dataValidity, gameCtrl.testAll)
+router.post('/games/testAll', modAut, check.dataInit, middleGame.testAll, check.logInit, check.dataValidity, gameCtrl.testAll)
 
 // créé une partie pour cette utilisateur
 router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)

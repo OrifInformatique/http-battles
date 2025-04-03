@@ -17,9 +17,6 @@ const utilFindPlayerV2 = require('../util/player/find')
 const utilUpdatePlayerV2 = require('../util/player/update')
 
 // import fonctions util 
-const utilCreateWordV2 = require('../util/word/create')
-
-// import fonctions util 
 const utilFindWordV2 = require('../util/word/find')
 
 // import fonctions util 
@@ -40,8 +37,11 @@ const LOC_GLOB = "file: ../middleware/game"
 /**
  * Test tout les midlleware Game
  * 
- * @returns             req.body
  * @returns             req.body.success
+ * @returns             req.body.all
+ * @returns             req.body.all[game].players
+ * @returns             req.body.all[game].players[player].words
+ * @returns             req.body.all[game].players[player].user
  */
 exports.testAll = async (req, res, next) => {
     // location local pour la gestion d'erreur
