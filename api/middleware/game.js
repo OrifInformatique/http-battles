@@ -367,6 +367,7 @@ exports.testAll = async (req, res, next) => {
  * @returns             req.body.games
  * @returns             req.body.game.players
  * @returns             req.body.game.player.words
+ * @returns             req.body.game.player.user
  */
 exports.findGamesV2 = async (req, res, next) => {
     // location local pour la gestion d'erreur
@@ -396,7 +397,6 @@ exports.findGamesV2 = async (req, res, next) => {
     if (req.utilCheck) {
         return null
     }
-
 
     await utilFindGameV2.findGame(req)
         .then(value => {
@@ -467,6 +467,29 @@ exports.findGamesV2 = async (req, res, next) => {
             })
         })
 
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        next()
+        return null
+    }
+
+    await utilGeneralV2.findUsersForPlayersForGames(req)
+        .then(value => {
+            req.data.push({
+                name: "utilGeneralV2.findUsersForPlayersForGames",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilGeneralV2.findUsersForPlayersForGames",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()
@@ -510,6 +533,19 @@ exports.createGameV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        return null
+    }
+
+    if (req.auth.userId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No userId"
+        req.data.push({
+            name: "req.auth.userId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
         return null
     }
 
@@ -629,12 +665,38 @@ exports.startGameV2 = async (req, res, next) => {
         return null
     }
 
-    if (req.body.gameIdV2 === undefined && req.body.gameId === undefined) {
+    if (req.body.gameId === undefined) {
         var error = new Error()
         error.name = "Bad Request"
         error.message = "No GameId"
         req.data.push({
-            name: "req.body.gameIdV2 === undefined && req.body.gameId === undefined",
+            name: "req.body.gameId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    if (req.body.clientId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No clientId"
+        req.data.push({
+            name: "req.body.clientId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    if (req.body.phrase === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No phrase"
+        req.data.push({
+            name: "req.body.phrase === undefined",
             loc: LOC_GLOB + " " + LOC_LOC,
             error: error
         })
@@ -712,19 +774,6 @@ exports.startGameV2 = async (req, res, next) => {
         return null
     }
 
-    if (req.body.player === undefined) {
-        var error = new Error()
-        error.name = "Bad Request"
-        error.message = "Bad clientId"
-        req.data.push({
-            name: "req.body.player.status === undefined",
-            loc: LOC_GLOB + " " + LOC_LOC,
-            error: error
-        })
-        next()
-        return null
-    }
-
     if (req.body.player.status === "PLAYER_TURN" || req.body.player.status === "WAIT") {
         var error = new Error()
         error.name = "Bad Request"
@@ -762,8 +811,6 @@ exports.startGameV2 = async (req, res, next) => {
                 })
             })
     }
-
-
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
@@ -886,7 +933,7 @@ exports.startGameV2 = async (req, res, next) => {
  * Permet à un utilisateur de rejoindre une partie
  * 
  * @param {*} obligatory    req.body.gameIdV2/gameId
- * @param {*} obligatory    req.body.req.body.userId
+ * @param {*} obligatory    req.body.userId
  * 
  * @returns                 req.body.game.players
  */
@@ -915,6 +962,32 @@ exports.joinGameV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        return null
+    }
+
+    if (req.body.gameId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No gameId"
+        req.data.push({
+            name: "req.body.gameId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    if (req.body.userId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No userId"
+        req.data.push({
+            name: "req.body.userId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
         return null
     }
 
@@ -1013,8 +1086,8 @@ exports.joinGameV2 = async (req, res, next) => {
 
     await utilGeneralV2.findPlayerForGame(req)
         .then(value => {
-            req.body.game = req.body.gamesPlayers[0].game
-            req.body.players = req.body.gamesPlayers[0].players
+            req.body.game = req.body.all[0].game
+            req.body.players = req.body.all[0].players
             req.data.push({
                 name: "utilGeneralV2.findPlayerForGame",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -1094,6 +1167,19 @@ exports.endGameV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        return null
+    }
+
+    if (req.body.gameId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No gameId"
+        req.data.push({
+            name: "req.body.gameId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
         return null
     }
 
@@ -1208,6 +1294,58 @@ exports.tryPhraseV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        return null
+    }
+
+    if (req.body.gameId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No gameId"
+        req.data.push({
+            name: "req.body.gameId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    if (req.body.clientId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No clientId"
+        req.data.push({
+            name: "req.body.clientId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    if (req.body.targetId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No targetId"
+        req.data.push({
+            name: "req.body.targetId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    if (req.body.phrase === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No phrase"
+        req.data.push({
+            name: "req.body.phrase === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
         return null
     }
 
@@ -1440,6 +1578,45 @@ exports.tryCaseV2 = async (req, res, next) => {
 
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
+        return null
+    }
+
+    if (req.body.gameId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No gameId"
+        req.data.push({
+            name: "req.body.gameId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    if (req.body.clientId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No clientId"
+        req.data.push({
+            name: "req.body.clientId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
+        return null
+    }
+
+    if (req.body.targetId === undefined) {
+        var error = new Error()
+        error.name = "Bad Request"
+        error.message = "No targetId"
+        req.data.push({
+            name: "req.body.targetId === undefined",
+            loc: LOC_GLOB + " " + LOC_LOC,
+            error: error
+        })
+        next()
         return null
     }
 

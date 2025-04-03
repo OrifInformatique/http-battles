@@ -16,7 +16,7 @@ router.post('/user/signup', userCtrl.signup)
 // redirige la requet post de connexion utilisateur
 router.post('/user/login', userCtrl.login)
 
-router.post('/user/find', auth, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
+router.get('/user/find', auth, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
 
 // export le router
 module.exports = router

@@ -2,6 +2,8 @@ const utilFindPlayerV2 = require('../player/find')
 
 const utilFindWordV2 = require('../word/find')
 
+const utilFindUsers = require('../user/find')
+
 const middleFindGameV2 = require('../../middleware/game')
 
 // import fonctions util pour check
@@ -16,7 +18,7 @@ const LOC_GLOB = "file: ../util/general/general"
  * 
  * @param {*}   obligatory: req.body.games
  * 
- * @returns                 req.body.gamesPlayers
+ * @returns                 req.body.all
  */
 exports.findPlayerForGame = async (req) => {
     // test de la validité des données
@@ -46,7 +48,7 @@ exports.findPlayerForGame = async (req) => {
         return null
     }
 
-    req.body.gamesPlayers = []
+    req.body.all = []
 
     if (req.body.game !== undefined) {
         req.body.games = [req.body.game]
@@ -55,6 +57,11 @@ exports.findPlayerForGame = async (req) => {
     for (const game in req.body.games) {
 
         req.body.gameIdV2 = req.body.games[game]._id
+
+        req.body.all.push({
+            game: req.body.games[game],
+            players: []
+        })
 
         await utilFindPlayerV2.findPlayer(req)
             .then(value => {
@@ -74,17 +81,19 @@ exports.findPlayerForGame = async (req) => {
             })
 
 
-        req.body.gamesPlayers.push({
-            game: req.body.games[game],
-            players: req.body.players
-        })
+
+        for (const player in req.body.players) {
+            req.body.all[game].players.push({
+                player: req.body.players[player]
+            })
+        }
 
         // stop la méthode en cas d'échèque du test
         if (req.utilCheck) {
             return null
         }
     }
-
+    
     // retourne la variable traitée pour la gestion d'erreur
     return req.body
 }
@@ -92,7 +101,7 @@ exports.findPlayerForGame = async (req) => {
 /**
  * Trouve les mots des joueurs d'une liste de parties
  * 
- * @param {*}   obligatory: req.body.gamesPlayers
+ * @param {*}   obligatory: req.body.all
  * 
  * @returns                 req.body.all
  */
@@ -124,19 +133,12 @@ exports.findWordsForPlayersForGames = async (req) => {
         return null
     }
 
-    req.body.all = []
+    for (const game in req.body.all) {
 
-    for (const game in req.body.gamesPlayers) {
-        req.body.all.push({
-            game: req.body.gamesPlayers[game].game,
-            players: []
-        })
-        for (const player in req.body.gamesPlayers[game].players) {
-            req.body.all[game].players.push({
-                player: req.body.gamesPlayers[game].players[player],
-                words: []
-            })
-            req.body.playerId = req.body.gamesPlayers[game].players[player]._id
+        for (const player in req.body.all[game].players) {
+            
+            req.body.playerId = req.body.all[game].players[player].player._id
+            req.body.all[game].players[player].words = []
 
             await utilFindWordV2.findWord(req)
                 .then(value => {
@@ -156,7 +158,11 @@ exports.findWordsForPlayersForGames = async (req) => {
                     })
                 })
 
-            req.body.all[game].players[player].words.push(req.body.words)
+                for (const word in req.body.words) {
+                    req.body.all[game].players[player].words.push({
+                        word: req.body.words[word]
+                    })
+                }
         }
     }
 
@@ -169,6 +175,82 @@ exports.findWordsForPlayersForGames = async (req) => {
     // retourne la variable traitée pour la gestion d'erreur
     return req.body
 }
+
+/**
+ * Trouve les users des joueurs d'une liste de parties
+ * 
+ * @param {*}   obligatory: req.body.all
+ * 
+ * @returns                 req.body.all
+ */
+exports.findUsersForPlayersForGames = async (req) => {
+    // test de la validité des données
+    const LOC_LOC = "methode: findUsersForPlayersForGames"
+
+    // test de la validité des données
+    await utilCheck.dataValidityTest(req)
+        .then(value => {
+            req.utilCheck = value
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                value: value
+            })
+        })
+        .catch(error => {
+            console.log(error)
+            req.data.push({
+                name: "utilCheck.dataValidityTest",
+                loc: LOC_GLOB + " " + LOC_LOC,
+                error: error
+            })
+        })
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+    for (const game in req.body.all) {
+
+        for (const player in req.body.all[game].players) {
+            
+            req.body.userId = req.body.all[game].players[player].player.userId
+            req.body.all[game].players[player].user = []
+
+            await utilFindUsers.findUser(req)
+                .then(value => {
+                    req.data.push({
+                        name: "utilFindUsers.findUser",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        value: value
+                    })
+                })
+                .catch(error => {
+                    console.log(error)
+                    req.data.push({
+                        name: "utilFindUsers.findUser",
+                        loc: LOC_GLOB + " " + LOC_LOC,
+                        error: error
+                    })
+                })
+
+                for (const user in req.body.users) {
+                    req.body.all[game].players[player].user.push(req.body.users[user].username)
+                }
+        }
+    }
+
+    // stop la méthode en cas d'échèque du test
+    if (req.utilCheck) {
+        return null
+    }
+
+
+    // retourne la variable traitée pour la gestion d'erreur
+    return req.body
+}
+
 
 /**
  * Trouve une partie, ses joueur et leurs mots après avoir filtrer la requete de toute variable parasite
