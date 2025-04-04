@@ -9,8 +9,6 @@ const middleUser = require('../middleware/user')
 
 const check = require('../middleware/check')
 
-const auth = require('../middleware/auth')
-
 // importe les fonctionalité d'authorisation moderateur
 const modAut = require('../middleware/modAut')
 
