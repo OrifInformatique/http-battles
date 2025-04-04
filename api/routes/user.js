@@ -13,9 +13,10 @@ const check = require('../middleware/check')
 const modAut = require('../middleware/modAut')
 
 // redirige la requette post de création utilisateur
-router.post('/user/signup', userCtrl.signup)
+router.post('/user/signup', check.dataInit, middleUser.signup, check.logInit, check.dataValidity, userCtrl.signup)
+
 // redirige la requet post de connexion utilisateur
-router.post('/user/login', userCtrl.login)
+router.post('/user/login', check.dataInit, middleUser.login, check.logInit, check.dataValidity, userCtrl.login)
 
 router.get('/user/find', modAut, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
 

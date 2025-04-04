@@ -66,6 +66,10 @@ exports.logInitFindUserAndGame = async (req) => {
         req.package = {}
     }
 
+    if(req.auth === undefined){
+        req.auth = {}
+    }
+
     // vérifie si la requete à un utilisateur
     if (req.auth.userId !== undefined) {
         req.body.userId = req.auth.userId

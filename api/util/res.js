@@ -21,6 +21,8 @@ exports.errorCodeTest = async (data) => {
         return 500
     } else if(data.error.name.includes('CastError')){
         return 400
+    } else if(data.error.name.includes('Unauthorized')){
+        return 401
     }  else if (data.name.includes('find')){
         return 404
     }  else if (data.name.includes('update')){
