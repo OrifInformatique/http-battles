@@ -497,6 +497,7 @@ exports.filteredFindGame = async (req) => {
     return req.body
 }
 
+
 /**
  * crée une list de mot à partir d'une phrase
  * 

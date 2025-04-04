@@ -55,7 +55,8 @@ app.get('/api', (req, res) => {
  * Routes:
  *  http://localhost:3000/api/user/signup
  *  http://localhost:3000/api/user/login
- *  http://localhost:3000/api/user/find
+ *  http://localhost:3000/api/user/findUsers
+ * http://localhost:3000/api/user/updateUser
  **/
 app.use('/api', userRoutes)
 

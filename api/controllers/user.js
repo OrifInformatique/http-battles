@@ -16,3 +16,8 @@ exports.login = (req, res, next) => {
 exports.findUser = async (req, res, next) => {
   utilRes.sendSuccess(200, req.body.users, res)
 }
+
+// renvoit l'utilisateur après update
+exports.updateUser = async (req, res, next) => {
+  utilRes.sendSuccess(200, req.body.user, res)
+}

@@ -12,6 +12,9 @@ const check = require('../middleware/check')
 // importe les fonctionalité d'authorisation moderateur
 const modAut = require('../middleware/modAut')
 
+// importe les fonctionalité d'authorisation moderateur
+const auth = require('../middleware/auth')
+
 // redirige la requette post de création utilisateur
 router.post('/user/signup', check.dataInit, middleUser.signup, check.logInit, check.dataValidity, userCtrl.signup)
 
@@ -20,6 +23,9 @@ router.post('/user/login', check.dataInit, middleUser.login, check.logInit, chec
 
 // retourne une liste des profils utilisateurs
 router.get('/user/findUsers', modAut, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
+
+// retourne une liste des profils utilisateurs
+router.put('/user/updateUser', auth, check.dataInit, middleUser.updateUser, check.logInit, check.dataValidity, userCtrl.updateUser)
 
 // export le router
 module.exports = router
