@@ -3,15 +3,8 @@
 // import fonctions util pour res
 const utilRes = require('../util/res')
 
-// import fonctions util pour board
-const utilCheck = require('../util/check')
-
 // import fonctions util pour log
 const utilLog = require('../util/log')
-
-
-// import fonctions contenu dans middleware/game
-const middleGame = require('./game')
 
 // constante Global le dossier et la page pour le traitement des erreures
 const LOC_GLOB = "file: ../middlware/check"
@@ -21,19 +14,25 @@ const LOC_GLOB = "file: ../middlware/check"
 exports.dataValidity = async (req, res, next) => {
     // test si les données exist
     if (req.data !== undefined) {
-        // parcour les données 
 
+        // parcour les données 
         for (const d of req.data) {
+
             // stock les donnée dans le log
             req.log.data.push(d)
+
             // test si les donées ont une valeur (si non cela veut dire qu'il s'agit d'une erreure)
             if (d.value === null || d.value === undefined) {
+
                 // set le code d'erreur à 400 (erreur dans la requette reçu du client) comme base
                 var errorCode = 400
+
                 // test si l'erreur est défini (si l'erreur est défini run le code dans le test)
                 if (d.error !== undefined) {
+
                     // test quel code d'erreur est le plus aproprier et remplace le code précedent
                     errorCode = await utilRes.errorCodeTest(d)
+
                     // transforme l'erreur en string pour que le client puis la voire
                     d.error = d.error.toString()
                 }
@@ -46,6 +45,7 @@ exports.dataValidity = async (req, res, next) => {
     }
     // test si la fonction next à été transmise
     if (next !== undefined) {
+        
         // si oui passe au prochain middleWare
         next()
     }

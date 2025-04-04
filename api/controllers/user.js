@@ -12,6 +12,7 @@ exports.login = (req, res, next) => {
   utilRes.sendSuccess(200, req.body.answer, res)
 }
 
+// renvoit une list d'utilisateur
 exports.findUser = async (req, res, next) => {
   utilRes.sendSuccess(200, req.body.users, res)
 }
