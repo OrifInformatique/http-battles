@@ -421,12 +421,6 @@ exports.findGamesV2 = async (req, res, next) => {
         return null
     }
 
-    if (req.body.targetUserId === undefined) {
-        req.body.userId = undefined
-    }
-
-    req.body.userId = req.body.targetUserId
-
     await utilGeneralV2.findPlayerForGame(req)
         .then(value => {
             req.data.push({
@@ -1341,6 +1335,7 @@ exports.tryPhraseV2 = async (req, res, next) => {
         return null
     }
 
+    // trouve une Game
     await utilFindGameV2.findGame(req)
         .then(value => {
             req.body.game = req.body.games[0]
@@ -1365,8 +1360,10 @@ exports.tryPhraseV2 = async (req, res, next) => {
         return null
     }
 
+    // stoque l'id de la cible dans la requete pour la recherche de son utilisateur
     req.body.playerId = req.body.targetId
-
+    
+    // trouve un player
     await utilFindPlayerV2.findPlayer(req)
         .then(value => {
             req.body.player = req.body.players[0]
@@ -1384,13 +1381,14 @@ exports.tryPhraseV2 = async (req, res, next) => {
                 error: error
             })
         })
-
+        
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         next()
         return null
     }
 
+    // touve des mots
     await utilFindWordV2.findWord(req)
         .then(value => {
             req.data.push({
@@ -1414,6 +1412,7 @@ exports.tryPhraseV2 = async (req, res, next) => {
         return null
     }
 
+    // test la phrase de la requete du client
     await utilGeneralV2.testPhrase(req)
         .then(value => {
             req.data.push({
@@ -1437,8 +1436,10 @@ exports.tryPhraseV2 = async (req, res, next) => {
         return null
     }
 
+    // stoque l'id du client dans la requete pour la recherche de son utilisateur
     req.body.playerId = req.body.clientId
 
+    // trouve un player
     await utilFindPlayerV2.findPlayer(req)
         .then(value => {
             req.body.player = req.body.players[0]
@@ -1463,6 +1464,7 @@ exports.tryPhraseV2 = async (req, res, next) => {
         return null
     }
 
+    // si la patie est ganée update le status du client pour signifier qu'il est le gagnant
     if (req.body.game.status === "WON") {
         req.body.playerStatus = "WINNER"
         await utilUpdatePlayerV2.updatePlayer(req)

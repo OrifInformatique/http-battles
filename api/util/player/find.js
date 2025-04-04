@@ -78,12 +78,13 @@ exports.findPlayer = async (req) => {
         }
         Object.assign(query, playerStatus)
     }
-
+    
     // recherche les Player correspondant au query
     await PlayerV2.find(query).sort("_id")
         .then(value => {
             // stoque les Player dans la requete
             req.body.players = value
+            
             req.data.push({
                 name: "Player.find",
                 loc: LOC_GLOB + " " + LOC_LOC,
@@ -98,7 +99,7 @@ exports.findPlayer = async (req) => {
                 error: error
             })
         })
-
+        
     // retourne la variable traitée pour la gestion d'erreur
     return req.body
 }
