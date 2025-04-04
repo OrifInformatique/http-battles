@@ -2,7 +2,7 @@
 const { error } = require('console');
 const jwt = require('jsonwebtoken');
 const path = require('path')
-const dotenv = require('dotenv').config({ path: path.resolve(__dirname, '../env/.env') })
+const dotenv = require('dotenv').config({ path: path.resolve(__dirname, 'env/.env') })
 
 // export le module
 module.exports = (req, res, next) => {
@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
 
         if (req.token !== process.env.DEV_TOKEN) {
             // decode le token 
-            const decodedToken = jwt.verify(req.token, 'RANDOM_TOKEN_SECRET')
+            const decodedToken = jwt.verify(req.token, `${process.env.TOK_SEC}`)
             // récupère l'id utilisateur
             const userId = decodedToken.userId
 

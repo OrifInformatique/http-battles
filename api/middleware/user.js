@@ -13,6 +13,9 @@ const bcrypt = require("bcrypt")
 // import jsonwebtoken pour fabriquer des token
 const jwt = require("jsonwebtoken")
 
+const path = require('path')
+const dotenv = require('dotenv').config({ path: path.resolve(__dirname, 'env/.env') })
+
 // location global pour la gestion d'erreur
 const LOC_GLOB = "file: ../middleware/user"
 
@@ -350,7 +353,7 @@ exports.login = async (req, res, next) => {
             // l'id utilisateur
             { userId: req.body.user._id },
             // une clef de hashage
-            "RANDOM_TOKEN_SECRET",
+            `${process.env.TOK_SEC}`,
             // une periode de validité
             { expiresIn: "24h" }
         )

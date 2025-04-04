@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
         next()
     } else {
         var error = new Error()
-        error.name = "unauthorized"
+        error.name = "Unauthorized"
         error.message = "Bad token"
         // renvoie le status de l'erreur
         res.status(401).json( error )
