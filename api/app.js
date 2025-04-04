@@ -55,107 +55,29 @@ app.get('/api', (req, res) => {
  * Routes:
  *  http://localhost:3000/api/user/signup
  *  http://localhost:3000/api/user/login
+ *  http://localhost:3000/api/user/find
  **/
 app.use('/api', userRoutes)
 
 /**
  * Implemente les fonctionalité de parties
  * Routes:
+ *  http://localhost:3000/api/games/testAll
  *  http://localhost:3000/api/games/createGame
- *  http://localhost:3000/api/games/findGame
- *  http://localhost:3000/api/games/listGames
+ *  http://localhost:3000/api/games/findGames
  *  http://localhost:3000/api/games/joinGame
  *  http://localhost:3000/api/games/startGame
- *  http://localhost:3000/api/games/checkTurn
  *  http://localhost:3000/api/games/endGame
+ *  http://localhost:3000/api/games/tryPhrase
+ *  http://localhost:3000/api/games/try(A, B, C, D)
  **/
 app.use('/api', gameRoutes)
 
+/**
+ * Implemente les fonctionalité de logs
+ * Routes:
+ *  http://localhost:3000/api/games/listLog
+ **/
 app.use('/api', logRoutes)
-
-
-/** 
- * Games : Crée une nouvelle partie en associant l'utilisateur connecté
- * à un autre utilisateur selon son email.
- **/
-app.get('/api/games', (req, res) => {
-    const games = require('../mocks/games/list.json');
-    res.status(200).json(games)
-});
-
-
-/** 
- * Games : Permet de récupérer les informations de jeux
- **/
-app.post('/api/games/:gameId/join', (req, res) => {
-    const gameId = req.params.gameId;
-    const gameToJoin = require('../mocks/games/join.json'); // Find or create 
-    if (gameToJoin.id === gameId) {
-        res.status(200).json(gameToJoin)
-    } else {
-        res.status(404).json({ message: 'Pas de partie trouvée' })
-    }
-});
-
-/** 
- * Games : Permet de récupérer le challenger d'un jeux
- **/
-app.post('/api/games/:gameId/challenger', (req, res) => {
-    const gameId = req.params.gameId;
-    const gameToCreate = require('../mocks/games/create.json'); // Find or create 
-    if (gameToCreate.id === gameId) {
-        res.status(200).json(gameToCreate)
-    } else {
-        res.status(404).json({ message: 'Pas de partie trouvée' })
-    }
-});
-
-
-/** 
- * Games : Permet de sauvegarder une phrase de 5 mots, 
- * ainsi que la position des 5 mots dans la grille. 
- **/
-app.post('/api/games/:gameId/settings', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté' })
-});
-
-/** 
- * Games : Permet de rechercher un mot dans la grille 
- * avec la méthode GET.
- **/
-app.get('/api/games/:gameId/search/:path', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté' })
-});
-
-/** 
- * Games : Permet de rechercher un mot dans la grille 
- * avec la méthode POST.
- **/
-app.post('/api/games/:gameId/search/:path', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté' })
-});
-
-/** 
- * Games : Permet de rechercher un mot dans la grille 
- * avec la méthode PUT.
- **/
-app.put('/api/games/:gameId/search/:path', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté' })
-});
-
-/** 
- * Games : Permet de rechercher un mot dans la grille 
- * avec la méthode DELETE.
- **/
-app.delete('/api/games/:gameId/search/:path', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté' })
-});
-
-/** 
- * Games : Permet de tenter de proposer la phrase secrète de l'adversaire.
- **/
-app.post('/api/games/:gameId/try', (req, res) => {
-    res.status(501).json({ message: 'Pas encore implémenté' })
-});
 
 module.exports = app;

@@ -18,6 +18,7 @@ router.post('/user/signup', check.dataInit, middleUser.signup, check.logInit, ch
 // redirige la requet post de connexion utilisateur
 router.post('/user/login', check.dataInit, middleUser.login, check.logInit, check.dataValidity, userCtrl.login)
 
+// retourne une liste des profils utilisateurs
 router.get('/user/find', modAut, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
 
 // export le router
