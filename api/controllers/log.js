@@ -7,7 +7,7 @@ const utilRes = require('../util/res')
 // liste les log
 exports.listLogs = async (req, res, next) => {
 
-    const logs = await utilLog.listLogs(req)
+    const logs = await utilLog.listLogsV2(req)
         .catch(error => {
             console.log(error)
             utilRes.sendError(404, error.toString(), res)
@@ -15,3 +15,4 @@ exports.listLogs = async (req, res, next) => {
 
     utilRes.sendSuccess(200, logs, res)
 }
+

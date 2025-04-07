@@ -66,14 +66,14 @@ exports.logInitFindUserAndGame = async (req) => {
         req.package = {}
     }
 
-    if(req.auth === undefined){
+    if (req.auth === undefined) {
         req.auth = {}
     }
 
     // vérifie si la requete à un utilisateur
     if (req.auth.userId !== undefined) {
         req.body.userId = req.auth.userId
-        
+
         // récupère les donnée utilisateur du client
         await utilUserV2.findUser(req)
             .then(value => {
@@ -97,7 +97,7 @@ exports.logInitFindUserAndGame = async (req) => {
             })
     }
 
-    if (req.body.gameIdV2 !== undefined){
+    if (req.body.gameIdV2 !== undefined) {
         req.body.gameId = req.body.gameIdV2
     }
 
@@ -144,8 +144,8 @@ exports.logDate = async (req) => {
     req.package.year = req.package.date.getFullYear()
     req.package.month = req.package.date.getMonth() + 1
     req.package.day = req.package.date.getDate()
-    req.package.hour = req.package.date.getHours() 
-    req.package.minute = req.package.date.getMinutes() 
+    req.package.hour = req.package.date.getHours()
+    req.package.minute = req.package.date.getMinutes()
 
     // retourn le package
     return req.package
@@ -486,4 +486,270 @@ exports.listLogs = async (req) => {
     return logMessage
 }
 
+// list les logs dans la base donées
+exports.listLogsV2 = async (req) => {
+    // crée un objet query qui servira à faire une requette pour la base de données
+    var query = {}
+
+    // test si l'id d'un log spécifique est demandé par le biais de son id
+    if (req.body._id !== undefined) {
+        // si oui, l'ajoute au query en traduisan l'id en object id qui sera reconu par la base de donnée et en l'ajoutant au query
+        var logId = {
+            "_id": mongoose.Types.ObjectId(req.body._id)
+        }
+        Object.assign(query, logId)
+    }
+
+    if (req.body.user !== undefined) {
+
+        // test si les log d'un utilisateur particulier son demander par le biais de son id
+        if (req.body.user._id !== undefined) {
+            // si oui, l'ajoute au query en traduisan l'id en object id qui sera reconu par la base de donnée et en l'ajoutant au query
+            var userId = {
+                "user._id": mongoose.Types.ObjectId(req.body.user._id)
+            }
+            Object.assign(query, userId)
+        }
+
+        // test si les log d'un utilisateur ayant un email particulier son demandé
+        if (req.body.user.email !== undefined) {
+            // stoque la l'email dans un objet
+            var userEmail = {
+                "user.email": req.body.user.email
+            }
+            // ajoute le contenu de l'objet au query
+            Object.assign(query, userEmail)
+        }
+
+        // test si le client demand les log d'un utilisateur avec un mot de pass particulier
+        if (req.body.user.password !== undefined) {
+            // stoque la requet pour la base de donnée dans un objet
+            var userPassword = {
+                "user.password": req.body.user.password
+            }
+            // asigne le contenu de l'objet au query
+            Object.assign(query, userPassword)
+        }
+
+        // test si le client recherche les log d'un utilisateur avec un username particulier
+        if (req.body.user.username !== undefined) {
+            // stoque la requete pour la base de donnée dans un objet
+            var userUsername = {
+                "user.username": req.body.user.username
+            }
+            // stoque le contenu de l'objet dans le query
+            Object.assign(query, userUsername)
+        }
+
+        // test si le client demande les log d'un utilisateur avec un prénom particuliert
+        if (req.body.user.firstname !== undefined) {
+            // stoque la reque t pour la base de données dans un objet
+            var userFirstname = {
+                "user.firstname": req.body.user.firstname
+            }
+            // ajoute le contenu de l'object au query
+            Object.assign(query, userFirstname)
+        }
+
+        // test si le client veut les log d'un utilisateur avec un nom particulier
+        if (req.body.user.lastname !== undefined) {
+            // stoque la requete pour la base de donnée dans un objet
+            var userLastname = {
+                "user.lastname": req.body.user.lastname
+            }
+            // stoque le contenu de l'objet dans le query
+            Object.assign(query, userLastname)
+        }
+    }
+
+    if (req.body.game !== undefined) {
+
+        // test si le client veut les log pour une partie particulières par le biais de son id
+        if (req.body.game._id !== undefined) {
+            // stoque la requete pour la base de donnée dans un objet
+            var gameId = {
+                "game._id": mongoose.Types.ObjectId(req.body.game._id)
+            }
+            // stoque le contenu de l'objet dans le query
+            Object.assign(query, gameId)
+        }
+
+        // test si le client veut les log pour une partie ave un état particulier
+        if (req.body.game.status !== undefined) {
+            // stoque la requete pour la base de donnée dans un objet
+            var gameStatus = {
+                "game.status": req.body.game.status
+            }
+            // stoque le contenu de l'objet dans le query
+            Object.assign(query, gameStatus)
+        }
+
+        // test si le client veut les log pour une partie avec un créateur particulier par le bias de son id
+        if (req.body.game.creatorId !== undefined) {
+            // stoque la requete pour la base de donnée dans un objet
+            var gameCreatorId = {
+                "game.creatorId": req.body.game.creatorId
+            }
+            // stoque le contenu de l'objet dans le query
+            Object.assign(query, gameCreatorId)
+        }
+    }
+
+    // test si le client veut les log d'une année particulière
+    if (req.body.year !== undefined) {
+        // stoque la requete pour la base de donnée dans un objet
+        var year = {
+            "year": req.body.year
+        }
+        // stoque le contenu de l'objet dans le query
+        Object.assign(query, year)
+    }
+
+    // test si le client veut les log d'un mois particulier
+    if (req.body.month !== undefined) {
+        // stoque la requete pour la base de donnée dans un objet
+        var month = {
+            "month": req.body.month
+        }
+        // stoque le contenu de l'objet dans le query
+        Object.assign(query, month)
+    }
+
+    // test si le client veut les log d'un jours particulier
+    if (req.body.day !== undefined) {
+        // stoque la requete pour la base de donnée dans un objet
+        var day = {
+            "day": req.body.day
+        }
+        // stoque le contenu de l'objet dans le query
+        Object.assign(query, day)
+    }
+
+    // test si le client veut les log d'une heure particulière
+    if (req.body.hour !== undefined) {
+        // stoque la requete pour la base de donnée dans un objet
+        var hour = {
+            "hour": req.body.hour
+        }
+        // stoque le contenu de l'objet dans le query
+        Object.assign(query, hour)
+    }
+
+    // test si le client veut les log d'une minutes particulière
+    if (req.body.minute !== undefined) {
+        // stoque la requete pour la base de donnée dans un objet
+        var minute = {
+            "minute": req.body.minute
+        }
+        // stoque le contenu de l'objet dans le query
+        Object.assign(query, minute)
+    }
+
+    // test ce que le client veut
+    if (req.body.data !== undefined) {
+        // test ce que le client veut
+        if (req.body.data.name !== undefined) {
+            // stoque la requete pour la base de donnée dans un objet
+            var dataName = {
+                "data.name": req.body.data.name
+            }
+            // stoque le contenu de l'objet dans le query
+            Object.assign(query, dataName)
+        }
+
+        // test ce que le client veut
+        if (req.body.data.loc !== undefined) {
+            // stoque la requete pour la base de donnée dans un objet
+            var dataLoc = {
+                "data.loc": req.body.data.loc
+            }
+            // stoque le contenu de l'objet dans le query
+            Object.assign(query, dataLoc)
+        }
+
+    }
+
+    // récupère les log de la base de données avec le query
+    const logs = await Log.find(query)
+    // initialise le message à renvoyer au client
+    var logMessage = {}
+
+    for (const log in logs) {
+
+        var newLog = {}
+
+        newLog._id = logs[log]._id
+        newLog.user = logs[log].user
+        newLog.game = logs[log].game
+        newLog.year = logs[log].year
+        newLog.month = logs[log].month
+        newLog.day = logs[log].day
+        newLog.hour = logs[log].hour
+        newLog.minute = logs[log].minute
+
+        // test ce que le client veut
+        if (req.body.data !== undefined) {
+            newLog.data = {}
+
+            for (const logData in logs[log].data) {
+                newLog.data[logData] = {}
+                Object.assign(newLog.data[logData], logs[log].data[logData])
+
+                if (req.body.data.name !== undefined
+                    && logs[log].data[logData].name !== undefined
+                    && req.body.data.name !== logs[log].data[logData].name
+                ) {
+                    newLog.data[logData] = undefined
+
+                } else if (req.body.data.loc !== undefined
+                    && logs[log].data[logData].loc !== undefined
+                    && req.body.data.loc !== logs[log].data[logData].loc
+                ) {
+                    newLog.data[logData] = undefined
+
+                } else if (req.body.data.error !== undefined
+                    && logs[log].data[logData].error !== undefined
+                ){
+                    newLog.data[logData].error = logs[log].data[logData].error
+
+                    
+
+                } else if (req.body.data.value !== undefined
+                    && logs[log].data[logData].value !== undefined
+                ) {
+                    newLog.data[logData].value = {}
+
+                    for (const logValue in logs[log].data[logData].value) {
+                        newLog.data[logData].value[logValue] = {}
+                        Object.assign(newLog.data[logData].value[logValue], logs[log].data[logData].value[logValue])
+                        for (const logValueKey in logs[log].data[logData].value[logValue]) {
+
+                            if (req.body.data.value[logValueKey] !== undefined
+                                && logs[log].data[logData].value[logValue][logValueKey] !== undefined
+                                && req.body.data.value[logValueKey] !== logs[log].data[logData].value[logValue][logValueKey]
+                            ) {
+                                newLog.data[logData].value[logValue] = undefined
+
+                            }
+                        }
+                    }
+
+                    if(typeof logs[log].data[logData].value !== "object"){
+                        newLog.data[logData].value = logs[log].data[logData].value
+                    }
+
+                } else if (req.body.data.value === undefined){
+                    newLog.data[logData].value = undefined
+                }
+            }
+
+        }
+
+        logMessage[log] = newLog
+    }
+
+
+    // retourn le message à envoyer au client
+    return logMessage
+}
 
