@@ -6,6 +6,8 @@ import './form.css';
 import '../general.css';
 
 function LaunchPage() {
+    let userId = useState(0);
+    let gameId = useState(0);
     let i = 0;
 
 /*     Tableaux    */
@@ -22,7 +24,7 @@ function LaunchPage() {
     const staticVal1 = ["/alpha","/beta","/gamma","/delta"];
     const staticVal2 = ["GET","POST","PUT","DELETE"];
 
-/*     Changements d'états    */
+/*     Changements d'états    
 
     const [phrase, setPhrase] = useState([
         // Dimensions 
@@ -62,21 +64,87 @@ function LaunchPage() {
             position: 5
         }
     ]);
+*/
+    const [phrase, setPhrase] = useState([
+        { 
+
+            "userId": userId, 
+        
+            "gameId": gameId, 
+        
+            "phrase": [ 
+        
+                { 
+        
+                    "word": { 
+        
+                        "content": dynamicVal[0][0], 
+        
+                        "position": [staticVal1[0], staticVal2[0]] 
+        
+                    } 
+        
+                    }, 
+        
+                    { 
+        
+                    "word": { 
+        
+                        "content": dynamicVal[1][0], 
+        
+                        "position": [staticVal1[0], staticVal2[0]] 
+        
+                    } 
+        
+                    }, 
+        
+                    { 
+        
+                    "word": { 
+        
+                        "content":  dynamicVal[2][0], 
+        
+                        "position": [staticVal1[0], staticVal2[0]] 
+        
+                    } 
+        
+                    }, 
+        
+                    { 
+        
+                    "word": { 
+        
+                        "content": dynamicVal[3][0], 
+        
+                        "position": [staticVal1[0], staticVal2[0]] 
+        
+                    } 
+            
+                    },
+                    
+                    { 
+        
+                    "word": { 
+        
+                        "content": dynamicVal[4][0], 
+        
+                        "position": [staticVal1[0], staticVal2[0]] 
+        
+                    } 
+        
+                },
+        
+            ] 
+        
+             
+        
+        } 
+    ])
     
     const [isSubmitted, setIsSubmitted] = useState(1);
 
     const handleChange = (e) => {
-        /*
-            const { name, value } = e.target
-            const [dimension, key] = name.split('.');
-            
-            setPhrase((prevPhrase) => ({
-                ...prevPhrase,
-                [dimension]: {
-                    ...prevPhrase[dimension],
-                    [key]: [value],
-            }}))
-        */
+      
         };
 
     switch(isSubmitted) { 
@@ -93,12 +161,8 @@ function LaunchPage() {
                     <WaitingOpponentDeck handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
                 </div>
             </>); 
-/*
-        case 3:
-            return (<>
-                <Test phrase={phrase}/>
-            </>)
-*/
+
+            
     }
 }
 
