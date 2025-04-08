@@ -660,7 +660,7 @@ exports.listLogsV2 = async (req) => {
             var dataName = {
                 "data.name": re
             }
-            console.log(dataName)
+
             // stoque le contenu de l'objet dans le query
             Object.assign(query, dataName)
         }
@@ -680,7 +680,7 @@ exports.listLogsV2 = async (req) => {
     console.log(query)
     // récupère les log de la base de données avec le query
     const logs = await Log.find(query)
-    
+
     // initialise le message à renvoyer au client
     var logMessage = {}
 
@@ -702,18 +702,20 @@ exports.listLogsV2 = async (req) => {
             newLog.data = {}
 
             for (const logData in logs[log].data) {
+
                 newLog.data[logData] = {}
+
                 Object.assign(newLog.data[logData], logs[log].data[logData])
-                
+
                 if (req.body.data.name !== undefined
                     && logs[log].data[logData].name !== undefined
-                    && !logs[log].data[logData].name.includes(req.body.data.name)
+                    && !logs[log].data[logData].name.toUpperCase().includes(req.body.data.name.toUpperCase())
                 ) {
                     newLog.data[logData] = undefined
 
                 } else if (req.body.data.loc !== undefined
                     && logs[log].data[logData].loc !== undefined
-                    && !logs[log].data[logData].loc.includes(req.body.data.loc)
+                    && !logs[log].data[logData].loc.toUpperCase().includes(req.body.data.loc.toUpperCase())
                 ) {
                     newLog.data[logData] = undefined
 
@@ -722,38 +724,37 @@ exports.listLogsV2 = async (req) => {
                 ) {
                     newLog.data[logData].value = {}
 
+                    if (typeof logs[log].data[logData].value === "object") {
 
-                    for (const logValue in logs[log].data[logData].value) {
-                        newLog.data[logData].value[logValue] = {}
+                        for (const logValue in logs[log].data[logData].value) {
+                            newLog.data[logData].value[logValue] = {}
 
 
-                        Object.assign(newLog.data[logData].value[logValue], logs[log].data[logData].value[logValue])
-                        
-                        for (const logValueKey in logs[log].data[logData].value[logValue]) {
+                            Object.assign(newLog.data[logData].value[logValue], logs[log].data[logData].value[logValue])
 
-                            if (req.body.data.value[logValueKey] !== undefined
-                                && logs[log].data[logData].value[logValue][logValueKey] !== undefined
-                                && req.body.data.value[logValueKey] !== logs[log].data[logData].value[logValue][logValueKey]
-                            ) {
-                                newLog.data[logData].value[logValue] = undefined
+                            for (const logValueKey in logs[log].data[logData].value[logValue]) {
+                                
+                                if (req.body.data.value[logValueKey] !== undefined
+                                    && logs[log].data[logData].value[logValue][logValueKey] !== undefined
+                                    && !logs[log].data[logData].value[logValue][logValueKey].toString().toUpperCase().includes(req.body.data.value[logValueKey].toString().toUpperCase())
+                                ) {
+                                    newLog.data[logData].value[logValue] = undefined
 
+                                }
                             }
+
                         }
-
-                    }
-
-                    if (typeof logs[log].data[logData].value !== "object") {
-                        newLog.data[logData].value = logs[log].data[logData].value
-                    }
-
-                    if (Object.keys(newLog.data[logData].value).length === 0) {
+                    } else if (Object.keys(req.body.data.value).length !== 0){
                         newLog.data[logData].value = undefined
+                    } else {
+                        newLog.data[logData].value = logs[log].data[logData].value
                     }
 
                 } else if (req.body.data.error !== undefined
                     && logs[log].data[logData].error !== undefined
+                    && !logs[log].data[logData].error.toUpperCase().includes(req.body.data.error.toUpperCase())
                 ) {
-                    newLog.data[logData].error = logs[log].data[logData].error
+                    newLog.data[logData].error = undefined
 
                 } else if (req.body.data.value === undefined) {
 
@@ -783,6 +784,18 @@ exports.listLogsV2 = async (req) => {
 
                 }
 
+            }
+
+            var test = false
+
+            for (const d in newLog.data) {
+                if (newLog.data[d] !== undefined) {
+                    test = true
+                }
+            }
+
+            if (!test) {
+                newLog = undefined
             }
 
         }
