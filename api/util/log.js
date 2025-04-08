@@ -707,21 +707,18 @@ exports.listLogsV2 = async (req) => {
                 ) {
                     newLog.data[logData] = undefined
 
-                } else if (req.body.data.error !== undefined
-                    && logs[log].data[logData].error !== undefined
-                ){
-                    newLog.data[logData].error = logs[log].data[logData].error
-
-                    
-
                 } else if (req.body.data.value !== undefined
                     && logs[log].data[logData].value !== undefined
                 ) {
                     newLog.data[logData].value = {}
 
+
                     for (const logValue in logs[log].data[logData].value) {
                         newLog.data[logData].value[logValue] = {}
+
+
                         Object.assign(newLog.data[logData].value[logValue], logs[log].data[logData].value[logValue])
+                        
                         for (const logValueKey in logs[log].data[logData].value[logValue]) {
 
                             if (req.body.data.value[logValueKey] !== undefined
@@ -732,15 +729,50 @@ exports.listLogsV2 = async (req) => {
 
                             }
                         }
+
                     }
 
-                    if(typeof logs[log].data[logData].value !== "object"){
+                    if (typeof logs[log].data[logData].value !== "object") {
                         newLog.data[logData].value = logs[log].data[logData].value
                     }
 
-                } else if (req.body.data.value === undefined){
+                    if (Object.keys(newLog.data[logData].value).length === 0) {
+                        newLog.data[logData].value = undefined
+                    }
+
+                } else if (req.body.data.error !== undefined
+                    && logs[log].data[logData].error !== undefined
+                ) {
+                    newLog.data[logData].error = logs[log].data[logData].error
+
+                } else if (req.body.data.value === undefined) {
+
                     newLog.data[logData].value = undefined
+
+                } else if (req.body.data.error === undefined) {
+
+                    newLog.data[logData].error = undefined
                 }
+
+                if (newLog.data[logData] === undefined) {
+                    newLog.data[logData] = {}
+                }
+
+                if ((newLog.data[logData].value === undefined
+                    && newLog.data[logData].error === undefined)
+                    && (req.body.data.value !== undefined
+                        || req.body.data.error !== undefined
+                    )
+                ) {
+
+                    newLog.data[logData] = undefined
+
+                } else if (Object.keys(newLog.data[logData]).length === 0) {
+
+                    newLog.data[logData] = undefined
+
+                }
+
             }
 
         }
