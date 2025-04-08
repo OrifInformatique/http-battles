@@ -513,9 +513,10 @@ exports.listLogsV2 = async (req) => {
 
         // test si les log d'un utilisateur ayant un email particulier son demandé
         if (req.body.user.email !== undefined) {
+            var re = new RegExp(req.body.user.email, "i")
             // stoque la l'email dans un objet
             var userEmail = {
-                "user.email": req.body.user.email
+                "user.email": re
             }
             // ajoute le contenu de l'objet au query
             Object.assign(query, userEmail)
@@ -523,9 +524,10 @@ exports.listLogsV2 = async (req) => {
 
         // test si le client demand les log d'un utilisateur avec un mot de pass particulier
         if (req.body.user.password !== undefined) {
+            var re = new RegExp(req.body.user.password, "i")
             // stoque la requet pour la base de donnée dans un objet
             var userPassword = {
-                "user.password": req.body.user.password
+                "user.password": re
             }
             // asigne le contenu de l'objet au query
             Object.assign(query, userPassword)
@@ -533,9 +535,10 @@ exports.listLogsV2 = async (req) => {
 
         // test si le client recherche les log d'un utilisateur avec un username particulier
         if (req.body.user.username !== undefined) {
+            var re = new RegExp(req.body.user.username, "i")
             // stoque la requete pour la base de donnée dans un objet
             var userUsername = {
-                "user.username": req.body.user.username
+                "user.username": re
             }
             // stoque le contenu de l'objet dans le query
             Object.assign(query, userUsername)
@@ -543,9 +546,10 @@ exports.listLogsV2 = async (req) => {
 
         // test si le client demande les log d'un utilisateur avec un prénom particuliert
         if (req.body.user.firstname !== undefined) {
+            var re = new RegExp(req.body.user.firstname, "i")
             // stoque la reque t pour la base de données dans un objet
             var userFirstname = {
-                "user.firstname": req.body.user.firstname
+                "user.firstname": re
             }
             // ajoute le contenu de l'object au query
             Object.assign(query, userFirstname)
@@ -553,9 +557,10 @@ exports.listLogsV2 = async (req) => {
 
         // test si le client veut les log d'un utilisateur avec un nom particulier
         if (req.body.user.lastname !== undefined) {
+            var re = new RegExp(req.body.user.lastname, "i")
             // stoque la requete pour la base de donnée dans un objet
             var userLastname = {
-                "user.lastname": req.body.user.lastname
+                "user.lastname": re
             }
             // stoque le contenu de l'objet dans le query
             Object.assign(query, userLastname)
@@ -576,9 +581,10 @@ exports.listLogsV2 = async (req) => {
 
         // test si le client veut les log pour une partie ave un état particulier
         if (req.body.game.status !== undefined) {
+            var re = new RegExp(req.body.game.status, "i")
             // stoque la requete pour la base de donnée dans un objet
             var gameStatus = {
-                "game.status": req.body.game.status
+                "game.status": re
             }
             // stoque le contenu de l'objet dans le query
             Object.assign(query, gameStatus)
@@ -649,28 +655,32 @@ exports.listLogsV2 = async (req) => {
     if (req.body.data !== undefined) {
         // test ce que le client veut
         if (req.body.data.name !== undefined) {
+            var re = new RegExp(req.body.data.name, "i")
             // stoque la requete pour la base de donnée dans un objet
             var dataName = {
-                "data.name": req.body.data.name
+                "data.name": re
             }
+            console.log(dataName)
             // stoque le contenu de l'objet dans le query
             Object.assign(query, dataName)
         }
 
         // test ce que le client veut
         if (req.body.data.loc !== undefined) {
+            var re = new RegExp(req.body.data.loc, "i")
             // stoque la requete pour la base de donnée dans un objet
             var dataLoc = {
-                "data.loc": req.body.data.loc
+                "data.loc": re
             }
             // stoque le contenu de l'objet dans le query
             Object.assign(query, dataLoc)
         }
 
     }
-
+    console.log(query)
     // récupère les log de la base de données avec le query
     const logs = await Log.find(query)
+    
     // initialise le message à renvoyer au client
     var logMessage = {}
 
@@ -694,16 +704,16 @@ exports.listLogsV2 = async (req) => {
             for (const logData in logs[log].data) {
                 newLog.data[logData] = {}
                 Object.assign(newLog.data[logData], logs[log].data[logData])
-
+                
                 if (req.body.data.name !== undefined
                     && logs[log].data[logData].name !== undefined
-                    && req.body.data.name !== logs[log].data[logData].name
+                    && !logs[log].data[logData].name.includes(req.body.data.name)
                 ) {
                     newLog.data[logData] = undefined
 
                 } else if (req.body.data.loc !== undefined
                     && logs[log].data[logData].loc !== undefined
-                    && req.body.data.loc !== logs[log].data[logData].loc
+                    && !logs[log].data[logData].loc.includes(req.body.data.loc)
                 ) {
                     newLog.data[logData] = undefined
 
