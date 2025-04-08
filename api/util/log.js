@@ -702,20 +702,23 @@ exports.listLogsV2 = async (req) => {
 
         // test si la requete demande des données, si oui commence le processus de filtrage et d'insertion 
         if (req.body.data !== undefined) {
-            // intialise le champ qui acceuiera les donnée dans cette instance de log
+            // intialise le champ qui acceuillera les données dans cette instance de log réponse
             newLog.data = {}
 
-            // parcours les données de l'instance de log de cette boucle
+            // parcours les données de l'instance de log reçu de cette boucle
             for (const logData in logs[log].data) {
-                // initialise le champ qui acceuillera cette instance de donnée
+                // initialise le champ qui acceuillera cette instance de donnée dans la réponse
                 newLog.data[logData] = {}
 
-                // copy les l'instance de donnée du log dans la copie qui sera transmit aux client
+                // copie les l'instance de donnée du log reçu dans la copie qui sera transmit aux client
                 Object.assign(newLog.data[logData], logs[log].data[logData])
 
-                /* test si: la requete exist pour le nom pour cette donnée
-                            si le nom de cette donnée exist
-                            si le nom de cette donnée ne contient PAS celui de la requete (tout est mis en majuscule pour simplifier les recheres)
+                /* test si: la requete spécifie le nom des données reçu
+                            si cette instance de donnée reçu à un nom
+                            si le nom de cette donnée ne contient PAS celui demandé par la requete
+                                mis en majuscule pour éviter les problème de capitalisation
+                            
+                le but est d'isoler les données invalides qui ne corresponde pas à la demande de la requete et de les effacer
                 */
                 if (req.body.data.name !== undefined
                     && logs[log].data[logData].name !== undefined
@@ -723,9 +726,12 @@ exports.listLogsV2 = async (req) => {
                 ) {
                     // si oui efface cette donnée
                     newLog.data[logData] = undefined
-                /* test si: la requete exist pour la localisation pour cette donnée
-                            si la localisation de cette donnée exist
-                            si la localisation de cette donnée ne contient PAS celui de la requete (tout est mis en majuscule pour simplifier les recheres)
+                /* test si: la requete spécifie la localisation de cette donnée
+                            si cette donnée à une localisation
+                            si la localisation de cette donnée ne contient PAS celui de la requete 
+                                mis en majuscule pour éviter les problème de capitalisation
+                
+                le but est d'isoler les données invalides qui ne corresponde pas à la demande de la requete et de les effacer
                 */
                 } else if (req.body.data.loc !== undefined
                     && logs[log].data[logData].loc !== undefined
@@ -733,31 +739,37 @@ exports.listLogsV2 = async (req) => {
                 ) {
                     // si oui efface cette donnée
                     newLog.data[logData] = undefined
-                // test si la requete demande la valeur associé à cette donnée et si cette donnée à une valeur
+                /* test:    si la requete demande la valeur associé à cette donnée (peut être une liste de valeur)
+                            si l'instance de donnée reçu à une valeur
+                */
                 } else if (req.body.data.value !== undefined
                     && logs[log].data[logData].value !== undefined
                 ) {
-                    // si oui initialise la valeur de cette donnée dans la variable pour la réponse
+                    // si oui initialise la valeur de cette donnée dans la réponse
                     newLog.data[logData].value = {}
                     
                     // test si la valeur de cette donnée est un objet
                     if (typeof logs[log].data[logData].value === "object"
                     ) {
-                        // si oui, parcours la liste de valeur de cette valleur
+                        // si oui, parcours cette valeur dans les données reçu champ après champ (normalment il s'agit d'un objet sous form de list et chaque champ est un nombre sous format string)
                         for (const logValue in logs[log].data[logData].value) {
-                            // initialise la valeur de cette instance de valeur dans la réponse
+                            // initialise la donnée de ce champ
                             newLog.data[logData].value[logValue] = {}
 
-                            // crée une copie de cette instance de valeur dans la réponse
+                            // crée une copie de la donnée de ce champ
                             Object.assign(newLog.data[logData].value[logValue], logs[log].data[logData].value[logValue])
 
-                            // parcour les champs de cette instance de valeur
+                            // parcour les champs de cette donnée
                             for (const logValueKey in logs[log].data[logData].value[logValue]) {
 
                                 /*
-                                Test:   si ce champ pour cette valeur est demandé dans la requette
-                                        si ce champ pour cette valeur a une valeur
-                                        si la valeur de ce champ ne contient PAS ce qui est demandé dans la requette (to transformé en string et en majuscule pour simplifier les conditions de recherche)
+                                Test:   si ce champ pour cette valeur est demandée dans la requette
+                                        si ce champ pour cette donnée exist
+                                        si la valeur de ce champ ne contient PAS ce qui est demandé dans la requette
+                                            tout en majuscule pour éviter le erreurs de capitalisation
+                                            tout en string pour s'assurer que les donnée soit d'un type qui puisse être comparé
+
+                                le bute est d'isoler ce qui n'est pas demandé par la requete et de l'effacer
                                 */
                                 if (req.body.data.value[logValueKey] !== undefined
                                     && logs[log].data[logData].value[logValue][logValueKey] !== undefined
@@ -768,25 +780,31 @@ exports.listLogsV2 = async (req) => {
                                 }
                             }
                         }
-                    // test si la valeur de cette requete n'a PAS de champ
-                    } else if (Object.keys(req.body.data.value).length !== 0) {
-                        // si oui efface la valeur
-                        newLog.data[logData].value = undefined
+                    /* si la valeur reçu n'est pas un objet test si la valeur de la requete a un champ
+                    
+                    le but est de filtrer les valeurs qui ne sont pas des objet quand des objets sont demandés
+                    */
                     } else {
-                        // si non atribue la valeur récupérée à la réponse
+                        // si non atribue la valeur récupérée à la réponse 
                         newLog.data[logData].value = logs[log].data[logData].value
                     }
 
-                    // test si la valeur de la requete n'est PAS du même type que celle de la données reçu
+                    /* test si la valeur de la requete n'est PAS du même type que celle de la données reçu
+                    
+                    le bute est de filtrer les valeur qui ne corresponde pas à la requete
+                    */
                     if (typeof req.body.data.value !== typeof logs[log].data[logData].value){
                         // si oui, effave la valeur
                         newLog.data[logData].value = undefined
                     }
                     
                 /*
-                si non test:    si la requete demande les erreur contenu dans les donnée
-                                si la donnée reçu contient des erreur
-                                si ce que demande la requette n'est pas contenu dans la donnée reçu
+                si non test:    si la requete demande les erreurs contenu dans les donnée
+                                si la donnée reçu contient des erreurs
+                                si ce que demande la requette n'est pas contenu dans la donnée reçue
+                                    tout en majuscule pour éviter les erreur de capitalisation
+
+                le bute est de filtrer les erreurs qui ne sont pas demandé par la requete
                 */
                 } else if (req.body.data.error !== undefined
                     && logs[log].data[logData].error !== undefined
@@ -794,19 +812,28 @@ exports.listLogsV2 = async (req) => {
                 ) {
                     // si oui efface l'erreur dans la réponse
                     newLog.data[logData].error = undefined
-                // si non test si la requete demande une valeur
+                /* si non test si la requete ne demande pas de valeur
+                
+                le but est de filtrer les valeurs si elle ne sont pas demandée pour allèger la réponse
+                */
                 } else if (req.body.data.value === undefined) {
                     //si oui efface la valeur de la réponse
                     newLog.data[logData].value = undefined
-                // si non test si la requete demande une erreur
+                /* si non test si la requete ne demande pas d'erreur
+                
+                le but est de filtrer les erreurs si elle ne sont pas demandée pour allèger la réponse
+                */
                 } else if (req.body.data.error === undefined) {
                     // si oui, efface l'erreur de la réponse
                     newLog.data[logData].error = undefined
                 }
 
-                // test si cette instance de donnée de la réponse exist
+                /* test si cette instance de donnée de la réponse n'exist pas
+                
+                le but est de créé une valeur tampons pour que les tests suivant ne lance pas d'erreur en testant des valeurs qui n'exist pas
+                */
                 if (newLog.data[logData] === undefined) {
-                    // si oui, la remet à zero
+                    // si oui, l'initialise
                     newLog.data[logData] = {}
                 }
 
@@ -818,6 +845,8 @@ exports.listLogsV2 = async (req) => {
                         (si la valeur de cette instance de donnée est demandé par la requette
                         ou
                         si l'erreur de cette instance de donnée est demandée par la requette)
+
+                Le bute est d'isoler et effacer les instance de données vides qui sont demandé par la requette et donc pas supprimer afin d'améliorée la lisibilité et réduire la taille de la réponse
                 */
                 if ((newLog.data[logData].value === undefined
                     && newLog.data[logData].error === undefined)
@@ -839,7 +868,7 @@ exports.listLogsV2 = async (req) => {
 
             // parcour les données envoyées comme réponse 
             for (const d in newLog.data) {
-                // test si ces donnée exist
+                // test si n'importe laquel de ces instances de donnée existe
                 if (newLog.data[d] !== undefined) {
                     // si oui, change le test comme vrai
                     test = true
@@ -848,7 +877,7 @@ exports.listLogsV2 = async (req) => {
 
             // si le test est faux
             if (!test) {
-                // suprime le log du message pour la réponse
+                // suprime le log de réponse
                 newLog = undefined
             }
 
