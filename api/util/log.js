@@ -677,17 +677,20 @@ exports.listLogsV2 = async (req) => {
         }
 
     }
-    console.log(query)
+    
     // récupère les log de la base de données avec le query
     const logs = await Log.find(query)
 
     // initialise le message à renvoyer au client
     var logMessage = {}
 
+    // boucle parcourant la liste de log reçu de la base de donnée
     for (const log in logs) {
 
+        // initialisation du log à ajouter au message
         var newLog = {}
 
+        // application des variables constantes du log
         newLog._id = logs[log]._id
         newLog.user = logs[log].user
         newLog.game = logs[log].game
@@ -697,109 +700,160 @@ exports.listLogsV2 = async (req) => {
         newLog.hour = logs[log].hour
         newLog.minute = logs[log].minute
 
-        // test ce que le client veut
+        // test si la requete demande des données, si oui commence le processus de filtrage et d'insertion 
         if (req.body.data !== undefined) {
+            // intialise le champ qui acceuiera les donnée dans cette instance de log
             newLog.data = {}
 
+            // parcours les données de l'instance de log de cette boucle
             for (const logData in logs[log].data) {
-
+                // initialise le champ qui acceuillera cette instance de donnée
                 newLog.data[logData] = {}
 
+                // copy les l'instance de donnée du log dans la copie qui sera transmit aux client
                 Object.assign(newLog.data[logData], logs[log].data[logData])
 
+                /* test si: la requete exist pour le nom pour cette donnée
+                            si le nom de cette donnée exist
+                            si le nom de cette donnée ne contient PAS celui de la requete (tout est mis en majuscule pour simplifier les recheres)
+                */
                 if (req.body.data.name !== undefined
                     && logs[log].data[logData].name !== undefined
                     && !logs[log].data[logData].name.toUpperCase().includes(req.body.data.name.toUpperCase())
                 ) {
+                    // si oui efface cette donnée
                     newLog.data[logData] = undefined
-
+                /* test si: la requete exist pour la localisation pour cette donnée
+                            si la localisation de cette donnée exist
+                            si la localisation de cette donnée ne contient PAS celui de la requete (tout est mis en majuscule pour simplifier les recheres)
+                */
                 } else if (req.body.data.loc !== undefined
                     && logs[log].data[logData].loc !== undefined
                     && !logs[log].data[logData].loc.toUpperCase().includes(req.body.data.loc.toUpperCase())
                 ) {
+                    // si oui efface cette donnée
                     newLog.data[logData] = undefined
-
+                // test si la requete demande la valeur associé à cette donnée et si cette donnée à une valeur
                 } else if (req.body.data.value !== undefined
                     && logs[log].data[logData].value !== undefined
                 ) {
+                    // si oui initialise la valeur de cette donnée dans la variable pour la réponse
                     newLog.data[logData].value = {}
-
-                    if (typeof logs[log].data[logData].value === "object") {
-
+                    
+                    // test si la valeur de cette donnée est un objet
+                    if (typeof logs[log].data[logData].value === "object"
+                    ) {
+                        // si oui, parcours la liste de valeur de cette valleur
                         for (const logValue in logs[log].data[logData].value) {
+                            // initialise la valeur de cette instance de valeur dans la réponse
                             newLog.data[logData].value[logValue] = {}
 
-
+                            // crée une copie de cette instance de valeur dans la réponse
                             Object.assign(newLog.data[logData].value[logValue], logs[log].data[logData].value[logValue])
 
+                            // parcour les champs de cette instance de valeur
                             for (const logValueKey in logs[log].data[logData].value[logValue]) {
-                                
+
+                                /*
+                                Test:   si ce champ pour cette valeur est demandé dans la requette
+                                        si ce champ pour cette valeur a une valeur
+                                        si la valeur de ce champ ne contient PAS ce qui est demandé dans la requette (to transformé en string et en majuscule pour simplifier les conditions de recherche)
+                                */
                                 if (req.body.data.value[logValueKey] !== undefined
                                     && logs[log].data[logData].value[logValue][logValueKey] !== undefined
                                     && !logs[log].data[logData].value[logValue][logValueKey].toString().toUpperCase().includes(req.body.data.value[logValueKey].toString().toUpperCase())
                                 ) {
+                                    // si oui, efface la valeur
                                     newLog.data[logData].value[logValue] = undefined
-
                                 }
                             }
-
                         }
-                    } else if (Object.keys(req.body.data.value).length !== 0){
+                    // test si la valeur de cette requete n'a PAS de champ
+                    } else if (Object.keys(req.body.data.value).length !== 0) {
+                        // si oui efface la valeur
                         newLog.data[logData].value = undefined
                     } else {
+                        // si non atribue la valeur récupérée à la réponse
                         newLog.data[logData].value = logs[log].data[logData].value
                     }
 
+                    // test si la valeur de la requete n'est PAS du même type que celle de la données reçu
+                    if (typeof req.body.data.value !== typeof logs[log].data[logData].value){
+                        // si oui, effave la valeur
+                        newLog.data[logData].value = undefined
+                    }
+                    
+                /*
+                si non test:    si la requete demande les erreur contenu dans les donnée
+                                si la donnée reçu contient des erreur
+                                si ce que demande la requette n'est pas contenu dans la donnée reçu
+                */
                 } else if (req.body.data.error !== undefined
                     && logs[log].data[logData].error !== undefined
                     && !logs[log].data[logData].error.toUpperCase().includes(req.body.data.error.toUpperCase())
                 ) {
+                    // si oui efface l'erreur dans la réponse
                     newLog.data[logData].error = undefined
-
+                // si non test si la requete demande une valeur
                 } else if (req.body.data.value === undefined) {
-
+                    //si oui efface la valeur de la réponse
                     newLog.data[logData].value = undefined
-
+                // si non test si la requete demande une erreur
                 } else if (req.body.data.error === undefined) {
-
+                    // si oui, efface l'erreur de la réponse
                     newLog.data[logData].error = undefined
                 }
 
+                // test si cette instance de donnée de la réponse exist
                 if (newLog.data[logData] === undefined) {
+                    // si oui, la remet à zero
                     newLog.data[logData] = {}
                 }
 
+                /*
+                test:   (si la valeur pour cette instance de donnée dans la réponse n'existe PAS
+                        et
+                        si l'erreur pour cette instance de donnée n'exist PAS)
+                        et
+                        (si la valeur de cette instance de donnée est demandé par la requette
+                        ou
+                        si l'erreur de cette instance de donnée est demandée par la requette)
+                */
                 if ((newLog.data[logData].value === undefined
                     && newLog.data[logData].error === undefined)
                     && (req.body.data.value !== undefined
                         || req.body.data.error !== undefined
                     )
                 ) {
-
+                    // si oui, efface la donnée
                     newLog.data[logData] = undefined
-
+                // si non, test si cette instance de donnée dans la réponse n'as PAS de champ
                 } else if (Object.keys(newLog.data[logData]).length === 0) {
-
+                    // si oui, supprime cette instance de donnée
                     newLog.data[logData] = undefined
-
                 }
-
             }
 
+            // initialise une variable de test comme fausse
             var test = false
 
+            // parcour les données envoyées comme réponse 
             for (const d in newLog.data) {
+                // test si ces donnée exist
                 if (newLog.data[d] !== undefined) {
+                    // si oui, change le test comme vrai
                     test = true
                 }
             }
 
+            // si le test est faux
             if (!test) {
+                // suprime le log du message pour la réponse
                 newLog = undefined
             }
 
         }
-
+        // stoque le log dans le message de réponse
         logMessage[log] = newLog
     }
 
