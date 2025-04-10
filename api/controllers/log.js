@@ -16,3 +16,15 @@ exports.listLogs = async (req, res, next) => {
     utilRes.sendSuccess(200, logs, res)
 }
 
+// liste les log
+exports.listLogsV3 = async (req, res, next) => {
+
+    const logs = await utilLog.listLogsV3(req)
+        .catch(error => {
+            console.log(error)
+            utilRes.sendError(404, error.toString(), res)
+        })
+
+    utilRes.sendSuccess(200, logs, res)
+}
+
