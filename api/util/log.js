@@ -491,42 +491,35 @@ exports.listLogsV3 = async (req) => {
     // crée un objet query qui servira à faire une requette pour la base de données
     var query = {}
 
-    // test si l'id d'un log spécifique est demandé par le biais de son id
-    if (req.body._id !== undefined) {
-        // si oui, l'ajoute au query en traduisan l'id en object id qui sera reconu par la base de donnée et en l'ajoutant au query
-        var logId = {
-            "_id": mongoose.Types.ObjectId(req.body._id)
-        }
-        Object.assign(query, logId)
-    }
-
     query = this.logCreateQuery(req.body, query)
-    console.log(query)
+
     // récupère les log de la base de données avec le query
     const logs = await Log.find(query)
 
     var logMessage = logs
 
+    logMessage = this.logFilterLoopUseless(req.body, logMessage)
 
-    logMessage = this.logFilterLoop(logMessage)
+
+
+    logMessage = this.logFilterLoopSize(logMessage)
 
     // retourn le message à envoyer au client
     return logMessage
 }
 
 exports.logCreateQuery = (object, query, key) => {
-    for(const champ in object){
-        console.log(object[champ])
-        if(!(typeof object[champ] === "object" && champ !== "_id")){
-            if(key !== undefined){
+    for (const champ in object) {
+        if (!(typeof object[champ] === "object" && champ !== "_id")) {
+            if (key !== undefined) {
                 key = key + "." + champ
-                query[key] = object[champ]
+                query[key] = new RegExp(object[champ], "i")
             } else {
                 query[champ] = object[champ]
             }
-            
+
         } else {
-            if(key !== undefined){
+            if (key !== undefined) {
                 key = key + "." + champ
                 query = this.logCreateQuery(object[champ], query, key)
             } else {
@@ -538,13 +531,82 @@ exports.logCreateQuery = (object, query, key) => {
     return query
 }
 
+exports.logFilterLoopUseless = (reqObject, logObject) => {
+    var newLogObject = {}
+    for (const ro in reqObject) {
+        for (const lo in logObject) {
+            if (parseInt(lo).toString() !== "NaN") {
+                var payout = this.logFilterLoopUseless(reqObject, logObject[lo])
+
+                if (payout !== undefined) {
+                    newLogObject[lo] = payout
+                }
+
+            } else if (lo === ro) {
+                if (lo === "_id") {
+                    if (logObject[lo].toString() === reqObject[ro]) {
+                        newLogObject[lo] = logObject[lo].toString()
+                        for (const fill in logObject) {
+                            if (typeof logObject[fill] !== "object" &&
+                                (typeof logObject[fill] === "string" || typeof logObject[fill] === "number") &&
+                                fill !== "id"
+                            ) {
+                                newLogObject[fill] = logObject[fill]
+                            }
+                        }
+                    }
+                } else if (typeof logObject[lo] === "object" && typeof reqObject[ro] === "object") {
+                    if (Object.keys(reqObject[ro]).length === 0) {
+                        newLogObject[lo] = logObject[lo]
+                    } else {
+                        var payout = this.logFilterLoopUseless(reqObject[ro], logObject[lo])
+                        if (payout !== undefined) {
+                            newLogObject[lo] = payout
+                            for (const fill in logObject) {
+                                if (typeof logObject[fill] !== "object" &&
+                                    (typeof logObject[fill] === "string" || typeof logObject[fill] === "number") &&
+                                    fill !== "id"
+                                ) {
+                                    newLogObject[fill] = logObject[fill]
+                                }
+                            }
+                        }
+                    }
+
+                } else if (!(typeof logObject[lo] === "object" || typeof reqObject[ro] === "object")) {
+                    if (logObject[lo].toString().toUpperCase().includes(reqObject[ro].toString().toUpperCase())) {
+                        for (const fill in logObject) {
+                            if (typeof logObject[fill] !== "object" &&
+                                (typeof logObject[fill] === "string" || typeof logObject[fill] === "number")
+                            ) {
+                                newLogObject[fill] = logObject[fill]
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
+    if (Object.keys(newLogObject).length === 0) {
+        newLogObject = undefined
+    }
+
+    return newLogObject
+
+}
+
+
+
 /**
  * filter entry to limit their size
  * @param {*} objectList 
  * @param {*} depth 
  * @returns objectList
  */
-exports.logFilterLoop = (objectList, depth) => {
+exports.logFilterLoopSize = (objectList, depth) => {
 
     if (depth === undefined) {
         var depth = 0
@@ -569,7 +631,7 @@ exports.logFilterLoop = (objectList, depth) => {
 
         if (depth < 5) {
             for (const item in objectList) {
-                objectList[item] = this.logFilterLoop(objectList[item], depth)
+                objectList[item] = this.logFilterLoopSize(objectList[item], depth)
             }
         }
 
@@ -591,6 +653,7 @@ exports.listLogsV2 = async (req) => {
         }
         Object.assign(query, logId)
     }
+
 
     if (req.body.user !== undefined) {
 
@@ -860,7 +923,7 @@ exports.listLogsV2 = async (req) => {
                                         si la valeur de ce champ ne contient PAS ce qui est demandé dans la requette
                                             tout en majuscule pour éviter le erreurs de capitalisation
                                             tout en string pour s'assurer que les donnée soit d'un type qui puisse être comparé
-
+ 
                                 le bute est d'isoler ce qui n'est pas demandé par la requete et de l'effacer
                                 */
                                 if (req.body.data.value[logValueKey] !== undefined
@@ -937,7 +1000,7 @@ exports.listLogsV2 = async (req) => {
                         (si la valeur de cette instance de donnée est demandé par la requette
                         ou
                         si l'erreur de cette instance de donnée est demandée par la requette)
-
+ 
                 Le bute est d'isoler et effacer les instance de données vides qui sont demandé par la requette et donc pas supprimer afin d'améliorée la lisibilité et réduire la taille de la réponse
                 */
                 if ((newLog.data[logData].value === undefined

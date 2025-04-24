@@ -33,7 +33,7 @@ router.put('/games/startGame', auth, check.dataInit, middleGame.startGameV2, che
 // términe la partie
 router.put('/games/endGame', auth, check.dataInit, middleGame.endGameV2, check.logInit, check.dataValidity, gameCtrl.endGameV2)
 
-// vérifie à qui est le tour
+// test la phrase du client
 router.put('/games/tryPhrase', auth, check.dataInit, middleGame.tryPhraseV2, check.logInit, check.dataValidity, gameCtrl.tryPhraseV2)
 
 router.all('/games/tryA', auth, check.dataInit, routeParam.a, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
