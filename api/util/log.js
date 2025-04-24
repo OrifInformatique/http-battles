@@ -508,77 +508,125 @@ exports.listLogsV3 = async (req) => {
     return logMessage
 }
 
+/**
+ * Fbrique le query pour la bdd
+ * @param {*} object 
+ * @param {*} query 
+ * @param {*} key 
+ * @returns query
+ */
 exports.logCreateQuery = (object, query, key) => {
+    // parcour la requette
     for (const champ in object) {
+        // test si le champ de la requette n'est pas un object (id excepted)
         if (!(typeof object[champ] === "object" && champ !== "_id")) {
+            // test si la clef est défini
             if (key !== undefined) {
+                // ajoute le champ à la clef
                 key = key + "." + champ
+                // ajout le regex de la requette au query pour la clef
                 query[key] = new RegExp(object[champ], "i")
             } else {
+                // ajoute le contenu de la requette (id) au query pour se champ
                 query[champ] = object[champ]
             }
 
         } else {
+            // test si la clef exist
             if (key !== undefined) {
+                // si oui y ajoute le champ
                 key = key + "." + champ
+                // rentre le resultat de la fonction appeler de manière récursive avec la clef comme clef dans le query
                 query = this.logCreateQuery(object[champ], query, key)
             } else {
+                // rentre le resultat de la fonction appeller de manière récursive avec le cham comme clef dans le query
                 query = this.logCreateQuery(object[champ], query, champ)
             }
         }
     }
 
+    // retourn le query
     return query
 }
 
+/**
+ * Filter useless informations from the result sent from the database
+ * @param {*} reqObject 
+ * @param {*} logObject 
+ * @returns newLogObject
+ */
 exports.logFilterLoopUseless = (reqObject, logObject) => {
+    // variable dans laquel les informations utiles serons stoquée
     var newLogObject = {}
-    for (const ro in reqObject) {
-        for (const lo in logObject) {
-            if (parseInt(lo).toString() !== "NaN") {
-                var payout = this.logFilterLoopUseless(reqObject, logObject[lo])
 
+    // boucle de parcoure de la requette
+    for (const ro in reqObject) {
+        // boucle du parcours du log
+        for (const lo in logObject) {
+            // test si la clefs est numérique
+            if (parseInt(lo).toString() !== "NaN") {
+                // si non relance la fonction de manière récursive (elle s'appel elle-même) pour le contenu de la en tant qu'objet log à parcourir et stoque le résultat dans une variable
+                var payout = this.logFilterLoopUseless(reqObject, logObject[lo])
+                // si la variable à un contenu le stoque dans le nouvel objet
                 if (payout !== undefined) {
                     newLogObject[lo] = payout
                 }
-
+            // test si la clef de la requet et celle du log sont les même
             } else if (lo === ro) {
+                // test si la clef du log est un  id
                 if (lo === "_id") {
+                    // test si l'id du log est le même que celui de la requette
                     if (logObject[lo].toString() === reqObject[ro]) {
+                        // incorpore une version string de l'id aux nouvelle objet
                         newLogObject[lo] = logObject[lo].toString()
+                        // parcour le log
                         for (const fill in logObject) {
+                            // test pour voir si le contenu du log est soit un string ou un nombre
                             if (typeof logObject[fill] !== "object" &&
                                 (typeof logObject[fill] === "string" || typeof logObject[fill] === "number") &&
                                 fill !== "id"
                             ) {
+                                // atribue le contenu du log à l'objet
                                 newLogObject[fill] = logObject[fill]
                             }
                         }
                     }
+                // test si le contenu du log et de la requete sont des objet
                 } else if (typeof logObject[lo] === "object" && typeof reqObject[ro] === "object") {
+                    // test si l'object à des clefs
                     if (Object.keys(reqObject[ro]).length === 0) {
+                        // atribue le contenu de l'object au nouvel object
                         newLogObject[lo] = logObject[lo]
                     } else {
+                        // stoque le resultat de la fonction appeler de manière récursive avec un degré d'abstraction supplementaire dans une variable
                         var payout = this.logFilterLoopUseless(reqObject[ro], logObject[lo])
+                        // test si la variable est vide
                         if (payout !== undefined) {
+                            // ajout la variable au nouvelle objet
                             newLogObject[lo] = payout
+                            // parcour le log
                             for (const fill in logObject) {
+                                // test pour voir si le contenu du log est soit un string ou un nombre
                                 if (typeof logObject[fill] !== "object" &&
                                     (typeof logObject[fill] === "string" || typeof logObject[fill] === "number") &&
                                     fill !== "id"
                                 ) {
+                                    // atribue le contenu du log à l'objet
                                     newLogObject[fill] = logObject[fill]
                                 }
                             }
                         }
                     }
-
+                // test ni la requet ni le log ne sont des objects
                 } else if (!(typeof logObject[lo] === "object" || typeof reqObject[ro] === "object")) {
                     if (logObject[lo].toString().toUpperCase().includes(reqObject[ro].toString().toUpperCase())) {
+                        // parcour le log
                         for (const fill in logObject) {
+                            // test pour voir si le contenu du log est soit un string ou un nombre
                             if (typeof logObject[fill] !== "object" &&
                                 (typeof logObject[fill] === "string" || typeof logObject[fill] === "number")
                             ) {
+                                // atribue le contenu du log à l'objet
                                 newLogObject[fill] = logObject[fill]
                             }
                         }
@@ -589,13 +637,14 @@ exports.logFilterLoopUseless = (reqObject, logObject) => {
         }
 
     }
-
+    // test si le nouvelle object est vide de clefs
     if (Object.keys(newLogObject).length === 0) {
+        // si oui le détruit
         newLogObject = undefined
     }
 
+    // retourn le nouvelle object
     return newLogObject
-
 }
 
 
