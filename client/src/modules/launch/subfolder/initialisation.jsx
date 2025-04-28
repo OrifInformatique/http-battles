@@ -37,26 +37,24 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
 function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, i}) {
 
     return (<>   
-                <div className="initWord"style={{display:"flex",flexFlow:"row" }}>
-                    <h3>Mot {i}</h3>
-                    <MyList handleChange={handleChange} tech={"dynamicVal"} valeurs={dynamicVal} i={i}/> 
-                </div>
-                
-                <div className="initRoute" style={{display:"flex",flexFlow:"column"}}>
-                    <h3>Route</h3>
-                    <MyList handleChange={handleChange} tech={"route"} valeurs={staticVal1} i={i}/> 
-                </div>
-
-                <div className="initMethod" style={{display:"flex",flexFlow:"column"}}>
-                    <h3>Methode</h3>
-                    <MyList handleChange={handleChange} tech={"method"} valeurs={staticVal2} i={i}/>
-                </div>
+        <div className="initWord"style={{display:"flex",flexFlow:"row" }}>
+            <h3>Mot {i}</h3>
+            <MyList handleChange={handleChange} tech={"dynamicVal"} valeurs={dynamicVal} i={i}/> 
+        </div>
         
+        <div className="initRoute" style={{display:"flex",flexFlow:"column"}}>
+            <h3>Route</h3>
+            <MyList handleChange={handleChange} tech={"route"} valeurs={staticVal1} i={i}/> 
+        </div>
+
+        <div className="initMethod" style={{display:"flex",flexFlow:"column"}}>
+            <h3>Methode</h3>
+            <MyList handleChange={handleChange} tech={"method"} valeurs={staticVal2} i={i}/>
+        </div>
     </>);
 }
 
-function ElementSlider({position ,i, x, phrase}) {
-    console.log(i)
+function ElementSlider({position ,i, phrase}) {
     return(<>
         <div className={position === i ? `init5Word wordPosition-${i}` :`init5Word position-${i} a`} id="position">
         {phrase[0].phrase[i-1].word.content} 
@@ -65,7 +63,7 @@ function ElementSlider({position ,i, x, phrase}) {
     </>)
 }
 
-function Slider({handleChange, dynamicVal, staticVal1, staticVal2, phrase, position}) {
+function Slider({handleChange, dynamicVal, staticVal1, staticVal2, position}) {
 
     return(<>
         <div className="initContainerVisible"> 
@@ -130,15 +128,14 @@ switch ( position ){
 
 }
 
-
     return(<> 
   
         <div className="initInitialisationContainer">
 
-            <p className="initLayoutText1">Hébergeur</p>
+            <p className="initLayoutText1 initLayoutText">Hébergeur</p>
             <img className="initLayout1" src="assets/images/element/CC0/layouts/blue_layout.png" alt="sword" />
            
-            <p className="initLayoutText2">Adversaire</p>
+            <p className="initLayoutText2 initLayoutText">Adversaire</p>
             <img className="initLayout2" src="assets/images/element/CC0/layouts/red_layout.png" alt="sword" />
 
             <h1 className="initTitle"style={{fontWeight:'bold', display:"flex",flexFlow:"column",alignItems:"center",paddingBottom:"0px"}}> Initialisation de la phrase </h1>
@@ -151,38 +148,13 @@ switch ( position ){
             </div>
                 
             <div className="initPhrase">
-
-                <div className={position === 1 ?"init5Word wordPosition-0" :"init5Word position-0 a"} id="position">
-                {phrase[0].phrase[0].word.content
-                } 
-                <img src="assets/images/element/sword_1.png" alt="sword" />
-                </div>
-
-                <div className={position === 2 ?"init5Word wordPosition-1" :"init5Word position-1 a"} id="position">
-                {phrase[0].phrase[1].word.content
-                } 
-                <img src="assets/images/element/sword_1.png" alt="sword" />
-                 </div>
-
-                <div className={position === 3 ?"init5Word wordPosition-2" :"init5Word position-2 a"} id="position">
-                {phrase[0].phrase[2].word.content
-                } 
-                <img src="assets/images/element/sword_1.png" alt="sword" />
-                </div>
-                
-                <div className={position === 4 ?"init5Word wordPosition-3" :"init5Word position-3 a"} id="position">
-                {phrase[0].phrase[3].word.content
-                }  
-                <img src="assets/images/element/sword_1.png" alt="sword" />
-                </div>
-
-                <div className={position === 5 ?"init5Word wordPosition-4" :"init5Word position-4 a"} id="position">      
-                {phrase[0].phrase[4].word.content
-                } 
-                <img src="assets/images/element/sword_1.png" alt="sword" />
-                </div>
+                <ElementSlider i={1} position={position} phrase={phrase}/>
+                <ElementSlider i={2} position={position} phrase={phrase}/>
+                <ElementSlider i={3} position={position} phrase={phrase}/>
+                <ElementSlider i={4} position={position} phrase={phrase}/>
+                <ElementSlider i={5} position={position} phrase={phrase}/>
             </div>
-                <ElementSlider x={x} i={i} position={position} phrase={phrase}/>
+             
             {arrowd}
 
             <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>

@@ -26,54 +26,16 @@ function LaunchPage() {
 
 /*     Changements d'états    
 
-    const [phrase, setPhrase] = useState([
-        // Dimensions 
-        { 
-            id: "firstword",
-            word: dynamicVal[0][0],
-            route: staticVal1[0],
-            method: staticVal2[0],
-            position: 1
-        },
-        { 
-            id: "secondword",
-            word: dynamicVal[1][0], 
-            route: staticVal1[0], 
-            method: staticVal2[0], 
-            position: 2
-        },
-        { 
-            id: "thirdword",
-            word: dynamicVal[2][0], 
-            route: staticVal1[0], 
-            method: staticVal2[0], 
-            position: 3
-        },
-        { 
-            id: "fourthword",
-            word: dynamicVal[3][0], 
-            route: staticVal1[0], 
-            method: staticVal2[0], 
-            position: 4
-        },
-        { 
-            id: "fifthword",
-            word: dynamicVal[4][0], 
-            route: staticVal1[0], 
-            method: staticVal2[0], 
-            position: 5
-        }
-    ]);
 */
     const [phrase, setPhrase] = useState([
-        { 
+        {
 
             "userId": userId, 
         
             "gameId": gameId, 
         
             "phrase": [ 
-        
+                
                 { 
         
                     "word": { 
@@ -135,13 +97,10 @@ function LaunchPage() {
                 },
         
             ] 
-        
-             
-        
-        } 
+        }
     ])
     
-    const [isSubmitted, setIsSubmitted] = useState(1);
+    const [isSubmitted, setIsSubmitted] = useState(2);
 
     const handleChange = (e) => {
       

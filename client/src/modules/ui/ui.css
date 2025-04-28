@@ -20,6 +20,8 @@
         height: 28px;
         background-color: #133a5c80;
 
+        color: white;
+
       }
       
       button[type="submit"]::before {
@@ -80,6 +82,8 @@
       
         height: 28px;
         background-color: #0a5b065a;
+
+        color: white;
       }
       
       button[type="button"]::before {
