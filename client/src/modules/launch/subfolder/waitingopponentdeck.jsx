@@ -7,10 +7,11 @@ const WaitingOpponentDeck = ({phrase}) => {
     <div className="waitTitle">
         <h1>Partie # numéro de la partie  - Initialisation de la phrase</h1>
     </div>*/}
-    <h1>Hello</h1>
-<img className="redGrid" alt="Grille Rouge" src="../assets/images/element/CC0/fight_grid/Grille_de_combat.png"/>
-<img className="blueGrid" alt="Grille Bleue" src="../assets/images/element/CC0/fight_grid/player_grid.png"/>
 
+    <img className="redGrid" alt="Grille Rouge" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/Grille_de_combat.png"/>
+    <img className="" alt="" src="../assets/images/element/CC0/waitingopponentdeck/element/settings-icon.png" />
+    <img className="blueGrid" alt="Grille Bleue" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/player_grid.png"/>
+    <img className="woodLayout_host" alt="Layout du bas couleur bois, emplacement du host" src="../assets/images/element/CC0/waitingopponentdeck/layouts/userlayout.png" />
     <div className="waitContainer">
 
 

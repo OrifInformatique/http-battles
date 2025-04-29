@@ -500,8 +500,8 @@
             
             position: absolute;
             
-            width: 75%;
-
+            width: 47%;
+            right: 30%;
             top: 10%;
         }
 
@@ -510,7 +510,16 @@
 
             position: absolute;
 
+            width: 35%;
+            right: 19%;
+
+            top: 10%;
+        }
+
+        .woodLayout_host {
+            position: absolute;
+
             width: 40%;
-            right: 6%;
-            top: 11%;
+            left: 26.9%;
+            bottom: 18.5%;
         }
