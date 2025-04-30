@@ -7,14 +7,16 @@ const WaitingOpponentDeck = ({phrase}) => {
     <div className="waitTitle">
         <h1>Partie # numéro de la partie  - Initialisation de la phrase</h1>
     </div>*/}
-
-    <img className="redGrid" alt="Grille Rouge" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/Grille_de_combat.png"/>
-    <img className="" alt="" src="../assets/images/element/CC0/waitingopponentdeck/element/settings-icon.png" />
-    <img className="blueGrid" alt="Grille Bleue" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/player_grid.png"/>
-    <img className="woodLayout_host" alt="Layout du bas couleur bois, emplacement du host" src="../assets/images/element/CC0/waitingopponentdeck/layouts/userlayout.png" />
-    <div className="waitContainer">
-
-
+    <div>
+        <div style={{display:"flex", flexDirection:"column", alignItems:"end"}}/*className="settingsContainer"*/>
+        <img className="settings" alt="" src="../assets/images/element/CC0/waitingopponentdeck/element/settings-icon.png" />
+        </div>
+        <div className="DIVS">
+        <img className="redGrid" alt="Grille Rouge" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/Grille_de_combat_rouge.png"/>
+        <img className="blueGrid" alt="Grille Bleue" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/player_grid.png"/>
+        </div>
+        <img className="woodLayout_host" alt="Layout du bas couleur bois, emplacement du host" src="../assets/images/element/CC0/waitingopponentdeck/layouts/userlayout.png" />
+    </div>
         {/* 
         <h2>Votre phrase est prête</h2>
 
@@ -31,7 +33,6 @@ const WaitingOpponentDeck = ({phrase}) => {
         </h1>
 
         */}
-    </div>
     </>)
 }
 

@@ -494,32 +494,38 @@
             position: absolute;
             padding-bottom: 40%;
         }
+        .settings {
+            position: relative;
+            width: 4%;
+
+            right: 28%;
+            top: 5%;
+
+        }
 
         .redGrid {
-            display: flex;
-            
             position: absolute;
             
-            width: 47%;
-            right: 30%;
-            top: 10%;
+            width: 20%;
+            left: 35%;
+            top: 8%;
         }
 
         .blueGrid {
-            display: flex;
-
             position: absolute;
 
-            width: 35%;
-            right: 19%;
+            width: 33%;
+            right: 22%;
 
             top: 10%;
         }
 
         .woodLayout_host {
-            position: absolute;
-
-            width: 40%;
-            left: 26.9%;
-            bottom: 18.5%;
+            position: relative;
+            top: 192px;
+            width: 70%;
+        }
+        .DIVS {
+            display: flex;
+            flex-flow: row-reverse wrap;
         }
