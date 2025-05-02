@@ -7,15 +7,23 @@ const WaitingOpponentDeck = ({phrase}) => {
     <div className="waitTitle">
         <h1>Partie # numéro de la partie  - Initialisation de la phrase</h1>
     </div>*/}
-    <div>
-        <div style={{display:"flex", flexDirection:"column", alignItems:"end"}}/*className="settingsContainer"*/>
+    <div className="gridContainer" style={{width:"1568px", position:"relative",height:"1000px", display:"flex", flexFlow:"column nowrap"}}> 
+        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center",width:"100%"}}/*className="settingsContainer"*/>
+            <p style={{fontSize:"30px"}}>À votre tour</p> 
+        </div>
         <img className="settings" alt="" src="../assets/images/element/CC0/waitingopponentdeck/element/settings-icon.png" />
+
+        <div className="redblueGridContainer">
+            <img className="redGrid" alt="Grille Rouge" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/opponent_grid_red.png"/>
+            <img className="blueGrid" alt="Grille Bleue" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/player_grid.png"/>
         </div>
-        <div className="DIVS">
-        <img className="redGrid" alt="Grille Rouge" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/Grille_de_combat_rouge.png"/>
-        <img className="blueGrid" alt="Grille Bleue" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/player_grid.png"/>
+
+        <div className="woodContainer">
+        <img className="woodLayout" alt="Layout du bas couleur bois, emplacement du host" src="../assets/images/element/CC0/waitingopponentdeck/layouts/wood_layout.png" />
+            <div>
+                <p className="wood" style={{position:"absolute", paddingLeft:"30%",zIndex:"11"}}>Helloasdsa</p>
+            </div>
         </div>
-        <img className="woodLayout_host" alt="Layout du bas couleur bois, emplacement du host" src="../assets/images/element/CC0/waitingopponentdeck/layouts/userlayout.png" />
     </div>
         {/* 
         <h2>Votre phrase est prête</h2>

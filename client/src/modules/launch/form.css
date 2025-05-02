@@ -495,37 +495,48 @@
             padding-bottom: 40%;
         }
         .settings {
-            position: relative;
-            width: 4%;
-
-            right: 28%;
-            top: 5%;
+            position: absolute;
+            top: 1%;
+            right: 1%;      
+            width: 10%;
 
         }
 
         .redGrid {
-            position: absolute;
+            position: relative;
             
-            width: 20%;
-            left: 35%;
-            top: 8%;
+            width: 50%;
         }
 
         .blueGrid {
-            position: absolute;
-
-            width: 33%;
-            right: 22%;
-
-            top: 10%;
-        }
-
-        .woodLayout_host {
             position: relative;
-            top: 192px;
-            width: 70%;
+
+            width: 45%;
+            right: 5%;
+            bottom: 3%;
         }
-        .DIVS {
+       
+        .redblueGridContainer {
             display: flex;
-            flex-flow: row-reverse wrap;
+            flex-flow:row wrap;
+
+            width: auto;
+
+            align-items:flex-start;
+
+            padding-left: 300px;
+        }
+
+        .woodContainer {
+            display: flex;
+            flex-flow: row;
+            align-items: end;
+            height: 321px;
+        }
+
+        .woodLayout {
+            position: relative;
+
+            width: 80%;
+            
         }
