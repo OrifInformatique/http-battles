@@ -502,6 +502,22 @@
 
         }
 
+        .ironPlankText {
+            position: relative;
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            background-image: url(../../../public/assets/images/element/CC0/waitingopponentdeck/element/iron_plank.png) ;
+            background-size: cover;
+
+            width: 1015px;
+            height: 125px;
+
+            font-weight: bold;
+        }
+
         .redGrid {
             position: relative;
             
@@ -531,12 +547,19 @@
             display: flex;
             flex-flow: row;
             align-items: end;
-            height: 321px;
+            height: 226px;
         }
 
         .woodLayout {
             position: relative;
-
             width: 80%;
-            
         }
+        .woodLayoutText {
+            position: absolute ;
+            font-size: xx-large;
+            bottom: 35px;
+            right: 200px;
+
+            width: 500px;
+        }
+        

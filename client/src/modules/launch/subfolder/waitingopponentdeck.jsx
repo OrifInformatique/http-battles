@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 
 
 const WaitingOpponentDeck = ({phrase}) => {
+    let turnA = "À votre tour";
+    let turnB = "Au tour de l'adversaire";
+    const [turnStatus, setTurnStatus] = useState(turnB)
+
+
+    let actA = "Vous avez loupé votre adversaire"
+    let actB = "Vous avez touché votre adversaire, à votre tour"
+    let actC = "Vous avez gagné"
+    const [action, setAction] = useState(actA)
+
     return(<>
     {/*
     <div className="waitTitle">
         <h1>Partie # numéro de la partie  - Initialisation de la phrase</h1>
     </div>*/}
     <div className="gridContainer" style={{width:"1568px", position:"relative",height:"1000px", display:"flex", flexFlow:"column nowrap"}}> 
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center",width:"100%"}}/*className="settingsContainer"*/>
-            <p style={{fontSize:"30px"}}>À votre tour</p> 
+        
+        <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center",width:"100%", paddingTop:"15px"}}/*className="settingsContainer"*/>
+            <p className="ironPlankText" style={{fontSize:"45px"}}>{turnStatus}</p> 
         </div>
         <img className="settings" alt="" src="../assets/images/element/CC0/waitingopponentdeck/element/settings-icon.png" />
 
@@ -20,10 +31,12 @@ const WaitingOpponentDeck = ({phrase}) => {
 
         <div className="woodContainer">
         <img className="woodLayout" alt="Layout du bas couleur bois, emplacement du host" src="../assets/images/element/CC0/waitingopponentdeck/layouts/wood_layout.png" />
-            <div>
-                <p className="wood" style={{position:"absolute", paddingLeft:"30%",zIndex:"11"}}>Helloasdsa</p>
+            <div style={{position:"relative", display:"flex", flexFlow:"column wrap"}}>
+                <p className="woodLayoutText"> {action} </p>
+                <h1>Hello</h1>
             </div>
         </div>
+
     </div>
         {/* 
         <h2>Votre phrase est prête</h2>
@@ -39,7 +52,6 @@ const WaitingOpponentDeck = ({phrase}) => {
         <h1>En attente de [username]
             <p>La partie pourra démarrer dès que [username] a renseigné la phrase</p>
         </h1>
-
         */}
     </>)
 }
