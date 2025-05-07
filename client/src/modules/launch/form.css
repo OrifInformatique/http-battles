@@ -501,6 +501,24 @@
             width: 10%;
 
         }
+        /*      IRON PLANK      */
+        .ironPlankContainer {
+            position: relative;
+
+            display: flex;
+            flex-direction: row;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 70%; 
+        }
+
+        .ironPlank {
+            position: absolute;
+            width: 100%;
+            height: 70%;
+        }
 
         .ironPlankText {
             position: relative;
@@ -509,38 +527,52 @@
             justify-content: center;
             align-items: center;
 
-            background-image: url(../../../public/assets/images/element/CC0/waitingopponentdeck/element/iron_plank.png) ;
-            background-size: cover;
-
             width: 1015px;
-            height: 125px;
-
-            font-weight: bold;
+            height: 120px;
         }
 
         .redGrid {
             position: relative;
             
-            width: 50%;
+            width: 40%;
         }
 
         .blueGrid {
             position: relative;
 
-            width: 45%;
-            right: 5%;
-            bottom: 3%;
+            width: 30%;
+            right: 0;
+            bottom: 0;
         }
        
         .redblueGridContainer {
             display: flex;
-            flex-flow:row wrap;
+            flex-flow: row wrap;
 
             width: auto;
 
-            align-items:flex-start;
+            align-items: flex-start;
 
             padding-left: 300px;
+        }
+
+        .wordFound {
+            position: absolute;
+            display: flex;
+
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: center;
+            
+            top: 690px;
+            gap: 20px;
+            
+            font-size: 40px;
+
+            color:white;
+            padding: 10px 10px 10px 10px;
+            background-color: rgba(0, 0, 0, 45%);
+            border-radius: 20px;
         }
 
         .woodContainer {
@@ -552,14 +584,26 @@
 
         .woodLayout {
             position: relative;
-            width: 80%;
+
+            bottom: -147px;
+            width: 70%;
         }
+
         .woodLayoutText {
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
             position: absolute ;
             font-size: xx-large;
-            bottom: 35px;
-            right: 200px;
 
-            width: 500px;
+            bottom: -123px;
+            right: 95px;
+
+            width: 700px;
         }
         
+        .imgExplosion {
+            position: absolute;
+            width: 299px;
+            z-index: 11;
+        }
