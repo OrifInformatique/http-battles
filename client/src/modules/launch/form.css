@@ -571,8 +571,16 @@
 
             color:white;
             padding: 10px 10px 10px 10px;
+            
+            background-image: url(../../../public/assets/images/element/CC0/waitingopponentdeck/element/wood_panel.png);
+            background-size: cover;
+            
+            height: 105px ;
+            width: 690px;
+            /*
             background-color: rgba(0, 0, 0, 45%);
-            border-radius: 20px;
+            */
+            
         }
 
         .woodContainer {
