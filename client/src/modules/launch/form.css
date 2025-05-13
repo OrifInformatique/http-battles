@@ -43,7 +43,7 @@
 
 /* ----------------------------------------------------------------------------------------------------------
 
-    Initialisation
+            INITIALISATION
 */
 .initInitialisationContainer * {
     font-size: 20px;
@@ -465,8 +465,9 @@
 
 
 /* -----------------------------------------------------------------------------------------------------------
-        
-        Waiting Oponnent Deck
+   
+            Waiting Oponnent Deck
+
 */
     /*     Container Principal     */
         .waitBackgroundContainer2 {
@@ -614,4 +615,27 @@
             position: absolute;
             width: 299px;
             z-index: 11;
+        }
+
+        /*
+        -------------------------------------------------------------------------------------------------------------------
+
+                        Victory
+        */
+
+
+        .congratulationsPhrase {
+            position: relative;
+        }
+
+        .wordEndContainer {
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+            justify-content: space-between;
+
+            width:800px ;
+            height: 200px ;
+
+            padding-top: 300px;
         }

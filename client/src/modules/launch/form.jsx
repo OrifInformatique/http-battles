@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Initialisation from "./subfolder/initialisation";
 import WaitingOpponentDeck from "./subfolder/waitingopponentdeck";
+import Victory from "./subfolder/victory.jsx"
 
 import './form.css';
 import '../general.css';
@@ -27,14 +28,14 @@ function LaunchPage() {
 /*     Changements d'états    
 
 */
-    const [phrase, setPhrase] = useState([
-        {
+    const [phrase, setPhrase] = useState(
+        [
 
-            "userId": userId, 
+            userId, 
         
-            "gameId": gameId, 
+            gameId, 
         
-            "phrase": [ 
+            [ 
                 
                 { 
         
@@ -97,14 +98,21 @@ function LaunchPage() {
                 },
         
             ] 
-        }
+        
     ])
     
-    const [isSubmitted, setIsSubmitted] = useState(2);
+    const [isSubmitted, setIsSubmitted] = useState(3);
 
     const handleChange = (e) => {
+        console.log(newPhrase)
+        console.log(newPhrase)
+
+        const { name, value } = e.target;
+        const newPhrase = [...phrase];
+        newPhrase[0].phrase[i].word.content = value;
+        setPhrase(newPhrase);
       
-        };
+    };
 
     switch(isSubmitted) { 
         case 1:
@@ -117,11 +125,16 @@ function LaunchPage() {
         case 2:
             return (<>  
                 <div className="waitBackgroundContainer2">
-                    <WaitingOpponentDeck handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
+                    <WaitingOpponentDeck dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
                 </div>
             </>); 
 
-            
+        case 3:
+            return(<>
+                <div className="waitBackgroundContainer2">
+                    <Victory phrase={phrase}/>
+                </div>
+            </>)
     }
 }
 

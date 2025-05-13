@@ -21,8 +21,6 @@ const WaitingOpponentDeck = ({phrase}) => {
     let actC = "Vous avez gagné"
     const [action, setAction] = useState(actA)
 
-    
-
     return(<>
     <div className="gridContainer" style={{width:"1568px", position:"relative",height:"1000px", display:"flex", flexFlow:"column nowrap", alignItems:"center"}}> 
         
