@@ -11,9 +11,9 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
                 <ul className="initUl" style={{ color: "black"}}>
                     <div className="initLiContainer">
                         {valeurs[i-1] && valeurs[i-1].map((value, index) => (
-                        <li className="initLi" key={index} >
-                            {value}
-                        </li>
+                            <li className="initLi" key={index} >
+                                {value}
+                            </li>
                         ))}
                     </div>
                 </ul>
@@ -37,8 +37,8 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
 function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, i}) {
 
     return (<>   
-        <div className="initWord"style={{display:"flex",flexFlow:"row" }}>
-            <h3>Mot {i}</h3>
+        <div className="initWord"style={{display:"flex",flexFlow:"row" }}> 
+            <h3>Mot {i} </h3> 
             <MyList handleChange={handleChange} tech={"dynamicVal"} valeurs={dynamicVal} i={i}/> 
         </div>
         
@@ -57,7 +57,7 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
 function ElementSlider({position ,i, phrase}) {
     return(<>
         <div className={position === i ? `init5Word wordPosition-${i}` :`init5Word position-${i} a`} id="position">
-            {phrase[0].phrase[i-1].word.content} 
+            {phrase[2][i-1].word.content} 
             <img src="assets/images/element/sword_1.png" alt="sword" />
         </div>
     </>)

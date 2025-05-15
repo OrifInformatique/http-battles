@@ -1,16 +1,19 @@
 import React, { useState } from "react";
+import Victory from "../subfolder/victory.jsx"
 
 function WordUnderscored({phrase, i}) {
+    console.log(i)
+    console.log(phrase[2])
     return(<>
         <div style={{ display:"flex", flexFlow:"column", alignItems:"center", bottom:"20px" }}>
-            <h2>{phrase[0].phrase[i].word.content}</h2>
+            <h2>{phrase[2][i].word.content}</h2>
             <p style={{position:"relative", fontSize:"100px", height:"20px", bottom:"110px"}}>__</p>
         </div>
     </>)
 }
 
 
-const WaitingOpponentDeck = ({phrase}) => {
+const WaitingOpponentDeck = ({phrase, i}) => {
     //exemples de messages avec leur useState
     let turnA = "À votre tour";
     let turnB = "Au tour de l'adversaire";
@@ -19,9 +22,15 @@ const WaitingOpponentDeck = ({phrase}) => {
     let actA = "Vous avez loupé votre adversaire"
     let actB = "Vous avez touché votre adversaire"
     let actC = "Vous avez gagné"
+    
     const [action, setAction] = useState(actA)
 
+    const [victory, setVictory] = useState(true)
+
     return(<>
+
+    <Victory victory={victory} />
+
     <div className="gridContainer" style={{width:"1568px", position:"relative",height:"1000px", display:"flex", flexFlow:"column nowrap", alignItems:"center"}}> 
         
         <div className="ironPlankContainer">

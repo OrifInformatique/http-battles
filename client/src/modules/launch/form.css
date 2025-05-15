@@ -483,6 +483,7 @@
             background-size:cover;
 
             min-height: 1000px;
+            position:relative;
         }
 
         .waitContainer {
@@ -612,9 +613,10 @@
         }
         
         .imgExplosion {
-            position: absolute;
-            width: 299px;
-            z-index: 11;
+            position: absolute ;
+
+            width: 299px ;
+            z-index: 11 ;
         }
 
         /*
@@ -629,13 +631,30 @@
         }
 
         .wordEndContainer {
-            display: flex;
-            flex-flow: row;
-            align-items: center;
-            justify-content: space-between;
+            display: flex ;
+            flex-flow: row ;
+            align-items: center ;
+            justify-content: space-between ;
 
-            width:800px ;
+            width: 800px ;
             height: 200px ;
 
-            padding-top: 300px;
+            padding-top: 450px ;
+
+        }
+
+        div > h2 {
+            font-size: 30px;
+        }
+
+        .victoryContainer {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+
+            position:absolute;
+            z-index: 2;
+            background-color: rgba(0,0,0,0.8);
+            width:100%;
+            height: 100%
         }

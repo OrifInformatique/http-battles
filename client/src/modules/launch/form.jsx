@@ -28,6 +28,9 @@ function LaunchPage() {
 /*     Changements d'états    
 
 */
+
+    const [end, setEnd] = useState(false);
+
     const [phrase, setPhrase] = useState(
         [
 
@@ -49,7 +52,7 @@ function LaunchPage() {
         
                     }, 
         
-                    { 
+                { 
         
                     "word": { 
         
@@ -61,7 +64,7 @@ function LaunchPage() {
         
                     }, 
         
-                    { 
+                { 
         
                     "word": { 
         
@@ -73,7 +76,7 @@ function LaunchPage() {
         
                     }, 
         
-                    { 
+                { 
         
                     "word": { 
         
@@ -98,10 +101,9 @@ function LaunchPage() {
                 },
         
             ] 
-        
     ])
     
-    const [isSubmitted, setIsSubmitted] = useState(3);
+    const [isSubmitted, setIsSubmitted] = useState(2);
 
     const handleChange = (e) => {
         console.log(newPhrase)
@@ -124,6 +126,7 @@ function LaunchPage() {
    
         case 2:
             return (<>  
+            
                 <div className="waitBackgroundContainer2">
                     <WaitingOpponentDeck dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
                 </div>
@@ -132,7 +135,7 @@ function LaunchPage() {
         case 3:
             return(<>
                 <div className="waitBackgroundContainer2">
-                    <Victory phrase={phrase}/>
+                    <Victory phrase={phrase} />
                 </div>
             </>)
     }
