@@ -129,7 +129,6 @@ switch ( position ){
 }
 
     return(<> 
-  
         <div className="initInitialisationContainer">
 
             <p className="initLayoutText1 initLayoutText">Hébergeur</p>
@@ -138,11 +137,11 @@ switch ( position ){
             <p className="initLayoutText2 initLayoutText">Adversaire</p>
             <img className="initLayout2" src="assets/images/element/CC0/layouts/red_layout.png" alt="sword" />
 
-            <h1 className="initTitle"style={{fontWeight:'bold', display:"flex",flexFlow:"column",alignItems:"center",paddingBottom:"0px"}}> Initialisation de la phrase </h1>
+            <h1 className="initTitle"style={{fontWeight:'bold', fontSize:"50px", display:"flex",flexFlow:"column",alignItems:"center",paddingBottom:"0px"}}> Initialisation de la phrase </h1>
             <div className="initPhraseLaunchContainer">
                 <div className="initElementContainer">
                     <div className="initFixPhrase">
-                        <h1 className="initChoosenPhrase">Phrase choisie : </h1>
+                        <h1 className="initChoosenPhrase">Phrase selectionnée : </h1>
                     </div>
                 </div>
             </div>
@@ -166,7 +165,7 @@ switch ( position ){
                     <img src="assets/images/element/CC0/initialisation/dice.png" alt="Dés pour tirer aléatoirement" />
                     <Random className={"randombtn"} label={"Aléatoire"}/>
                 </div>
-                <Button form={"myForm"} className={"victoryButton"} label={"Valider la phrase"}/>
+                <Button form={"myForm"} className={"initbtn"} label={"Valider la phrase"}/>
             </div>
         </div>
     </>);

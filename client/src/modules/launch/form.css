@@ -81,7 +81,8 @@
 
             .initLayoutText {
                 color: white;
-                font-size: xx-large;
+                font-size: 50px;
+                font-style: bold;
             }
 
     /*
@@ -103,16 +104,16 @@
         }
         .initLayoutText1 {
             position: absolute;
-            left: 9%;
-            top: 45px;
+            left: 7%;
+            top: 29px;
             z-index: 1;
 
             
         }
         .initLayoutText2 {
             position: absolute;
-            right: 8%;
-            top: 290px;
+            right: 6%;
+            top: 277px;
             z-index: 1;
 
 
@@ -155,8 +156,8 @@
 
                         position: relative;
                         overflow: visible;
-                        background-image: url(../../../public/assets/images/element/1409-rose_des_vents.png);
-                        background-size: 40%;
+                        background-image: url(../../../public/assets/images/element/CC0/initialisation/compass.png);
+                        background-size: 60%;
                         background-position: center;
                         background-repeat: no-repeat;
                         animation: rotateImage 30s infinite linear;
@@ -169,7 +170,11 @@
                         animation: rotateIImage 30s infinite linear;
                     }
                     .initChoosenPhrase {
-                        font-size: x-large;
+                        font-size:40px;
+                        color:white;
+                        background-color: rgba(0,0,0,0.7);
+                        border-radius: 20px;
+                        padding: 2px 70px 2px 70px;
                     }
 
                     /*     Phrase choisie   */
@@ -177,12 +182,13 @@
                         width: 600px;
                         height: 100px;
 
-                        font-size: 20px;
                         display: flex;
                         flex-flow: row wrap;
                         align-items: center;
                         justify-content: center;
-                        padding-bottom: 15%;
+
+                        padding-top: 5%;
+                        font-size: 20px;
 
                         gap: 80px;
                     }
@@ -331,7 +337,8 @@
             /*     Boutton de validation de la phrase     */
 
             .initbtn {
-                min-width: 350px;
+                min-width: 300px;
+                height: 28px;
             }
             
 
