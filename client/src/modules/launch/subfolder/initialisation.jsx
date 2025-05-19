@@ -11,7 +11,7 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
                 <ul className="initUl" style={{ color: "black"}}>
                     <div className="initLiContainer">
                         {valeurs[i-1] && valeurs[i-1].map((value, index) => (
-                            <li className="initLi" key={index} >
+                            <li className="initLi" key={index} onClick={handleChange} >
                                 {value}
                             </li>
                         ))}
@@ -24,7 +24,7 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
                 <ul className="initUl" style={{ color: "black" }}>
                      <div className="initLiContainer">
                         {valeurs.map((valeur, index) => (
-                            <li className="initLi" key={index} onClick={() => handleChange({ target: { name: `${tech}[${i}]`, value: valeur } })} style={{ cursor: "pointer" }}>
+                            <li className="initLi" key={index} onClick={handleChange} style={{ cursor: "pointer" }}>
                                 {valeur}
                             </li>
                         ))}
@@ -116,15 +116,15 @@ let x = 1;
 switch ( position ){
     case 1:
 
-    arrowd = (<> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }/></>);
+    arrowd = (<> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }/></>);
     break;
 
     case 5:
-    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/></>);
+    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/></>);
     break;
 
     default:
-    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>);
+    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>);
 
 }
 
@@ -163,10 +163,10 @@ switch ( position ){
 
             <div className="initButtonContainer">
                 <div className="buttons">
-                    <img src="assets/images/element/CC0/dice.png" alt="Dés pour tirer aléatoirement" />
+                    <img src="assets/images/element/CC0/initialisation/dice.png" alt="Dés pour tirer aléatoirement" />
                     <Random className={"randombtn"} label={"Aléatoire"}/>
                 </div>
-                <Button form={"myForm"} className={"initbtn"} label={"Valider la phrase"}/>
+                <Button form={"myForm"} className={"victoryButton"} label={"Valider la phrase"}/>
             </div>
         </div>
     </>);

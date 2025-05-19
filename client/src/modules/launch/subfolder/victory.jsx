@@ -14,16 +14,19 @@ function Victory({phrase, victory}) {
 
     return(<>
 
-        <div className="victoryContainer" style={{display:"flex", flexFlow:"column nowrap", alignItems:"center"}}>
+        <div className={victory ? "victoryContainer" : "defeatContainer"} style={{display:"flex", flexFlow:"column nowrap", alignItems:"center"}}>
             {
-                victory ? <h1 className="congratulationsPhrase">Félicitations vous avez gagné !  
-                <img style={{ width: "20px"}} src="../../../../assets/images/element/CC0/waitingopponentdeck/element/victory/golden_trophy.png" alt="golden trophy"/>
-                
+                victory ? 
+                <h1 className="congratulationsPhrase">Félicitations vous avez gagné !  
+                    <img style={{ width: "50px", paddingLeft:"5px"}} src="../../../../assets/images/element/CC0/victory/golden_trophy.png" alt="golden trophy"/>
                 </h1> 
-                : <h1 className="congratulationsPhrase">Malheuresement vous avez perdu !</h1>
+                : 
+                <h1 className="congratulationsPhrase">Malheuresement vous avez perdu !
+                    <img style={{ width: "100px", paddingLeft:"5px"}} src="./../../../assets/images/element/CC0/victory/game_over.png" alt="game over"/>
+                </h1>
             }
 
-            <div className="wordEndContainer" /*style={{display:"flex", flexFlow:"row", alignItems:"center", justifyContent:"stretch"}}*/>
+            <div className={victory ? "wordEndContainer" : "wordEndContainerGO"} /*style={{display:"flex", flexFlow:"row", alignItems:"center", justifyContent:"stretch"}}*/>
                 <div style={{ display:"flex", flexFlow:"column", alignItems:"center"}}>
                     <h2> Votre phrase choisie </h2>
                     <div style={{ display:"flex", flexFlow:"row", alignItems:"center", justifyContent:"space-between", width:"auto", gap:"5px" }}>
@@ -48,11 +51,11 @@ function Victory({phrase, victory}) {
                 </div>
             </div>
 
-            <div style={{ display:"flex", flexFlow:"column", alignItems:"center", gap:"20px", paddingTop:"350px"}}>
-                <h1>
+            <div style={{ display:"flex", flexFlow:"column", alignItems:"center", gap:"20px", paddingTop:"400px", fontSize:"30px"}}>
+                <h1 style={{}} >
                     Nouvelle partie contre [username]
                 </h1>
-                <Button className={"initbtn"} label={"Valider la phrase"}/>
+                <Button className={victory ? "victoryButton" : "defeatButton"} label={"Valider la phrase"}/>
             </div>
         </div>
     </>)

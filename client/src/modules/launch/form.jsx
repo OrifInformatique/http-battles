@@ -29,7 +29,6 @@ function LaunchPage() {
 
 */
 
-    const [end, setEnd] = useState(false);
 
     const [phrase, setPhrase] = useState(
         [
@@ -103,15 +102,16 @@ function LaunchPage() {
             ] 
     ])
     
-    const [isSubmitted, setIsSubmitted] = useState(2);
+    const [isSubmitted, setIsSubmitted] = useState(1);
 
     const handleChange = (e) => {
+        console.log(name)
         console.log(newPhrase)
-        console.log(newPhrase)
+        console.log(i)
 
         const { name, value } = e.target;
         const newPhrase = [...phrase];
-        newPhrase[0].phrase[i].word.content = value;
+        newPhrase[2][i].word.content = value;
         setPhrase(newPhrase);
       
     };
