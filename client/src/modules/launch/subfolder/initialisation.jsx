@@ -51,12 +51,12 @@ function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, 
             <h3>Methode</h3>
             <MyList handleChange={handleChange} tech={"method"} valeurs={staticVal2} i={i}/>
         </div>
-    </>);
-}
+            </>);
+    }
 
 function ElementSlider({position ,i, phrase}) {
     return(<>
-        <div className={position === i ? `init5Word wordPosition-${i}` :`init5Word position-${i} a`} id="position">
+        <div style={{ }} className={position === i ? `init5Word wordPosition-${i}` :`init5Word position-${i} a`} id="position">
             {phrase[2][i-1].word.content} 
             <img src="assets/images/element/sword_1.png" alt="sword" />
         </div>
