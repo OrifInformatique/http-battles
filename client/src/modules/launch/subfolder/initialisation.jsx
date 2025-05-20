@@ -3,7 +3,31 @@ import Button from "../../ui/button";
 import Random from "../../ui/random";
 import '../../general.css';
 
-function MyList({ handleChange, valeurs = [], i, tech}) {
+function Mylistitem({i, value, setPhrase, phrase}) {
+
+    const handleChange = (e) => {
+
+            console.log(phrase,"phrase")
+            console.log(i,"i")
+            
+
+            setPhrase(phrase[2][1].word.value )
+        /* 
+        const newPhrase = [...phrase];
+            newPhrase[2][i].word.content = value;
+            */
+        // console.log(newPhrase,"newPhrase" );
+        
+    };
+
+    return  (<>
+        <li className="initLi" onClick={handleChange} style={{ cursor: "pointer" }}>
+            {value}
+        </li>
+    </>)
+}
+
+function MyList({ phrase, setPhrase, valeurs = [], i, tech}) {
 
     switch (tech) {
         case "dynamicVal":
@@ -11,9 +35,7 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
                 <ul className="initUl" style={{ color: "black"}}>
                     <div className="initLiContainer">
                         {valeurs[i-1] && valeurs[i-1].map((value, index) => (
-                            <li className="initLi" key={index} onClick={handleChange} >
-                                {value}
-                            </li>
+                            <Mylistitem key={index} i={i} value={value} setPhrase={setPhrase} phrase={phrase} />
                         ))}
                     </div>
                 </ul>
@@ -23,10 +45,8 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
             return (<>
                 <ul className="initUl" style={{ color: "black" }}>
                      <div className="initLiContainer">
-                        {valeurs.map((valeur, index) => (
-                            <li className="initLi" key={index} onClick={handleChange} style={{ cursor: "pointer" }}>
-                                {valeur}
-                            </li>
+                        {valeurs.map((value, index) => (
+                            <Mylistitem key={index} i={i} value={value} setPhrase={setPhrase} phrase={phrase} />
                         ))}
                     </div>
                 </ul>
@@ -34,27 +54,28 @@ function MyList({ handleChange, valeurs = [], i, tech}) {
     }
 }
 
-function InitialisationList({ handleChange, staticVal1, staticVal2, dynamicVal, i}) {
+function InitialisationList({ phrase, setPhrase, staticVal1, staticVal2, dynamicVal, i}) {
 
     return (<>   
         <div className="initWord"style={{display:"flex",flexFlow:"row" }}> 
             <h3>Mot {i} </h3> 
-            <MyList handleChange={handleChange} tech={"dynamicVal"} valeurs={dynamicVal} i={i}/> 
+            <MyList phrase={phrase} setPhrase={setPhrase} tech={"dynamicVal"} valeurs={dynamicVal} i={i}/> 
         </div>
         
         <div className="initRoute" style={{display:"flex",flexFlow:"column"}}>
             <h3>Route</h3>
-            <MyList handleChange={handleChange} tech={"route"} valeurs={staticVal1} i={i}/> 
+            <MyList phrase={phrase} setPhrase={setPhrase} tech={"route"} valeurs={staticVal1} i={i}/> 
         </div>
 
         <div className="initMethod" style={{display:"flex",flexFlow:"column"}}>
             <h3>Methode</h3>
-            <MyList handleChange={handleChange} tech={"method"} valeurs={staticVal2} i={i}/>
+            <MyList phrase={phrase} setPhrase={setPhrase} tech={"method"} valeurs={staticVal2} i={i}/>
         </div>
             </>);
     }
 
-function ElementSlider({position ,i, phrase}) {
+function ElementSlider({position ,i , phrase, setPhrase}) {
+
     return(<>
         <div style={{ }} className={position === i ? `init5Word wordPosition-${i}` :`init5Word position-${i} a`} id="position">
             {phrase[2][i-1].word.content} 
@@ -63,25 +84,25 @@ function ElementSlider({position ,i, phrase}) {
     </>)
 }
 
-function Slider({handleChange, dynamicVal, staticVal1, staticVal2, position}) {
+function Slider({setPhrase, phrase, dynamicVal, staticVal1, staticVal2, position}) {
 
     return(<>
         <div className="initContainerVisible"> 
             <div className={ "initContainerContent position-" + position} id="slider">
                 <div className="initContainerContent1 initContainerContentX">
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} /*phrase={phrase[0]}*/ /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} /*phrase={phrase[0]}*/ /> 
                 </div >    
                 <div className="initContainerContent2 initContainerContentX">          
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} /> 
                 </div>                         
                 <div className="initContainerContent3 initContainerContentX">          
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={3} /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={3} /> 
                 </div>  
                 <div className="initContainerContent4 initContainerContentX">          
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={4} /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={4} /> 
                 </div>
                 <div className="initContainerContent5 initContainerContentX">          
-                    <InitialisationList handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={5} /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={5} /> 
                 </div>                 
             </div>
         </div> 
@@ -90,15 +111,11 @@ function Slider({handleChange, dynamicVal, staticVal1, staticVal2, position}) {
 
 
 
-export default ({handleChange, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
+export default ({setPhrase, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
 //  Flèches
 const [position, setPosition] = useState(1)
 const TOTAL_SLIDES = 5;
 let arrowd = null;
-let i = 1;
-
-// Variables globales
-let x = 1;
 
 //   Enlever la flèche lorsque on est sur le 1er ou dernier élément.
     function handleChangeArrowLeft() {
@@ -157,7 +174,7 @@ switch ( position ){
             {arrowd}
 
             <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>
-                <Slider position={position} handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} phrase={phrase[0]}/>
+                <Slider position={position} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} phrase={phrase}/>
             </form>
 
             <div className="initButtonContainer">

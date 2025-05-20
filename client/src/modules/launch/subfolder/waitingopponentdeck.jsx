@@ -24,7 +24,7 @@ function Grid({phrase, turnStatus, action}) {
             <img className="settings" alt="" src="../assets/images/element/CC0/waitingopponentdeck/element/settings-icon.png"/>
 
             <div className="redblueGridContainer">
-                <img className="redGrid" alt="Grille Rouge" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/opponent_grid_red.png"/>
+                <img className="redGrid" alt="Grille Rouge" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/opponent_grid.png"/>
                 <img className="blueGrid" alt="Grille Bleue" src="../assets/images/element/CC0/waitingopponentdeck/fight_grid/player_grid.png"/>
             </div>
 

@@ -49,7 +49,7 @@ function LaunchPage() {
         
                     } 
         
-                    }, 
+                }, 
         
                 { 
         
@@ -61,7 +61,7 @@ function LaunchPage() {
         
                     } 
         
-                    }, 
+                }, 
         
                 { 
         
@@ -73,7 +73,7 @@ function LaunchPage() {
         
                     } 
         
-                    }, 
+                }, 
         
                 { 
         
@@ -85,9 +85,9 @@ function LaunchPage() {
         
                     } 
             
-                    },
+                },
                     
-                    { 
+                { 
         
                     "word": { 
         
@@ -104,23 +104,11 @@ function LaunchPage() {
     
     const [isSubmitted, setIsSubmitted] = useState(1);
 
-    const handleChange = (e) => {
-        console.log(name,"name")
-        console.log(newPhrase,"newPhrase")
-        console.log(phrase,"phrase")
-
-        const { name, value } = e.target;
-        const newPhrase = [...phrase];
-        newPhrase[2][i].word.content = value;
-        console.log(newPhrase,"newPhrase" );
-      
-    };
-
     switch(isSubmitted) { 
         case 1:
             return (<>
                 <div className="initBackgroundContainer1">
-                    <Initialisation handleChange={handleChange} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
+                    <Initialisation setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
                 </div>
             </>); 
    
