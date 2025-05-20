@@ -3,15 +3,33 @@ import Button from "../../ui/button";
 import Random from "../../ui/random";
 import '../../general.css';
 
-function Mylistitem({i, value, setPhrase, phrase}) {
+function Mylistitem({i, value, setPhrase, phrase, tech}) {
 
     const handleChange = (e) => {
+            const newPhrase = [...phrase]
+            console.log(newPhrase[2][i-1].word.content, "newWord")
+            console.log(newPhrase[2][i-1].word.position[0], "newRoute")
+            console.log(newPhrase[2][i-1].word.position[1], "newMethod")
+
+            switch (tech) {
+                case "dynamicVal":
+                    setPhrase(newPhrase[2][i-1].word.content === value)
+                break;
+
+                case "route":
+                    setPhrase(newPhrase[2][i-1].position[0].content === value)
+                break;
+
+                default:
+                    setPhrase(newPhrase[2][i-1].position[1].content === value)
+                break;
+            }
 
             console.log(phrase,"phrase")
             console.log(i,"i")
-            
+            console.log(tech, "tech")
 
-            setPhrase(phrase[2][1].word.value )
+           // setPhrase(phrase[2][1].word.value )
         /* 
         const newPhrase = [...phrase];
             newPhrase[2][i].word.content = value;
@@ -35,7 +53,7 @@ function MyList({ phrase, setPhrase, valeurs = [], i, tech}) {
                 <ul className="initUl" style={{ color: "black"}}>
                     <div className="initLiContainer">
                         {valeurs[i-1] && valeurs[i-1].map((value, index) => (
-                            <Mylistitem key={index} i={i} value={value} setPhrase={setPhrase} phrase={phrase} />
+                            <Mylistitem key={index} tech={tech} i={i} value={value} setPhrase={setPhrase} phrase={phrase} />
                         ))}
                     </div>
                 </ul>
@@ -46,12 +64,12 @@ function MyList({ phrase, setPhrase, valeurs = [], i, tech}) {
                 <ul className="initUl" style={{ color: "black" }}>
                      <div className="initLiContainer">
                         {valeurs.map((value, index) => (
-                            <Mylistitem key={index} i={i} value={value} setPhrase={setPhrase} phrase={phrase} />
+                            <Mylistitem key={index} tech={tech} i={i} value={value} setPhrase={setPhrase} phrase={phrase} />
                         ))}
                     </div>
                 </ul>
             </>);
-    }
+        }
 }
 
 function InitialisationList({ phrase, setPhrase, staticVal1, staticVal2, dynamicVal, i}) {
@@ -74,7 +92,7 @@ function InitialisationList({ phrase, setPhrase, staticVal1, staticVal2, dynamic
             </>);
     }
 
-function ElementSlider({position ,i , phrase, setPhrase}) {
+function ElementSlider({position , i , phrase}) {
 
     return(<>
         <div style={{ }} className={position === i ? `init5Word wordPosition-${i}` :`init5Word position-${i} a`} id="position">
@@ -116,6 +134,7 @@ export default ({setPhrase, dynamicVal, staticVal1, staticVal2, phrase, setIsSub
 const [position, setPosition] = useState(1)
 const TOTAL_SLIDES = 5;
 let arrowd = null;
+let i = null;
 
 //   Enlever la flèche lorsque on est sur le 1er ou dernier élément.
     function handleChangeArrowLeft() {
@@ -142,7 +161,6 @@ switch ( position ){
 
     default:
     arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>);
-
 }
 
     return(<> 
