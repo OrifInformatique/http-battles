@@ -3,39 +3,28 @@ import Button from "../../ui/button";
 import Random from "../../ui/random";
 import '../../general.css';
 
+import LaunchPage from "../form.jsx"
+
 function Mylistitem({i, value, setPhrase, phrase, tech}) {
 
     const handleChange = (e) => {
             const newPhrase = [...phrase]
-            console.log(newPhrase[2][i-1].word.content, "newWord")
-            console.log(newPhrase[2][i-1].word.position[0], "newRoute")
-            console.log(newPhrase[2][i-1].word.position[1], "newMethod")
 
             switch (tech) {
                 case "dynamicVal":
-                    setPhrase(newPhrase[2][i-1].word.content === value)
+                    newPhrase[2][i-1].word.content = value
                 break;
 
                 case "route":
-                    setPhrase(newPhrase[2][i-1].position[0].content === value)
+                   newPhrase[2][i-1].word.position[0] = value
                 break;
 
                 default:
-                    setPhrase(newPhrase[2][i-1].position[1].content === value)
+                    newPhrase[2][i-1].word.position[1] = value
                 break;
             }
 
-            console.log(phrase,"phrase")
-            console.log(i,"i")
-            console.log(tech, "tech")
-
-           // setPhrase(phrase[2][1].word.value )
-        /* 
-        const newPhrase = [...phrase];
-            newPhrase[2][i].word.content = value;
-            */
-        // console.log(newPhrase,"newPhrase" );
-        
+            setPhrase(newPhrase)
     };
 
     return  (<>
@@ -93,9 +82,8 @@ function InitialisationList({ phrase, setPhrase, staticVal1, staticVal2, dynamic
     }
 
 function ElementSlider({position , i , phrase}) {
-
     return(<>
-        <div style={{ }} className={position === i ? `init5Word wordPosition-${i}` :`init5Word position-${i} a`} id="position">
+        <div className={position === i ? `init5Word wordPosition-${i}` :`init5Word position-${i} a`} id="position">
             {phrase[2][i-1].word.content} 
             <img src="assets/images/element/sword_1.png" alt="sword" />
         </div>
@@ -151,16 +139,17 @@ let i = null;
 
 switch ( position ){
     case 1:
-
-    arrowd = (<> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }/></>);
+        arrowd = (<> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }/></>);
     break;
 
     case 5:
-    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/></>);
+        arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/></>);
     break;
 
     default:
-    arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>);
+        arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>);
+    break;
+s
 }
 
     return(<> 
