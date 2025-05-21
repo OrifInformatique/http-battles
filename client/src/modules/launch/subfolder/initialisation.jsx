@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import Button from "../../ui/button";
-import Random from "../../ui/random";
 import '../../general.css';
 
-import LaunchPage from "../form.jsx"
+import Button from "../../ui/button";
+import Random from "../../ui/random";
+
+import {dynamicVal, staticVal1, staticVal2} from "../form.jsx"
 
 function Mylistitem({i, value, setPhrase, phrase, tech}) {
 
@@ -35,7 +36,6 @@ function Mylistitem({i, value, setPhrase, phrase, tech}) {
 }
 
 function MyList({ phrase, setPhrase, valeurs = [], i, tech}) {
-
     switch (tech) {
         case "dynamicVal":
             return(<>
@@ -61,7 +61,7 @@ function MyList({ phrase, setPhrase, valeurs = [], i, tech}) {
         }
 }
 
-function InitialisationList({ phrase, setPhrase, staticVal1, staticVal2, dynamicVal, i}) {
+function InitialisationList({ phrase, setPhrase, i}) {
 
     return (<>   
         <div className="initWord"style={{display:"flex",flexFlow:"row" }}> 
@@ -90,25 +90,25 @@ function ElementSlider({position , i , phrase}) {
     </>)
 }
 
-function Slider({setPhrase, phrase, dynamicVal, staticVal1, staticVal2, position}) {
+function Slider({setPhrase, phrase, position}) {
 
     return(<>
         <div className="initContainerVisible"> 
             <div className={ "initContainerContent position-" + position} id="slider">
                 <div className="initContainerContent1 initContainerContentX">
-                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={1} /*phrase={phrase[0]}*/ /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} i={1} /*phrase={phrase[0]}*/ /> 
                 </div >    
                 <div className="initContainerContent2 initContainerContentX">          
-                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={2} /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} i={2} /> 
                 </div>                         
                 <div className="initContainerContent3 initContainerContentX">          
-                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={3} /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} i={3} /> 
                 </div>  
                 <div className="initContainerContent4 initContainerContentX">          
-                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={4} /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} i={4} /> 
                 </div>
                 <div className="initContainerContent5 initContainerContentX">          
-                    <InitialisationList phrase={phrase} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={5} /> 
+                    <InitialisationList phrase={phrase} setPhrase={setPhrase} i={5} /> 
                 </div>                 
             </div>
         </div> 
@@ -117,7 +117,7 @@ function Slider({setPhrase, phrase, dynamicVal, staticVal1, staticVal2, position
 
 
 
-export default ({setPhrase, dynamicVal, staticVal1, staticVal2, phrase, setIsSubmitted}) => {
+export default ({setPhrase, phrase, setIsSubmitted}) => {
 //  Flèches
 const [position, setPosition] = useState(1)
 const TOTAL_SLIDES = 5;
@@ -181,7 +181,7 @@ s
             {arrowd}
 
             <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>
-                <Slider position={position} setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} phrase={phrase}/>
+                <Slider position={position} setPhrase={setPhrase} phrase={phrase}/>
             </form>
 
             <div className="initButtonContainer">

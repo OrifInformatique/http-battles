@@ -6,13 +6,8 @@ import Victory from "./subfolder/victory.jsx"
 import './form.css';
 import '../general.css';
 
-function LaunchPage() {
-    let userId = useState(0);
-    let gameId = useState(0);
-    let i = 0;
-
 /*     Tableaux    */
-    const dynamicVal = [
+    export const dynamicVal = [
         ["Le","La","Un","Une","Mon"],
         ["chat","chien","enfant","oiseau","voisin"],
         ["mange","regarde","porte","attrape","entend"],
@@ -22,8 +17,13 @@ function LaunchPage() {
 
 /*     Tableaux statiques   */
 
-    const staticVal1 = ["/alpha","/beta","/gamma","/delta"];
-    const staticVal2 = ["GET","POST","PUT","DELETE"];
+    export const staticVal1 = ["/alpha","/beta","/gamma","/delta"];
+    export const staticVal2 = ["GET","POST","PUT","DELETE"];
+
+function LaunchPage() {
+    let userId = useState(0);
+    let gameId = useState(0);
+    let i = 0;
 
 /*     Changements d'états    
 
@@ -102,13 +102,13 @@ function LaunchPage() {
             ] 
     ])
     
-    const [isSubmitted, setIsSubmitted] = useState(1);
+    const [isSubmitted, setIsSubmitted] = useState(2);
 
     switch(isSubmitted) { 
         case 1:
             return (<>
-                <div className="initBackgroundContainer1">
-                    <Initialisation setPhrase={setPhrase} dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
+                <div style={{color:"white"}} className="initBackgroundContainer1">
+                    <Initialisation setPhrase={setPhrase} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
                 </div>
             </>); 
    
@@ -116,16 +116,18 @@ function LaunchPage() {
             return (<>  
             
                 <div className="waitBackgroundContainer2">
-                    <WaitingOpponentDeck dynamicVal={dynamicVal} staticVal1={staticVal1} staticVal2={staticVal2} i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
+                    <WaitingOpponentDeck i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
                 </div>
             </>); 
 
+        /*
         case 3:
             return(<>
                 <div className="waitBackgroundContainer2">
                     <Victory phrase={phrase} />
                 </div>
-            </>)
+            </>);
+        */
     }
 }
 

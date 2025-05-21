@@ -55,7 +55,7 @@ function Victory({phrase, victory}) {
                 <h1 style={{}} >
                     Nouvelle partie contre [username]
                 </h1>
-                <Button className={victory ? "victoryButton" : "defeatButton"} label={"Valider la phrase"}/>
+                <Button className={victory ? "victoryButton" : "defeatButton"} label={"Revanche"}/>
             </div>
         </div>
     </>)

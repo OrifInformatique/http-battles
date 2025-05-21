@@ -58,7 +58,7 @@
 
                 color:black;
 
-                background-image: url(../../../public/assets/images/background/free-photo-of-mer-naviguer-ciel-bleu-bateau-a-moteur.jpeg);
+                background-image: url(../../../public/assets/images/background/temporary_background.png);
                 background-repeat: no-repeat;
                 background-size:cover;
 
@@ -379,16 +379,14 @@
                 margin: 0;
                 height: 300px;
                 width: 180px;
-                left:calc(50% - 87px);
+                left: calc(50% - 87px);
                 background: transparent;
                 border: 0px solid blue;
                 border-radius: 5px;
                 position: absolute;
                 z-index: 10;
                 padding-top:30px;
-            /*    overflow: hidden;*/
-            
-            /*    display: none; /*  Caché par défaut */
+          
                 position: absolute;
             }
 
@@ -407,14 +405,14 @@
             .initLi {
                 position: relative;
                 width: 150px;
-                background-color: transparent;
+                background-image: url(../../../public/assets/images/element/CC0/initialisation/iron_list.png);
+                background-size: cover;
                 border: 1px solid black;
-                color: black /*#333*/;
+                color: white /*#333*/;
                 /*left: 20px;*/
                 padding: 8px;
 
-                opacity: 0;
-                visibility: hidden;
+                opacity: 1;
                 transform:scale(1);
                 /*transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s;
 */
@@ -429,11 +427,11 @@
                
             }
             .initLi:hover {
-                background: white;
+                background: rgba(0,0,0,0.9);
                 font-size: large;
                 cursor: pointer;
                 z-index: 14;
-                transform: scale(1.1);
+                transform: scale(1.2);
                 transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s;
             }
 
@@ -485,9 +483,9 @@
 
             color:white;
 
-            background-image: url(../../../public/assets/images/background/free-photo-of-mer-naviguer-ciel-bleu-bateau-a-moteur.jpeg);
+            background-image: url(../../../public/assets/images/background/temporary_background.png);
             background-repeat: no-repeat;
-            background-size:cover;
+            background-size: cover;
 
             min-height: 1000px;
             position:relative;
@@ -610,19 +608,14 @@
             display: flex;
             flex-flow: column nowrap;
             align-items: center;
-            position: absolute ;
+            position: relative ;
             font-size: xx-large;
-
-            bottom: -123px;
-            right: 95px;
-
-            width: 700px;
         }
         
         .imgExplosion {
-            position: absolute ;
+            position: relative ;
 
-            width: 299px ;
+            width: 50px ;
             z-index: 11 ;
         }
 

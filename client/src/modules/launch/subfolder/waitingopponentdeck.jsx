@@ -40,7 +40,7 @@ function Grid({phrase, turnStatus, action}) {
 
             <div className="woodContainer">
                 <img className="woodLayout" alt="Layout du bas couleur bois, emplacement du host" src="../../../assets/images/element/CC0/waitingopponentdeck/layouts/wood_layout.png"/>
-                <div style={{position:"relative", display:"flex", flexFlow:"column wrap"}}>
+                <div style={{position:"relative", display:"flex", flexFlow:"row wrap", justifyContent:"center", alignItems:"center", position:"absolute", width:"100%", bottom:"0"}}>
                     <p className="woodLayoutText"> {action} </p>
                     <img className="imgExplosion"src="../assets/images/element/CC0/waitingopponentdeck/element/explosion.png"/>
                 </div>
@@ -62,7 +62,7 @@ const WaitingOpponentDeck = ({phrase, i}) => {
     
     const [action, setAction] = useState(actA)
     const [end, setEnd] = useState(false)
-    const [victory, setVictory] = useState(false)
+    const [victory, setVictory] = useState(true)
 
     return(<>
         { end  ?
