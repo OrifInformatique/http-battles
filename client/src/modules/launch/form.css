@@ -537,6 +537,23 @@
             width: 1015px;
             height: 120px;
         }
+        .gGrid > .grid {
+            width: 105px;
+            height: 105px;
+        }
+        .grid {
+            display: flex;
+
+            flex-direction: row nowrap;
+            justify-content: center;
+            align-items: center;
+
+            border: black 3px solid;
+            /*
+            width: 100%;
+            height: 100%;
+            */
+        }
 
         .redGrid {
             position: relative;
@@ -608,14 +625,16 @@
             display: flex;
             flex-flow: column nowrap;
             align-items: center;
+            
             position: relative ;
-            font-size: xx-large;
+            
+            font-size: 40px;
         }
         
         .imgExplosion {
             position: relative ;
 
-            width: 50px ;
+            width: 70px ;
             z-index: 11 ;
         }
 
@@ -627,13 +646,14 @@
 
 
         .congratulationsPhrase {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
             position: relative;
             padding-top: 20px;
             font-size: 45px;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .wordEndContainer {

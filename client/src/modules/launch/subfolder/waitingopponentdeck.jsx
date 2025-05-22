@@ -16,7 +16,35 @@ function WordUnderscored({phrase, i}) {
 function Grid({phrase, turnStatus, action}) {
         return(<>
         <div className="gridContainer" style={{width:"1568px", position:"relative",height:"1000px", display:"flex", flexFlow:"column nowrap", alignItems:"center"}}> 
-            
+            <div style={{position:"absolute", display:"flex", flexFlow:"column nowrap", zIndex:"99", left:"24.6%", top:"16.8%"}}>
+                <div className="gGrid" style={{display:"flex", flexFlow:"row nowrap", }}>
+                    <div className="grid alpha get"><h1>i</h1></div>
+                    <div className="grid beta get"><h1>i</h1></div>
+                    <div className="grid delta get"><h1>i</h1></div>
+                    <div className="grid gamma get"><h1>i</h1></div>
+                </div>
+                <div className="gGrid" style={{display:"flex", flexFlow:"row nowrap",}}>
+                    <div className="grid alpha post"><h1>i</h1></div>
+                    <div className="grid beta post"><h1>i</h1></div>
+                    <div className="grid delta post"><h1>i</h1></div>
+                    <div className="grid gamma post"><h1>i</h1></div>
+
+                </div>
+                <div className="gGrid" style={{display:"flex", flexFlow:"row nowrap", }}>
+                    <div className="grid alpha" ><h1>i</h1></div>
+                    <div className="grid beta"><h1>i</h1></div>
+                    <div className="grid delta"><h1>i</h1></div>
+                    <div className="grid gamma"><h1>i</h1></div>
+
+                </div>
+                <div className="gGrid" style={{display:"flex", flexFlow:"row nowrap", }}>
+                    <div className="grid alpha" ><h1>i</h1></div>
+                    <div className="grid beta"><h1>i</h1></div>
+                    <div className="grid delta"><h1>i</h1></div>
+                    <div className="grid gamma"><h1>i</h1></div>
+                </div>
+            </div>
+
             <div className="ironPlankContainer">
                 <img className="ironPlank" src="../assets/images/element/CC0/waitingopponentdeck/element/iron_plank.png"/>
                 <p className="ironPlankText" style={{fontSize:"45px"}}> {turnStatus} </p> 
@@ -30,17 +58,17 @@ function Grid({phrase, turnStatus, action}) {
 
             <div className="wordFound">
                 <img style={{position:"absolute", width:"150px", left:"-55px", top:"-55px"}} src="../assets/images/element/CC0/waitingopponentdeck/element/1st_leave.png"/>
-            <WordUnderscored phrase={phrase} i={0}/>
-            <WordUnderscored phrase={phrase} i={1}/>
-            <WordUnderscored phrase={phrase} i={2}/>
-            <WordUnderscored phrase={phrase} i={3}/>
-            <WordUnderscored phrase={phrase} i={4}/>
-            <img style={{position:"absolute", width:"18%", left:"620px", top:"20px"}} src="../assets/images/element/CC0/waitingopponentdeck/element/2nd_leaves.png"/>
+                    <WordUnderscored phrase={phrase} i={0}/>
+                    <WordUnderscored phrase={phrase} i={1}/>
+                    <WordUnderscored phrase={phrase} i={2}/>
+                    <WordUnderscored phrase={phrase} i={3}/>
+                    <WordUnderscored phrase={phrase} i={4}/>
+                <img style={{position:"absolute", width:"18%", left:"620px", top:"20px"}} src="../assets/images/element/CC0/waitingopponentdeck/element/2nd_leaves.png"/>
             </div>
 
             <div className="woodContainer">
                 <img className="woodLayout" alt="Layout du bas couleur bois, emplacement du host" src="../../../assets/images/element/CC0/waitingopponentdeck/layouts/wood_layout.png"/>
-                <div style={{position:"relative", display:"flex", flexFlow:"row wrap", justifyContent:"center", alignItems:"center", position:"absolute", width:"100%", bottom:"0"}}>
+                <div style={{position:"relative", display:"flex", flexFlow:"row wrap", justifyContent:"center", alignItems:"center", position:"absolute", width:"90%", bottom:"15px", gap:"40px"}}>
                     <p className="woodLayoutText"> {action} </p>
                     <img className="imgExplosion"src="../assets/images/element/CC0/waitingopponentdeck/element/explosion.png"/>
                 </div>
@@ -52,6 +80,7 @@ function Grid({phrase, turnStatus, action}) {
 
 const WaitingOpponentDeck = ({phrase, i}) => {
     //exemples de messages avec leur useState
+
     let turnA = "À votre tour";
     let turnB = "Au tour de l'adversaire";
     const [turnStatus, setTurnStatus] = useState(turnB)
@@ -64,6 +93,8 @@ const WaitingOpponentDeck = ({phrase, i}) => {
     const [end, setEnd] = useState(false)
     const [victory, setVictory] = useState(true)
 
+    // Si fin de partie, afficher page de victoire sinon laisser Grid
+
     return(<>
         { end  ?
         <>
@@ -71,7 +102,7 @@ const WaitingOpponentDeck = ({phrase, i}) => {
             <Grid phrase={phrase} i={i} turnStatus={turnStatus} action={action}/>
         </>
         :
-        <Grid phrase={phrase} i={i} turnStatus={turnStatus} action={action}/>
+            <Grid phrase={phrase} i={i} turnStatus={turnStatus} action={action}/>
         }
     </>)
 }
