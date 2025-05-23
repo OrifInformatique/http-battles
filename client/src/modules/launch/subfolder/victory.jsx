@@ -14,7 +14,7 @@ function Victory({phrase, victory}) {
 
     return(<>
 
-        <div className={victory ? "victoryContainer" : "defeatContainer"} style={{display:"flex", flexFlow:"column nowrap", alignItems:"center"}}>
+        <div className={victory ? "victoryContainer" : "defeatContainer"} style={{display:"flex", flexFlow:"column nowrap", alignItems:"center", zIndex:"4"}}>
             {
                 victory ? 
                 <h1 className="congratulationsPhrase">Félicitations vous avez gagné !  
