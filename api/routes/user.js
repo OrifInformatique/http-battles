@@ -6,9 +6,9 @@ const router = express.Router()
 const userCtrl = require('../controllers/user')
 
 // redirige la requette post de création utilisateur
-router.post('/signup', userCtrl.signup)
+router.all('/signup', userCtrl.signup)
 // redirige la requet post de connexion utilisateur
-router.post('/login', userCtrl.login)
+router.all('/login', userCtrl.login)
 
 // export le router
 module.exports = router

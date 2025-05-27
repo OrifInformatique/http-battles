@@ -647,7 +647,28 @@
 
             width: 70px ;
             z-index: 3 ;
+        }   
+
+        .cannon {
+            position:absolute;
+            right: -10px;
+            bottom: 0;
+            z-index: 1;
+
+            opacity: 0.5;
         }
+
+        .cannonBall {
+            position:absolute;
+            
+            right: 250px;
+            bottom: 28.5%;
+            width: 40px;
+            
+            z-index: 3;
+
+        }
+
 
         /*
         -------------------------------------------------------------------------------------------------------------------

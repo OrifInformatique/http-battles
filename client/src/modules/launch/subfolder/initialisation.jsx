@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
 import '../../general.css';
 
 import Button from "../../ui/button";
@@ -136,30 +137,48 @@ let i = null;
             setPosition(position + 1)
         }
     }
+//  Flèches
+    switch ( position ){
+        case 1:
+            arrowd = (<> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }/></>);
+        break;
 
-switch ( position ){
-    case 1:
-        arrowd = (<> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }/></>);
-    break;
+        case 5:
+            arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/></>);
+        break;
 
-    case 5:
-        arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/></>);
-    break;
+        default:
+            arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>);
+        break;
 
-    default:
-        arrowd = (<><img className="initLeftArrow" id="arrowLeft" src="/assets/images/element/CC0/initialisation/left-arrow.png" alt="Left arrow" onClick={() => handleChangeArrowLeft() }/> <img className="initRightArrow" id="arrowRight" src="/assets/images/element/CC0/initialisation/right-arrow.png" alt="Right arrow" onClick={() => handleChangeArrowRight() }></img></>);
-    break;
-s
-}
+    }
+    const [hostUsername, setHostUsername] = useState('');
+
+    const opponentUsername = "Jasy";
+
+    useEffect(() => {
+        axios.post("http://localhost:4000/api/user/findusers", {
+        })
+        .then(res=> {
+        //    console.log("succes res", res)
+          
+
+        })
+        .catch(resC => {
+        //    console.log("echec res", resC)
+        })
+    }, []);
 
     return(<> 
         <div className="initInitialisationContainer">
 
             <p className="initLayoutText1 initLayoutText">Hébergeur</p>
             <img className="initLayout1" src="assets/images/element/CC0/layouts/blue_layout.png" alt="sword" />
-           
+            <p className="hostText"> {hostUsername} </p>
+
             <p className="initLayoutText2 initLayoutText">Adversaire</p>
             <img className="initLayout2" src="assets/images/element/CC0/layouts/red_layout.png" alt="sword" />
+            <p className="opponentText"> {opponentUsername} </p>
 
             <h1 className="initTitle"style={{fontWeight:'bold', fontSize:"50px", display:"flex",flexFlow:"column",alignItems:"center",paddingBottom:"0px"}}> Initialisation de la phrase </h1>
             <div className="initPhraseLaunchContainer">

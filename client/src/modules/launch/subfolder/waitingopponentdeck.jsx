@@ -18,58 +18,58 @@ function Grid({phrase, turnStatus, action}) {
         <div className="gridContainer" style={{width:"1568px", position:"relative",height:"1000px", display:"flex", flexFlow:"column nowrap", alignItems:"center"}}> 
             <div style={{position:"absolute", display:"flex", flexFlow:"column nowrap", zIndex:"2", left:"24.6%", top:"16.8%"}}>
                 <div className="gGrid" style={{display:"flex", flexFlow:"row nowrap", }}>
-                    <div className="grid alpha get"><h1>i</h1></div>
-                    <div className="grid beta get"><h1>i</h1></div>
-                    <div className="grid delta get"><h1>i</h1></div>
-                    <div className="grid gamma get"><h1>i</h1></div>
+                    <div className="grid" data-x=" " ><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
                 </div>
                 <div className="gGrid" style={{display:"flex", flexFlow:"row nowrap",}}>
-                    <div className="grid alpha post"><h1>i</h1></div>
-                    <div className="grid beta post"><h1>i</h1></div>
-                    <div className="grid delta post"><h1>i</h1></div>
-                    <div className="grid gamma post"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
 
                 </div>
                 <div className="gGrid" style={{display:"flex", flexFlow:"row nowrap", }}>
-                    <div className="grid alpha put" ><h1>i</h1></div>
-                    <div className="grid beta put"><h1>i</h1></div>
-                    <div className="grid delta put"><h1>i</h1></div>
-                    <div className="grid gamma put"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
 
                 </div>
                 <div className="gGrid" style={{display:"flex", flexFlow:"row nowrap", }}>
-                    <div className="grid alpha delete" ><h1>i</h1></div>
-                    <div className="grid beta delete"><h1>i</h1></div>
-                    <div className="grid delta delete"><h1>i</h1></div>
-                    <div className="grid gamma delete"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
+                    <div className="grid"><h1>i</h1></div>
                 </div>
             </div>
             <div style={{position:"absolute", display:"flex", flexFlow:"column nowrap", zIndex:"2", left:"54.7%", top:"17.9%"}}>
                 <div className="gGridOpp" style={{display:"flex", flexFlow:"row nowrap", }}>
-                    <div className="gridOpp alpha get"><h1>i</h1></div>
-                    <div className="gridOpp beta get"><h1>i</h1></div>
-                    <div className="gridOpp delta get"><h1>i</h1></div>
-                    <div className="gridOpp gamma get"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
                 </div>
                 <div className="gGridOpp" style={{display:"flex", flexFlow:"row nowrap",}}>
-                    <div className="gridOpp alpha post"><h1>i</h1></div>
-                    <div className="gridOpp beta post"><h1>i</h1></div>
-                    <div className="gridOpp delta post"><h1>i</h1></div>
-                    <div className="gridOpp gamma post"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
 
                 </div>
                 <div className="gGridOpp" style={{display:"flex", flexFlow:"row nowrap", }}>
-                    <div className="gridOpp alpha put" ><h1>i</h1></div>
-                    <div className="gridOpp beta put"><h1>i</h1></div>
-                    <div className="gridOpp delta put"><h1>i</h1></div>
-                    <div className="gridOpp gamma put"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
 
                 </div>
                 <div className="gGridOpp" style={{display:"flex", flexFlow:"row nowrap", }}>
-                    <div className="gridOpp alpha delete" ><h1>i</h1></div>
-                    <div className="gridOpp beta delete"><h1>i</h1></div>
-                    <div className="gridOpp delta delete"><h1>i</h1></div>
-                    <div className="gridOpp gamma delete"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
+                    <div className="gridOpp"><h1>i</h1></div>
                 </div>
             </div>
 
@@ -99,10 +99,10 @@ function Grid({phrase, turnStatus, action}) {
                 <div style={{position:"relative", display:"flex", flexFlow:"row wrap", justifyContent:"center", alignItems:"center", position:"absolute", width:"90%", bottom:"15px", gap:"40px"}}>
                     <p className="woodLayoutText"> {action} </p>
                     <img className="imgExplosion" src="../assets/images/element/CC0/waitingopponentdeck/element/explosion.png"/>
-                    <img className="" src=""/>
                 </div>
             </div>
-
+            <img className="cannon" src="../assets/images/element/CC0/waitingopponentdeck/element/cannon.png"/>
+            <img className="cannonBall" src="../assets/images/element/CC0/waitingopponentdeck/element/cannon_ball.png"/>
         </div>
     </>)
 }

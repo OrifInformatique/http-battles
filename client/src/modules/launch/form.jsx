@@ -102,7 +102,7 @@ function LaunchPage() {
             ] 
     ])
     
-    const [isSubmitted, setIsSubmitted] = useState(2);
+    const [isSubmitted, setIsSubmitted] = useState(1);
 
     switch(isSubmitted) { 
         case 1:
