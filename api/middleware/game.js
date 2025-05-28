@@ -374,6 +374,7 @@ exports.findGamesV2 = async (req, res, next) => {
     const LOC_LOC = "methode: findGame"
 
     // test de la validité des données
+    
     await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value

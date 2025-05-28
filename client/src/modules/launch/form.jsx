@@ -119,15 +119,6 @@ function LaunchPage() {
                     <WaitingOpponentDeck i={i} phrase={phrase} isSubmitted={isSubmitted} setIsSubmitted={setIsSubmitted}/>
                 </div>
             </>); 
-
-        /*
-        case 3:
-            return(<>
-                <div className="waitBackgroundContainer2">
-                    <Victory phrase={phrase} />
-                </div>
-            </>);
-        */
     }
 }
 

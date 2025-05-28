@@ -108,7 +108,6 @@
             top: 29px;
             z-index: 1;
 
-            
         }
         .initLayoutText2 {
             position: absolute;
@@ -117,6 +116,19 @@
             z-index: 1;
 
 
+        }
+
+        /*
+            Username d'Host + Opponent
+        */
+
+        .hostText {
+            position: absolute;
+            left: 200px;
+            height: 750px;
+        }
+        .opponentText {
+            position: absolute;
         }
 
             /*     Containers des colonnes de la page    

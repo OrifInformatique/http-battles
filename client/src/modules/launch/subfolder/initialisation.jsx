@@ -152,29 +152,30 @@ let i = null;
         break;
 
     }
-    const [hostUsername, setHostUsername] = useState('');
+    const [hostUsername, setHostUsername] = useState('Patmas3838');
+    const [opponentUsername, setOpponentUsername] = useState('aaa');
 
-    const opponentUsername = "Jasy";
-
+/*
     useEffect(() => {
-        axios.post("http://localhost:4000/api/user/findusers", {
+        axios.post("http://localhost:3000/api/user/findusers", {
+            "email":"sad"
         })
         .then(res=> {
-        //    console.log("succes res", res)
-          
-
+            console.log("succes res", res.data)
         })
-        .catch(resC => {
-        //    console.log("echec res", resC)
+        .catch(error => {
+            console.log("echec res", error)
         })
     }, []);
-
+*/
     return(<> 
         <div className="initInitialisationContainer">
 
             <p className="initLayoutText1 initLayoutText">Hébergeur</p>
             <img className="initLayout1" src="assets/images/element/CC0/layouts/blue_layout.png" alt="sword" />
+            <div className="hostTextContainer">
             <p className="hostText"> {hostUsername} </p>
+            </div>
 
             <p className="initLayoutText2 initLayoutText">Adversaire</p>
             <img className="initLayout2" src="assets/images/element/CC0/layouts/red_layout.png" alt="sword" />

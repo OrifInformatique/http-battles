@@ -22,7 +22,7 @@ router.post('/user/signup', check.dataInit, middleUser.signup, check.logInit, ch
 router.post('/user/login', check.dataInit, middleUser.login, check.logInit, check.dataValidity, userCtrl.login)
 
 // retourne une liste des profils utilisateurs
-router.get('/user/findUsers', modAut, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
+router.post('/user/findUsers', modAut, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
 
 // retourne une liste des profils utilisateurs
 router.put('/user/updateUser', auth, check.dataInit, middleUser.updateUser, check.logInit, check.dataValidity, userCtrl.updateUser)
