@@ -127,6 +127,7 @@
             left: 200px;
             height: 750px;
         }
+        
         .opponentText {
             position: absolute;
         }
@@ -169,7 +170,7 @@
                         position: relative;
                         overflow: visible;
                         background-image: url(../../../public/assets/images/element/CC0/initialisation/compass.png);
-                        background-size: 60%;
+                        background-size: 54%;
                         background-position: center;
                         background-repeat: no-repeat;
                         animation: rotateImage 30s infinite linear;

@@ -7,7 +7,7 @@ export const useGamesList = () => {
   const [games, setGames] = useState(null);
 
   const { auth } = useContext(AuthContext);
-
+  
   const getGamesList = async () => {
     setLoading(true);
     setGames(null);

@@ -45,7 +45,7 @@ function MyList({ phrase, setPhrase, valeurs = [], i, tech}) {
                         {valeurs[i-1] && valeurs[i-1].map((value, index) => (
                             <Mylistitem key={index} tech={tech} i={i} value={value} setPhrase={setPhrase} phrase={phrase} />
                         ))}
-                    </div>
+                    </div>s
                 </ul>
             </>);
     
@@ -155,10 +155,11 @@ let i = null;
     const [hostUsername, setHostUsername] = useState('Patmas3838');
     const [opponentUsername, setOpponentUsername] = useState('aaa');
 
-/*
+
     useEffect(() => {
         axios.post("http://localhost:3000/api/user/findusers", {
-            "email":"sad"
+            "email":"sad",
+            "state": "WINNER"
         })
         .then(res=> {
             console.log("succes res", res.data)
@@ -167,7 +168,7 @@ let i = null;
             console.log("echec res", error)
         })
     }, []);
-*/
+
     return(<> 
         <div className="initInitialisationContainer">
 

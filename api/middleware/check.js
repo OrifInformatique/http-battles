@@ -17,7 +17,6 @@ exports.dataValidity = async (req, res, next) => {
 
         // parcour les données 
         for (const d of req.data) {
-
             // stock les donnée dans le log
             req.log.data.push(d)
 
@@ -43,6 +42,7 @@ exports.dataValidity = async (req, res, next) => {
         // enregistre le log
         await utilLog.logToDatabase(req.log)
     }
+    
     // test si la fonction next à été transmise
     if (next !== undefined) {
         
@@ -129,7 +129,7 @@ exports.logInit = async (req, res, next) => {
                 error: error
             })
         })
-
+        
 
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {

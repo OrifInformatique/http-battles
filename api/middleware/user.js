@@ -30,7 +30,6 @@ const LOC_GLOB = "file: ../middleware/user"
 exports.findUser = async (req, res, next) => {
     // location local pour la gestion d'erreur
     const LOC_LOC = "methode: findUser"
-
     // test de la validité des données
     await utilCheck.dataValidityTest(req, next)
         .then(value => {

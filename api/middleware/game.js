@@ -374,7 +374,7 @@ exports.findGamesV2 = async (req, res, next) => {
     const LOC_LOC = "methode: findGame"
 
     // test de la validité des données
-    
+
     await utilCheck.dataValidityTest(req, next)
         .then(value => {
             req.utilCheck = value
@@ -467,7 +467,7 @@ exports.findGamesV2 = async (req, res, next) => {
         next()
         return null
     }
-
+    
     await utilGeneralV2.findUsersForPlayersForGames(req)
         .then(value => {
             req.data.push({
@@ -1363,7 +1363,7 @@ exports.tryPhraseV2 = async (req, res, next) => {
 
     // stoque l'id de la cible dans la requete pour la recherche de son utilisateur
     req.body.playerId = req.body.targetId
-    
+
     // trouve un player
     await utilFindPlayerV2.findPlayer(req)
         .then(value => {
@@ -1382,7 +1382,7 @@ exports.tryPhraseV2 = async (req, res, next) => {
                 error: error
             })
         })
-        
+
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         next()
