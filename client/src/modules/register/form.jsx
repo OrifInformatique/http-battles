@@ -8,6 +8,9 @@ import { AuthContext } from "../../contexts/auth";
 import "./form.css";
 import "../general.css";
 
+// UI 
+import Button from "../ui/button";
+
 const RegisterForm = ({ formData, onChange, handleSubmit, errorMessage }) => {
   return (
     <form onSubmit={handleSubmit} className="registerContainer">
@@ -28,7 +31,7 @@ const RegisterForm = ({ formData, onChange, handleSubmit, errorMessage }) => {
       <div className="nameContainer">
         <input
           type="text"
-          className="calibri"
+          className="calibri name"
           id="firstname"
           name="firstname"
           value={formData.firstname}
@@ -38,7 +41,7 @@ const RegisterForm = ({ formData, onChange, handleSubmit, errorMessage }) => {
         />
         <input
           type="text"
-          className="calibri"
+          className="calibri name"
           id="lastname"
           name="lastname"
           value={formData.lastname}
@@ -101,9 +104,7 @@ const RegisterForm = ({ formData, onChange, handleSubmit, errorMessage }) => {
         </label>
       </div>
 
-      <button type="submit" name="submit" className="buttonRegister">
-        Création de votre compte
-      </button>
+      <Button className={"buttonRegister"} label={"Création de votre compte"}/>
 
       { errorMessage ? <div>
         <p><strong>Error : </strong> {errorMessage}</p> 

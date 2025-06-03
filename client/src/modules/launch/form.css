@@ -1,6 +1,4 @@
-@keyframes 
-
-    rotateImage {
+@keyframes  rotateImage {
     0% {
         transform: rotate(0deg);
     }
@@ -18,150 +16,754 @@
     }
 }
 
-/*     Container Principal     */
-
-.backgroundContainer1 {
-    display: flex;
-    flex-flow: row;
-    align-items: baseline;
-    justify-content: space-around;
-
-    color:white;
-
-    background-image: url(../../../public/assets/images/background/launchbackground_upscale.webp);
-    background-repeat: no-repeat;
-    background-size:cover;
-
-    min-height: 1000px;
-    min-width: 200px
-}
-
-.backgroundContainer2 {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    justify-content: center;
-
-    color:white;
-
-    background-image: url(../../../public/assets/images/background/launchbackground_upscale.webp);
-    background-repeat: no-repeat;
-    background-size:cover;
-
-    min-height: 1000px;
-}
-
-/*  Règles pour Select  */
-select {
-    width: 100px;
-}
-/*     Titre de la page    */
-
-.title {
-    padding-top: 10%;
-    padding-bottom: 30px;
-}
-
-/*     Containers des colonnes de la page    
-    /*     Container principal des titres + listes*/
-
-    /*     Container qui prend en compte l'initialisation de la phrase       */
-    .initialisationContainer {
-        color:white;
+@keyframes scale {
+    0% {
+        transform: translateY(0px);
+        transform: scale(1);
     }
-        /*  Liste des mots  */
+    
+    100% {
+        transform: scale(1.5);
+        transform: translateY(-10px);
+    }
+}
 
-        .listLaunchContainer {
+@keyframes notScale {
+    0% {
+        transform: scale(1.5);
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+        transform: scale(1);
+    }
+}
+
+/* Listes déroulantes */
+
+/* ----------------------------------------------------------------------------------------------------------
+
+            INITIALISATION
+*/
+.initInitialisationContainer * {
+    font-size: 20px;
+}
+        /*     Container Principal     */
+            .initBackgroundContainer1 {
+                display: flex;
+                flex-flow: row;
+                align-items: baseline;
+                justify-content: space-around;
+                position: relative;
+
+                color:black;
+
+                background-image: url(../../../public/assets/images/background/temporary_background.png);
+                background-repeat: no-repeat;
+                background-size:cover;
+
+                min-height: 1400px;
+                min-width: 200px;
+            }
+            .initInitialisationContainer {
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+                justify-content: center;
+            }
+            /*     Titre de la page    */
+            .initTitle {
+                position: static;
+                
+                padding-top: 5%;
+                padding-bottom: 30px;
+            }
+
+            .initLayoutText {
+                color: white;
+                font-size: 50px;
+                font-style: bold;
+            }
+
+    /*
+            Layouts rouge et bleu 
+    */
+        
+        .initLayout1 {
+            position: absolute;
+            width:500px;
+            left: 0;
+            top: 20px;
+        }
+
+        .initLayout2 {
+            position: absolute;
+            width:450px;
+            right: 0;
+            top:200px;
+        }
+        .initLayoutText1 {
+            position: absolute;
+            left: 7%;
+            top: 29px;
+            z-index: 1;
+
+            
+        }
+        .initLayoutText2 {
+            position: absolute;
+            right: 6%;
+            top: 277px;
+            z-index: 1;
+
+
+        }
+
+            /*     Containers des colonnes de la page    
+                /*     Container principal des titres + listes*/
+
+                /*     Container qui prend en compte l'initialisation de la phrase       */
+                .initContainer {
+                    color:white;
+                }
+
+
+            /*     Container de la phrase avec mandala de fond     */
+
+                .initValidationContainer {
+                    display: flex;
+                    flex-flow: column nowrap;
+                    align-items: center;
+                    justify-content: center;
+                
+                    /*gap: 200px;*/
+                }
+                    /*     Titre du container de validation     */
+                    
+                    .initTitleValidationContainer {
+                        display: flex;
+                        flex-flow: row nowrap;
+                        gap: 20px;
+                    }
+                    /*     Container de l'Element mobile     */
+
+                    .initElementContainer {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        height: 300px;
+
+                        position: relative;
+                        overflow: visible;
+                        background-image: url(../../../public/assets/images/element/CC0/initialisation/compass.png);
+                        background-size: 60%;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        animation: rotateImage 30s infinite linear;
+                    
+                        min-width: 50%;
+                    }
+
+                    /*     Pour fixer la phrase et qu'elle ne soit pas affectée par la rotation     */
+                    .initFixPhrase {
+                        animation: rotateIImage 30s infinite linear;
+                    }
+                    .initChoosenPhrase {
+                        font-size:40px;
+                        color:white;
+                        background-color: rgba(0,0,0,0.7);
+                        border-radius: 20px;
+                        padding: 2px 70px 2px 70px;
+                    }
+
+                    /*     Phrase choisie   */
+                    .initPhrase {
+                        width: 600px;
+                        height: 100px;
+
+                        display: flex;
+                        flex-flow: row wrap;
+                        align-items: center;
+                        justify-content: center;
+
+                        padding-top: 5%;
+                        font-size: 20px;
+
+                        gap: 80px;
+                    }
+                    /*       Styles pour chaque mots  + _     */
+
+                    .init5Word {
+        
+                        display: flex;
+                        flex-flow: column nowrap;
+                        align-items: center;
+                        font-size: x-large;
+                    }
+
+                    .p {
+                        font-size: 130px;
+                        position: absolute;
+                    }
+
+                    /*   Transition pour les mots   */
+
+                    .wordPosition-0 {
+                        transform: scale(1.2) translateY(-40px);
+                        transition: transform 0.5s ease-in-out ;
+                    }
+                    .wordPosition-1{
+                        transform: scale(1.2) translateY(-40px);
+                        transition: transform 0.5s ease-in-out ; 
+                    }
+                    .wordPosition-2{
+                        transform: scale(1.2) translateY(-40px);
+                        transition: transform 0.5s ease-in-out ; 
+                    }
+                    .wordPosition-3{
+                        transform: scale(1.2) translateY(-40px);
+                        transition: transform 0.5s ease-in-out ; 
+                    }
+                    .wordPosition-4{
+                        transform: scale(1.2) translateY(-40px);
+                        transition: transform 0.5s ease-in-out ; 
+                    }
+                    .a {
+                        transition: transform 0.5s ease-in-out ; 
+                    }
+
+                    #position > img {
+                        position: absolute;
+                        max-width: none;
+                        width: 100px;
+                        padding-top: 20px;
+                    }
+        /*          
+
+                SLIDER Liste de mots ---------------------------------------------------------
+        
+        */
+
+            /*  Style de base des containers  */
+        
+                .initContainerVisible {
+                    position: relative;
+                    padding-top: 17%;
+                    display: flex;
+                    flex-flow: row;
+                    align-items: flex-start;
+                    justify-content: center;
+                    height: 400px;
+                    width: 800px;
+
+                    overflow: hidden;
+                }
+
+                .initContainerContent {
+                    position: absolute;
+                    display: flex;
+                    width:500%;
+                /*     gap: 600px; */
+                    left: 0;
+                }                           
+                
+            /*
+            Containers de content 1-2-3-4-5 
+            */
+
+            .initContainerContent.position-1 {
+                transform: translateX(0%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .initContainerContent.position-2 {
+                transform: translateX(-20%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .initContainerContent.position-3 {
+                transform: translateX(-40%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .initContainerContent.position-4 {
+                transform: translateX(-60%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .initContainerContent.position-5 {
+                transform: translateX(-80%);
+                transition: transform 0.5s ease-in-out;
+            }  
+                .initContainerContentX {
+                    display: flex;
+                    flex-flow: row ;    
+                    width:100%;
+                    justify-content: center;
+                    /*gap: 200px;*/               
+                    animation-play-state: paused; 
+                }
+                /*       Flèches des listes       */
+                    
+                    #arrowLeft {
+                        position: absolute;
+
+                        left: 18%;
+                        top: 46%;
+
+                        width: 100px;
+                        height: 100px;
+
+                        z-index: 13;
+
+                    }
+                    .initRightArrow {
+                        position: absolute;
+
+                        right: 18%;
+                        top: 46%;
+
+                        width: 100px;
+                        height: 100px;
+
+                        z-index: 13;
+
+                    }
+
+            /*
+            
+                Fin Liste de mots ---------------------------------------------------------
+            
+            */
+
+            
+            /*     Boutton de validation de la phrase     */
+
+            .initbtn {
+                min-width: 300px;
+                height: 28px;
+            }
+            
+
+            /*  Règles pour Select  */
+
+            select {
+                width: 100px;
+                height: 25px;
+
+                background-color: transparent;
+
+                border: solid 2px black;
+                border-radius: 13px;
+            }
+
+
+       
+
+            .initWord, .initRoute, .initMethod{
+                position:relative;
+                flex:1;
+
+            }
+            .initWord h3, .initRoute h3, .initMethod h3{
+                width:100%;
+                text-align: center;
+                
+            }
+            /*      Liste déroulantes      */
+
+            .initUl {
+                display: flex;
+                flex-flow: column nowrap;
+                align-items: center;
+                list-style-type: none;
+
+                padding: 0;
+                margin: 0;
+                height: 300px;
+                width: 180px;
+                left: calc(50% - 87px);
+                background: transparent;
+                border: 0px solid blue;
+                border-radius: 5px;
+                position: absolute;
+                z-index: 10;
+                padding-top:30px;
+          
+                position: absolute;
+            }
+
+            .initLiContainer {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-flow: column;
+            }
+
+            .initUl:active {
+                display: block;
+            }
+
+            .initLi {
+                position: relative;
+                width: 150px;
+                background-image: url(../../../public/assets/images/element/CC0/initialisation/iron_list.png);
+                background-size: cover;
+                border: 1px solid black;
+                color: white /*#333*/;
+                /*left: 20px;*/
+                padding: 8px;
+
+                opacity: 1;
+                transform:scale(1);
+                /*transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s;
+*/
+            }
+
+            .initUl:hover .initLi {
+               /* top: 30px;
+                left: -30px; */
+                position: relative;
+                opacity: 1;
+                visibility: visible;
+               
+            }
+            .initLi:hover {
+                background: rgba(0,0,0,0.9);
+                font-size: large;
+                cursor: pointer;
+                z-index: 14;
+                transform: scale(1.2);
+                transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s;
+            }
+
+            .initLi:active {
+                background: wheat;
+            }
+
+            /*       2 boutons de bas de page       */
+            .initButtonContainer {
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: flex-end;
+                /* position: absolute; */                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                gap: 50%;
+                top: 1000px;
+                width: 800px;
+                padding-top: 20px;
+        }
+
+            .buttons {
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+
+                
+            }
+
+            .buttons > img {
+                max-width: 70px;
+            }
+
+            .randombtn {
+                position: absolute;
+                width: 200px;
+            }
+
+
+/* -----------------------------------------------------------------------------------------------------------
+   
+            Waiting Oponnent Deck
+
+*/
+    /*     Container Principal     */
+        .waitBackgroundContainer2 {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: center;
+
+            color:white;
+
+            background-image: url(../../../public/assets/images/background/temporary_background.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            min-height: 1000px;
+            position:relative;
+        }
+
+        .waitContainer {
+            display: flex;
+            flex-flow: column wrap;
+            gap: 30px;
+        }
+
+        .waitTitle {
+            position: absolute;
+            padding-bottom: 40%;
+        }
+        .settings {
+            position: absolute;
+            top: 1%;
+            right: 1%;      
+            width: 10%;
+
+        }
+        /*      IRON PLANK      */
+        .ironPlankContainer {
+            position: relative;
+
+            display: flex;
+            flex-direction: row;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 70%; 
+        }
+
+        .ironPlank {
+            position: absolute;
+            width: 100%;
+            height: 70%;
+        }
+
+        .ironPlankText {
+            position: relative;
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            width: 1015px;
+            height: 120px;
+        }
+        .gGrid > .grid {
+            width: 105px;
+            height: 105px;
+        }
+        .grid {
+            display: flex;
+
+            flex-direction: row nowrap;
+            justify-content: center;
+            align-items: center;
+
+            border: black 1px solid;
+        }
+
+        .gGridOpp > .gridOpp {
+            width: 70px;
+            height: 70px;
+        }
+
+        .gridOpp {
+            display: flex;
+
+            flex-direction: row nowrap;
+            justify-content: center;
+            align-items: center;
+
+            border: black 1px solid;
+        }
+
+        .redGrid {
+            position: relative;
+            
+            width: 40%;
+        }
+
+        .blueGrid {
+            position: relative;
+
+            width: 30%;
+            right: 0;
+            bottom: 0;
+        }
+       
+        .redblueGridContainer {
             display: flex;
             flex-flow: row wrap;
-            justify-content: space-between;
+
+            width: auto;
+
             align-items: flex-start;
 
-            min-width: 450px;
-            gap: 70px;
+            padding-left: 300px;
         }
 
-
-/*     Container de la phrase avec mandala de fond     */
-
-    .validationContainer {
-        display: flex;
-        flex-flow: column nowrap;
-        align-items: center;
-        justify-content: center;
-    
-        gap: 200px;
-    }
-        /*     Titre du container de validation     */
-        
-        .titleValidationContainer {
+        .wordFound {
+            position: absolute;
             display: flex;
-            flex-flow: row nowrap;
-            gap: 20px;
-        }
-        /*     Container de l'Element mobile     */
 
-        .elementContainer {
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: center;
+            
+            top: 690px;
+            gap: 20px;
+            
+            font-size: 40px;
+
+            color:white;
+            padding: 10px 10px 10px 10px;
+            
+            background-image: url(../../../public/assets/images/element/CC0/waitingopponentdeck/element/wood_panel.png);
+            background-size: cover;
+            
+            height: 105px ;
+            width: 690px;
+            /*
+            background-color: rgba(0, 0, 0, 45%);
+            */
+            
+        }
+
+        .woodContainer {
+            display: flex;
+            flex-flow: row;
+            align-items: end;
+            height: 226px;
+        }
+
+        .woodLayout {
+            position: relative;
+
+            bottom: -147px;
+            width: 70%;
+        }
+
+        .woodLayoutText {
+            display: flex;
+            flex-flow: column nowrap;
+            align-items: center;
+            
+            position: relative ;
+            
+            font-size: 40px;
+        }
+        
+        .imgExplosion {
+            position: relative ;
+
+            width: 70px ;
+            z-index: 3 ;
+        }   
+
+        .cannon {
+            position:absolute;
+            right: -10px;
+            bottom: 0;
+            z-index: 1;
+
+            opacity: 0.5;
+        }
+
+        .cannonBall {
+            position:absolute;
+            
+            right: 250px;
+            bottom: 28.5%;
+            width: 40px;
+            
+            z-index: 3;
+
+        }
+
+
+        /*
+        -------------------------------------------------------------------------------------------------------------------
+
+                        Victory
+        */
+
+
+        .congratulationsPhrase {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            height: 300px;
 
             position: relative;
-            overflow: visible;
-            background-image: url(../../../public/assets/images/element/1409-rose_des_vents.png);
-            background-size: 105%;
-            background-position: center;
-            background-repeat: no-repeat;
-            animation: rotateImage 30s infinite linear;
-        
-            min-width: 50%;
-        }
-        /*     Pour fixer la phrase et qu'elle ne soit pas affectée par la rotation     */
-        .fixPhrase {
-            animation: rotateIImage 30s infinite linear;
+            padding-top: 20px;
+            font-size: 45px;
+
         }
 
-        /*     Phrase choisie   */
-        .phrase {
+        .wordEndContainer {
+            display: flex ;
+            flex-flow: row ;
+            align-items: center ;
+            justify-content: space-between ;
+
+            width: 1000px ;
+            height: 200px ;
+
+            padding-top: 400px ;
+
+            gap: 30px
+
+        }
+        .wordEndContainerGO {
+            display: flex ;
+            flex-flow: row ;
+            align-items: center ;
+            justify-content: space-between ;
+
+            width: 1000px ;
+            height: 200px ;
+
+            padding-top: 350px ;
+
+            gap: 30px
         }
 
-        /*     Boutton de validation de la phrase     */
-
-        .buttonLaunch {
-            color: white;
-            width: 200%;
+        div > h2 {
+            font-size: 30px;
         }
-        
 
-button[type="submit"]{
-    max-width: 250px;
-}
-/*     Element mobile      */
+        .victoryContainer {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
 
+            position:absolute;
+            z-index: 2;
+            background-color: rgba(41, 27, 198, 0.9);
+            backdrop-filter:blur(3px);
+            width:100%;
+            height: 100%
+        }
 
-/*     A supprimer     
+        .defeatContainer {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
 
-.element {
-    position: fixed;
+            position:absolute;
+            z-index: 2;
+            background-color: rgba(198, 27, 27, 0.8);
+            backdrop-filter:blur(3px);
+            width:100%;
+            height: 100%
+        }
 
-    background-size:absolute;
-    background-image: url(../../../public/assets/images/element/2-flower-mandala.png);
-   
+        button.victoryButton {
+            width:500px;
+            height:40px
+        }
 
-    height: 300px;
-    width: 350px;
+        button.victoryButton:hover::before {
+            height:40px;
+        }
 
-}
+        button.defeatButton {
+            border: 2px solid red;
+            width:500px;
+            height:40px
+        }
 
-        Container qui contient mon element mobile    
+        button.defeatButton:hover::before {
+            height:40px;
 
-    .container {
-        position: relative;
-
-        width:100vw;
-        height: 100vh;
-    }
-
-    */
+            border: 2px solid red;
+            background-color: red;
+        }

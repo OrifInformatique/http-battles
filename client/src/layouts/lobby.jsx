@@ -43,7 +43,7 @@ const TopBarLogout = () => {
 const TopBar = () => {
   return (
     <header className="w-full h-12 border-b border-gray-200">
-      <div className="flex w-full h-full max-w-[960px] m-auto justify-between items-center">
+      <div className="flex w-full h-full max-w-[960px] m-auto justify-between items-center"> 
         <h1 className="font-black px-4 ">HTTP Battle</h1>
         <nav className="flex">
           <TopBarLink route="/lobby" label="Lobby" />

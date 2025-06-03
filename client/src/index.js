@@ -12,6 +12,7 @@ import InGameLayout from "./layouts/in-game";
 import LoginForm from "./modules/login/form";
 import RegisterForm from "./modules/register/form";
 import ForgotPasswordForm from "./modules/forgotpassword/form";
+import GameLaunchTest from "./modules/games/launchtest";
 
 // Lobby Components
 import GamesCreate from "./modules/games/create";
@@ -50,6 +51,7 @@ root.render(
 
         <Route path="/games" element={<InGameLayout />}>
           <Route path=":gameId" element={<GamesLaunch />} />
+          <Route path=":gameId/test" element={<GameLaunchTest />} />
           <Route path=":gameId/ended" element={<GamesEnded />} />
           <Route path=":gameId/join" element={<GamesJoinLink />} />
         </Route>

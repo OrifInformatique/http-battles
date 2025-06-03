@@ -7,7 +7,7 @@
 }
 
 * {
-  font-family: Calibril;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /*Règles de généralités notamment pour les formulaires*/
@@ -22,6 +22,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
+  opacity: 70%;
+
 }
 
 .public-layout input[type="password"]:-webkit-autofill,
@@ -32,6 +34,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
+  opacity: 70%;
+
 }
 
 .public-layout input[type="text"]:-webkit-autofill,
@@ -42,6 +46,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: #ffffff;
   transition: background-color 5000s ease-in-out 0s;
+  opacity: 70%;
+
 }
 
 /*   Généralités pour les inputs   */
@@ -51,6 +57,14 @@
   color: white;
   background-clip: text;
   -webkit-text-fill-color: #ffffff;
+  opacity: 70%;
+
+}
+
+.public-layout input[type="text"] {
+  border-bottom: solid  1px white;
+  opacity: 70%;
+
 }
 
 .public-layout input[type="email"],
@@ -63,7 +77,10 @@
   min-width: 80%;
   max-width: 100%;
 
+  opacity: 70%;
   padding: 4px 4px 4px 4px;
+
+  
 }
 
 .public-layout input[type="password"],
@@ -75,7 +92,7 @@
 
   min-width: 80%;
   max-width: 100%;
-
+  opacity: 70%;
   padding: 4px 4px 4px 4px;
 }
 
@@ -88,15 +105,6 @@
 }
 
 /*     Bouton BLEU "Création de votre compte"    */
-
-.public-layout button[type="submit"] {
-  background-color: #005ba9;
-
-  letter-spacing: 0px;
-
-  height: 28px;
-  min-width: 200px;
-}
 
 /*   Définition police du composant en: Calibri Light ( imported ) */
 

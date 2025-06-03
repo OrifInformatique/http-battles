@@ -12,11 +12,8 @@ const dotenv = require('dotenv').config({ path: path.resolve(__dirname, 'env/.en
 
 // importe la page user.js de dossiers routes qui contient les chemins d'accès envers les différnts fonctionnalité utilisateurs
 const userRoutes = require('./routes/user')
-
 const gameRoutes = require('./routes/game')
-
 const logRoutes = require('./routes/log')
-
 
 // connection à la base de donnée mongodb, plus précisément le cluster 0 avec l'utilisateur KenCacciabue
 mongoose.set('strictQuery', false);

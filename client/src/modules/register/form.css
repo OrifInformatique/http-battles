@@ -1,4 +1,4 @@
-.public-layout h1 {
+h1 {
   letter-spacing: 2px;
 }
 
@@ -100,8 +100,8 @@
   padding-left: 5%;
 }
 
-.public-layout input[type="password"]/*input[type="password"]:-webkit-autofill */ {
-  color: white;
-  background: rgba(0, 0, 0, 0);
-  border-bottom: white solid 1px;
+/*  */
+
+.name {
+  width: 250px;
 }
