@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     console.log(data)
     if (data && data.token) {
       const date = new Date();
-      localStorage.setItem("HTTP-BATTLES-AUTH-TOKEN", data.token);
+      localStorage.setItem("HTTP-BATTLES-AUTH-TOKEN", "ModerationeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2I2ZmY4YjRiMDhiNGRlOTAzMDNjZDAiLCJpYXQiOjE3NDAwNDYyNDksImV4cCI6MTc0MDEzMjY0OX0.4Hp2F457BBCTyqZFMTCAyDUGSf2Iy_aKC_JswQM9ZWw");
       localStorage.setItem("HTTP-BATTLES-AUTH-EXPIRATION", date);
       localStorage.setItem("HTTP-BATTLES-AUTH-USERID", data.userId);
       setAuth({

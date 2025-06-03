@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import {default as axios} from 'axios';
+// import axios from 'axios';
 import '../../general.css';
 
 import Button from "../../ui/button";
@@ -157,10 +158,7 @@ let i = null;
 
 
     useEffect(() => {
-        axios.post("http://localhost:3000/api/user/findusers", {
-            "email":"sad",
-            "state": "WINNER"
-        })
+        axios.post("http://localhost:3000/api/user/findusers")
         .then(res=> {
             console.log("succes res", res.data)
         })
