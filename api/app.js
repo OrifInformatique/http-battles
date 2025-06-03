@@ -1,16 +1,28 @@
+/**
+ * Role:    Crée une application express.js
+ * Date:    0.3.06.2025
+ * 
+ */
+
+// importe express
 const express = require('express');
 
 // importe le package Mongoose qui facilittent les interactions avec la base donnée Mongodb
 const mongoose = require('mongoose');
 
+// importe le package body-parser
 const bodyParser = require('body-parser');
 
+// crée l'app express
 const app = express();
 
+// importe le module node.js qui permet d'accèder au chemin de fichiers
 const path = require('path')
+
+// importe dotenv et le configure pour trouver le dossier .env
 const dotenv = require('dotenv').config({ path: path.resolve(__dirname, 'env/.env') })
 
-// importe la page user.js de dossiers routes qui contient les chemins d'accès envers les différnts fonctionnalité utilisateurs
+// importe la page user.js de dossiers routes qui contient les chemins d'accès envers les différents fonctionnalité utilisateurs
 const userRoutes = require('./routes/user')
 const gameRoutes = require('./routes/game')
 const logRoutes = require('./routes/log')
@@ -23,7 +35,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD
     // si une erreure est reperer, affiche l'erreur
     .catch((e) => console.log(e))
 
-
+// défini le header des réponse avec leurs droit d'accès
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -31,11 +43,14 @@ app.use((req, res, next) => {
     next();
 });
 
+// définit le format de la requette comme du json
 app.use(bodyParser.json());
+// precise que l'url va contenir que des string
 app.use(bodyParser.urlencoded({ extended: false }));
 
 /**
  * API root
+ * Envoie une réponse quand une requette atteint la racine de l'api
  **/
 app.get('/', (req, res) => {
     res.status(200).json({ message: 'HTTP Battle - API' })
@@ -43,22 +58,24 @@ app.get('/', (req, res) => {
 
 /** 
  * Base API
+ * Envoie une réponse quand une requette atteint la base de l'api
  **/
 app.get('/api', (req, res) => {
     res.status(200).json({ message: 'HTTP Battle - Version 0.1' })
 });
+
 /**
- * implemente les fonctionalité utilisateurs
+ * implemente les routes utilisateurs
  * Routes:
  *  http://localhost:3000/api/user/signup
  *  http://localhost:3000/api/user/login
  *  http://localhost:3000/api/user/findUsers
- * http://localhost:3000/api/user/updateUser
+ *  http://localhost:3000/api/user/updateUser
  **/
 app.use('/api', userRoutes)
 
 /**
- * Implemente les fonctionalité de parties
+ * Implemente les routes de parties
  * Routes:
  *  http://localhost:3000/api/games/testAll
  *  http://localhost:3000/api/games/createGame
@@ -72,10 +89,11 @@ app.use('/api', userRoutes)
 app.use('/api', gameRoutes)
 
 /**
- * Implemente les fonctionalité de logs
+ * Implemente les routes de logs
  * Routes:
  *  http://localhost:3000/api/games/listLog
  **/
 app.use('/api', logRoutes)
 
+// exporte le fichier comme module app express
 module.exports = app;

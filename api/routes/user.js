@@ -2,9 +2,11 @@
 const express = require('express')
 // crée un router
 const router = express.Router()
-// importe les fonctionalité utilisateur
+
+// importe les endpoints utilisateur
 const userCtrl = require('../controllers/user')
 
+// importe les middleware utilisateur
 const middleUser = require('../middleware/user')
 
 const check = require('../middleware/check')

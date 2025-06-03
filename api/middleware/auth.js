@@ -6,6 +6,7 @@ const dotenv = require('dotenv').config({ path: path.resolve(__dirname, 'env/.en
 
 // export le module
 module.exports = (req, res, next) => {
+    console.log(req.body)
     // test le code contenu
     try {
         // extrait le token du header de la requete en utilisant la fonction split pour seulment récupérer le contenu après l'espace suivant le mot clef Bearer

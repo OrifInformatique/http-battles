@@ -13,8 +13,16 @@ export const useGamesList = () => {
     setGames(null);
 
     const res = await fetch(`${API_BASE_URL}${API_GAMES_LIST_ROUTE}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${auth.token}` },
+      method: "POST",
+      headers: { 
+        Authorization: `Bearer `,
+        "Content-Type": "application/json"
+       },
+      body:JSON.stringify({
+        userId: "67af54fde76b7fc7cec6b7f3",
+        "gameStatus": "SETTINGS"
+
+      })
     });
 
     const data = await res.json();
