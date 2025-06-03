@@ -398,6 +398,8 @@ exports.findGamesV2 = async (req, res, next) => {
         return null
     }
 
+    req.body.userId = undefined
+
     await utilFindGameV2.findGame(req)
         .then(value => {
             req.data.push({
@@ -460,7 +462,7 @@ exports.findGamesV2 = async (req, res, next) => {
                 error: error
             })
         })
-
+        
     // stop la méthode en cas d'échèque du test
     if (req.utilCheck) {
         next()
@@ -483,7 +485,7 @@ exports.findGamesV2 = async (req, res, next) => {
                 error: error
             })
         })
-
+        
     // test si la fonction next à été transmise et passe au prochains middlware si oui
     if (next !== undefined) {
         next()

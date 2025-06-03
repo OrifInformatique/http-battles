@@ -22,7 +22,7 @@ router.all('/games/testAll', modAut, check.dataInit, middleGame.testAll, check.l
 router.all('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)
 
 // trouve une partie selon la clefs
-router.all('/games/findGames', auth, check.dataInit, middleGame.findGamesV2, check.logInit, check.dataValidity, gameCtrl.findGamesV2)
+router.post('/games/findGames', auth, check.dataInit, middleGame.findGamesV2, check.logInit, check.dataValidity, gameCtrl.findGamesV2)
 
 // permet à un utilisateur de rejoindre une partie
 router.all('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, check.logInit, check.dataValidity, gameCtrl.joinGameV2)
