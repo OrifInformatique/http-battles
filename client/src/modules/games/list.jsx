@@ -58,8 +58,8 @@ const GamesList = () => {
           <GamesListLoading />
         ) : (
           <>
-            {launchedGames.map((aGame) => (
-              <GamesListItem key={aGame.id} game={aGame} />
+            {launchedGames.map((aGame, index) => ( 
+                <GamesListItem key={aGame.game._id} game={aGame} />
             ))}
           </>
         )}

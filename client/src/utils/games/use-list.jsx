@@ -25,7 +25,7 @@ export const useGamesList = () => {
     });
 
     const data = await res.json();
-
+    console.log(data)
     setGames(data);
     setLoading(false);
   };

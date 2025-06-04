@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {default as axios} from 'axios';
+import { AuthContext } from "../../../contexts/auth.js";
 // import axios from 'axios';
 import '../../general.css';
 
@@ -126,6 +127,9 @@ const TOTAL_SLIDES = 5;
 let arrowd = null;
 let i = null;
 
+const { auth } = useContext(AuthContext);
+    
+
 //   Enlever la flèche lorsque on est sur le 1er ou dernier élément.
     function handleChangeArrowLeft() {
         if (position > 1) { 
@@ -156,17 +160,46 @@ let i = null;
     const [hostUsername, setHostUsername] = useState('Patmas3838');
     const [opponentUsername, setOpponentUsername] = useState('aaa');
 
+//  requêtes vers API
 
     useEffect(() => {
-        axios.post("http://localhost:3000/api/user/findusers")
+        axios.post("http://localhost:3000/api/user/findusers", {
+            userId: auth.userId
+        }, {
+            headers: { 
+            Authorization: `Bearer ${auth.token}`,
+            "Content-type": "application/json"
+        },
+            }
+        )
         .then(res=> {
-            console.log("succes res", res.data)
+            console.log("succes res", res.data[0].username)
+            setHostUsername(res.data[0].username)
         })
         .catch(error => {
             console.log("echec res", error)
         })
     }, []);
-
+/*
+    useEffect(() => {
+        axios.post("http://localhost:3000/api/user/findusers", {
+            userId: auth.userId
+        }, {
+            headers: { 
+            Authorization: `Bearer ${auth.token}`,
+            "Content-type": "application/json"
+        },
+            }
+        )
+        .then(res=> {
+            console.log("succes res", res.data)
+            setOpponentUsername(res.data[0].username)
+        })
+        .catch(error => {
+            console.log("echec res", error)
+        })
+    }, []);
+*/
     return(<> 
         <div className="initInitialisationContainer">
 
@@ -199,7 +232,11 @@ let i = null;
              
             {arrowd}
 
-            <form id="myForm" onSubmit={(e) => {e.preventDefault(), setIsSubmitted(2)}}>
+            <form id="myForm" onSubmit={(e) => {
+                e.preventDefault(), 
+                setIsSubmitted(2),
+                console.log("a")
+                }}>
                 <Slider position={position} setPhrase={setPhrase} phrase={phrase}/>
             </form>
 
