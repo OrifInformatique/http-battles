@@ -157,6 +157,7 @@ const { auth } = useContext(AuthContext);
         break;
 
     }
+    
     const [hostUsername, setHostUsername] = useState('Patmas3838');
     const [opponentUsername, setOpponentUsername] = useState('aaa');
 
@@ -180,6 +181,7 @@ const { auth } = useContext(AuthContext);
             console.log("echec res", error)
         })
     }, []);
+    
 /*
     useEffect(() => {
         axios.post("http://localhost:3000/api/user/findusers", {
