@@ -151,16 +151,16 @@ Ce fichier contient les fonctions pour trouver les [utilisateurs](#7a1-userjs) d
 Ce fichier contient les fonctions pour modifier les [utilisateurs](#7a1-userjs) dans la base de données
 
 ####        6C. [player](api/util/player)
-Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des joueurs
+Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des [joueurs](#7b2-playerv2js)
 
 #####           6C1. [create.js](api/util/player/create.js)
-Ce fichier contient les fonctions de créations de joueurs dans la base de données
+Ce fichier contient les fonctions de créations de [joueurs](#7b2-playerv2js) dans la base de données
 
 #####           6C2. [find.js](api/util/player/find.js)
-Ce fichier contient les fonctions pour trouver les joueurs dans la base de données
+Ce fichier contient les fonctions pour trouver les [joueurs](#7b2-playerv2js) dans la base de données
 
 #####           6C3. [update.js](api/util/player/update.js)
-Ce fichier contient les fonctions pour modifier les joueurs dans la base de données
+Ce fichier contient les fonctions pour modifier les [joueurs](#7b2-playerv2js) dans la base de données
 
 ####        6D. [word](api/util/word)
 Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des mots
