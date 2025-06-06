@@ -163,16 +163,16 @@ Ce fichier contient les fonctions pour trouver les [joueurs](#7b2-playerv2js) da
 Ce fichier contient les fonctions pour modifier les [joueurs](#7b2-playerv2js) dans la base de données
 
 ####        6D. [word](api/util/word)
-Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des mots
+Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des [mots](#7b3-wordv2js)
 
 #####           6D1. [create.js](api/util/word/create.js)
-Ce fichier contient les fonctions de créations de mots dans la base de données
+Ce fichier contient les fonctions de créations de [mots](#7b3-wordv2js) dans la base de données
 
 #####           6D2. [find.js](api/util/word/find.js)
-Ce fichier contient les fonctions pour trouver les mots dans la base de données
+Ce fichier contient les fonctions pour trouver les [mots](#7b3-wordv2js) dans la base de données
 
 #####           6D3. [update.js](api/util/word/update.js)
-Ce fichier contient les fonctions pour modifier les mots dans la base de données
+Ce fichier contient les fonctions pour modifier les [mots](#7b3-wordv2js) dans la base de données
 
 ####        6E. [general](api/util/general)
 Ce dossier contient le fichier qui traite des données en general et les filtre et modifies
