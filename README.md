@@ -184,6 +184,7 @@ router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, chec
  * etc...
  * 
  * */ 
+ router.post('/games/startGame', auth, check.dataInit, middleGame.startGameV2, check.logInit, check.dataValidity, gameCtrl.startGameV2)
 ```
 
 ####        3B. [user.js](api/routes/user.js)
