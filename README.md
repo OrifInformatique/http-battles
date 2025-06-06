@@ -85,7 +85,7 @@ Ce fichier est celui qui crée l'app [Express](#1a-expressjs)
 Ce dossier contient les routes par lesquel les requêtes passerons
 
 ####        3A. [game.js](api/routes/game.js)
-Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite des parties
+Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite des [parties](#7b1-gamev2js)
 
 ####        3B. [user.js](api/routes/user.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonctions [utilisateur](#7a1-userjs)
@@ -97,7 +97,7 @@ Ce fichier contient les routes qui permettent d'accèder aux fonction de log
 Ce fichier contient les fonctions et fichiers qui traiterons les données
 
 ####        4A. [game.js](api/middleware/game.js)
-Ce fichier contient les fonctions qui traites les données de parties
+Ce fichier contient les fonctions qui traites les données de [parties](#7b1-gamev2js)
 
 ####        4B. [user.js](api/middleware/user.js)
 Ce fichier contient les fonctions quitraites les données [utilisateurs](#7a1-userjs)
@@ -115,7 +115,7 @@ Ce fichier contient les fonctions qui ajoute l'informations de qu'elle route est
 Ce dossiers contients les endpoints, les fonctions qui renvoirons la réponse aux clients
 
 ####        5A. [game.js](api/controllers/game.js)
-Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant la partie est un succès
+Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant la [partie](#7b1-gamev2js) est un succès
 
 ####        5B. [user.js](api/controllers/user.js)
 Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant l'[utilisateur](#7a1-userjs) est un succès
@@ -127,16 +127,16 @@ Ce fichier contient les endpoints qui envoit la réponse au client si la requett
 Ce dossier contient différent fichiers utils entre autre ceux qui s'occupe de gérer les requètes envoyer à la base de données
 
 ####        6A. [game](api/util/game)
-Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données de parties
+Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données de [parties](#7b1-gamev2js)
 
 #####           6A1. [create.js](api/util/game/create.js)
-Ce fichier contient les fonctions de créations de parties dans la base de données
+Ce fichier contient les fonctions de créations de [parties](#7b1-gamev2js) dans la base de données
 
 #####           6A2. [find.js](api/util/game/find.js)
-Ce fichier contient les fonctions pour trouver les partie dans la base de données
+Ce fichier contient les fonctions pour trouver les [parties](#7b1-gamev2js) dans la base de données
 
 #####           6A3. [update.js](api/util/game/update.js)
-Ce fichier contient les fonctions pour modifier les parties dans la base de données
+Ce fichier contient les fonctions pour modifier les [parties](#7b1-gamev2js) dans la base de données
 
 ####        6B. [user](api/util/user)
 Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des [utilisateurs](#7a1-userjs)
