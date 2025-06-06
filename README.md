@@ -4,6 +4,15 @@ HTTP Battles - Jeu d'initiation au protocole HTTP
 ## API
 Cette section à pour but d'expliquer la structure et le fonctionnement de l'API pour faciliter les interactions et future devellopement associer
 
+### Index
+1. [Outils utilisé](#1-outils-utilisé)
+2. [index.js et app.js](#2-indexjs-et-appjs)
+3. [routes](#3-routes)
+4. [middlewares](#4-middlewares)
+5. [controllers](#5-controllers)
+6. [util](#6-util)
+7. [models / modelV2](#7-models--modelv2)
+
 ###     1. Outils utilisé
 Cette section a pour bute de présenter et de donner une explication brêve des différent frameworks, librairie et module utilisé
 
@@ -93,4 +102,10 @@ Ce fichier contient les fonctions de choix et mise en page des réponse
 
 ###     7. [models](api/models) / [modelV2](api/modelV2)
 Ces dossiers s'occupe de déclrer les modèles de données qui structurerons la base de données
+
+####    7A. [models](api/models)
+Dossier contenant les modèles existant depuis le début du dévellopement de l'application et potenciellemnt des données très anciennes
+
+####    7B. [modelV2](api/modelV2)
+Dossier comtenant les modèles qui ont été introduis durant la deuxième version du Backend
 
