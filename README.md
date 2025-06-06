@@ -29,6 +29,8 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     -   5C. [log.js](#5c-logjs)
 6.  [util](#6-util)
     -   6A. [game](#6a-game)
+        - 6A1. [create.js](#6a1-createjs)
+        - 6A2. [find.js](#6a2-findjs)
     -   6B. [user](#6b-user)
     -   6C. [player](#6c-player)
     -   6D. [word](#6d-word)
@@ -111,6 +113,15 @@ Ce dossier contient différent fichiers utils entre autre ceux qui s'occupe de g
 
 ####        6A. [game](api/util/game)
 Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données de parties
+
+#####           6A1. [create.js](api/util/game/create.js)
+Ce fichier contient les fonctions de créations de parties dans la base de données
+
+#####           6A2. [find.js](api/util/game/find.js)
+Ce fichier contient les fonctions pour trouver les partie dans la base de données
+
+#####           6A3. [update.js](api/util/game/update.js)
+Ce fichier contient les fonctions pour modifier les psrties dans la base de données
 
 ####        6B. [user](api/util/user)
 Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des utilisateurs
