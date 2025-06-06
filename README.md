@@ -20,6 +20,9 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     - 4D. [check.js](#4d-checkjs)
     - 4E. [routeParam.js](#4e-routeparamjs)
 5.  [controllers](#5-controllers)
+    - 5A. [game.js](#5a-gamejs)
+    - 5B. [user.js](#5b-userjs)
+    - 5C. [log.js](#5c-logjs)
 6.  [util](#6-util)
 7.  [models / modelV2](#7-models--modelv2)
 
