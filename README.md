@@ -42,10 +42,19 @@ Ces fichiers contiennes les fonctions d'autentification. Plus précisement l'aut
 Ce fichier contiens les fonctions de checks des données et de logs
 
 ####        4E. [routeParam.js](api/middleware/routeParam.js)
-Ce fichier contien les fonctions qui ajoute l'informations de qu'elle route est utilisée dans la requette
+Ce fichier contient les fonctions qui ajoute l'informations de qu'elle route est utilisée dans la requette
 
 ###     5. [controllers](api/controllers) 
 Ce dossiers contients, les endpoints, les fonctions qui renvoirons la réponse aux clients
+
+####        5A. [game.js](api/controllers/game.js)
+Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant la partie est un succès
+
+####        5B. [user.js](api/controllers/user.js)
+Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant l'utilisateur est un succès
+
+####        5C. [log.js](api/controllers/log.js)
+Ce fichier contient les endpoints qui envoit la réponse au client si la requette concernant les logs est un succès ou un echec
 
 ###     6. [util](api/util)
 Ce dossier contient différent fichiers utils entre autre ceux qui s'occupe de gérer les requètes envoyer à la base de données
