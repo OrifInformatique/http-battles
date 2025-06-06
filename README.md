@@ -99,6 +99,19 @@ Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite
 
 ```
 /**
+ * créé une partie pour cette utilisateur
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": ""        // id du client
+ *  }
+ * 
+ * */ 
+router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)
+```
+
+```
+/**
  * trouve une partie selon la clefs
  *  
  * forme de la requette :

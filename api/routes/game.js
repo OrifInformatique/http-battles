@@ -1,6 +1,6 @@
 /**
  * Role:    Route pour les fonctionnalité des parties
- * Date:    0.3.06.2025
+ * Date:    06.06.2025
  * 
  */
 
@@ -25,8 +25,16 @@ const middleGame = require('../middleware/game')
 
 router.all('/games/testAll', modAut, check.dataInit, middleGame.testAll, check.logInit, check.dataValidity, gameCtrl.testAll)
 
-// créé une partie pour cette utilisateur
-router.all('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)
+/**
+ * créé une partie pour cette utilisateur
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": ""        // id du client
+ *  }
+ * 
+ * */ 
+router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)
 
 /**
  * trouve une partie selon la clefs
