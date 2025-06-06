@@ -53,6 +53,9 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 7A1. [User.js](#7a1-userjs)
         - 7A2. [Log.js](#7a2-logjs)
     -   7B. [modelV2](#7b-modelv2)
+        - 7B1. [GameV2.js](#7b1-gamev2js)
+        - 7B2. [PlayerV2.js](#7b2-playerv2js)
+        - 7B3. [WordV2.js](#7b3-wordv2js)
 
 ###     1. Outils utilisé
 Cette section a pour bute de présenter et de donner une explication brêve des différent frameworks, librairie et module utilisé
@@ -85,7 +88,7 @@ Ce dossier contient les routes par lesquel les requêtes passerons
 Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite des parties
 
 ####        3B. [user.js](api/routes/user.js)
-Ce fichier contient les routes qui permettent d'accèder aux fonctions utilisateur
+Ce fichier contient les routes qui permettent d'accèder aux fonctions [utilisateur](#7a1-userjs)
 
 ####        3C. [log.js ](api/routes/log.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonction de log
@@ -97,10 +100,10 @@ Ce fichier contient les fonctions et fichiers qui traiterons les données
 Ce fichier contient les fonctions qui traites les données de parties
 
 ####        4B. [user.js](api/middleware/user.js)
-Ce fichier contient les fonctions quitraites les données utilisateurs
+Ce fichier contient les fonctions quitraites les données [utilisateurs](#7a1-userjs)
 
 ####        4C. [auth.js](api/middleware/auth.js) et [modAuth.js](api/middleware/modAut.js)
-Ces fichiers contiennes les fonctions d'autentification. Plus précisement l'autentifications des utilisateurs et dévellopeurs
+Ces fichiers contiennes les fonctions d'autentification. Plus précisement l'autentifications des [utilisateurs](#7a1-userjs) et dévellopeurs
 
 ####        4D. [check.js](api/middleware/check.js)
 Ce fichier contiens les fonctions de checks des données et de logs
@@ -115,7 +118,7 @@ Ce dossiers contients les endpoints, les fonctions qui renvoirons la réponse au
 Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant la partie est un succès
 
 ####        5B. [user.js](api/controllers/user.js)
-Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant l'utilisateur est un succès
+Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant l'[utilisateur](#7a1-userjs) est un succès
 
 ####        5C. [log.js](api/controllers/log.js)
 Ce fichier contient les endpoints qui envoit la réponse au client si la requette concernant les logs est un succès ou un echec
@@ -136,16 +139,16 @@ Ce fichier contient les fonctions pour trouver les partie dans la base de donné
 Ce fichier contient les fonctions pour modifier les parties dans la base de données
 
 ####        6B. [user](api/util/user)
-Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des utilisateurs
+Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des [utilisateurs](#7a1-userjs)
 
 #####           6B1. [create.js](api/util/user/create.js)
-Ce fichier contient les fonctions de créations d'utilisateurs dans la base de données
+Ce fichier contient les fonctions de créations d'[utilisateurs](#7a1-userjs) dans la base de données
 
 #####           6B2. [find.js](api/util/user/find.js)
-Ce fichier contient les fonctions pour trouver les utilisateurs dans la base de données
+Ce fichier contient les fonctions pour trouver les [utilisateurs](#7a1-userjs) dans la base de données
 
 #####           6B3. [update.js](api/util/user/update.js)
-Ce fichier contient les fonctions pour modifier les utilisateurs dans la base de données
+Ce fichier contient les fonctions pour modifier les [utilisateurs](#7a1-userjs) dans la base de données
 
 ####        6C. [player](api/util/player)
 Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des joueurs
@@ -190,11 +193,19 @@ Ces dossiers s'occupe de déclrer les modèles de données qui structurerons la 
 Dossier contenant les modèles existant depuis le début du dévellopement de l'application et potenciellemnt des données très anciennes
 
 #####           7A1. [User.js](api/models/User.js)
-Ce fichier contient le Schema des utilisateurs qui sera stoquer dans la base de donnée [MongoDB](#1b-mongodb)
+Ce fichier contient le Schema des [utilisateurs](#7a1-userjs) qui sera stoqué dans la base de donnée [MongoDB](#1b-mongodb)
 
 #####           7A2. [Log.js](api/models/Log.js)
-Ce fichier contient le Schema des logs qui sera stoquer dans la base de donnée [MongoDB](#1b-mongodb)
+Ce fichier contient le Schema des logs qui sera stoqué dans la base de donnée [MongoDB](#1b-mongodb)
 
 ####        7B. [modelV2](api/modelV2)
 Dossier comtenant les modèles qui ont été introduis durant la deuxième version du Backend
 
+#####           7B1. [GameV2.js](api/modelV2/GameV2.js)
+Ce fichier contient le Schema des parties qui sera stoqué dans la base de donnée [MongoDB](#1b-mongodb)
+
+#####           7B2. [PlayerV2.js](api/modelV2/PlayerV2.js)
+Ce fichier contient le Schema des joueurs qui sera stoqué dans la base de donnée [MongoDB](#1b-mongodb)
+
+#####           7B3. [WordV2.js](api/modelV2/WordV2.js)
+Ce fichier contient le Schema des mots qui sera stoqué dans la base de donnée [MongoDB](#1b-mongodb)
