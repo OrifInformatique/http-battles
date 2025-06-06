@@ -133,6 +133,20 @@ router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, 
 router.post('/games/findGames', auth, check.dataInit, middleGame.findGamesV2, check.logInit, check.dataValidity, gameCtrl.findGamesV2)
 ```
 
+```
+/**
+ * permet à un utilisateur de rejoindre une partie
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client
+ *      "gameId": "",       // id de la partie
+ *  }
+ * 
+ * */ 
+router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, check.logInit, check.dataValidity, gameCtrl.joinGameV2)
+```
+
 ####        3B. [user.js](api/routes/user.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonctions [utilisateur](#7a1-userjs)
 
