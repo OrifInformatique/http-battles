@@ -10,6 +10,8 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     -   1B. [MongoDB](#1b-mongodb)
         - 1B1. [schemas](#1b1-schemas)
         - 1B2. [MongoDB Atlas](#1b2-mongodb-atlas)
+    -   1C. [Node.js](#1c-nodejs)
+        - 1C1. [dotenv](#1c1-dotenv)
 2.  [index.js et app.js](#2-indexjs-et-appjs)
     -   2A. [index.js](#2a-indexjs)
     -   2B. [app.js](#2b-appjs)
@@ -56,6 +58,8 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 7B1. [GameV2.js](#7b1-gamev2js)
         - 7B2. [PlayerV2.js](#7b2-playerv2js)
         - 7B3. [WordV2.js](#7b3-wordv2js)
+8.  [.env](#8-env)
+9.  [.gitignore](#9-gitignore)
 
 ###     1. Outils utilisé
 Cette section a pour bute de présenter et de donner une explication brêve des différent frameworks, librairie et module utilisé
@@ -71,6 +75,12 @@ Les schemas sont les structures de données que nous déclarons dans notre codes
 
 #####           1B2. [MongoDB Atlas](https://www.mongodb.com/)
 MongoDB Atlas est une plateform en lign qui propose un service nous permettant de stoquer nos données chez eux plutôt que en local
+
+####        1C. [Node.js](https://nodejs.org/en)
+Node.js est un environnement JavaScript qui permet de faire un server et de manager le backend d'une application
+
+#####           1C1. [dotenv](https://www.npmjs.com/package/dotenv)
+dotenv est un package [Node.js](#1c-nodejs) qui permet l'utilisation de fichier [.env](#8-env) qui permette de stoquer certaine données seulement en local afin de les garder privée
 
 ###     2. [index.js](api/index.js) et [app.js](api/app.js)
 Ces deux document sont le ceux qui crée le server et l'app [Express](#expressjs)
@@ -209,3 +219,9 @@ Ce fichier contient le Schema des joueurs qui sera stoqué dans la base de donn�
 
 #####           7B3. [WordV2.js](api/modelV2/WordV2.js)
 Ce fichier contient le Schema des mots qui sera stoqué dans la base de donnée [MongoDB](#1b-mongodb)
+
+###     8. [.env](api/env/.env)
+Ce fichier contient des variables local qui ne seront pas retransmit au dépots git distant
+
+###     9. [.gitignore](api/.gitignore)
+Ce fichier spécifie des élément que git doit ignorer
