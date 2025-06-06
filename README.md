@@ -7,10 +7,18 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
 ###     1. Outils utilisé
 Cette section a pour bute de présenter et de donner une explication brêve des différent frameworks, librairie et module utilisé
 
-####        1A. Express.js
+####        1A. [Express.js](https://expressjs.com/)
 Epress.js est un framework utilisé pour facilité les interaction avec le client
 
-[https://expressjs.com/](https://expressjs.com/)
+####        1B. [MongoDB](https://www.mongodb.com/)
+MongoDB est un langage de base de données [NoSQL](https://fr.wikipedia.org/wiki/NoSQL) (Not only [SQL]((https://fr.wikipedia.org/wiki/Structured_Query_Language))[Structured Query Language]) que nos utilisons pour stoqué et structurer nos données pour ce logiciel
+
+#####           1B1. [Schemas](#7-models--modelv2)
+Les schemas sont les structures de données que nous déclarons dans notre codes et qui définirons comment nos donnée serons stoqué
+
+#####           1B2. [MongoDB Atlas](https://www.mongodb.com/)
+MongoDB Atlas est une plateform en lign qui propose un service nous permettant de stoquer nos données chez eux plutôt que en local
+
 ###     2. [index.js](api/index.js) et [app.js](api/app.js)
 Ces deux document sont le ceux qui crée le server et l'app [Express](#expressjs)
 
@@ -45,7 +53,7 @@ Ce fichier contiens les fonctions de checks des données et de logs
 Ce fichier contient les fonctions qui ajoute l'informations de qu'elle route est utilisée dans la requette
 
 ###     5. [controllers](api/controllers) 
-Ce dossiers contients, les endpoints, les fonctions qui renvoirons la réponse aux clients
+Ce dossiers contients les endpoints, les fonctions qui renvoirons la réponse aux clients
 
 ####        5A. [game.js](api/controllers/game.js)
 Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant la partie est un succès
@@ -58,6 +66,12 @@ Ce fichier contient les endpoints qui envoit la réponse au client si la requett
 
 ###     6. [util](api/util)
 Ce dossier contient différent fichiers utils entre autre ceux qui s'occupe de gérer les requètes envoyer à la base de données
+
+####        6A. [game](api/util/game)
+Ce dossier contients les fichiers qui traitent des interactions avec la base de données MongoDB concernant les données de parties
+
+####        6B. [user](api/util/user)
+Ce dossier contients les fichiers qui traitent des interactions avec la base de données MongoDB concernant les données des utilisateurs
 
 ###     7. [models](api/models) / [modelV2](api/modelV2)
 Ces dossiers s'occupe de déclrer les modèles de données qui structurerons la base de données
