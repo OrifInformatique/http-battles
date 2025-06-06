@@ -63,14 +63,49 @@ router.post('/games/findGames', auth, check.dataInit, middleGame.findGamesV2, ch
  * forme de la requette :
  *  {
  *      "userId": "",       // id du client
- *      "gameId": "",       // id de la partie
+ *      "gameId": ""        // id de la partie
  *  }
  * 
  * */ 
 router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, check.logInit, check.dataValidity, gameCtrl.joinGameV2)
 
-// commence la partie
-router.all('/games/startGame', auth, check.dataInit, middleGame.startGameV2, check.logInit, check.dataValidity, gameCtrl.startGameV2)
+/**
+ * commence la partie
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client
+ *      "gameId": "",       // id de la partie
+ *      "clientId": "",     // id du joueur
+ *      "phrase": [         // phrase du joueur
+ *          {               // mot 1
+ *              "content": "",          // contenu du mot
+ *              "phrasePosition": "",​   // position dans la phrase (ex. "1")
+ *              "boardPosition": ""     // position sur le plateau
+ *          },
+ *          {               // mot 2
+ *              "content": "",
+ *              "phrasePosition": "",​
+ *              "boardPosition": ""
+ *          }
+ *      ]
+ *  }
+ * 
+ * "boardPosition" possible input:
+ *  - "Get A"
+ *  - "Get B"
+ *  - "Get C"
+ *  - "Get D"
+ * 
+ *  - "Post A"
+ *  - "Post B"
+ *  - "Post C"
+ *  - "Post D"
+ * 
+ * etc...
+ * 
+ * */ 
+router.post('/games/startGame', auth, check.dataInit, middleGame.startGameV2, check.logInit, check.dataValidity, gameCtrl.startGameV2)
 
 // términe la partie
 router.all('/games/endGame', auth, check.dataInit, middleGame.endGameV2, check.logInit, check.dataValidity, gameCtrl.endGameV2)
