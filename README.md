@@ -17,7 +17,7 @@ Ces deux document sont le ceux qui crée le server et l'app [Express](#expressjs
 ###     3. routes
 Ce dossier contient les routes par lesquel les requêtes passerons
 
-####        3A. game.js
+####        [3A. game.js](api/routes/game.js)
 Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite des parties
 
 ####        3B. user.js
