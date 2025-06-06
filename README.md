@@ -11,10 +11,10 @@ Cette section a pour bute de présenter et de donner une explication brêve des 
 Epress.js est un framework utilisé pour facilité les interaction avec le client
 
 [https://expressjs.com/](https://expressjs.com/)
-###     2. index.js et app.js
+###     2. [index.js](api/index.js) et [app.js](api/app.js)
 Ces deux document sont le ceux qui crée le server et l'app [Express](#expressjs)
 
-###     3. routes
+###     3. [routes](api/routes)
 Ce dossier contient les routes par lesquel les requêtes passerons
 
 ####        [3A. game.js](api/routes/game.js)
@@ -26,7 +26,7 @@ Ce fichier contient les routes qui permettent d'accèder aux fonctions utilisate
 ####        [3C. log.js ](api/routes/log.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonction de log
 
-###     4. middlewares
+###     4. [middlewares](api/middleware)
 Ce fichier contient les fonctions et fichiers qui traiterons les données
 
 ####        4A. [game.js](api/middleware/game.js)
