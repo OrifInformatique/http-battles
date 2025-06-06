@@ -1,3 +1,10 @@
+/**
+ * Role:    Route pour les fonctionnalité des parties
+ * Date:    0.3.06.2025
+ * 
+ */
+
+
 // import express
 const express = require('express')
 // crée un router
@@ -21,7 +28,25 @@ router.all('/games/testAll', modAut, check.dataInit, middleGame.testAll, check.l
 // créé une partie pour cette utilisateur
 router.all('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)
 
-// trouve une partie selon la clefs
+/**
+ * trouve une partie selon la clefs
+ *  
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client
+ *      "gameId": "",       // id de la partie (facultatif)
+ *      "creatorId": "",    // id du créateur de la partie (facultatif) 
+ *      "gameStatus": ""    // statut de la partie (facultatif)
+ *  }
+ * 
+ * gameStatus possible: 
+ *  - "WAITING_CHALLENGER"
+ *  - "SETTINGS"
+ *  - "PLAYING"
+ *  - "WON"
+ *  - "EMDED"
+ * 
+ * */ 
 router.post('/games/findGames', auth, check.dataInit, middleGame.findGamesV2, check.logInit, check.dataValidity, gameCtrl.findGamesV2)
 
 // permet à un utilisateur de rejoindre une partie

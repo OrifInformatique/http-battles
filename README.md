@@ -97,6 +97,29 @@ Ce dossier contient les routes par lesquel les requêtes passerons
 ####        3A. [game.js](api/routes/game.js)
 Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite des [parties](#7b1-gamev2js)
 
+```
+/**
+ * trouve une partie selon la clefs
+ *  
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client
+ *      "gameId": "",       // id de la partie (facultatif)
+ *      "creatorId": "",    // id du créateur de la partie (facultatif) 
+ *      "gameStatus": ""    // statut de la partie (facultatif)
+ *  }
+ * 
+ * gameStatus possible: 
+ *  - "WAITING_CHALLENGER"
+ *  - "SETTINGS"
+ *  - "PLAYING"
+ *  - "WON"
+ *  - "EMDED"
+ * 
+ * */ 
+router.post('/games/findGames', auth, check.dataInit, middleGame.findGamesV2, check.logInit, check.dataValidity, gameCtrl.findGamesV2)
+```
+
 ####        3B. [user.js](api/routes/user.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonctions [utilisateur](#7a1-userjs)
 
