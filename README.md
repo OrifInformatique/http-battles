@@ -50,6 +50,8 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     -   6H. [log.js](#6f-logjs)
 7.  [models / modelV2](#7-models--modelv2)
     -   7A. [models](#7a-models)
+        - 7A1. [User.js](#7a1-userjs)
+        - 7A2. [Log.js](#7a2-logjs)
     -   7B. [modelV2](#7b-modelv2)
 
 ###     1. Outils utilisé
@@ -170,7 +172,7 @@ Ce fichier contient les fonctions pour trouver les mots dans la base de données
 Ce fichier contient les fonctions pour modifier les mots dans la base de données
 
 ####        6E. [general](api/util/general)
-Ce dossier contient les fichiers qui traitent des données en general et les filtre et modifies
+Ce dossier contient le fichier qui traite des données en general et les filtre et modifies
 
 ####        6F. [log.js](api/util/log.js)
 Ce fichier contient les fonctions qui traites, modifie et gère les interactions avec la base de donnée [MongoDB](#1b-mongodb) concernant les données de log
@@ -184,9 +186,15 @@ Ce fichier contient les fonctions de choix et mise en page des réponse
 ###     7. [models](api/models) / [modelV2](api/modelV2)
 Ces dossiers s'occupe de déclrer les modèles de données qui structurerons la base de données
 
-####    7A. [models](api/models)
+####        7A. [models](api/models)
 Dossier contenant les modèles existant depuis le début du dévellopement de l'application et potenciellemnt des données très anciennes
 
-####    7B. [modelV2](api/modelV2)
+#####           7A1. [User.js](api/models/User.js)
+Ce fichier contient le Schema des utilisateurs qui sera stoquer dans la base de donnée [MongoDB](#1b-mongodb)
+
+#####           7A2. [Log.js](api/models/Log.js)
+Ce fichier contient le Schema des logs qui sera stoquer dans la base de donnée [MongoDB](#1b-mongodb)
+
+####        7B. [modelV2](api/modelV2)
 Dossier comtenant les modèles qui ont été introduis durant la deuxième version du Backend
 
