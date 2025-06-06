@@ -41,6 +41,9 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 6C2. [find.js](#6c2-findjs)
         - 6C3. [update.js](#6c3-updatejs)
     -   6D. [word](#6d-word)
+        - 6D1. [create.js](#6d1-createjs)
+        - 6D2. [find.js](#6d2-findjs)
+        - 6D3. [update.js](#6d3-updatejs)
     -   6E. [general](#6e-general)
     -   6F. [log.js](#6f-logjs)
     -   6G. [check.js](#6g-checkjs)
@@ -156,6 +159,15 @@ Ce fichier contient les fonctions pour modifier les joueurs dans la base de donn
 
 ####        6D. [word](api/util/word)
 Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des mots
+
+#####           6D1. [create.js](api/util/word/create.js)
+Ce fichier contient les fonctions de créations de mots dans la base de données
+
+#####           6D2. [find.js](api/util/word/find.js)
+Ce fichier contient les fonctions pour trouver les mots dans la base de données
+
+#####           6D3. [update.js](api/util/word/update.js)
+Ce fichier contient les fonctions pour modifier les mots dans la base de données
 
 ####        6E. [general](api/util/general)
 Ce dossier contient les fichiers qui traitent des données en general et les filtre et modifies
