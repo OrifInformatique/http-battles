@@ -68,10 +68,28 @@ Ce fichier contient les endpoints qui envoit la réponse au client si la requett
 Ce dossier contient différent fichiers utils entre autre ceux qui s'occupe de gérer les requètes envoyer à la base de données
 
 ####        6A. [game](api/util/game)
-Ce dossier contients les fichiers qui traitent des interactions avec la base de données MongoDB concernant les données de parties
+Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données de parties
 
 ####        6B. [user](api/util/user)
-Ce dossier contients les fichiers qui traitent des interactions avec la base de données MongoDB concernant les données des utilisateurs
+Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des utilisateurs
+
+####        6C. [player](api/util/player)
+Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des joueurs
+
+####        6D. [word](api/util/word)
+Ce dossier contient les fichiers qui traitent des interactions avec la base de données [MongoDB](#1b-mongodb) concernant les données des mots
+
+####        6E. [general](api/util/general)
+Ce dossier contient les fichiers qui traitent des données en general et les filtre et modifies
+
+####        6F. [log.js](api/util/log.js)
+Ce fichier contient les fonctions qui traites, modifie et gère les interactions avec la base de donnée [MongoDB](#1b-mongodb) concernant les données de log
+
+####        6G. [check.js](api/util/check.js)
+Ce fichier contient la fonctions de test de validité des données 
+
+####        6H. [res.js](api/util/res.js)
+Ce fichier contient les fonctions de choix et mise en page des réponse
 
 ###     7. [models](api/models) / [modelV2](api/modelV2)
 Ces dossiers s'occupe de déclrer les modèles de données qui structurerons la base de données
