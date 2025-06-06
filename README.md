@@ -55,7 +55,7 @@ Ce fichier contient les fonctions qui ajoute l'informations de qu'elle route est
 ###     5. [controllers](api/controllers) 
 Ce dossiers contients les endpoints, les fonctions qui renvoirons la réponse aux clients
 
-####        5A. [game.js](api/controllers/game.js)
+    ####        5A. [game.js](api/controllers/game.js)
 Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant la partie est un succès
 
 ####        5B. [user.js](api/controllers/user.js)
