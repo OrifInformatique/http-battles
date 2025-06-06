@@ -106,7 +106,7 @@ Ce fichier contient les fonctions quitraites les données [utilisateurs](#7a1-us
 Ces fichiers contiennes les fonctions d'autentification. Plus précisement l'autentifications des [utilisateurs](#7a1-userjs) et dévellopeurs
 
 ####        4D. [check.js](api/middleware/check.js)
-Ce fichier contiens les fonctions de checks des données et de logs
+Ce fichier contiens les fonctions de checks des données et de [logs](#7a2-logjs)
 
 ####        4E. [routeParam.js](api/middleware/routeParam.js)
 Ce fichier contient les fonctions qui ajoute l'informations de qu'elle route est utilisée dans la requette
@@ -121,7 +121,7 @@ Ce fichier contient les endpoints qui envois la réponse au client si la requett
 Ce fichier contient les endpoints qui envois la réponse au client si la requette concernant l'[utilisateur](#7a1-userjs) est un succès
 
 ####        5C. [log.js](api/controllers/log.js)
-Ce fichier contient les endpoints qui envoit la réponse au client si la requette concernant les logs est un succès ou un echec
+Ce fichier contient les endpoints qui envoit la réponse au client si la requette concernant les [logs](#7a2-logjs) est un succès ou un echec
 
 ###     6. [util](api/util)
 Ce dossier contient différent fichiers utils entre autre ceux qui s'occupe de gérer les requètes envoyer à la base de données
@@ -178,7 +178,7 @@ Ce fichier contient les fonctions pour modifier les mots dans la base de donnée
 Ce dossier contient le fichier qui traite des données en general et les filtre et modifies
 
 ####        6F. [log.js](api/util/log.js)
-Ce fichier contient les fonctions qui traites, modifie et gère les interactions avec la base de donnée [MongoDB](#1b-mongodb) concernant les données de log
+Ce fichier contient les fonctions qui traites, modifie et gère les interactions avec la base de donnée [MongoDB](#1b-mongodb) concernant les données de [log](#7a2-logjs)
 
 ####        6G. [check.js](api/util/check.js)
 Ce fichier contient la fonctions de test de validité des données 
@@ -193,7 +193,7 @@ Ces dossiers s'occupe de déclrer les modèles de données qui structurerons la 
 Dossier contenant les modèles existant depuis le début du dévellopement de l'application et potenciellemnt des données très anciennes
 
 #####           7A1. [User.js](api/models/User.js)
-Ce fichier contient le Schema des [utilisateurs](#7a1-userjs) qui sera stoqué dans la base de donnée [MongoDB](#1b-mongodb)
+Ce fichier contient le Schema des utilisateurs qui sera stoqué dans la base de donnée [MongoDB](#1b-mongodb)
 
 #####           7A2. [Log.js](api/models/Log.js)
 Ce fichier contient le Schema des logs qui sera stoqué dans la base de donnée [MongoDB](#1b-mongodb)
