@@ -11,6 +11,8 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 1B1. [schemas](#1b1-schemas)
         - 1B2. [MongoDB Atlas](#1b2-mongodb-atlas)
 2.  [index.js et app.js](#2-indexjs-et-appjs)
+    -   2A. [index.js](#2a-indexjs)
+    -   2B. [app.js](#2b-appjs)
 3.  [routes](#3-routes)
     -   3A. [game.js](#3a-gamejs)
     -   3B. [user.js](#3b-userjs)
@@ -55,6 +57,12 @@ MongoDB Atlas est une plateform en lign qui propose un service nous permettant d
 
 ###     2. [index.js](api/index.js) et [app.js](api/app.js)
 Ces deux document sont le ceux qui crée le server et l'app [Express](#expressjs)
+
+####        2A. [index.js](api/index.js)
+Ce fichier est le document qui crée le server 
+
+####        2B. [app.js](api/app.js)
+Ce fichier est celui qui crée l'app [Express](#1a-expressjs)
 
 ###     3. [routes](api/routes)
 Ce dossier contient les routes par lesquel les requêtes passerons
