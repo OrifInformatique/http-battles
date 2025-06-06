@@ -31,6 +31,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     -   6A. [game](#6a-game)
         - 6A1. [create.js](#6a1-createjs)
         - 6A2. [find.js](#6a2-findjs)
+        - 6A3. [update.js](#6a3-updatejs)
     -   6B. [user](#6b-user)
     -   6C. [player](#6c-player)
     -   6D. [word](#6d-word)
