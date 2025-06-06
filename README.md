@@ -5,15 +5,15 @@ HTTP Battles - Jeu d'initiation au protocole HTTP
 Cette section à pour but d'expliquer la structure et le fonctionnement de l'API pour faciliter les interactions et future devellopement associer
 
 ### Index
-1. [Outils utilisé](#1-outils-utilisé)
+1.  [Outils utilisé](#1-outils-utilisé)
     -1A. [Express.js](#1a-expressjs)
     -1B. [MongoDB](#1b-mongodb)
-2. [index.js et app.js](#2-indexjs-et-appjs)
-3. [routes](#3-routes)
-4. [middlewares](#4-middlewares)
-5. [controllers](#5-controllers)
-6. [util](#6-util)
-7. [models / modelV2](#7-models--modelv2)
+2.  [index.js et app.js](#2-indexjs-et-appjs)
+3.  [routes](#3-routes)
+4.  [middlewares](#4-middlewares)
+5.  [controllers](#5-controllers)
+6.  [util](#6-util)
+7.  [models / modelV2](#7-models--modelv2)
 
 ###     1. Outils utilisé
 Cette section a pour bute de présenter et de donner une explication brêve des différent frameworks, librairie et module utilisé
