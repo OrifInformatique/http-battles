@@ -24,7 +24,17 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     - 5B. [user.js](#5b-userjs)
     - 5C. [log.js](#5c-logjs)
 6.  [util](#6-util)
+    - 6A. [game](#6a-game)
+    - 6B. [user](#6b-user)
+    - 6C. [player](#6c-player)
+    - 6D. [word](#6d-word)
+    - 6E. [general](#6e-general)
+    - 6F. [log.js](#6f-logjs)
+    - 6G. [check.js](#6g-checkjs)
+    - 6H. [log.js](#6f-logjs)
 7.  [models / modelV2](#7-models--modelv2)
+    - 7A. [models](#7a-models)
+    - 7B. [modelV2](#7b-modelv2)
 
 ###     1. Outils utilisé
 Cette section a pour bute de présenter et de donner une explication brêve des différent frameworks, librairie et module utilisé
