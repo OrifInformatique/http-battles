@@ -187,6 +187,69 @@ router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, chec
  router.post('/games/startGame', auth, check.dataInit, middleGame.startGameV2, check.logInit, check.dataValidity, gameCtrl.startGameV2)
 ```
 
+```
+/**
+ * test la phrase du client
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client
+ *      "gameId": "",       // id de la partie
+ *      "clientId": "",     // id du joueur
+ *      "targetId": "",     // id du joueur cible
+ *      "phrase": [         // phrase que le joueur test
+ *          {               // mot 1
+ *              "content": "",          // contenu du mot
+ *              "phrasePosition": "",​   // position dans la phrase (ex. "1")
+ *              "boardPosition": ""     // position sur le plateau
+ *          },
+ *          {               // mot 2
+ *              "content": "",
+ *              "phrasePosition": "",​
+ *              "boardPosition": ""
+ *          }
+ *      ]
+ *  }
+ * 
+  * "boardPosition" possible input:
+ *   - "Get A"
+ *   - "Get B"
+ *   - "Get C"
+ *   - "Get D"
+ * 
+ *   - "Post A"
+ *   - "Post B"
+ *   - "Post C"
+ *   - "Post D"
+ * 
+ * etc...
+ * 
+ * */ 
+router.all('/games/tryPhrase', auth, check.dataInit, middleGame.tryPhraseV2, check.logInit, check.dataValidity, gameCtrl.tryPhraseV2)
+```
+
+```
+/**
+ * test la case
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client
+ *      "gameId": "",       // id de la partie
+ *      "clientId": "",     // id du joueur
+ *      "targetId": ""      // id du joueur cible
+ *  }
+ * 
+ * */ 
+router.all('/games/tryA', auth, check.dataInit, routeParam.a, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
+
+router.all('/games/tryB', auth, check.dataInit, routeParam.b, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
+
+router.all('/games/tryC', auth, check.dataInit, routeParam.c, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
+
+router.all('/games/tryD', auth, check.dataInit, routeParam.d, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
+```
+
 ####        3B. [user.js](api/routes/user.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonctions [utilisateur](#7a1-userjs)
 
