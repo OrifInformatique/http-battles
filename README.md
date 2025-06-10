@@ -297,6 +297,45 @@ router.post('/user/signup', check.dataInit, middleUser.signup, check.logInit, ch
  * */ 
 router.post('/user/login', check.dataInit, middleUser.login, check.logInit, check.dataValidity, userCtrl.login)
 ```
+
+```
+/**
+ * retourne une liste des profils utilisateurs
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client (facultatif)
+ *      "email": "",        // email du nouvel utilisateur (facultatif)
+ *      "password": "",     // password du nouvel utilisateur (facultatif)
+ *      "firstName": "",    // prenom du nouvel utilisateur (facultatif) 
+ *      "lastname": "",     // nom du nouvel utilisateur (facultatif)
+ *      "username": ""      // username du nouvel utilisateur (facultatif)
+ *  }
+ * 
+ * */ 
+router.get('/user/findUsers', modAut, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
+```
+
+```
+/**
+ * update un profil utilisateur
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client 
+ *      "email": "",        // nouvelle email de l'utilisateur (facultatif)
+ *      "password": "",     // password de l'utilisateur 
+ *      "update": {
+ *          "password": ""  // nouveaux password de l'utilisateur 
+ *      },
+ *      "firstName": "",    // nouveau prenom de l'utilisateur (facultatif) 
+ *      "lastname": "",     // nouveau nom de l'utilisateur (facultatif)
+ *      "username": ""      // nouveau username de l'utilisateur (facultatif)
+ *  }
+ * 
+ * */ 
+// update un profil utilisateur
+router.put('/user/updateUser', auth, check.dataInit, middleUser.updateUser, check.logInit, check.dataValidity, userCtrl.updateUser)
+```
 ####        3C. [log.js ](api/routes/log.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonction de log
 
