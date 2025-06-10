@@ -250,6 +250,19 @@ router.all('/games/tryC', auth, check.dataInit, routeParam.c, middleGame.tryCase
 router.all('/games/tryD', auth, check.dataInit, routeParam.d, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
 ```
 
+```
+/**
+ * términe la partie
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client
+ *      "gameId": ""       // id de la partie
+ *  }
+ * 
+ * */ 
+router.all('/games/endGame', auth, check.dataInit, middleGame.endGameV2, check.logInit, check.dataValidity, gameCtrl.endGameV2)
+```
 ####        3B. [user.js](api/routes/user.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonctions [utilisateur](#7a1-userjs)
 

@@ -107,7 +107,16 @@ router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, chec
  * */ 
 router.post('/games/startGame', auth, check.dataInit, middleGame.startGameV2, check.logInit, check.dataValidity, gameCtrl.startGameV2)
 
-// términe la partie
+/**
+ * términe la partie
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client
+ *      "gameId": ""       // id de la partie
+ *  }
+ * 
+ * */ 
 router.all('/games/endGame', auth, check.dataInit, middleGame.endGameV2, check.logInit, check.dataValidity, gameCtrl.endGameV2)
 
 /**
@@ -161,7 +170,6 @@ router.all('/games/tryPhrase', auth, check.dataInit, middleGame.tryPhraseV2, che
  *  }
  * 
  * */ 
-
 router.all('/games/tryA', auth, check.dataInit, routeParam.a, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
 
 router.all('/games/tryB', auth, check.dataInit, routeParam.b, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
