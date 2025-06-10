@@ -27,8 +27,51 @@ function Mylistitem({i, value, setPhrase, phrase, tech}) {
                     newPhrase[2][i-1].word.position[1] = value
                 break;
             }
+            
+            setPhrase(newPhrase)
+
+            switch (newPhrase[2][i-1].word.position[0]) {
+                case "/alpha":
+                    newPhrase[2][i-1].word.position[0] = "A";
+                    setPhrase(newPhrase)
+                break;
+                case "/beta":
+                    newPhrase[2][i-1].word.position[0] = "B";
+                    setPhrase(newPhrase)
+                break;
+                case "/gamma":
+                    newPhrase[2][i-1].word.position[0] = "C";
+                    setPhrase(newPhrase)
+                break;
+                case "/delta":
+                    newPhrase[2][i-1].word.position[0] = "D";
+                    setPhrase(newPhrase)
+                break;
+            }
 
             setPhrase(newPhrase)
+
+            switch (newPhrase[2][i-1].word.position[1]) {
+                case "GET":
+                    newPhrase[2][i-1].word.position[1] = "A";
+                    setPhrase(newPhrase)
+                break;
+                case "POST":
+                    newPhrase[2][i-1].word.position[1] = "B";
+                    setPhrase(newPhrase)
+                break;
+                case "PUT":
+                    newPhrase[2][i-1].word.position[1] = "C";
+                    setPhrase(newPhrase)
+                break;
+                case "DELETE":
+                    newPhrase[2][i-1].word.position[1] = "D";
+                    setPhrase(newPhrase)
+                break;
+            }
+            
+            setPhrase(newPhrase)
+            console.log(phrase, "ARRAY")
     };
 
     return  (<>
@@ -181,7 +224,27 @@ const { auth } = useContext(AuthContext);
             console.log("echec res", error)
         })
     }, []);
-    
+
+    /*
+    useEffect(() => {
+        axios.post("http://localhost:3000/api/games/findgames", {
+            userId: auth.userId
+        }, {
+            headers: { 
+            Authorization: `Bearer ${auth.token}`,
+            "Content-type": "application/json"
+        },
+            }
+        )
+        .then(res=> {
+            console.log("succes res", res.data[0].username)
+            setHostUsername(res.data[0].username)
+        })
+        .catch(error => {
+            console.log("echec res", error)
+        })
+    }, []);
+
 /*
     useEffect(() => {
         axios.post("http://localhost:3000/api/user/findusers", {
@@ -236,8 +299,7 @@ const { auth } = useContext(AuthContext);
 
             <form id="myForm" onSubmit={(e) => {
                 e.preventDefault(), 
-                setIsSubmitted(2),
-                console.log("a")
+                setIsSubmitted(2)
                 }}>
                 <Slider position={position} setPhrase={setPhrase} phrase={phrase}/>
             </form>

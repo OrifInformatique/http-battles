@@ -25,8 +25,8 @@ function LaunchPage() {
     let gameId = useState(0);
     let i = 0;
 
-/*     Changements d'états    
-
+/*     
+    Changements d'états    
 */
 
 
@@ -45,8 +45,10 @@ function LaunchPage() {
         
                         "content": dynamicVal[0][0], 
         
-                        "position": [staticVal1[0], staticVal2[0]] 
-        
+                        "position": [staticVal1[0], staticVal2[0]] ,
+
+                        "phrasePosition": "1"
+                        
                     } 
         
                 }, 
@@ -57,7 +59,9 @@ function LaunchPage() {
         
                         "content": dynamicVal[1][0], 
         
-                        "position": [staticVal1[0], staticVal2[0]] 
+                        "position": [staticVal1[0], staticVal2[0]] ,
+
+                        "phrasePosition": "2"
         
                     } 
         
@@ -69,7 +73,9 @@ function LaunchPage() {
         
                         "content":  dynamicVal[2][0], 
         
-                        "position": [staticVal1[0], staticVal2[0]] 
+                        "position": [staticVal1[0], staticVal2[0]] ,
+
+                        "phrasePosition": "3"
         
                     } 
         
@@ -81,7 +87,9 @@ function LaunchPage() {
         
                         "content": dynamicVal[3][0], 
         
-                        "position": [staticVal1[0], staticVal2[0]] 
+                        "position": [staticVal1[0], staticVal2[0]] ,
+
+                        "phrasePosition": "4"
         
                     } 
             
@@ -93,7 +101,9 @@ function LaunchPage() {
         
                         "content": dynamicVal[4][0], 
         
-                        "position": [staticVal1[0], staticVal2[0]] 
+                        "position": [staticVal1[0], staticVal2[0]] ,
+
+                        "phrasePosition": "5"
         
                     } 
         
@@ -102,6 +112,7 @@ function LaunchPage() {
             ] 
     ])
     
+
     const [isSubmitted, setIsSubmitted] = useState(1);
 
     switch(isSubmitted) { 
