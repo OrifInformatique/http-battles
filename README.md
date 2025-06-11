@@ -26,6 +26,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 3A7 [api/games/endGame](#3a7-apigamesendgame)
         - 3A8. [api/games/testAll](#3a8-apigamestestall)
     -   3B. [user.js](#3b-userjs)
+        - 3B1. [api/user/signup](#3b1-apiusersignup)
     -   3C. [log.js](#3c-logjs)
 4.  [middlewares](#4-middlewares)
     -   4A. [game.js](#4a-gamejs)
@@ -288,6 +289,7 @@ router.post('/games/testAll', modAut, check.dataInit, middleGame.testAll, check.
 ####        3B. [user.js](api/routes/user.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonctions [utilisateur](#7a1-userjs)
 
+#####           3B1. [api/user/signup](https://github.com/OrifInformatique/http-battles/blob/701e01c3b61583789ab5c88f29f2529e07064d90/api/routes/user.js#L42)
 ```
 /**
  * redirige la requette post de création utilisateur
