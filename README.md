@@ -17,6 +17,8 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     -   2B. [app.js](#2b-appjs)
 3.  [routes](#3-routes)
     -   3A. [game.js](#3a-gamejs)
+        - 3A1 [api/games/createGame](#3a1-apigamescreategame)
+        - 3A2 [api/games/findGames](#3a2-apigamesfindgames)
     -   3B. [user.js](#3b-userjs)
     -   3C. [log.js](#3c-logjs)
 4.  [middlewares](#4-middlewares)
@@ -110,7 +112,7 @@ Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite
  * */ 
 router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)
 ```
-
+#####           3A2. [api/games/findGames](https://github.com/OrifInformatique/http-battles/blob/494dbeabaa7dbfba593df29bed8557d617873c3e/api/routes/game.js#L58)
 ```
 /**
  * trouve une partie selon la clefs
