@@ -31,6 +31,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 3B3. [api/user/findUsers](#3b3-apiuserfindusers)
         - 3B4. [api/user/updateUser](#3b4-apiuserupdateuser)
     -   3C. [log.js](#3c-logjs)
+        - 3C1. [api/log/listLog](#3c1-apiloglistlog)
 4.  [middlewares](#4-middlewares)
     -   4A. [game.js](#4a-gamejs)
     -   4B. [user.js](#4b-userjs)
@@ -367,6 +368,38 @@ router.put('/user/updateUser', auth, check.dataInit, middleUser.updateUser, chec
 ####        3C. [log.js ](api/routes/log.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonction de log
 
+#####           3C1. [api/log/listLog](https://github.com/OrifInformatique/http-battles/blob/06846a1be4ae02b6d486bd801e3a387ceb073bff/api/routes/log.js#L39)
+```
+/**
+ * recupère la liste des logs suivant les informations fourni par le client
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": "",       // id du client
+ *      "_id": "",          // id du log (facultatif)
+ *      "user": {           // contient les informations sur le client dont on veut les logs (facultatif)
+ *                  ...
+ *              },          
+ *      "game": {           // contient les informations sur la partie dont on veut les logs (facultatif)
+ *                  ...
+ *              }, 
+ *      "year": "",         // année du log (facultatif)
+ *      "month": "",        // mois du log (facultatif)
+ *      "day": "",          // jours du log (facultatif)
+ *      "hour": "",         // heur du log (facultatif)
+ *      "minute": "",       // minute du log (facultatif)
+ *      "data": {           // contient les informations sur les données du log que l'ont désire récupéré (facultatif) renvoit toute les données si vide et aucune si non inclus
+ *                  "name": "Player.find",                                      // nom de la donnée (facultatif)
+ *                  "loc": "file: ../util/player/find methode: findPlayer",​     // localisation de la données (facultatif)
+ *                  "value":    {                                               // contient les informations sur les valeurs contenue dans la données que l'on désire (facultatif) renvoit toute les valeurs si vide et aucune si non inclus. Ne fonctionne que avec 1 degré d'abstractions
+ *                                  ...
+ *                              }
+ *              }
+ *  }
+ * 
+ * */ 
+router.post('/log/listLog', modAut, logCtrl.listLogs)
+```
 ###     4. [middlewares](api/middleware)
 Ce fichier contient les fonctions et fichiers qui traiterons les données
 
