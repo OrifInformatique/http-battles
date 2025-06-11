@@ -24,6 +24,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 3A5 [api/games/tryPhrase](#3a5-apigamestryphrase)
         - 3A6 [api/games/try...](#3a6-apigamestry)
         - 3A7 [api/games/endGame](#3a7-apigamesendgame)
+        - 3A8. [api/games/testAll](#3a8-apigamestestall)
     -   3B. [user.js](#3b-userjs)
     -   3C. [log.js](#3c-logjs)
 4.  [middlewares](#4-middlewares)
@@ -271,7 +272,7 @@ router.all('/games/tryD', auth, check.dataInit, routeParam.d, middleGame.tryCase
  * */ 
 router.all('/games/endGame', auth, check.dataInit, middleGame.endGameV2, check.logInit, check.dataValidity, gameCtrl.endGameV2)
 ```
-#####           3A8. [api/games/testAll]()
+#####           3A8. [api/games/testAll](https://github.com/OrifInformatique/http-battles/blob/67b244a072bf3c72eb36090eaaaa3dfecb0974c4/api/routes/game.js#L35)
 ```
 /**
  * teste toute les routes games
