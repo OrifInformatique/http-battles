@@ -111,7 +111,7 @@ Ce dossier contient les routes par lesquel les requêtes passerons
 ####        3A. [game.js](api/routes/game.js)
 Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite des [parties](#7b1-gamev2js)
 
-#####           3A1. [api/games/createGame](https://github.com/OrifInformatique/http-battles/blob/ebf485631833e50e71c32a8ce670de7637c85ce4/api/routes/game.js#L37)
+#####           3A1. [api/games/createGame](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L46)
 ```
 /**
  * créé une partie pour cette utilisateur
@@ -124,7 +124,7 @@ Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite
  * */ 
 router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)
 ```
-#####           3A2. [api/games/findGames](https://github.com/OrifInformatique/http-battles/blob/494dbeabaa7dbfba593df29bed8557d617873c3e/api/routes/game.js#L58)
+#####           3A2. [api/games/findGames](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L67)
 ```
 /**
  * trouve une partie selon la clefs
@@ -147,7 +147,7 @@ router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, 
  * */ 
 router.post('/games/findGames', auth, check.dataInit, middleGame.findGamesV2, check.logInit, check.dataValidity, gameCtrl.findGamesV2)
 ```
-#####           3A3. [api/games/joinGame](https://github.com/OrifInformatique/http-battles/blob/494dbeabaa7dbfba593df29bed8557d617873c3e/api/routes/game.js#L70)
+#####           3A3. [api/games/joinGame](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L79)
 ```
 /**
  * permet à un utilisateur de rejoindre une partie
@@ -161,7 +161,7 @@ router.post('/games/findGames', auth, check.dataInit, middleGame.findGamesV2, ch
  * */ 
 router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, check.logInit, check.dataValidity, gameCtrl.joinGameV2)
 ```
-#####           3A4. [api/games/startGame](https://github.com/OrifInformatique/http-battles/blob/494dbeabaa7dbfba593df29bed8557d617873c3e/api/routes/game.js#L108)
+#####           3A4. [api/games/startGame](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L117)
 ```
 /**
  * commence la partie
@@ -201,7 +201,7 @@ router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, chec
  * */ 
  router.post('/games/startGame', auth, check.dataInit, middleGame.startGameV2, check.logInit, check.dataValidity, gameCtrl.startGameV2)
 ```
-#####           3A5. [api/games/tryPhrase](https://github.com/OrifInformatique/http-battles/blob/494dbeabaa7dbfba593df29bed8557d617873c3e/api/routes/game.js#L159)
+#####           3A5. [api/games/tryPhrase](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L168)
 ```
 /**
  * test la phrase du client
@@ -242,7 +242,7 @@ router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, chec
  * */ 
 router.all('/games/tryPhrase', auth, check.dataInit, middleGame.tryPhraseV2, check.logInit, check.dataValidity, gameCtrl.tryPhraseV2)
 ```
-#####           3A6. [api/games/try...](https://github.com/OrifInformatique/http-battles/blob/494dbeabaa7dbfba593df29bed8557d617873c3e/api/routes/game.js#L173)
+#####           3A6. [api/games/try...](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L182)
 ```
 /**
  * test la case
@@ -264,7 +264,7 @@ router.all('/games/tryC', routeParam.getParams, auth, check.dataInit, routeParam
 
 router.all('/games/tryD', routeParam.getParams, auth, check.dataInit, routeParam.d, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
 ```
-#####           3A7. [api/games/endGame](https://github.com/OrifInformatique/http-battles/blob/494dbeabaa7dbfba593df29bed8557d617873c3e/api/routes/game.js#L120)
+#####           3A7. [api/games/endGame](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L129)
 ```
 /**
  * términe la partie
@@ -278,7 +278,7 @@ router.all('/games/tryD', routeParam.getParams, auth, check.dataInit, routeParam
  * */ 
 router.all('/games/endGame', auth, check.dataInit, middleGame.endGameV2, check.logInit, check.dataValidity, gameCtrl.endGameV2)
 ```
-#####           3A8. [api/games/testAll](https://github.com/OrifInformatique/http-battles/blob/67b244a072bf3c72eb36090eaaaa3dfecb0974c4/api/routes/game.js#L35)
+#####           3A8. [api/games/testAll](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L35)
 ```
 /**
  * teste toute les routes games
