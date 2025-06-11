@@ -29,6 +29,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 3B1. [api/user/signup](#3b1-apiusersignup)
         - 3B2. [api/user/login](#3b2-apiuserlogin)
         - 3B3. [api/user/findUsers](#3b3-apiuserfindusers)
+        - 3B4. [api/user/updateUser](#3b4-apiuserupdateuser)
     -   3C. [log.js](#3c-logjs)
 4.  [middlewares](#4-middlewares)
     -   4A. [game.js](#4a-gamejs)
@@ -342,7 +343,7 @@ router.post('/user/login', check.dataInit, middleUser.login, check.logInit, chec
  * */ 
 router.get('/user/findUsers', modAut, check.dataInit, middleUser.findUser, check.logInit, check.dataValidity, userCtrl.findUser)
 ```
-
+#####           3B4. [api/user/updateUser](https://github.com/OrifInformatique/http-battles/blob/701e01c3b61583789ab5c88f29f2529e07064d90/api/routes/user.js#L90)
 ```
 /**
  * update un profil utilisateur
@@ -352,7 +353,7 @@ router.get('/user/findUsers', modAut, check.dataInit, middleUser.findUser, check
  *      "email": "",        // nouvelle email de l'utilisateur (facultatif)
  *      "password": "",     // password de l'utilisateur 
  *      "update": {
- *          "password": ""  // nouveaux password de l'utilisateur 
+ *          "password": ""  // nouveaux password de l'utilisateur (facultatif)
  *      },
  *      "firstName": "",    // nouveau prenom de l'utilisateur (facultatif) 
  *      "lastname": "",     // nouveau nom de l'utilisateur (facultatif)
