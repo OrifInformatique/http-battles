@@ -27,6 +27,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 3A8. [api/games/testAll](#3a8-apigamestestall)
     -   3B. [user.js](#3b-userjs)
         - 3B1. [api/user/signup](#3b1-apiusersignup)
+        - 3B2. [api/user/login](#3b2-apiuserlogin)
     -   3C. [log.js](#3c-logjs)
 4.  [middlewares](#4-middlewares)
     -   4A. [game.js](#4a-gamejs)
@@ -307,6 +308,7 @@ Ce fichier contient les routes qui permettent d'accèder aux fonctions [utilisat
  * */ 
 router.post('/user/signup', check.dataInit, middleUser.signup, check.logInit, check.dataValidity, userCtrl.signup)
 ```
+#####           3B2. [api/user/login](https://github.com/OrifInformatique/http-battles/blob/701e01c3b61583789ab5c88f29f2529e07064d90/api/routes/user.js#L55)
 ```
 /**
  * redirige la requet post de connexion utilisateur
