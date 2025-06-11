@@ -23,6 +23,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 3A4 [api/games/startGame](#3a4-apigamesstartgame)
         - 3A5 [api/games/tryPhrase](#3a5-apigamestryphrase)
         - 3A6 [api/games/try...](#3a6-apigamestry)
+        - 3A7 [api/games/endGame](#3a7-apigamesendgame)
     -   3B. [user.js](#3b-userjs)
     -   3C. [log.js](#3c-logjs)
 4.  [middlewares](#4-middlewares)
@@ -167,7 +168,7 @@ router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, chec
  *          {               // mot 1
  *              "content": "",          // contenu du mot
  *              "phrasePosition": "",​   // position dans la phrase (ex. "1")
- *              "boardPosition": ""     // position sur le plateau (facultatif)
+ *              "boardPosition": ""     // position sur le plateau 
  *          },
  *          {               // mot 2
  *              "content": "",
@@ -208,7 +209,7 @@ router.post('/games/joinGame', auth, check.dataInit, middleGame.joinGameV2, chec
  *          {               // mot 1
  *              "content": "",          // contenu du mot
  *              "phrasePosition": "",​   // position dans la phrase (ex. "1")
- *              "boardPosition": ""     // position sur le plateau 
+ *              "boardPosition": ""     // position sur le plateau (facultatif)
  *          },
  *          {               // mot 2
  *              "content": "",
@@ -256,7 +257,7 @@ router.all('/games/tryC', auth, check.dataInit, routeParam.c, middleGame.tryCase
 
 router.all('/games/tryD', auth, check.dataInit, routeParam.d, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
 ```
-
+#####           3A7. [api/games/endGame](https://github.com/OrifInformatique/http-battles/blob/494dbeabaa7dbfba593df29bed8557d617873c3e/api/routes/game.js#L120)
 ```
 /**
  * términe la partie
