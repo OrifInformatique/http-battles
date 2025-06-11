@@ -97,7 +97,7 @@ Ce dossier contient les routes par lesquel les requêtes passerons
 ####        3A. [game.js](api/routes/game.js)
 Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite des [parties](#7b1-gamev2js)
 
-#####           3A1. [api/games/createGame](https://github.com/OrifInformatique/http-battles/blob/ebf485631833e50e71c32a8ce670de7637c85ce4/api/routes/game.js#L37)
+#####           3A1. [api/games/createGame](https://github.com/OrifInformatique/http-battles/api/routes/game.js#L37)
 ```
 /**
  * créé une partie pour cette utilisateur
