@@ -271,6 +271,19 @@ router.all('/games/tryD', auth, check.dataInit, routeParam.d, middleGame.tryCase
  * */ 
 router.all('/games/endGame', auth, check.dataInit, middleGame.endGameV2, check.logInit, check.dataValidity, gameCtrl.endGameV2)
 ```
+#####           3A8. [api/games/testAll]()
+```
+/**
+ * teste toute les routes games
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": ""       // id du client
+ *  }
+ * 
+ * */ 
+router.post('/games/testAll', modAut, check.dataInit, middleGame.testAll, check.logInit, check.dataValidity, gameCtrl.testAll)
+```
 ####        3B. [user.js](api/routes/user.js)
 Ce fichier contient les routes qui permettent d'accèder aux fonctions [utilisateur](#7a1-userjs)
 

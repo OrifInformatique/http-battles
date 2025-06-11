@@ -23,7 +23,16 @@ const check = require('../middleware/check')
 
 const middleGame = require('../middleware/game')
 
-router.all('/games/testAll', modAut, check.dataInit, middleGame.testAll, check.logInit, check.dataValidity, gameCtrl.testAll)
+/**
+ * teste toute les routes games
+ * 
+ * forme de la requette :
+ *  {
+ *      "userId": ""       // id du client
+ *  }
+ * 
+ * */ 
+router.post('/games/testAll', modAut, check.dataInit, middleGame.testAll, check.logInit, check.dataValidity, gameCtrl.testAll)
 
 /**
  * créé une partie pour cette utilisateur
