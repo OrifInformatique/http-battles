@@ -179,13 +179,13 @@ router.all('/games/tryPhrase', auth, check.dataInit, middleGame.tryPhraseV2, che
  *  }
  * 
  * */ 
-router.all('/games/tryA', auth, check.dataInit, routeParam.a, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
+router.all('/games/tryA', routeParam.getParams, auth, check.dataInit, routeParam.a, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
 
-router.all('/games/tryB', auth, check.dataInit, routeParam.b, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
+router.all('/games/tryB', routeParam.getParams, auth, check.dataInit, routeParam.b, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
 
-router.all('/games/tryC', auth, check.dataInit, routeParam.c, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
+router.all('/games/tryC', routeParam.getParams, auth, check.dataInit, routeParam.c, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
 
-router.all('/games/tryD', auth, check.dataInit, routeParam.d, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
+router.all('/games/tryD', routeParam.getParams, auth, check.dataInit, routeParam.d, middleGame.tryCaseV2, check.logInit, check.dataValidity,  gameCtrl.tryCaseV2)
 
 
 // export le router

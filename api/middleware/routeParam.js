@@ -71,3 +71,19 @@ exports.d = (req, res, next) => {
     }
 
 }
+
+exports.getParams = (req, res, next) => {
+    const LOC_LOC = "methode: getParams"
+    
+    if(req.query !== undefined){
+        for(const i in req.query){
+
+            req.body[i] = req.query[i]
+        }
+        next()
+    } else {
+        // renvoie le status de l'erreur
+        res.status(400).json({ error })
+    }
+
+}
