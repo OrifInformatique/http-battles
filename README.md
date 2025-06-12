@@ -17,13 +17,14 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     -   2B. [app.js](#2b-appjs)
 3.  [routes](#3-routes)
     -   3A. [game.js](#3a-gamejs)
-        - 3A1 [api/games/createGame](#3a1-apigamescreategame)
-        - 3A2 [api/games/findGames](#3a2-apigamesfindgames)
-        - 3A3 [api/games/joinGame](#3a3-apigamesjoingame)
-        - 3A4 [api/games/startGame](#3a4-apigamesstartgame)
-        - 3A5 [api/games/tryPhrase](#3a5-apigamestryphrase)
-        - 3A6 [api/games/try...](#3a6-apigamestry)
-        - 3A7 [api/games/endGame](#3a7-apigamesendgame)
+        - 3A1. [api/games/createGame](#3a1-apigamescreategame)
+            - 3A1a. [auth](#3a1a-auth)
+        - 3A2. [api/games/findGames](#3a2-apigamesfindgames)
+        - 3A3. [api/games/joinGame](#3a3-apigamesjoingame)
+        - 3A4. [api/games/startGame](#3a4-apigamesstartgame)
+        - 3A5. [api/games/tryPhrase](#3a5-apigamestryphrase)
+        - 3A6. [api/games/try...](#3a6-apigamestry)
+        - 3A7. [api/games/endGame](#3a7-apigamesendgame)
         - 3A8. [api/games/testAll](#3a8-apigamestestall)
     -   3B. [user.js](#3b-userjs)
         - 3B1. [api/user/signup](#3b1-apiusersignup)
@@ -37,6 +38,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     -   4A. [game.js](#4a-gamejs)
     -   4B. [user.js](#4b-userjs)
     -   4C. [auth.js et modAuth.js](#4c-authjs-et-modauthjs)
+        - 4C1. [auth.js](#4c1-authjs)
     -   4D. [check.js](#4d-checkjs)
     -   4E. [routeParam.js](#4e-routeparamjs)
 5.  [controllers](#5-controllers)
@@ -124,6 +126,10 @@ Ce fichier contient les routes qui permettent d'acceder aux fonctions qui traite
  * */ 
 router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, check.logInit, check.dataValidity, gameCtrl.createGameV2)
 ```
+######              3A1a. [auth](#4c1-authjs)
+Middleware d'authorisation
+
+######              3A1b. [check.dataInit]
 #####           3A2. [api/games/findGames](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L67)
 ```
 /**
@@ -444,6 +450,9 @@ Ce fichier contient les fonctions quitraites les données [utilisateurs](#7a1-us
 
 ####        4C. [auth.js](api/middleware/auth.js) et [modAuth.js](api/middleware/modAut.js)
 Ces fichiers contiennes les fonctions d'autentification. Plus précisement l'autentifications des [utilisateurs](#7a1-userjs) et dévellopeurs
+
+#####           4C1. [auth.js](api/middleware/auth.js)
+Fichier principal d'authorisation qui traites des requette utilisateur avec un pass pour les requette devlopper
 
 ####        4D. [check.js](api/middleware/check.js)
 Ce fichier contiens les fonctions de checks des données et de [logs](#7a2-logjs)
