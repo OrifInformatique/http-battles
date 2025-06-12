@@ -19,6 +19,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     -   3A. [game.js](#3a-gamejs)
         - 3A1. [api/games/createGame](#3a1-apigamescreategame)
             - 3A1a. [auth](#3a1a-auth)
+            - 3A1b. [check.dataInit](#3a1b-checkdatainit)
         - 3A2. [api/games/findGames](#3a2-apigamesfindgames)
         - 3A3. [api/games/joinGame](#3a3-apigamesjoingame)
         - 3A4. [api/games/startGame](#3a4-apigamesstartgame)
@@ -40,6 +41,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
     -   4C. [auth.js et modAuth.js](#4c-authjs-et-modauthjs)
         - 4C1. [auth.js](#4c1-authjs)
     -   4D. [check.js](#4d-checkjs)
+        - 4D1. [dataInit()](#4d1-datainit)
     -   4E. [routeParam.js](#4e-routeparamjs)
 5.  [controllers](#5-controllers)
     -   5A. [game.js](#5a-gamejs)
@@ -129,7 +131,9 @@ router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, 
 ######              3A1a. [auth](#4c1-authjs)
 Middleware d'authorisation
 
-######              3A1b. [check.dataInit]
+######              3A1b. [check.dataInit](#4d1-datainit)
+Fonction d'initialisation de la list des données de [log](#7a2-logjs) à récupérer
+
 #####           3A2. [api/games/findGames](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L67)
 ```
 /**
@@ -456,6 +460,9 @@ Fichier principal d'authorisation qui traites des requette utilisateur avec un p
 
 ####        4D. [check.js](api/middleware/check.js)
 Ce fichier contiens les fonctions de checks des données et de [logs](#7a2-logjs)
+
+#####           4D1. [dataInit()](https://github.com/OrifInformatique/http-battles/blob/8f04cff4c180e1eec1422167862b21a09bb500c8/api/middleware/check.js#L55)
+Fonction d'initialisation de la list des données de log à récupérer
 
 ####        4E. [routeParam.js](api/middleware/routeParam.js)
 Ce fichier contient les fonctions qui ajoute l'informations de qu'elle route est utilisée dans la requette
