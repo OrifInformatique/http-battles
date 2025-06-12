@@ -20,6 +20,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 3A1. [api/games/createGame](#3a1-apigamescreategame)
             - 3A1a. [auth](#3a1a-auth)
             - 3A1b. [check.dataInit](#3a1b-checkdatainit)
+            - 3A1c. [createGameV2](#3a1c-middlegamecreategamev2)
         - 3A2. [api/games/findGames](#3a2-apigamesfindgames)
         - 3A3. [api/games/joinGame](#3a3-apigamesjoingame)
         - 3A4. [api/games/startGame](#3a4-apigamesstartgame)
@@ -37,6 +38,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 3C2. [api/log/listLogV3](#3c2-apiloglistlogsv3)
 4.  [middlewares](#4-middlewares)
     -   4A. [game.js](#4a-gamejs)
+        - 4A1. [createGameV2](#4a1-creategamev2)
     -   4B. [user.js](#4b-userjs)
     -   4C. [auth.js et modAuth.js](#4c-authjs-et-modauthjs)
         - 4C1. [auth.js](#4c1-authjs)
@@ -132,7 +134,10 @@ router.post('/games/createGame', auth, check.dataInit, middleGame.createGameV2, 
 Middleware d'authorisation
 
 ######              3A1b. [check.dataInit](#4d1-datainit)
-Fonction d'initialisation de la list des données de [log](#7a2-logjs) à récupérer
+Middleware d'initialisation de la list des données de [log](#7a2-logjs) à récupérer
+
+######              3A1c. [middleGame.createGameV2](#4a1-creategamev2)
+Middleware de création de partie
 
 #####           3A2. [api/games/findGames](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L67)
 ```
@@ -448,6 +453,9 @@ Ce fichier contient les fonctions et fichiers qui traiterons les données
 
 ####        4A. [game.js](api/middleware/game.js)
 Ce fichier contient les fonctions qui traites les données de [parties](#7b1-gamev2js)
+
+#####           4A1. [createGameV2](https://github.com/OrifInformatique/http-battles/blob/880af3174450e31377a159cba9c7fa7f28025626/api/middleware/game.js#L509C9-L509C22)
+Middleware de création de partie
 
 ####        4B. [user.js](api/middleware/user.js)
 Ce fichier contient les fonctions quitraites les données [utilisateurs](#7a1-userjs)
