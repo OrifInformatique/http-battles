@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {default as axios} from 'axios';
+import axios from 'axios';
 import { AuthContext } from "../../../contexts/auth.js";
 // import axios from 'axios';
 import '../../general.css';
@@ -169,9 +169,12 @@ const [position, setPosition] = useState(1)
 const TOTAL_SLIDES = 5;
 let arrowd = null;
 let i = null;
-
+console.log("initialisation")
 const { auth } = useContext(AuthContext);
-    
+
+    const [hostUsername, setHostUsername] = useState('Patmas3838');
+    const [opponentUsername, setOpponentUsername] = useState('aaa');
+    const [creatorId, setCreatorId] = useState('');
 
 //   Enlever la flèche lorsque on est sur le 1er ou dernier élément.
     function handleChangeArrowLeft() {
@@ -201,9 +204,6 @@ const { auth } = useContext(AuthContext);
 
     }
     
-    const [hostUsername, setHostUsername] = useState('Patmas3838');
-    const [opponentUsername, setOpponentUsername] = useState('aaa');
-
 //  requêtes vers API
 
     useEffect(() => {
@@ -217,7 +217,7 @@ const { auth } = useContext(AuthContext);
             }
         )
         .then(res=> {
-            console.log("succes res", res.data[0].username)
+            console.log("succes res")
             setHostUsername(res.data[0].username)
         })
         .catch(error => {
@@ -225,25 +225,46 @@ const { auth } = useContext(AuthContext);
         })
     }, []);
 
-    /*
+    
+
     useEffect(() => {
         axios.post("http://localhost:3000/api/games/findgames", {
-            userId: auth.userId
+            userId: auth.userId,
+            gameStatus: "PLAYING"
         }, {
             headers: { 
             Authorization: `Bearer ${auth.token}`,
-            "Content-type": "application/json"
+            "Content-type": "application/json",
+            "Accept": "*/*",
+            "Accept-Encoding":"gzip, deflate, br",
+            "Connection": "keep-alive"
         },
             }
         )
         .then(res=> {
-            console.log("succes res", res.data[0].username)
-            setHostUsername(res.data[0].username)
+            console.log(res,"2222")
+            console.log("succes res", res.data[0].game.creatorId),
+            setCreatorId(res.data[0].game.creatorId)
+            let test =  res.data[0].players.find((player) => {
+                return player.player.userId === res.data[0].game.creatorId
+            })
+            console.log(test,"test")
         })
         .catch(error => {
             console.log("echec res", error)
         })
+
+        console.log(auth.token)
+       
+
     }, []);
+
+    if (creatorId === "67a4c9208dbb3ff2526fed16") {
+            console.log("CreatorsayNothing")
+        }
+    console.log(creatorId, "Creator ID 4564")
+    
+    
 
 /*
     useEffect(() => {
@@ -267,7 +288,6 @@ const { auth } = useContext(AuthContext);
 */
     return(<> 
         <div className="initInitialisationContainer">
-
             <p className="initLayoutText1 initLayoutText">Hébergeur</p>
             <img className="initLayout1" src="assets/images/element/CC0/layouts/blue_layout.png" alt="sword" />
             <div className="hostTextContainer">
