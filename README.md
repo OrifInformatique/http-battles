@@ -44,6 +44,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
         - 4C1. [auth.js](#4c1-authjs)
     -   4D. [check.js](#4d-checkjs)
         - 4D1. [dataInit()](#4d1-datainit)
+        - 4D2. [logInit()](#4d2-loginit)
     -   4E. [routeParam.js](#4e-routeparamjs)
 5.  [controllers](#5-controllers)
     -   5A. [game.js](#5a-gamejs)
@@ -474,7 +475,7 @@ Ce fichier contiens les fonctions de checks des données et de [logs](#7a2-logjs
 #####           4D1. [dataInit()](https://github.com/OrifInformatique/http-battles/blob/4857f052d0ea9817b0fc475dd4b8cbd03e45e51c/api/middleware/check.js#L60)
 Fonction d'initialisation de la list des données de log à récupérer
 
-#####           4D2. [logInit()]()
+#####           4D2. [logInit()](https://github.com/OrifInformatique/http-battles/blob/5179bbac2b166c6a59e58f365a815fb37ec2fb4d/api/middleware/check.js#L60)
 Fonction d'initialisation des logs
 
 ####        4E. [routeParam.js](api/middleware/routeParam.js)
