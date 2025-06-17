@@ -51,7 +51,12 @@ exports.dataValidity = async (req, res, next) => {
     }
 }
 
-// initialise les données et le log pour pouvoire les tester
+/**
+ * initialise les données et le log pour pouvoire les tester
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 exports.dataInit = async (req, res, next) => {
     // informe dans quel méthodes les potentielles erreurs interne se trouve
     const LOC_LOC = "methode: dataInit"
