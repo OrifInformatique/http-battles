@@ -4,9 +4,13 @@ const jwt = require('jsonwebtoken');
 const path = require('path')
 const dotenv = require('dotenv').config({ path: path.resolve(__dirname, 'env/.env') })
 
-// export le module
+/**
+ * export le module d'authorisations
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports = (req, res, next) => {
-    console.log(req.body)
     // test le code contenu
     try {
         // extrait le token du header de la requete en utilisant la fonction split pour seulment récupérer le contenu après l'espace suivant le mot clef Bearer
