@@ -139,6 +139,8 @@ Middleware d'initialisation de la list des données de [log](#7a2-logjs) à réc
 ######              3A1c. [middleGame.createGameV2](#4a1-creategamev2)
 Middleware de création de partie
 
+######              3A1c. [check.logInit](#4d2-loginit)
+
 #####           3A2. [api/games/findGames](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L67)
 ```
 /**
@@ -471,6 +473,9 @@ Ce fichier contiens les fonctions de checks des données et de [logs](#7a2-logjs
 
 #####           4D1. [dataInit()](https://github.com/OrifInformatique/http-battles/blob/4857f052d0ea9817b0fc475dd4b8cbd03e45e51c/api/middleware/check.js#L60)
 Fonction d'initialisation de la list des données de log à récupérer
+
+#####           4D2. [logInit()]()
+Fonction d'initialisation des logs
 
 ####        4E. [routeParam.js](api/middleware/routeParam.js)
 Ce fichier contient les fonctions qui ajoute l'informations de qu'elle route est utilisée dans la requette

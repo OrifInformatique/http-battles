@@ -70,7 +70,13 @@ exports.dataInit = async (req, res, next) => {
     }
 }
 
-// initialise le log
+/**
+ * initialise le log
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 exports.logInit = async (req, res, next) => {
     // renseigne dans quel méthode les futur erreures sont
     const LOC_LOC = "methode: logInit"
