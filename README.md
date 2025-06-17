@@ -469,7 +469,7 @@ Fichier principal d'authorisation qui traites des requette utilisateur avec un p
 ####        4D. [check.js](api/middleware/check.js)
 Ce fichier contiens les fonctions de checks des données et de [logs](#7a2-logjs)
 
-#####           4D1. [dataInit()](https://github.com/OrifInformatique/http-battles/blob/8f04cff4c180e1eec1422167862b21a09bb500c8/api/middleware/check.js#L55)
+#####           4D1. [dataInit()](https://github.com/OrifInformatique/http-battles/blob/4857f052d0ea9817b0fc475dd4b8cbd03e45e51c/api/middleware/check.js#L60)
 Fonction d'initialisation de la list des données de log à récupérer
 
 ####        4E. [routeParam.js](api/middleware/routeParam.js)
