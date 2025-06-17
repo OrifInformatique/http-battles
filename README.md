@@ -21,6 +21,7 @@ Cette section à pour but d'expliquer la structure et le fonctionnement de l'API
             - 3A1a. [auth](#3a1a-auth)
             - 3A1b. [check.dataInit](#3a1b-checkdatainit)
             - 3A1c. [createGameV2](#3a1c-middlegamecreategamev2)
+            - 3A1d. [check.logInit](#3a1d-checkloginit)
         - 3A2. [api/games/findGames](#3a2-apigamesfindgames)
         - 3A3. [api/games/joinGame](#3a3-apigamesjoingame)
         - 3A4. [api/games/startGame](#3a4-apigamesstartgame)
@@ -140,7 +141,7 @@ Middleware d'initialisation de la list des données de [log](#7a2-logjs) à réc
 ######              3A1c. [middleGame.createGameV2](#4a1-creategamev2)
 Middleware de création de partie
 
-######              3A1c. [check.logInit](#4d2-loginit)
+######              3A1d. [check.logInit](#4d2-loginit)
 
 #####           3A2. [api/games/findGames](https://github.com/OrifInformatique/http-battles/blob/d4cc376abf658454f7c50dfb0b0865d65e3a730c/api/routes/game.js#L67)
 ```
