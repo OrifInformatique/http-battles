@@ -27,6 +27,10 @@ import Redirect from './utils/redirect';
 // Styles
 import './index.pcss';
 
+//Jeu Textuel Tristan
+import RPG from './rpg';
+RPG();
+
 const container = document.getElementById('root');
 const root = createRoot(container);
 
